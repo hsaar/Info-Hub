@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>나는소은~~</title>
+	<title>소~~은~~</title>
 </head>
 <body>
 	<section class="intro" aria-label="서비스 소개">
