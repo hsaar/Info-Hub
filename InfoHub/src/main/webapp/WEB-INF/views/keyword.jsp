@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>Home</title>
+	<title>나는소은~~</title>
 </head>
 <body>
 <h1>
