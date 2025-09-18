@@ -21,7 +21,7 @@ public class PolicyDAO {
             pstmt.setInt(1, regionId);
             for (int i = 0; i < categories.length; i++) {
                 pstmt.setInt(i + 2, categories[i]);
-            }
+           }
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
