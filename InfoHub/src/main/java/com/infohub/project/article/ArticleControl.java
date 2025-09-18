@@ -1,0 +1,82 @@
+package com.infohub.project.article;
+
+import java.util.List;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.infohub.project.HomeController;
+
+
+@Controller
+public class ArticleControl {
+	
+	private static final org.slf4j.Logger logger = LoggerFactory.getLogger(HomeController.class);
+	
+	@Autowired
+	ArticleService service;
+	
+	@RequestMapping("articleListAll")
+	public String articleListAll(Model model) throws Exception{
+		logger.info("articleListAll..");
+		
+		List<ArticleVO> articleListAll = service.articlListAll();
+		model.addAttribute("articleListAll", articleListAll);
+		
+		return "articleListAll";
+	}
+	
+	@RequestMapping("articleListAll1")
+	public String articleListAll1(Model model) throws Exception{
+		logger.info("articleListAll1..");
+		
+		List<ArticleVO> articleListAll1 = service.articlListAll1();
+		model.addAttribute("articleListAll1", articleListAll1);
+		
+		return "articleListAll1";
+	}
+	
+	@RequestMapping("articleListAll2")
+	public String articleListAll2(Model model) throws Exception{
+		logger.info("articleListAll2..");
+		
+		List<ArticleVO> articleListAll2 = service.articlListAll2();
+		model.addAttribute("articleListAll2", articleListAll2);
+		
+		return "articleListAll2";
+	}
+	
+	@RequestMapping("articleListAll3")
+	public String articleListAll3(Model model) throws Exception{
+		logger.info("articleListAll3..");
+		
+		List<ArticleVO> articleListAll3 = service.articlListAll3();
+		model.addAttribute("articleListAll3", articleListAll3);
+		
+		return "articleListAll3";
+	}
+	
+	@RequestMapping("articleListAll4")
+	public String articleListAll4(Model model) throws Exception{
+		logger.info("articleListAll4..");
+		
+		List<ArticleVO> articleListAll4 = service.articlListAll4();
+		model.addAttribute("articleListAll4", articleListAll4);
+		
+		return "articleListAll4";
+	}
+	
+	@RequestMapping("articleListAll5")
+	public String articleListAll5(Model model) throws Exception{
+		logger.info("articleListAll5..");
+		
+		List<ArticleVO> articleListAll5 = service.articlListAll5();
+		model.addAttribute("articleListAll5", articleListAll5);
+		
+		return "articleListAll5";
+	}
+
+}
