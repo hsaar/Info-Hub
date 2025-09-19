@@ -16,6 +16,9 @@
 <P> test count : ${test}</P>
 <p><a href = "keyword">keyword</a></p>
 <p><a href = "login">login</a></p>
+<a href = "registrationlistAll">registration test </a> : ${listAll }<br>
+<a href = "searchlistAll">search test </a> <br>
+<a href = "searchCount">search test </a> : ${searchCount }<br>
 
 
 </body>
