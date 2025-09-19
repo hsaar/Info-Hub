@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+<%@ page session="true" %>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -13,5 +14,8 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
+<a href = "registrationlistAll">registration test </a> : ${listAll }<br>
+<a href = "searchlistAll">search test </a> <br>
+<a href = "searchCount">search test </a> : ${searchCount }<br>
 </body>
 </html>
