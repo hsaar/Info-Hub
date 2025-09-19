@@ -19,6 +19,13 @@
 <a href = "registrationlistAll">registration test </a> : ${listAll }<br>
 <a href = "searchlistAll">search test </a> <br>
 <a href = "searchCount">search test </a> : ${searchCount }<br>
+<button type="button" onclick="location.href='articleListAll1'">부동산</button>
+<button type="button" onclick="location.href='articleListAll2'">주식</button>
+<button type="button" onclick="location.href='articleListAll3'">적금</button>
+<button type="button" onclick="location.href='articleListAll4'">복지</button>
+<button type="button" onclick="location.href='articleListAll5'">창업</button>
+<br><br>
+<a href="articleListAll">최신기사 조회</a> <br>
 
 
 </body>
