@@ -30,11 +30,11 @@
       		
       		<div style="flex:1; margin-right:15px;">
 			
-            <p style="font-size: 20; font-weight: bold;">${article.title}(기사제목)</p>
+            <p><a href="articleContent?title=${article.title}" style="font-size: 25; font-weight: bold;">${article.title}</a></p>
             ${article.content}(기사내용)
             <p style="font-size: 12;"> 
            
-            ${article.name}(카테고리) | ${article.source}(source) | ${article.published}(작성일)<br>
+            ${article.name} | ${article.source} | ${article.published}<br>
             ${article.views}(조회수) | ${article.hearts}(좋아요수) </p>
             </div>
             

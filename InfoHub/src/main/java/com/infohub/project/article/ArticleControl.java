@@ -2,11 +2,15 @@ package com.infohub.project.article;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.infohub.project.HomeController;
 
@@ -78,5 +82,17 @@ public class ArticleControl {
 		
 		return "articleListAll5";
 	}
+	
+	@RequestMapping("articleContent")
+	public String articleContent(Model model, String title) throws Exception{
+		logger.info("articleContent..");
+		
+		List<ArticleVO> articleContent = service.articleContent(title);
+		model.addAttribute("articleContent", articleContent);
+		
+		return "articleContent";
+	}
+	
+	
 
 }

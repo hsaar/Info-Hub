@@ -15,6 +15,8 @@ public class ArticleVO {
 	private int article_categories_categories_id;
 	private String name;
 	
+	ArticleVO(){}
+	
 	public String getName() {
 		return name;
 	}
@@ -41,7 +43,6 @@ public class ArticleVO {
 		this.name = name;
 	}
 
-	ArticleVO(){}
 
 	public ArticleVO(int article_id, String title, String content, String tags, String published, String source,
 			int views, int hearts, String image, int login_login_id, int article_categories_categories_id) {
@@ -149,7 +150,7 @@ public class ArticleVO {
 
 	@Override
 	public String toString() {
-		return "ArticleVO [article_id=" + article_id + ", title=" + title + ", content=" + content + ", tags=" + tags
+		return "Comment_articleVO [article_id=" + article_id + ", title=" + title + ", content=" + content + ", tags=" + tags
 				+ ", published=" + published + ", source=" + source + ", views=" + views + ", hearts=" + hearts
 				+ ", image=" + image + ", login_login_id=" + login_login_id + ", article_categories_categories_id="
 				+ article_categories_categories_id + ", name=" + name + "]";

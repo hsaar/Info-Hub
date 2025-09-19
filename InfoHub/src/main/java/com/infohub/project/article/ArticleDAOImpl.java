@@ -49,16 +49,19 @@ public class ArticleDAOImpl implements ArticleDAO{
 		return session.selectList("com.infohub.project.articleMapper.articleListAll5");
 	}
 
+	@Override
+	public List<ArticleVO> articleContent(String title) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList("com.infohub.project.articleMapper.articleContent", title);
 	
-	
-	
+	}
 
-	
+	@Override
+	public void updateViews(String title) throws Exception{
+		// TODO Auto-generated method stub
+		session.update("com.infohub.project.articleMapper.updateViews", title);
+	}
 
-	
 
-
-	
-	
 
 }

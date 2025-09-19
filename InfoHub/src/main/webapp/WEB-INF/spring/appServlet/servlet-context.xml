@@ -27,7 +27,9 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="com.infohub.project" />
-	
+	<context:component-scan base-package="com.infohub.project.article_categories" />
+   <context:component-scan base-package="com.infohub.project.article" />
+   <context:component-scan base-package="com.infohub.project.scraps" />
 	
 	
 </beans:beans>

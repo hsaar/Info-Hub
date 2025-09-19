@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ArticleServiceImpl implements ArticleService{
@@ -47,8 +49,11 @@ public class ArticleServiceImpl implements ArticleService{
 		return dao.articlListAll5();
 	}
 
-	
-	
-	
+	@Override
+	public List<ArticleVO> articleContent(String title) throws Exception {
+		// TODO Auto-generated method stub
+		dao.updateViews(title);
+		return dao.articleContent(title);
+	}
 
 }

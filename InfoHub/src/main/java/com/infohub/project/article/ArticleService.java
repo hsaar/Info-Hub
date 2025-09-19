@@ -11,4 +11,6 @@ public interface ArticleService {
 	List<ArticleVO> articlListAll4() throws Exception;
 	List<ArticleVO> articlListAll5() throws Exception;
 
+	List<ArticleVO> articleContent(String title) throws Exception;
+	
 }

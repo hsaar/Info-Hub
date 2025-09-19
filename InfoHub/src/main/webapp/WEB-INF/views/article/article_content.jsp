@@ -5,13 +5,22 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>Home</title>
+	   <title>기사 전체조회</title>
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
+        <h1 class="display-3">
+  		 articleListAll!  
+		</h1>
 
-<P>  The time on the server is ${serverTime}. </P>
+<div class="container">
+<h2>전체기사</h2>
+</div>
+<div class="container">
+<div style="padding-top: 50px">
+	
+ 
+ 
+   </div>
+   </div>
 </body>
 </html>
