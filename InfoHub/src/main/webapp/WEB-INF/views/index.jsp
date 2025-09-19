@@ -9,9 +9,14 @@
 </head>
 <body>
 <h1>
-	Hello world!  stets
+	Hello world!
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
+<P> test count : ${test}</P>
+<p><a href = "keyword">keyword</a></p>
+<p><a href = "login">login</a></p>
+
+
 </body>
 </html>
