@@ -41,6 +41,7 @@
 		</dependency>	
 		
 		<!-- Logging -->
+		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -159,7 +160,19 @@
 		    <artifactId>log4jdbc-log4j2-jdbc4</artifactId>
 		    <version>1.16</version>
 		</dependency>  
-		 
+		   <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+      <dependency>
+          <groupId>com.googlecode.json-simple</groupId>
+          <artifactId>json-simple</artifactId>
+          <version>1.1.1</version>
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/org.lazyluke/log4jdbc-remix -->
+      <dependency>
+          <groupId>org.lazyluke</groupId>
+          <artifactId>log4jdbc-remix</artifactId>
+          <version>0.2.7</version>
+      </dependency>   
 	</dependencies>
     <build>
         <plugins>

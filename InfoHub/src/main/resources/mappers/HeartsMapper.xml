@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.heartsMapper">
+
+	<!-- 좋아요 추가 -->
+	<insert id="insertHeart" parameterType="HeartsVO">
+		INSERT INTO hearts (login_login_id, article_article_id, board_boardno, comment_board_comment_id)
+		VALUES (#{loginLoginId}, #{articleArticleId}, #{boardBoardno},#{commentBoardCommentId})
+	</insert>
+
+	<!-- 좋아요 취소 -->
+	<delete id="deleteHeart" parameterType="HeartsVO">
+		DELETE FROM hearts
+		WHERE login_login_id = #{loginLoginId}
+		<if test="boardBoardno != null">
+			AND board_boardno = #{boardBoardno}
+		</if>
+		<if test="articleArticleId != null">
+			AND article_article_id = #{articleArticleId}
+		</if>
+	</delete>
+	<!-- 특정 게시글 좋아요 수 -->
+	<select id="countHearts" resultType="int"
+		parameterType="HeartsVO">
+		SELECT COUNT(*)
+		FROM hearts
+		WHERE
+		<choose>
+			<when test="boardBoardno != null">board_boardno = #{boardBoardno}</when>
+			<when test="articleArticleId != null">article_article_id = #{articleArticleId}</when>
+		</choose>
+	</select>
+
+
+</mapper>
