@@ -13,6 +13,7 @@ public class SearchListAllDTO {
 	private int login_login_id;
 	private int article_categories_categories_id;
 	
+	
 	SearchListAllDTO(){}
 
 	public SearchListAllDTO(int article_id, String title, String content, String tags, String published, String source,

@@ -7,3 +7,4 @@ public interface SearchListAllService {
 	List<SearchListAllDTO> searchlistAll() throws Exception;
 	
 }
+

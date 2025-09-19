@@ -9,3 +9,4 @@ public interface SearchListAllDAO {
 	int searchCount() throws Exception;
 	List<SearchListAllDTO> searchlistAll() throws Exception;
 }
+

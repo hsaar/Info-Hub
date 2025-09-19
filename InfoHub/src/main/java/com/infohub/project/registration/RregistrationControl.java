@@ -35,6 +35,7 @@ public class RregistrationControl {
 	
 	
 	
+	
 //	@RequestMapping("emplistAll")
 //	public String empList(Model model)throws Exception {
 //		logger.info("전체사원 조회입니다.");

@@ -19,6 +19,7 @@ public class RegistrationDAOImpl implements RegistrationDAO{
 		// TODO Auto-generated method stub
 		return sqlSession.selectList(nameSpace + ".registrationlistAll");
 		
+	
 		
 	}
 

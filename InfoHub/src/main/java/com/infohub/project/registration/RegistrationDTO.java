@@ -11,6 +11,7 @@ public class RegistrationDTO {
 	private String call;
 	private String type;
 	
+	
 	RegistrationDTO(){}
 
 	public RegistrationDTO(int login_id, int registration_id, String title, String content, String link, String period,
