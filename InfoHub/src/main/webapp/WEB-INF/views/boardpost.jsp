@@ -11,7 +11,7 @@
 <body>
 <center>
 		<h1>글쓰기</h1>
-		<form method="post" action="write_ok.jsp" name="write_frm">
+		<form method="post" action="${pageContext.request.contextPath}/board/register" name="write_frm">
 			<table>
 				<tr height="30">
 					<td width="80">작성자</td>

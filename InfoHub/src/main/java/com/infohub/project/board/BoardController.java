@@ -31,7 +31,7 @@ public class BoardController {
 	@Autowired
 	BoardService service;
 
-	@RequestMapping(value = "board/login", method = RequestMethod.GET)
+/*	@RequestMapping(value = "board/login", method = RequestMethod.GET)
 	public String login() {
 		logger.info("login view 이동");
 		return "login";
@@ -62,7 +62,7 @@ public class BoardController {
 		rttr.addFlashAttribute("msg", "로그아웃되었습니다");
 		return "redirect:/";
 	}
-
+*/
 	// 글목록
 	@RequestMapping(value = "board/list", method = RequestMethod.GET)
 	public ModelAndView list() {
