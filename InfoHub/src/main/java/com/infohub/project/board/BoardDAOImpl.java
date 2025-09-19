@@ -16,27 +16,21 @@ public class BoardDAOImpl implements BoardDAO {
 	private static final String nameSpace="com.infohub.project.BoardMapper";
 
 	@Override
-	public int boardCount() throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public List<BoardVO> list() {
 		// TODO Auto-generated method stub
 		return sqlsession.selectList(nameSpace+".list");
 	}
 
 	@Override
-	public int updateReadCnt(int bno) {
+	public int updateReadCnt(int boardno) {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlsession.update(nameSpace+".updateReadCnt"+boardno);
 	}
 
 	@Override
-	public BoardVO getDetail(int bno) {
+	public BoardVO getDetail(int boardno) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectOne(nameSpace+".detail",bno);
+		return sqlsession.selectOne(nameSpace+".detail",boardno);
 	}
 
 	@Override
@@ -48,19 +42,19 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public int update(BoardVO boardVO) {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlsession.update(nameSpace+".update",boardVO);
 	}
 
 	@Override
-	public int delete(int bno) {
+	public int delete(int boardno) {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlsession.delete(nameSpace+".delete",boardno);
 	}
 
 	@Override
 	public Map login(Map<String, Object> map) {
 		// TODO Auto-generated method stub
-		return null;
+		return sqlsession.selectOne(nameSpace+".login", map);
 	}
 
 	

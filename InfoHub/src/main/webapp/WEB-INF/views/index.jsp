@@ -12,8 +12,8 @@
 
 	<P>The time on the server is ${serverTime}.</P>
 
-	<a href="boardpost">
-		<h5 class="box-title">새글쓰기</h5>
+	<a href="boardmain">
+		<h5 class="box-title">커뮤니티 페이지</h5>
 	</a>
 </body>
 </html>

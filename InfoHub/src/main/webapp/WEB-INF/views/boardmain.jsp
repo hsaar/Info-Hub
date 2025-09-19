@@ -13,5 +13,12 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
+<p> 게시판 메인 페이지 게시글은 여기 올라옴</p>
+<div>
+<a href="boardpost">
+		<h5 class="box-title">새글쓰기</h5>
+	</a>
+
+</div>
 </body>
 </html>
