@@ -45,4 +45,50 @@ public class HomeController {
 		return "index";
 	}
 	
+	@GetMapping("article_home")
+	public String article_home(Model model) {
+		return "/article/article_home";
+	}
+	
+	@GetMapping("timeline")
+	public String timeline(Model model) {
+		return "timeline";
+	}
+	
+	@GetMapping("registrationlistAll")
+	public String registrationlistAll(Model model) {
+		return "/article/registrationlistAll";
+	}
+	
+	@GetMapping("my_benifit")
+	public String my_benifit(Model model) {
+		return "/customized/my_benifit";
+	}
+	
+	@GetMapping("customized_article")
+	public String customized_article(Model model) {
+		return "/customized/customized_article";
+	}
+	
+	@GetMapping("board_main")
+	public String board_main(Model model) {
+		return "/board/board_main";
+	}
+	
+	@GetMapping("policy")
+	public String policy(Model model) {
+		return "/otherPage/policy";
+	}
+	
+	@GetMapping("benefits")
+	public String benefits(Model model) {
+		return "/otherPage/benefits";
+	}
+	
+	@GetMapping("mypage_main")
+	public String mypage_main(Model model) {
+		return "/mypage/mypage_main";
+	}
+	
+	
 }

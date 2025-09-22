@@ -1,0 +1,35 @@
+/* styles.css */
+.page-hero{ max-width:1120px; margin:28px auto 12px; padding:0 20px }
+.page-hero h1{ margin:0; font-size:24px }
+.page-hero p{ margin:6px 0 0; color:var(--sub); font-size:14px }
+
+/* Grid */
+.grid{ max-width:1120px; margin:0 auto; padding:12px 20px 56px; display:grid; grid-template-columns: 1fr 360px; gap:22px }
+@media (max-width: 980px){ .grid{ grid-template-columns: 1fr } }
+
+/* Card */
+.card{ background:var(--white); border:1px solid var(--mist-200); border-radius:var(--radius); box-shadow: var(--shadow) }
+.card-header{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--mist-100) }
+.card-header h3{ margin:0; font-size:16px }
+.card-body{ padding:16px }
+
+.cloud-wrap{ position:relative; height:420px; border:2px solid var(--mist-300); border-radius:24px; overflow:hidden; background:linear-gradient(180deg,#f9fbff,#f2f6fb) }
+.cloud-wrap:hover{ border-color: var(--brand) }
+.cloud{ position:relative; width:100%; height:100% }
+.tag{ position:absolute; user-select:none; cursor:pointer; transition: transform .2s ease, opacity .2s ease }
+.tag:hover{ transform: scale(1.08) }
+
+.pill{ border-radius:14px; background: var(--mist-50); border:1px solid var(--mist-200) }
+.list{ display:flex; flex-direction:column; gap:10px }
+.list a{ display:flex; gap:10px; align-items:center; text-decoration:none; color:var(--ink); padding:10px 12px; border-radius:12px; border:1px solid transparent }
+.list a:hover{ border-color:var(--mist-300); background:var(--white) }
+.dot{ width:6px; height:6px; border-radius:50%; background:var(--sub) }
+
+.more-btn{ width:28px; height:28px; display:grid; place-items:center; border-radius:8px; background:var(--white); border:1px solid var(--mist-200); cursor:pointer }
+.more-btn:hover{ border-color:var(--brand); color:var(--brand) }
+
+.hover-outline{ border:2px solid transparent; border-radius:18px }
+.hover-outline:hover{ border-color: var(--brand) }
+
+.note{ max-width:1120px; margin:24px auto 60px; padding:0 20px; color:var(--sub); font-size:13px }
+

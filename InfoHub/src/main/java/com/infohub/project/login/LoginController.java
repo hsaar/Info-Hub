@@ -17,6 +17,7 @@ public class LoginController {
 		model.addAttribute("getUserById", se.getUserById(1));
 		return "./login/login";
 	}
+	
 	@GetMapping("idfind")
 	public String idfind(Model model) {
 		
