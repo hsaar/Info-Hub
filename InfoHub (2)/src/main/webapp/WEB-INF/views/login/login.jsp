@@ -10,13 +10,10 @@
 <body>
 <h1> 로그인 </h1>
 
-
-<P>  The time on the server is ${serverTime} </P>
-
+<P>  The time on the server is ${serverTime}. </P>
 <div> 
 	<p>listAll : ${listAll}</p>
 	<p>getUserById : ${getUserById}</p>
-	
 	
 </div>
 </body>

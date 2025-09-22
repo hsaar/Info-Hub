@@ -1,4 +1,4 @@
-package com.infohub.project.article_search;
+package com.infohub.project.article_categories;
 
 import java.util.List;
 
@@ -16,22 +16,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.infohub.project.HomeController;
 
 @Controller
-public class article_searchControl { 
+public class article_categoriesControl { 
 	
-	private static final Logger logger = LoggerFactory.getLogger(article_searchControl.class);
+	private static final Logger logger = LoggerFactory.getLogger(article_categoriesControl.class);
 	
 	@Autowired
-	private article_searchService service;
+	private article_categoriesService service;
 	
-	@RequestMapping("article_search")
-	public String articlelistAll(Model model) throws Exception{
-		logger.info("기사전체조회");
-		List<article_searchDTO> articlelistAll = service.articlelistAll();
+	@RequestMapping("article_categorieslistAll")
+	public String listAll(Model model) throws Exception{
+		logger.info("전체조회");
+		List<article_categoriesDTO> article_categorieslistAll = service.article_categorieslistAll();
 		
-		model.addAttribute("article_search", articlelistAll);
-
-		return "./article/article_search";
-
+		model.addAttribute("article_categorieslistAll", article_categorieslistAll);
+		return "article_categorieslistAll";
 	}
 	
 	

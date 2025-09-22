@@ -5,19 +5,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>로그인페이지입니다</title>
+	<title>첫 화면 페이지입니다</title>
 </head>
 <body>
-<h1> 로그인 </h1>
+<h1>
+	Hello world!
+</h1>
+
+<P>  The time on the server is ${serverTime}. </P>
+<P> test count : ${test}</P>
+<p><a href = "keyword">keyword</a></p>
+<p><a href = "login">login</a></p>
 
 
-<P>  The time on the server is ${serverTime} </P>
-
-<div> 
-	<p>listAll : ${listAll}</p>
-	<p>getUserById : ${getUserById}</p>
-	
-	
-</div>
 </body>
 </html>
