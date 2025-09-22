@@ -50,16 +50,16 @@ public class ArticleDAOImpl implements ArticleDAO{
 	}
 
 	@Override
-	public List<ArticleVO> articleContent(String title) throws Exception {
+	public List<ArticleVO> articleContent(int article_id) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList("com.infohub.project.articleMapper.articleContent", title);
+		return session.selectList("com.infohub.project.articleMapper.articleContent", article_id);
 	
 	}
 
 	@Override
-	public void updateViews(String title) throws Exception{
+	public void updateViews(int article_id) throws Exception{
 		// TODO Auto-generated method stub
-		session.update("com.infohub.project.articleMapper.updateViews", title);
+		session.update("com.infohub.project.articleMapper.updateViews",article_id);
 	}
 
 

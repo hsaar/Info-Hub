@@ -50,10 +50,10 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public List<ArticleVO> articleContent(String title) throws Exception {
+	public List<ArticleVO> articleContent(int article_id) throws Exception {
 		// TODO Auto-generated method stub
-		dao.updateViews(title);
-		return dao.articleContent(title);
+		dao.updateViews(article_id);
+		return dao.articleContent(article_id);
 	}
 
 }

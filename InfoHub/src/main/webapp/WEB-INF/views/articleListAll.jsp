@@ -2,16 +2,24 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-
-   <title>articleListAll</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>누림 — 전체기사</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 </head>
 <body>
-
+  <!-- 상단바 -->
+<%@ include file="../include/main_header.jsp"%>
         <h1 class="display-3">
   		 최신기사 조회
 		</h1>
+
 
 <div class="container">
 <div style="padding-top: 1px">
@@ -31,12 +39,12 @@
       		
       		<div style="flex:1; margin-right:15px;">
 			
-            <p><a href="articleContent?title=${article.title}" style="font-size: 25; font-weight: bold;">${article.title}</a></p>
+            <p><a href="articleContent?article_id=${article.article_id}" style="font-size: 25; font-weight: bold;">${article.title}</a></p>
             ${article.content}(기사내용)
             <p style="font-size: 12;"> 
            
             ${article.name} | ${article.source} | ${article.published}<br>
-            ${article.views}(조회수) | ${article.hearts}(좋아요수) </p>
+            ${article.hearts}(좋아요수) </p>
             </div>
             
             <div style="flex:0 0 450px;">

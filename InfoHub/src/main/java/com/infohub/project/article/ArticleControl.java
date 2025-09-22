@@ -84,10 +84,10 @@ public class ArticleControl {
 	}
 	
 	@RequestMapping("articleContent")
-	public String articleContent(Model model, String title) throws Exception{
+	public String articleContent(Model model, int article_id) throws Exception{
 		logger.info("articleContent..");
 		
-		List<ArticleVO> articleContent = service.articleContent(title);
+		List<ArticleVO> articleContent = service.articleContent(article_id);
 		model.addAttribute("articleContent", articleContent);
 		
 		return "articleContent";
