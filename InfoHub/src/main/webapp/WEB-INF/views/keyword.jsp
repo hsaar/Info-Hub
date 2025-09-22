@@ -8,10 +8,11 @@
 	<title>Home</title>
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
-
-<P>  The time on the server is ${serverTime}. </P>
+	<section class="intro" aria-label="서비스 소개">
+		<h2 class="title">키워드 페이지</h2>
+		<p class="subtitle">
+			키워드 찾는중
+		</p>
+	</section>
 </body>
 </html>
