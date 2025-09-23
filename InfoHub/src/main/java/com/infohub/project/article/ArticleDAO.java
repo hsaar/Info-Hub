@@ -11,9 +11,9 @@ public interface ArticleDAO {
 	List<ArticleVO> articlListAll4() throws Exception;
 	List<ArticleVO> articlListAll5() throws Exception;
 	
-	List<ArticleVO> articleContent(String title) throws Exception;
+	List<ArticleVO> articleContent(int article_id) throws Exception;
 	
-	public void updateViews(String title) throws Exception;
+	public void updateViews(int article_id) throws Exception;
 	
 	
 

@@ -29,11 +29,11 @@
 	</select>
 	
 	<select id="articleContent" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where title = #{title} order by published desc;
+	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_id = #{article_id} order by published desc;
 	</select>
 	
-	<update id="updateViews" parameterType="String">
-	UPDATE article SET views = views + 1 WHERE title = #{title}
+	<update id="updateViews" parameterType="java.lang.Integer">
+	UPDATE article SET views = views + 1 WHERE article_id = #{article_id}
 	</update>
 	
 	

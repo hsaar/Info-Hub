@@ -1,19 +1,19 @@
-package com.infohub.project.article;
+package com.infohub.project.comment;
 
 public class CommentVO {
 	
-	private int comment_id;
+	private String comment_id;
 	private String created_date;
 	private String last_modified;
 	private String comment;
-	private int hearts;
-	private int login_login_id;
-	private int article_article_id;
+	private String hearts;
+	private String login_login_id;
+	private String article_article_id;
 	
 	CommentVO(){}
 
-	public CommentVO(int comment_id, String created_date, String last_modified, String comment, int hearts,
-			int login_login_id, int article_article_id) {
+	public CommentVO(String comment_id, String created_date, String last_modified, String comment, String hearts,
+			String login_login_id, String article_article_id) {
 		super();
 		this.comment_id = comment_id;
 		this.created_date = created_date;
@@ -24,11 +24,11 @@ public class CommentVO {
 		this.article_article_id = article_article_id;
 	}
 
-	public int getComment_id() {
+	public String getComment_id() {
 		return comment_id;
 	}
 
-	public void setComment_id(int comment_id) {
+	public void setComment_id(String comment_id) {
 		this.comment_id = comment_id;
 	}
 
@@ -56,36 +56,37 @@ public class CommentVO {
 		this.comment = comment;
 	}
 
-	public int getHearts() {
+	public String getHearts() {
 		return hearts;
 	}
 
-	public void setHearts(int hearts) {
+	public void setHearts(String hearts) {
 		this.hearts = hearts;
 	}
 
-	public int getLogin_login_id() {
+	public String getLogin_login_id() {
 		return login_login_id;
 	}
 
-	public void setLogin_login_id(int login_login_id) {
+	public void setLogin_login_id(String login_login_id) {
 		this.login_login_id = login_login_id;
 	}
 
-	public int getArticle_article_id() {
+	public String getArticle_article_id() {
 		return article_article_id;
 	}
 
-	public void setArticle_article_id(int article_article_id) {
+	public void setArticle_article_id(String article_article_id) {
 		this.article_article_id = article_article_id;
 	}
 
 	@Override
 	public String toString() {
-		return "Comment_articleVO [comment_id=" + comment_id + ", created_date=" + created_date + ", last_modified="
+		return "CommentVO [comment_id=" + comment_id + ", created_date=" + created_date + ", last_modified="
 				+ last_modified + ", comment=" + comment + ", hearts=" + hearts + ", login_login_id=" + login_login_id
 				+ ", article_article_id=" + article_article_id + "]";
 	}
+	
 	
 	
 }

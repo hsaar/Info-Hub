@@ -30,7 +30,7 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll = service.articlListAll();
 		model.addAttribute("articleListAll", articleListAll);
 		
-		return "./article/articleListAll";
+		return "article/articleListAll";
 	}
 	
 	@RequestMapping("articleListAll1")
@@ -40,7 +40,7 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll1 = service.articlListAll1();
 		model.addAttribute("articleListAll1", articleListAll1);
 		
-		return "./article/articleListAll1";
+		return "article/articleListAll1";
 	}
 	
 	@RequestMapping("articleListAll2")
@@ -50,7 +50,7 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll2 = service.articlListAll2();
 		model.addAttribute("articleListAll2", articleListAll2);
 		
-		return "./article/articleListAll2";
+		return "article/articleListAll2";
 	}
 	
 	@RequestMapping("articleListAll3")
@@ -60,7 +60,7 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll3 = service.articlListAll3();
 		model.addAttribute("articleListAll3", articleListAll3);
 		
-		return "./article/articleListAll3";
+		return "article/articleListAll3";
 	}
 	
 	@RequestMapping("articleListAll4")
@@ -70,7 +70,7 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll4 = service.articlListAll4();
 		model.addAttribute("articleListAll4", articleListAll4);
 		
-		return "./article/articleListAll4";
+		return "article/articleListAll4";
 	}
 	
 	@RequestMapping("articleListAll5")
@@ -80,17 +80,17 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll5 = service.articlListAll5();
 		model.addAttribute("articleListAll5", articleListAll5);
 		
-		return "./article/articleListAll5";
+		return "article/articleListAll5";
 	}
 	
 	@RequestMapping("articleContent")
-	public String articleContent(Model model, String title) throws Exception{
+	public String articleContent(Model model, int article_id) throws Exception{
 		logger.info("articleContent..");
 		
-		List<ArticleVO> articleContent = service.articleContent(title);
+		List<ArticleVO> articleContent = service.articleContent(article_id);
 		model.addAttribute("articleContent", articleContent);
 		
-		return "./article/articleContent";
+		return "article/articleContent";
 	}
 	
 	

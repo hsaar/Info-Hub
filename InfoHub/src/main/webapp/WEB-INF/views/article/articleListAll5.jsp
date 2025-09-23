@@ -30,17 +30,17 @@
       		
       		<div style="flex:1; margin-right:15px;">
 			
-            <p><a href="articleContent?title=${article.title}" style="font-size: 25; font-weight: bold;">${article.title}</a></p>
+            <p><a href="articleContent?article_id=${article.article_id}" style="font-size: 25; font-weight: bold;">${article.title}</a></p>
             ${article.content}(기사내용)
             <p style="font-size: 12;"> 
            
             ${article.name} | ${article.source} | ${article.published}<br>
-            ${article.views}(조회수) | ${article.hearts}(좋아요수) </p>
+            ${article.hearts}(좋아요수) </p>
             </div>
             
             <div style="flex:0 0 450px;">
-            <img src="${article.image }" alt="${article.image }" style="width:250px; height:180px; border-radius:8px;">
-      		</div>
+            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 250px; height: 180px;">
+            </div>
            
           	</div>
           	</td>
