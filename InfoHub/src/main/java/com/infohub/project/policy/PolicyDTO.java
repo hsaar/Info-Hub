@@ -3,7 +3,7 @@ package com.infohub.project.policy;
 public class PolicyDTO {
     private String title;
     private String content;
-    
+
     // 기본 생성자
     public PolicyDTO() {}
 
@@ -18,4 +18,9 @@ public class PolicyDTO {
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
+
+    @Override
+    public String toString() {
+        return "PolicyDTO{title='" + title + "', content='" + content + "'}";
+    }
 }
