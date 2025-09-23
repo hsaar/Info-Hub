@@ -1,7 +1,8 @@
-package com.infohub.map;
+package com.infohub.project.map;
 
 import java.sql.SQLException;
-import com.infohub.policy.*;
+
+import com.infohub.project.policy.*;
 
 
 public class ShowMap {

@@ -1,4 +1,4 @@
-package com.infohub.policy;
+package com.infohub.project.policy;
 
 import java.io.IOException;
 import java.io.PrintWriter;

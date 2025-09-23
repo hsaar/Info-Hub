@@ -1,4 +1,4 @@
-package com.infohub.map;
+package com.infohub.project.map;
 
 public class Weather {
     

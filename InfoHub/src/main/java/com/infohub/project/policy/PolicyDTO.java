@@ -1,4 +1,4 @@
-package com.infohub.policy;
+package com.infohub.project.policy;
 
 public class PolicyDTO {
     private String title;

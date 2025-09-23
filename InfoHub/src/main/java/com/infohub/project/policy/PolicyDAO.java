@@ -1,4 +1,4 @@
-package com.infohub.policy;
+package com.infohub.project.policy;
 
 import java.sql.*;
 import java.util.ArrayList;
