@@ -1,5 +1,5 @@
 package com.infohub.map;
 
-public class weatheToday {
+public class Weather {
     
 }
