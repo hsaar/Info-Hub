@@ -20,8 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.infohub.project.board.BoardController;
-
-import com.infohub.project.board.BoardVO;
  
 
 
@@ -89,15 +87,15 @@ public class BoardController {
 	}
 
 	// 글쓰기 페이지 이동
-	@RequestMapping(value = "board/register", method = RequestMethod.GET)
+	@RequestMapping(value = "/boardregister", method = RequestMethod.GET)
 	public String register(Model model) {
 		logger.info("글쓰기 이동");
 		 model.addAttribute("serverTime", new java.util.Date());
-		return "boardpost";
+		return "board/boardregister";
 	}
 
 	// 글쓰기 페이지
-	@RequestMapping(value = "board/register", method = RequestMethod.POST)
+	@RequestMapping(value = "/boardregister", method = RequestMethod.POST)
 	public String register(BoardVO boardVO, HttpServletRequest request, RedirectAttributes rttr) throws Exception {
 		request.setCharacterEncoding("UTF-8");
 		logger.info("내용" + boardVO);
@@ -106,7 +104,7 @@ public class BoardController {
 		if (r > 0) {
 			rttr.addFlashAttribute("msg", "추가에 성공하였습니다.");
 		}
-		return "redirect:list";
+		return "redirect:boardlist";
 	}
 	
 	//글수정 페이지 이동

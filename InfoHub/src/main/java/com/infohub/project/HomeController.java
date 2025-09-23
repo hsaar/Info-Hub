@@ -37,10 +37,10 @@ public class HomeController {
 		return "index";
 	}
 	
-	@RequestMapping("/boardmain")
-    public String boardMain(Model model) {
+	@RequestMapping("/boardlist")
+    public String boardList(Model model) {
         model.addAttribute("serverTime", new java.util.Date());
-        return "boardmain";  // /WEB-INF/views/boardmain.jsp 로 forward
+        return "/board/boardlist";  
     }
 	
 }

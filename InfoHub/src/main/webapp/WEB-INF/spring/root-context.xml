@@ -12,8 +12,8 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<bean id="dataSourceSpied" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://192.168.0.44:3306/infohub?serverTimezone=UTC"></property>
-		<property name="username" value="avangers4"></property>
+		<property name="url" value="jdbc:mysql://192.168.0.14:3306/infohub?serverTimezone=UTC"></property>
+		<property name="username" value="avangers"></property>
 		<property name="password" value="12345"></property>
 	</bean>
 	
