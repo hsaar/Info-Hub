@@ -40,8 +40,8 @@
             </div>
             
             <div style="flex:0 0 450px;">
-            <img src="${article.image }" alt="${article.image }" style="width:250px; height:180px; border-radius:8px;">
-      		</div>
+            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 250px; height: 180px;">
+            </div>
            
           	</div>
           	</td>

@@ -70,7 +70,7 @@
             </div>
             
             <div class="news-thumb">
-            <img src="${article.image }" alt="${article.image }">
+            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 250px; height: 180px;">
       		</div>
            
           	</div>

@@ -13,12 +13,10 @@
 
 <!-- 댓글 관련 자바스크립트 -->
 <script type="text/javascript">
-	
 		
-	$(document).ready(function(){	
+	$(document).ready(function(){
+		
 		commentList();
-		
-		
 		
   	  	$("#commentInsertBtn").click(function(){
 	        var article_article_id =$("#article_article_id").val();
@@ -46,9 +44,9 @@
 	       		error: function(){
 	       			alert("댓글 등록 실패");
 	       		}
-	        	
 	        }); // ajax() end
 	   	}); // commentInsert() end
+	   	
 	   	
 	   	function commentList(){
 	   		var article_article_id =$("#article_article_id").val();
@@ -74,8 +72,10 @@
 	                 }
 	                 else{
 	                    $(result).each(function(){
-	                       htmls = htmls + '<div class="commentList" id="commentList' +this.comment_id + '">';
+	                      // htmls = htmls + '<div id="commentList' +this.comment_id + '">';
 	                                        //<div id="reno12"> <div id="reno13">
+	                       htmls += '<hr style="width: 600px; float: left;">';
+	                       htmls += '<br>';
 	                       htmls += '<span class="d-block">';
 	                       htmls += '<strong class="text-gray-dark">' + ' 회원ID : ' +this.login_login_id + '</strong>';
 	                       htmls += '</span><br>';
@@ -87,8 +87,7 @@
 	                       htmls += '<br>';
 	                       htmls += ' 좋아요 수 ' + this.hearts;
 	                       htmls += '<br>';
-	                       htmls += '-----------------------------------------------';
-	                       htmls += '</div>';   
+	                       //htmls += '</div>';   
 	                    });  // each End
 	                 }
 	                 $("#commentList").html(htmls);
@@ -96,15 +95,51 @@
 	             error : function(data){
 	                alert("에러" + data);
 	             }     
-	             
 	       });
-	       
 	   	}//commentList()
-	});	
+	
     
-    
+			
+			$("#scrapBtn").click(function(scrap){
+				
+				var article_article_id =$("#article_article_id").val();
+		   		
+		   		url ="scrap";
+		   		var paramData ={
+		        		"article_article_id" : article_article_id
+		        		
+		        };
+		   		
+				$.ajax({
+					url: url,
+					data: paramData,
+					type: "post",
+					dataType: "json",
+					success: function(scrap){
+						if(scrap==0){
+							alert("스크랩완료");
+							var btn = '<button type="button" class="btn btn-success" id="scrapBtn">★</button>'
+							$("#scrapBtn").html(btn);
+						}else if(scrap==1){
+							alert("스크랩취소");
+							var btn = '<button type="button" class="btn btn-success" id="scrapBtn">☆</button>'
+							$("#scrapBtn").html(btn);
+							//location.reload();
+						}
+						
+					},
+					error : function(){
+		                alert("에러");
+		             }     
+				
+				})//ajax
+			});//scrapbtn
+				
+		});
+	
+	
+	
 </script>  
-
 
 </head>
 <body>
@@ -127,13 +162,17 @@
             <div style="font-size: 35; font-weight: bold;">${article.title}</div>
             <p style="font-size: 12;"> 
             ${article.source} | ${article.published}<br>
-            ${article.views}(조회수) | ${article.hearts}(좋아요수)</p> <br><br>
+            ${article.views}(조회수) | ${article.hearts}(좋아요수)</p>
+            
+            <p><button type="button" class="btn btn-success" id="scrapBtn">☆</button></p>
             <div style="flex:0 0 450px;">
-            <img src="resources/img/${article.image }" alt="${article.image }" style="width:500px; height:350px;">
-      		</div>
+            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 650px; height: 450px;">
+            </div>
       		<br>
       		<br>
-            ${article.content}(기사내용)<br><br>
+            <p>${article.content}(기사내용)</p>
+            <br>
+      		<br>
             </div>
         </div>
    
@@ -144,16 +183,14 @@
     <div>
         <input type="hidden" name="article_article_id" id="article_article_id" value="${article.article_id}">
         <input type="text" name="comment" id="comment" placeholder="내용을 입력하세요">
+        
         <button type="button" id="commentInsertBtn">등록</button>
     </div>
     </form>
 </div>
-<hr>
 <div class="container">
-    <div class="commentList" id="commentList">
-    </div>
+    <div id="commentList"></div><br>
 </div>
-
 
 </c:forEach>
  	
