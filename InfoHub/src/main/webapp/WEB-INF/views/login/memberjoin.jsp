@@ -5,13 +5,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>첫 화면 페이지입니다</title>
+	<title>회원가입 성공 페이지</title>
+	<link rel="stylesheet" href="<c:url value='/resources/css/login.css' />">
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
-
-<P>  The time on the server is ${serverTime}. </P>
+	<p>일단 성공</p>
 </body>
 </html>

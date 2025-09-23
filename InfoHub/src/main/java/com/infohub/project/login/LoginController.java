@@ -1,12 +1,21 @@
 package com.infohub.project.login;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LoginController {
+	private Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
 	@Autowired
 	LoginServiceImpl se;
@@ -21,22 +30,91 @@ public class LoginController {
 	@GetMapping("idfind")
 	public String idfind(Model model) {
 		
-		return "./idfind/idfind";
+		return "./login/idfind";
 	}
 	@GetMapping("logout")
-	public String logout(Model model) {
-		return "./logout/logout";
+	public String logout(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.invalidate();
+		}
+		return "redirect:/";
 	}
-	@GetMapping("memberjoin")
-	public String memberjoin(Model model) {
-		return "./memberjoin/memberjoin";
-	}
+
 	@GetMapping("myinfo")
-	public String myinfo(Model model) {
-		return "./myinfo/myinfo";
+	public String myinfo(@RequestParam("name")String name ,Model model) {
+		model.addAttribute("name", name);
+		return "./login/myinfo";
+	}
+	@PostMapping("myinfo")
+	public String myinfo(Model model, 
+						@RequestParam("userId")String userId,
+						@RequestParam("password")String password,
+						@RequestParam("email")String email,
+						@RequestParam("name")String name,
+						@RequestParam("phone")String phone) {
+		
+		String username = se.getUserByUsername(userId).getUsername();
+		int i = se.updateUser(new LoginDTO(username,password,name,email,phone,null,null,1,1,0));
+		if( i > 0 )
+			logger.info("변경성공");
+		
+		return "redirect:/";
 	}
 	@GetMapping("passwordfind")
 	public String passwordfind(Model model) {
-		return "./passwordfind/passwordfind";
+		return "./login/passwordfind";
 	}
+	@PostMapping("login_ok")
+	public String login_ok(Model model, LoginRequest lr, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		LoginDTO res = se.login(lr);
+		
+		if(res!=null) {
+			request.getSession().invalidate(); //기존 세션 파기
+			
+			HttpSession session = request.getSession(true);
+			session.setAttribute("userId", res.getName()); //세션이 없으면 새로운 세션에 유저id값 부여
+			
+			return "redirect:/";
+		}else {
+			redirectAttributes.addFlashAttribute("errorMsg","아이디와 비밀번호를 확인해 주세요");
+			return "redirect:/login";
+		}
+	}
+	@GetMapping("memberjoin")
+	public String movememberjoin(Model model){
+		return "./login/memberjoin";
+	}
+	@PostMapping("memberjoin")
+	public String memberjoin(Model model, 
+							@RequestParam("username")String username, 
+							@RequestParam("password")String password,
+							@RequestParam("passwordcheak")String passwordcheak,
+							@RequestParam("email")String email,
+							@RequestParam("name")String name,
+							@RequestParam("phone")String phone,
+							@RequestParam("birthyear")int birthyear) {
+		int currentYear = java.time.LocalDate.now().getYear();
+		int age = currentYear - birthyear;
+		
+		if(se.checkNameDuplicate(name)==1) {
+			logger.info("중복이름");
+		}
+		
+		if(se.checkUsernameDuplicate(username)==1) {
+			logger.info("중복아이디");
+		}
+			
+		if(!password.equals(passwordcheak)) {
+			logger.info("패스워드 체크 틀림");
+		}
+		
+		int i = se.insertUser(new LoginDTO(username,password,name,email,phone,null,null,1,1,age));
+		if( i > 0 )
+			logger.info("생성성공");
+		
+		return "./login/memberjoin";
+	}
+	
+
 }

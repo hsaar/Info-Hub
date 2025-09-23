@@ -5,31 +5,12 @@
 <%@ page session="false" %>
 <html lang="ko">
 
-<<<<<<< HEAD
-<P>  The time on the server is ${serverTime}. </P>
-<P> test count : ${test}</P>
-<p><a href = "keyword">keyword</a></p>
-<p><a href = "login">login</a></p>
-<a href = "registrationlistAll">registration test </a> : ${listAll }<br>
-<a href = "searchlistAll">search test </a> <br>
-<a href = "searchCount">search test </a> : ${searchCount }<br>
-
-<button type="button" onclick="location.href='articleListAll1'">부동산</button>
-<button type="button" onclick="location.href='articleListAll2'">주식</button>
-<button type="button" onclick="location.href='articleListAll3'">적금</button>
-<button type="button" onclick="location.href='articleListAll4'">복지</button>
-<button type="button" onclick="location.href='articleListAll5'">창업</button>
-<br><br>
-<a href="articleListAll">최신기사 조회</a> <br>
-	<a href="boardmain">
-		<h5 class="box-title">커뮤니티 페이지</h5>
-	</a>
-=======
 <head>
 <title>정책 &amp; 혜택 — Mist Blue Theme</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"
 	charset="UTF-8">
+<%@ include file = "include/plugin.jsp" %>
 	
 <!-- 타이틀용 세리프 + 본문 산세리프 -->
 <link href="./index_files/css2" rel="stylesheet">
@@ -40,7 +21,6 @@
 	rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 <%@ include file="include/header.jsp" %>
-<%@ include file = "include/plugin.jsp" %>
 
 </head>
 
