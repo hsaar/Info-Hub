@@ -5,13 +5,88 @@
 <mapper namespace="com.infohub.project.searchMapper"> <!-- 다음에 자바에서 호출해서 사용 -->
 	
 	<select id="searchCount" resultType="int">
-	select count(*) from article
+		select count(*) from article
 	</select>
 
 	<select id="searchlistAll" resultType="com.infohub.project.searchlistAll.SearchListAllDTO">
 		select * 
 		from article
-	</select>	
+	</select>
+	
+	<select id="read" resultType="com.infohub.project.searchlistAll.SearchListAllDTO">
+		select *
+		from article
+		where article_id = #{article_id}
+	</select> 
+		
+		
+	<select id="listCriteria" resultType="com.infohub.project.searchlistAll.SearchListAllDTO">
+		select *
+		from article
+		where article_id > 0
+		order by article_id
+		limit #{pageStart}, #{perPageNum}
+	
+	</select>
+	
+	<select id = "countPaging" resultType="int">
+		select count(article_id)
+		from article
+		where article_id > 0
+		
+	</select>
+	 
+	 <sql id="searchCondition">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and title like concat('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and content like concat('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and writer like concat('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				and (title like concat('%', #{keyword}, '%')
+					or content like concat('%', #{keyword}, '%'))
+			</if>
+			<if test="searchType == 'all'.toString()">
+				and (title like concat('%', #{keyword}, '%')
+					or content like concat('%', #{keyword}, '%')
+					or writer like concat('%', #{keyword}, '%'))
+			</if>
+		</if>
+	</sql>
+	 	 
+	<select id="listPage" resultType="com.infohub.project.searchlistAll.SearchListAllDTO">
+		select *
+		from article
+		where article_id > 0
+		<include refid="searchCondition"></include>
+		order by article_id desc
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="gettotalcount" resultType="int">
+		select count(article_id)
+		from article
+		where article_id > 0
+		<include refid="searchCondition"></include>
+		
+	</select>
+		
+		
+	<select id="listSearch" resultType="com.infohub.project.searchlistAll.SearchListAllDTO">
+		
+		select *
+		from article
+		where article_id > 0
+		<include refid="searchCondition"></include>	
+        ORDER BY article_id DESC    
+        limit #{pageStart}, #{perPageNum}
+        	
+	</select>
 </mapper>
 
 

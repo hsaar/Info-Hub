@@ -16,6 +16,8 @@
 <P>  The time on the server is ${serverTime}. </P>
 <a href = "registrationlistAll">registration test </a> : ${listAll }<br>
 <a href = "searchlistAll">search test </a> <br>
+<a href = "listcri">cri test </a> <br>
+<a href = "slistPage">searchlist test </a> <br>
 <a href = "searchCount">search test </a> : ${searchCount }<br>
 </body>
 </html>
