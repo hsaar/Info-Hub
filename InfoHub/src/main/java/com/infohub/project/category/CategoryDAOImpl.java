@@ -15,13 +15,13 @@ public class CategoryDAOImpl implements CategoryDAO{
 	@Override
 	public List<CategoryVO> selectMainCategories() {
 		// TODO Auto-generated method stub
-		return sqlsession.selectList(nameSpace, ".selectMainCategories");
+		return sqlsession.selectList(nameSpace+ ".selectMainCategories");
 	}
 	
 	@Override
 	public List<CategoryVO> selectSubCategories(int parentId) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectList(nameSpace, ".selectSubCategories");
+		return sqlsession.selectList(nameSpace+ ".selectSubCategories",parentId);
 	}
 	
 	

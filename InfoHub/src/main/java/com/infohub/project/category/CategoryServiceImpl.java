@@ -10,15 +10,19 @@ public class CategoryServiceImpl implements CategoryService{
 	@Autowired
 	private CategoryDAO dao;
 
-	    @Override
-	    public List<CategoryVO> getMainCategories() {
-	        return dao.selectMainCategories();
-	    }
+	@Override
+    public List<CategoryVO> getMainCategories() {
+        List<CategoryVO> list = dao.selectMainCategories();
+        System.out.println("[Service] MainCategories = " + list);
+        return list;
+    }
 
-	    @Override
-	    public List<CategoryVO> getSubCategories(int parentId) {
-	        return dao.selectSubCategories(parentId);
-	    }
+    @Override
+    public List<CategoryVO> getSubCategories(int parentId) {
+        List<CategoryVO> list = dao.selectSubCategories(parentId);
+        System.out.println("[Service] parentId = " + parentId);
+        return list;
+    }
 	}
 
 

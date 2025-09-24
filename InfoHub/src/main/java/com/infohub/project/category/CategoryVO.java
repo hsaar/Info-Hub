@@ -27,7 +27,7 @@ public class CategoryVO {
 	}
 
 
-	public Integer getParentId() {
+	public int getParentId() {
 		return parentId;
 	}
 

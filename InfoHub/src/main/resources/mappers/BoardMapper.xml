@@ -41,7 +41,7 @@
 
 
 		<!-- 글쓰기 -->
-		<insert id="write" parameterType="BoardVO"
+		<insert id="register" parameterType="BoardVO"
 			useGeneratedKeys="true" keyProperty="BoardNO">
 			INSERT INTO board (title, content, login_login_id, age_category_id,
 			sub_category_id, regi_date)

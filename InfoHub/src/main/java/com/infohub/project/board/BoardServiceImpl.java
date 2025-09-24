@@ -32,7 +32,8 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int register(BoardVO boardVO) {
-		// TODO Auto-generated method stub
+		// 1. 게시글 정보를 Board 테이블에 저장 (게시글 ID가 반환되거나, VO에 자동 주입)
+		int boardId=dao.register(boardVO);
 		return dao.register(boardVO);
 	}
 

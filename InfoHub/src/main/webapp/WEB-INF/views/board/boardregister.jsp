@@ -41,7 +41,7 @@
 				</tr>
 				<tr height="50">
 					<td colspan="4" align="center"><input type="button"
-						value="글쓰기" onclick="check_ok()" />
+						value="글쓰기" onclick="${pageContext.request.contextPath}redirect:list" />
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input
 						type="reset" value="다시작성" />
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input
