@@ -15,6 +15,9 @@ public class ScrapDTO {
     private String articleTitle;
     private String articleContent;
     private String articleImage;
+    
+    // 스크랩 종류 구분
+    private String type;   
 
     public ScrapDTO() {}
 
@@ -48,4 +51,7 @@ public class ScrapDTO {
 
     public String getArticleImage() { return articleImage; }
     public void setArticleImage(String articleImage) { this.articleImage = articleImage; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 }

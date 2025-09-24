@@ -8,13 +8,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @WebServlet("/scraps")	// HTTP 요청 처리
 public class ScrapServer extends HttpServlet {
 	private static final long serialVersionUID = 1L;	// 직렬화 버전 UID
-    private ScrapService service = new ScrapService();
 
-    // 스크랩 목록 조회ㄴ
+    @Autowired
+    private ScrapService service;
+
+    // 스크랩 목록 조회
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

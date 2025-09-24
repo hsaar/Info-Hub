@@ -3,17 +3,21 @@ package com.infohub.project.mypage;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository   // 스프링 빈 등록
 public class ScrapDAO {
-    private static final String url = "jdbc:mysql://192.168.0.16:3306/policy?serverTimezone=UTC";
-    private static final String user = "avangers5";
-    private static final String pass = "12345";
+
+    @Autowired
+    private DataSource dataSource;   // root-context.xml
 
     // 스크랩 추가 (정책)
     public void addPolicyScrap(int loginId, int policyId) throws SQLException {
         String sql = "INSERT INTO scraps (login_login_id, policy_id, created_date) VALUES (?, ?, NOW())";
 
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, loginId);
             pstmt.setInt(2, policyId);
@@ -25,7 +29,7 @@ public class ScrapDAO {
     public void addArticleScrap(int loginId, int articleId) throws SQLException {
         String sql = "INSERT INTO scraps (login_login_id, article_id, created_date) VALUES (?, ?, NOW())";
 
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, loginId);
             pstmt.setInt(2, articleId);
@@ -40,7 +44,7 @@ public class ScrapDAO {
                      "FROM scraps s JOIN policy p ON s.policy_id = p.policy_id " +
                      "WHERE s.login_login_id = ? ORDER BY s.created_date DESC";
 
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, loginId);
 
@@ -52,6 +56,7 @@ public class ScrapDAO {
                     dto.setPolicyId(rs.getInt("policy_id"));
                     dto.setPolicyTitle(rs.getString("title"));
                     dto.setPolicyContent(rs.getString("content"));
+                    dto.setType("policy");
                     results.add(dto);
                 }
             }
@@ -66,7 +71,7 @@ public class ScrapDAO {
                      "FROM scraps s JOIN article a ON s.article_id = a.article_id " +
                      "WHERE s.login_login_id = ? ORDER BY s.created_date DESC";
 
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, loginId);
 
@@ -79,6 +84,7 @@ public class ScrapDAO {
                     dto.setArticleTitle(rs.getString("title"));
                     dto.setArticleContent(rs.getString("content"));
                     dto.setArticleImage(rs.getString("image"));
+                    dto.setType("article");
                     results.add(dto);
                 }
             }
@@ -89,7 +95,7 @@ public class ScrapDAO {
     // 스크랩 삭제
     public void deleteScrap(int scrapId) throws SQLException {
         String sql = "DELETE FROM scraps WHERE scraps_id = ?";
-        try (Connection conn = DriverManager.getConnection(url, user, pass);
+        try (Connection conn = dataSource.getConnection(); 
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, scrapId);
             pstmt.executeUpdate();

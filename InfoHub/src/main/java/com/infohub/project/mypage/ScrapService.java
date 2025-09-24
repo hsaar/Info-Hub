@@ -2,9 +2,14 @@ package com.infohub.project.mypage;
 
 import java.sql.SQLException;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service   // 서비스 계층 등록
 public class ScrapService {
-    private ScrapDAO dao = new ScrapDAO();
+
+    @Autowired
+    private ScrapDAO dao;
 
     // 정책 스크랩 추가
     public void addPolicyScrap(int loginId, int policyId) throws SQLException {
