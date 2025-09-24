@@ -8,10 +8,7 @@
       <img src="<c:url value='/resources/image/5.png'/>" alt="INFO HUB 로고">
     </a>
     <ul class="menu">
-      <li><a href="article_home">기사</a></li>
-      <li><a href="registrationlistAll">정책</a></li>
-      <li><a href="timeline">타임라인</a></li>
-      <li><a href="board_main">게시판</a></li>
+     <li><a href="mypage_main">마이페이지</a></li>
       <li><a href="login">로그인</a></li>
     </ul>
   </nav>

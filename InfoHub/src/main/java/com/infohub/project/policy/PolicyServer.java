@@ -2,6 +2,7 @@ package com.infohub.project.policy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.sql.SQLException;
 
 @RestController   // JSON 반환 전용 컨트롤러
@@ -17,13 +18,14 @@ public class PolicyServer {
             @RequestParam(value = "policyId", required = false) Integer policyId,
             @RequestParam(value = "regionId", required = false) Integer regionId,
             @RequestParam(value = "category", required = false) Integer categoryId,
-            @RequestParam(value = "keyword", required = false) String keyword) {
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "orderBy", required = false) String orderBy) {
 
         try {
             if (policyId != null) {  // 상세 조회
                 return service.getPolicyDetail(policyId);
             }
-            return service.getPolicies(regionId, categoryId, keyword);  // 목록 조회
+            return service.getPolicies(regionId, categoryId, keyword, orderBy);  // 목록 조회
         } catch (SQLException e) {
             return "{\"error\":\"DB 오류 발생\"}";
         }
@@ -50,6 +52,28 @@ public class PolicyServer {
             return "{\"error\":\"DB 오류\"}";
         } catch (Exception e) {
             return "{\"error\":\"잘못된 요청\"}";
+        }
+    }
+
+    // 정책 수정 (관리자용)
+    @PutMapping
+    public String updatePolicy(@ModelAttribute PolicyDTO dto) {
+        try {
+            service.updatePolicy(dto);
+            return "{\"result\":\"update_success\"}";
+        } catch (Exception e) {
+            return "{\"error\":\"DB 오류\"}";
+        }
+    }
+
+    // 정책 삭제 (관리자용)
+    @DeleteMapping
+    public String deletePolicy(@RequestParam("policyId") int policyId) {
+        try {
+            service.deletePolicy(policyId);
+            return "{\"result\":\"delete_success\"}";
+        } catch (Exception e) {
+            return "{\"error\":\"DB 오류\"}";
         }
     }
 }

@@ -5,9 +5,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	
+	<title>Home</title>
 </head>
 <body>
-
+	<div>
+		<%@ include file = "map.jsp" %>	
+	</div>
+	<div>
+		<%@ include file = "keyword.jsp" %>
+	</div>
 </body>
 </html>

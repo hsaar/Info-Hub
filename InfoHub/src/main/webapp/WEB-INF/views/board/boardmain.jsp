@@ -5,19 +5,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>로그인페이지입니다</title>
+	<title>커뮤니티</title>
 </head>
 <body>
-<h1> 로그인 </h1>
+<h1>
+	Hello world!  
+</h1>
 
+<P>  The time on the server is ${serverTime}. </P>
+<p> 게시판 메인 페이지 게시글은 여기 올라옴</p>
+<div>
+<a href="boardpost">
+		<h5 class="box-title">새글쓰기</h5>
+	</a>
 
-<P>  The time on the server is ${serverTime} </P>
-
-<div> 
-	<p>listAll : ${listAll}</p>
-	<p>getUserById : ${getUserById}</p>
-	
-	
 </div>
 </body>
 </html>
