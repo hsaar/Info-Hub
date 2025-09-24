@@ -13,24 +13,19 @@ public class SearchListAllDAOImpl implements SearchListAllDAO{
 	SqlSession sqlSession;
 	
 	private static final String nameSpace="com.infohub.project.searchMapper";
-
-	@Override
-	public int searchCount() throws Exception {
-		// TODO Auto-generated method stub
-		return sqlSession.selectOne(nameSpace + ".searchCount");
-	}
+	
 	
 	@Override
-	public List<SearchListAllDTO> searchlistAll() throws Exception {
-		// TODO Auto-generated method stub
-		return sqlSession.selectList(nameSpace + ".searchlistAll");
-	}
-	
-	@Override
-	public List<SearchListAllDTO> listPage(Criteria cri) throws Exception {
+	public List<SearchListAllDTO> slistPage(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
 		
-		return sqlSession.selectList(nameSpace + ".listPage",cri);
+		return sqlSession.selectList(nameSpace + ".slistPage",cri);
+	}
+	
+	@Override
+	public List<SearchListAllDTO> read(int articleId) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(nameSpace + ".read",articleId);
 	}
 	
 	@Override
@@ -39,12 +34,12 @@ public class SearchListAllDAOImpl implements SearchListAllDAO{
 		return sqlSession.selectOne(nameSpace + ".gettotalcount", cri);
 	}
 
-	@Override
-	public SearchListAllDTO read(int article_id) throws Exception {
-		// TODO Auto-generated method stub
-		return sqlSession.selectOne(nameSpace + ".read",article_id);
-	}
 
+//	@Override
+//	public List<SearchListAllDTO> searchlistAll() throws Exception {
+//		// TODO Auto-generated method stub
+//		return sqlSession.selectList(nameSpace + ".searchlistAll");
+//	}
 //
 //	@Override
 //	public List<SearchListAllDTO> listCriteria(Criteria cri) throws Exception {

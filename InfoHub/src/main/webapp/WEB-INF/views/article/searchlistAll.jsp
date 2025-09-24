@@ -107,8 +107,6 @@
 			<p>---------------------------------------------------------------------------------------</p>
 			<br>
 			<th>타이틀 :<td>${searchlistAll.title}</td></th><br>
-			<th>[카테고리:<td> <a href ='/views/readPage${pageMaker.makeSearch(pageMaker.cri.page) }&article_id=${searchlistAll.article_id}'>
-		 		${searchlistAll.title }	</a></td></tr><br>
 			<th>등록시간 : <td>${searchlistAll.published}</td></th><br>
 			<th>사진 : <td>${searchlistAll.image}</td></th><br>
 			<th>내용 : <td>${searchlistAll.content}</td></th><br>
