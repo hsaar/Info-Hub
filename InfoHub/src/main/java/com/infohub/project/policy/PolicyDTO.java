@@ -26,7 +26,7 @@ public class PolicyDTO {
 
     public PolicyDTO() {}
 
-    // Getter & Setter
+    // getter & setter
     public int getPolicyId() { return policyId; }
     public void setPolicyId(int policyId) { this.policyId = policyId; }
 
