@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PolicyDAO {
-    private static final String url = "jdbc:mysql://192.168.0.14:3306/policy?serverTimezone=UTC";
+    private static final String url = "jdbc:mysql://192.168.0.16:3306/policy?serverTimezone=UTC";
     private static final String user = "avangers5";
     private static final String pass = "12345";
 
