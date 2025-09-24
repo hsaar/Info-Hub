@@ -56,7 +56,7 @@ public class ScrapDAO {
                     dto.setPolicyId(rs.getInt("policy_id"));
                     dto.setPolicyTitle(rs.getString("title"));
                     dto.setPolicyContent(rs.getString("content"));
-                    dto.setType("policy");
+                    dto.setType("policy"); 
                     results.add(dto);
                 }
             }
@@ -84,7 +84,7 @@ public class ScrapDAO {
                     dto.setArticleTitle(rs.getString("title"));
                     dto.setArticleContent(rs.getString("content"));
                     dto.setArticleImage(rs.getString("image"));
-                    dto.setType("article");
+                    dto.setType("article"); 
                     results.add(dto);
                 }
             }
