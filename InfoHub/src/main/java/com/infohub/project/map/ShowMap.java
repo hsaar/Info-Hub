@@ -44,7 +44,9 @@ public class ShowMap {
             PolicyDTO detail = service.getPolicyDetail(1);
             System.out.println("제목: " + detail.getTitle());
             System.out.println("내용: " + detail.getContent());
-            System.out.println("좋아요 수: " + detail.getLikes()); // 정책 상세 조회
+            System.out.println("좋아요 수: " + detail.getLikes());
+            System.out.println("최소 나이: " + detail.getMinAge());
+            System.out.println("최대 나이: " + detail.getMaxAge()); // 정책 상세 조회
 
         } catch (SQLException e) {
             e.printStackTrace();

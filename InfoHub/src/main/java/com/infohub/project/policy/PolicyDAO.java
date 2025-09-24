@@ -80,6 +80,8 @@ public class PolicyDAO {
                     dto.setCategoryId(rs.getInt("category_id"));
                     dto.setKeyword(rs.getString("keyword"));
                     dto.setCreatedAt(rs.getString("created_at"));
+                    dto.setMinAge(rs.getInt("min_age"));
+                    dto.setMaxAge(rs.getInt("max_age"));
                 }
             }
         }
@@ -89,8 +91,8 @@ public class PolicyDAO {
     // 정책 추가 (관리자용)
     public void insertPolicy(PolicyDTO dto) throws SQLException {
         String sql = "INSERT INTO policy " +
-                     "(title, content, application_link, application_start, application_end, region_id, category_id, keyword, created_at) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                     "(title, content, application_link, application_start, application_end, region_id, category_id, keyword, min_age, max_age, created_at) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
         try (Connection conn = DriverManager.getConnection(url, user, pass);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -103,6 +105,8 @@ public class PolicyDAO {
             pstmt.setInt(6, dto.getRegionId());
             pstmt.setInt(7, dto.getCategoryId());
             pstmt.setString(8, dto.getKeyword());
+            pstmt.setInt(9, dto.getMinAge());
+            pstmt.setInt(10, dto.getMaxAge());
             // created_at은 DB에서 NOW()로 자동 입력
 
             pstmt.executeUpdate();

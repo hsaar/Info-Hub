@@ -76,6 +76,14 @@ public class PolicyServer extends HttpServlet {
             dto.setRegionId(Integer.parseInt(req.getParameter("regionId")));
             dto.setCategoryId(Integer.parseInt(req.getParameter("categoryId")));
             dto.setKeyword(req.getParameter("keyword"));
+            String minAgeStr = req.getParameter("minAge");
+            String maxAgeStr = req.getParameter("maxAge");
+            if (minAgeStr != null && !minAgeStr.isEmpty()) {
+                dto.setMinAge(Integer.parseInt(minAgeStr));
+            }
+            if (maxAgeStr != null && !maxAgeStr.isEmpty()) {
+                dto.setMaxAge(Integer.parseInt(maxAgeStr));
+            }
             // createdAt은 DB에서 NOW()로 자동 입력
 
             service.addPolicy(dto);
@@ -89,4 +97,5 @@ public class PolicyServer extends HttpServlet {
             resp.getWriter().print("{\"error\":\"잘못된 요청\"}");
         }
     }
+
 }

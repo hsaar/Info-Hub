@@ -10,6 +10,8 @@ public class PolicyDTO {
     private String applicationStart;
     private String applicationEnd;
     private int likes;
+    private int minAge;
+    private int maxAge;
 
     // 필터링
     private int policyId;
@@ -58,6 +60,12 @@ public class PolicyDTO {
     public String getCreatedAt() { return createdAt; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 
+    public int getMinAge() { return minAge; }
+    public void setMinAge(int minAge) { this.minAge = minAge; }
+
+    public int getMaxAge() { return maxAge; }
+    public void setMaxAge(int maxAge) { this.maxAge = maxAge; }
+
     @Override
     public String toString() {
         return "PolicyDTO{" +
@@ -66,6 +74,8 @@ public class PolicyDTO {
                 ", content='" + content + '\'' +
                 ", regionId=" + regionId +
                 ", categoryId=" + categoryId +
+                ", minAge=" + minAge +
+                ", maxAge=" + maxAge +
                 '}';
     }
 }
