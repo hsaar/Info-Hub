@@ -14,13 +14,6 @@ public class ScrapsDAOImpl implements ScrapsDAO {
 	
 	private final static String nameSpace = "com.infohub.project.scrapsMapper";
 	
-	private static ScrapsDAOImpl instance = new ScrapsDAOImpl();
-	
-	
-	public static ScrapsDAOImpl getInstance() {
-		
-		return instance;
-	}
 	
 	@Override
 	public int scrapsCount() throws Exception {

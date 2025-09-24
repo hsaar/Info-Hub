@@ -15,6 +15,10 @@ public interface ArticleDAO {
 	
 	public void updateViews(int article_id) throws Exception;
 	
+	public void updateHearts(int article_id) throws Exception;
+	public void cancleHearts(int article_id) throws Exception;
+	int countHearts(int article_id) throws Exception;
+	
 	
 
 	

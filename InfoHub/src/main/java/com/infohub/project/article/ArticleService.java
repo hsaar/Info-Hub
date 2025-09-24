@@ -13,4 +13,6 @@ public interface ArticleService {
 
 	List<ArticleVO> articleContent(int article_id) throws Exception;
 	
+	int countHearts(int article_id) throws Exception;
+	
 }

@@ -8,10 +8,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page session="false" %>
 
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-
-<title>articleContent</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>articleContent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+	
+	
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 
@@ -20,8 +29,11 @@
 		
 	$(document).ready(function(){
 		
+		articleHearts();
+		scrapsCheck();
+		heartsCheck();
 		commentList();
-		scrapCount();
+		
 		
   	  	$("#commentInsertBtn").click(function(){
 	        var article_article_id =$("#article_article_id").val();
@@ -133,20 +145,18 @@
 						
 					},
 					error : function(){
-		                alert("에러");
+		                alert("스크랩 에러");
 		             }     
 				
 				})//ajax
 			});//scrapbtn
 			
-			function scrapCount(){
+			function scrapsCheck(){
 		   		var article_article_id =$("#article_article_id").val();
-		   		var login_login_id = $("#login_login_id").val();
 		   		
-		   		url ="scrapCheck";
+		   		url ="scrapsCheck";
 		   		var paramData ={
-		        		"article_article_id" : article_article_id,
-		        		"login_login_id" : login_login_id
+		        		"article_article_id" : article_article_id
 		        };
 		   		
 		   		console.log(paramData);
@@ -171,10 +181,113 @@
 		                 }
 		             },
 		             error : function(data){
-		                alert("에러" + data);
+		                alert("스크랩 에러" + data);
 		             }     
 		       });
-		   	};
+		   	}; //scrapsCheck()
+		   	
+			$("#heartBtn").click(function(heart){
+				
+				var article_article_id =$("#article_article_id").val();
+		   		
+		   		url ="heart";
+		   		var paramData ={
+		        		"article_article_id" : article_article_id
+		        };
+		   		
+		   		console.log(paramData);
+		   		
+				$.ajax({
+					url: url,
+					data: paramData,
+					type: "post",
+					dataType: "json",
+					success: function(heart){
+						if(heart==0){
+							alert("좋아요완료");
+							  var btn = '🎔'
+								  $("#heartBtn").html(btn);
+						}else if(heart==1){
+							alert("좋아요취소");
+							 var btn = '♡'
+								  $("#heartBtn").html(btn);
+						}
+						location.reload();
+					},
+					error : function(){
+		                alert("좋아요 에러");
+		             }     
+				
+				})//ajax
+			});//heartbtn
+			
+			
+			function heartsCheck(){
+		   		var article_article_id =$("#article_article_id").val();
+		   		
+		   		url ="heartsCheck";
+		   		var paramData ={
+		        		"article_article_id" : article_article_id
+		        };
+		   		
+		   		console.log(paramData);
+		   		
+		   	  	$.ajax({
+		        	url : url,         // 주소 -> controller 매핑주소
+		          	data : paramData,    // 요청데이터
+		          	dataType : "json",  // 데이터타입
+		          	type : "post",      // 전송방식
+		            success : function(result){
+		            	console.log(result.length);
+		            	
+		            	
+		                 if(result.length < 1){
+		                	 var btn = '♡'
+		                	$("#heartBtn").html(btn);
+		                 }
+		                 else if(result.length = 1){
+		                    $(result).each(function(){
+		                    	var btn = '🎔'
+		                 		$("#heartBtn").html(btn);
+		                    });  // each End
+		                 }
+		             },
+		             error : function(data){
+		                alert("좋아요 에러" + data);
+		             }     
+		       });
+		   	}; //heartsCheck()
+		   	
+		   	function articleHearts(){
+		   		var article_article_id = $("#article_article_id").val();
+		   		
+		   		url ="articleHearts";
+		   		var paramData ={
+		        		"article_article_id" : article_article_id
+		        };
+		   		
+		   		console.log(paramData);
+		   		
+		   	  	$.ajax({
+		        	url : url,         // 주소 -> controller 매핑주소
+		          	data : paramData,    // 요청데이터
+		          	dataType : "json",  // 데이터타입
+		          	type : "post",      // 전송방식
+		            success : function(result){
+		            	console.log(result);
+		            	
+		            	var htmls ="";
+		            	
+		            	
+		                htmls += '♥' + result
+		                
+		                 $("#heartsCount").html(htmls);
+		             },
+		             error : function(data){
+		                alert("좋아요카운트 에러" + data);
+		             }     
+		       });
+		   	}; //articleHearts()
 		});
 	
 	
@@ -184,12 +297,41 @@
 </head>
 <body>
 
-        <h1 class="display-3">
-  		 기사 상세조회
-		</h1>
+<!-- 상단바 -->
+<%@ include file="../include/main_header.jsp"%>
 
-<div class="container">
-<div style="padding-top: 1px">
+<!-- 네비게이션 -->
+  	<div class="news-header">
+    <nav class="news-nav">
+      <a href="#" class="active">종합</a>
+      <a href="articleListAll1">부동산</a>
+      <a href="articleListAll2">주식</a>
+      <a href="articleListAll3">적금</a>
+      <a href="articleListAll4">복지</a>
+      <a href="articleListAll5">창업</a>
+      <a href="#">기타</a>
+    </nav>
+	</div>
+	
+	<!-- 브레드크럼 -->
+	<div class="breadcrumb">
+    <div class="container">
+      <a href="#">공지사항</a>
+      <span>></span>
+      <span>2025년 3/4분기 입회심사 결과</span>
+    </div>
+	</div>
+
+       <!-- 메인 컨테이너 -->
+	<div class="news-container">
+    <!-- 메인 콘텐츠 -->
+    <main class="news-main">
+    <h1 class="news-title">
+  		 기사 상세조회
+	</h1>
+
+	<div class="container">
+	<div style="padding-top: 1px">
 	
       <c:forEach var="article" items="${articleContent}"> <!-- JSTL의 반복문 -->
     
@@ -201,10 +343,13 @@
             <div style="font-size: 12;"> ${article.name}</div>
             <div style="font-size: 35; font-weight: bold;">${article.title}</div>
             <p style="font-size: 12;"> 
-            ${article.source} | ${article.published}<br>
-            ${article.views}(조회수) | ${article.hearts}(좋아요수)</p>
+            ${article.source} | ${article.published}</p>
+            views: ${article.views} <!--  | ${article.hearts}(좋아요수)</p>-->
+            <div id="heartsCount"></div>
             
-            <p><button type="button" class="btn btn-success" id="scrapBtn">☆</button></p>
+            <p><button type="button" class="btn btn-success" id="scrapBtn">☆</button>
+            <button type="button" class="btn btn-success" id="heartBtn">♡</button>
+            </p>
             
             <div style="flex:0 0 450px;">
             <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 650px; height: 450px;">
@@ -237,6 +382,78 @@
  	
 </div>
 </div>
+</main>
+<aside>
+      <div class="sidebar-section">
+        <h2>많이 본 기사</h2>
+        <ol class="rank-list">
+          <li>
+            <span class="rank-number">1</span>
+            <a href="#">인더스트리뉴스, 제7회 인터넷신문 대상 수상</a>
+          </li>
+          <li>
+            <span class="rank-number">2</span>
+            <a href="#">[오늘의 언론동향] 2025년 9월 5일 금요일</a>
+          </li>
+          <li>
+            <span class="rank-number">3</span>
+            <a href="#">투데이신문, 제8회 청년플러스포럼 'NEW Green Generation: ...'</a>
+          </li>
+          <li>
+            <span class="rank-number">4</span>
+            <a href="#">한국인터넷신문협회, 언론 정부직 손배제 강령 추진에 강력 반대</a>
+          </li>
+          <li>
+            <span class="rank-number">5</span>
+            <a href="#">[신연수 칼럼] 누가 누구를 개혁하는가?</a>
+          </li>
+        </ol>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>포토·영상</h2>
+        <div class="photo-grid">
+          <div class="photo-item"></div>
+          <div class="photo-item"></div>
+        </div>
+      </div>
+    </aside>
+   </div>
+ 
+
+
+  <!-- Top 버튼 -->
+  <button class="top-button" id="topButton" aria-label="맨 위로 이동">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 4l-8 8h6v8h4v-8h6z"/>
+    </svg>
+  </button>
    
+   
+   
+  <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
+    © 2025 누림 — Mist Blue Theme
+  </footer>
+<script>
+    // Top 버튼 기능
+    const topButton = document.getElementById('topButton');
+    
+    // 스크롤 시 버튼 표시/숨김
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 300) {
+        topButton.classList.add('show');
+      } else {
+        topButton.classList.remove('show');
+      }
+    });
+    
+    // 버튼 클릭 시 맨 위로 스크롤
+    topButton.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>  
 </body>
 </html>

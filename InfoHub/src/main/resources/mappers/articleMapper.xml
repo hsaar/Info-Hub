@@ -36,6 +36,18 @@
 	UPDATE article SET views = views + 1 WHERE article_id = #{article_id}
 	</update>
 	
+	<update id="updateHearts" parameterType="java.lang.Integer">
+	UPDATE article SET hearts = hearts + 1 WHERE article_id = #{article_id}
+	</update>
+	
+	<update id="cancleHearts" parameterType="java.lang.Integer">
+	UPDATE article SET hearts = hearts - 1 WHERE article_id = #{article_id}
+	</update>
+	
+	<select id="countHearts" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT hearts FROM article WHERE article_id = #{article_id}
+	</select>
+	
 	
 	
 </mapper>

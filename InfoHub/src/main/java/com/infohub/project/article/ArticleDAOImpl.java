@@ -62,6 +62,24 @@ public class ArticleDAOImpl implements ArticleDAO{
 		session.update("com.infohub.project.articleMapper.updateViews",article_id);
 	}
 
+	@Override
+	public void updateHearts(int article_id) throws Exception {
+		// TODO Auto-generated method stub
+		session.update("com.infohub.project.articleMapper.updateHearts",article_id);
+	}
 
+	@Override
+	public void cancleHearts(int article_id) throws Exception {
+		// TODO Auto-generated method stub
+		session.update("com.infohub.project.articleMapper.cancleHearts",article_id);
+	}
+
+	@Override
+	public int countHearts(int article_id) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectOne("com.infohub.project.articleMapper.countHearts",article_id);
+	}
+
+	
 
 }

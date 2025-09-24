@@ -24,13 +24,13 @@ public class ScrapsControl {
 	}
 	
 	@ResponseBody
-	@PostMapping("scrapCheck")
-	public int scrapCount(int article_article_id) throws Exception {
-		System.out.println("scrap");
+	@PostMapping("scrapsCheck")
+	public int scrapsCount(int article_article_id) throws Exception {
+		System.out.println("scrapsCheck");
 		
-		int scrapCheck = service.scrapsCheck(article_article_id);
+		int scrapsCheck = service.scrapsCheck(article_article_id);
 		
-		return scrapCheck;
+		return scrapsCheck;
 	}
 	
 	@ResponseBody

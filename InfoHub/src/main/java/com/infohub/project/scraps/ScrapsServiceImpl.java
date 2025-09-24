@@ -9,13 +9,6 @@ public class ScrapsServiceImpl implements ScrapsService {
 	@Autowired
 	ScrapsDAO dao;
 	
-	private static ScrapsServiceImpl instance = new ScrapsServiceImpl();
-	
-	
-	public static ScrapsServiceImpl getInstance() {
-		
-		return instance;
-	}
 
 	@Override
 	public int scrapsCount() throws Exception {

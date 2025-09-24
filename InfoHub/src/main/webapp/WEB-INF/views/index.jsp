@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page session="false"%>
 <html lang="ko">
 
 <head>
-<title>정책 &amp; 혜택 — Mist Blue Theme</title>
+<title>정책 &amp; 혜택 – Mist Blue Theme</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"
 	charset="UTF-8">
-<%@ include file = "include/plugin.jsp" %>
-	
+<%@ include file="include/plugin.jsp"%>
+
 <!-- 타이틀용 세리프 + 본문 산세리프 -->
 <link href="./index_files/css2" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,73 +20,84 @@
 	href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
-<%@ include file="include/header.jsp" %>
+<%@ include file="include/header.jsp"%>
 
 </head>
 
 <body>
 	<header class="main-header">
-	<%@ include file = "include/main_header.jsp" %>
+		<%@ include file="include/main_header.jsp"%>
 	</header>
 
 	<!-- 메인 히어로(양분) -->
 	<main class="hero">
-		<div class="layout">
-			<div class="layout-main">
+		<div class="container layout">
+			<!-- ⬇⬇ 왼쪽 컬럼 래퍼 추가 -->
+			<section class="left-col">
 
-				<!-- 누림 카드 스타일로 만든 상단 메시지 -->
-				<section class="intro" aria-label="서비스 소개">
-					<h2 class="title">나에게 맞는 지원, 지금 찾기</h2>
-					<p class="subtitle">
-						프로필 기반 맞춤 추천으로 필요한 <strong>정책·혜택만</strong> 쏙쏙.
-					</p>
-				</section>
+				<!-- ⬇⬇ 인트로 카드 추가 -->
+				<article class="card intro-card">
+					<div class="card-body">
+						<h1 class="page-title">나에게 맞는 지원, 지금 찾기</h1>
+						<p class="eyebrow">
+							프로필 기반 맞춤 추천으로 필요한 <strong>정책·혜택</strong>만 쏙쏙.
+						</p>
+					</div>
+				</article>
+
 				<section class="split">
-
 					<!-- 좌: 정책 -->
 					<article class="col policy">
 						<div class="inner">
 							<span class="eyebrow">POLICY</span>
-							<h1 class="title">정책</h1>
+							<h2 class="title">정책</h2>
 							<p class="desc">분야/지역/대상 필터와 마감일 알림으로, 필요한 정책만 빠르게 모아보세요.</p>
-							<a class="panel-link" href="policy"
-								aria-label="정책 페이지로 이동" title="정책 페이지로 이동"></a>
+							<a class="panel-link" href="policy" aria-label="정책 페이지로 이동"
+								title="정책 페이지로 이동"></a>
 						</div>
-
 					</article>
 
-					<!-- 우: 혜택(워터리) -->
+					<!-- 우: 혜택(워터릴) -->
 					<article class="col benefit" aria-labelledby="benefit-title">
 						<div class="inner">
 							<span class="eyebrow">BENEFITS</span>
 							<h2 id="benefit-title" class="title">혜택</h2>
 							<p class="desc">장학금·주거·교통·문화·건강 혜택을 프로필 기반으로 추천합니다.</p>
-							<a class="panel-link" href="benefits"
-								aria-label="혜택 페이지로 이동" title="혜택 페이지로 이동"></a>
+							<a class="panel-link" href="benefits" aria-label="혜택 페이지로 이동"
+								title="혜택 페이지로 이동"></a>
 						</div>
 					</article>
+					
+					
 				</section>
-			</div>
+
+			</section> <!-- ⬅ left-col 닫기 태그 추가 -->
+
 			<aside class="sidebar">
-				<article class="col login-panel" aria-labelledby="login-title">
-					<div class="inner">
+				<article class="card login-panel" aria-labelledby="login-title">
+					<div class="card-body">
 						<h3 id="login-title" class="title"
 							style="font-size: 24px; text-align: center;">
 							<strong>로그인하고</strong> 여러 서비스를 <br>편리하게 이용하세요.
 						</h3>
 
 						<ul class="quick-links">
-							<li><a href="timeline" class="dot-link"> <span class="icon"
-									style="-mask: url('clock.svg')"></span><span>타임라인</span>
+							<li><a href="my_benifit" class="dot-link"> 
+								<span class="icon" style="mask: url('clock.svg')"></span>
+								<span>내 혜택 모아보기</span>
 							</a></li>
-							<li><a href="board" class="dot-link"> <span class="icon "
-									style="-mask: url('post.svg')"></span><span>게시판</span>
+					
+							<li><a href="customized_article" class="dot-link"> 
+								<span class="icon" style="mask: url('post.svg')"></span>
+								<span>맞춤형 기사 추천</span>
 							</a></li>
-							<li><a href="my_benifit" class="dot-link"> <span class="icon"
-									style="-mask: url('mypage.svg')"></span><span>나의 정책</span>
+							<li><a href="my_benifit" class="dot-link"> 
+								<span class="icon" style="mask: url('mypage.svg')"></span>
+								<span>나의 정책</span>
 							</a></li>
-							<li><a href="mypage_main" class="dot-link"> <span class="icon"
-									style="-mask: url('alarm.svg')"></span><span>마이페이지</span>
+							<li><a href="mypage_main" class="dot-link"> 
+								<span class="icon" style="mask: url('alarm.svg')"></span>
+								<span>마이페이지</span>
 							</a></li>
 						</ul>
 
@@ -97,17 +108,11 @@
 		</div>
 
 	</main>
-	
-	<div>
-		<%@ include file = "map.jsp" %>	
-	</div>
-	<div>
-		<%@ include file = "keyword.jsp" %>
-	</div>
-	
+
 	<footer class="footer">
-		<%@ include file = "include/footer.jsp" %>
+		<%@ include file="include/footer.jsp"%>
 	</footer>
+	
 	<!-- Code injected by live-server -->
 	<script>
 		// <![CDATA[  <-- For SVG support
@@ -160,8 +165,6 @@
 		}
 		// ]]>
 	</script>
->>>>>>> refs/heads/hs
-
 
 </body>
 </html>

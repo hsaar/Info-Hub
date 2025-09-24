@@ -9,7 +9,7 @@
 %>
 <header class="topbar">
 	<nav class="nav">
-		<a class="logo" href="<c:url value='/'/>">INFO HUB</a>
+		<a class="logo" href="<c:url value='/'/>"><img src="<c:url value='/resources/image/5.png'/>" alt="INFO HUB 로고"></a>
 		<ul class="menu">
 			<li><a href="articleListAll">기사</a></li>
 			<li><a href="timeline">타임라인</a></li>

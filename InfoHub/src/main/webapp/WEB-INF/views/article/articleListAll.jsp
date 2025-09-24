@@ -22,7 +22,7 @@
 <!-- 네비게이션 -->
   	<div class="news-header">
     <nav class="news-nav">
-      <a href="#" class="active">종합</a>
+      <a href="articleListAll" class="active">종합</a>
       <a href="articleListAll1">부동산</a>
       <a href="articleListAll2">주식</a>
       <a href="articleListAll3">적금</a>
@@ -68,7 +68,7 @@
       		<div class="news-meta">
             ${article.name} | ${article.source}<br>
             ${article.published}<br>
-            ${article.hearts}(좋아요수)
+            ♥${article.hearts}
             </div>
             
             <div class="news-thumb">

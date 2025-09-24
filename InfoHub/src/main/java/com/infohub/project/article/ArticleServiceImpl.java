@@ -56,4 +56,12 @@ public class ArticleServiceImpl implements ArticleService{
 		return dao.articleContent(article_id);
 	}
 
+	@Override
+	public int countHearts(int article_id) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.countHearts(article_id);
+	}
+
+	
+
 }
