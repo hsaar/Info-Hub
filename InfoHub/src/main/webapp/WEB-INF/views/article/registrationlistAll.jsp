@@ -12,19 +12,35 @@
 </h1>
 
 <h2>혜택</h2>
-
-		<tr>
-		<c:forEach var="registrationlistAll" items="${registrationlistAll }"> <!-- JSTL의 반복문 -->
-			<p>----------------------------------------------------------------------------------------</p><br>
-			<th>타이틀 : <td>${registrationlistAll.title}</td></th><br>
-			<th>내용  : <td>${registrationlistAll.content}</td></th><br>
-			<th>신청기간 : <td>${registrationlistAll.period}</td></th><br>
-			<th>접수기관 : <td>${registrationlistAll.trachea}</td></th><br>
-			<th>전화문의 : <td>${registrationlistAll.call}</td></th><br>
-			<th>지원형태 : <td>${registrationlistAll.type}</td></th><br>
-			<th>신청방법 : </th><a href="${registrationlistAll.link}" class="btn-text type-black diagonal" target="_blank" title="새창열림"><span>타사이트 이동</span></a>
-		</c:forEach>
-		</tr>
+	<table border="1" cellpadding="5" cellspacing="0">
+	    <thead>
+	        <tr>
+	            <th>타이틀</th>
+	            <th>내용</th>
+	            <th>신청기간</th>
+	            <th>접수기관</th>
+	            <th>전화문의</th>
+	            <th>지원형태</th>
+	            <th>신청방법</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <c:forEach var="item" items="${registrationlistAll}">
+	            <tr>
+	                <td>${item.title}</td>
+	                <td>${item.content}</td>
+	                <td>${item.period}</td>
+	                <td>${item.trachea}</td>
+	                <td>${item.call}</td>
+	                <td>${item.type}</td>
+	                <td>
+	                    <a href="${item.link}" target="_blank" title="새창열림">
+	                        타사이트 이동
+	                    </a>
+	                </td>
+	            </tr>
+	        </c:forEach>
+	    </tbody>
 	</table>
 </body>
 </html>

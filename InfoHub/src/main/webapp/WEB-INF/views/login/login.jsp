@@ -27,7 +27,7 @@
     <form action="memberjoin" method="post">
       <h1>Create Account</h1>
       <span>or use your email for registration</span>
-      <input type="text" placeholder="ID" name = "username" required/>
+      <input type="text" placeholder="ID" name = "userId" required/>
       <input type="password" placeholder="Password" name = "password" required/>
       <input type="password" placeholder="PasswordCheak" name = "passwordcheak" required/>
       <input type="email" placeholder="Email" name = "email" required/>
@@ -51,7 +51,7 @@
     <form action="login_ok" method="post">
       <h1>Sign in</h1>
       <span>or use your account</span>
-      <input type="text" placeholder="Email" name = "username"/>
+      <input type="text" placeholder="Email" name = "userId"/>
       <input type="password" placeholder="Password" name="password"/>
       <a href="#">Forgot your password?</a>
       <button>Sign In</button>

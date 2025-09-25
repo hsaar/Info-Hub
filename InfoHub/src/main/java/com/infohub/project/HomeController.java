@@ -56,11 +56,6 @@ public class HomeController {
 		return "timeline";
 	}
 	
-	@GetMapping("registrationlistAll")
-	public String registrationlistAll(Model model) {
-		return "/article/registrationlistAll";
-	}
-	
 	@GetMapping("my_benifit")
 	public String my_benifit(Model model) {
 		return "/customized/my_benifit";

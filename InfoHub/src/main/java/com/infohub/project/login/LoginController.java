@@ -23,7 +23,6 @@ public class LoginController {
 	@GetMapping("login")
 	public String login(Model model) {
 		model.addAttribute("listAll", se.listAll());
-		model.addAttribute("getUserById", se.getUserById(1));
 		return "./login/login";
 	}
 	
@@ -54,8 +53,7 @@ public class LoginController {
 						@RequestParam("name")String name,
 						@RequestParam("phone")String phone) {
 		
-		String username = se.getUserByUsername(userId).getUsername();
-		int i = se.updateUser(new LoginDTO(username,password,name,email,phone,null,null,1,1,0));
+		int i = se.updateUser(new LoginDTO(userId,password,name,email,phone,null,null,1,1,0));
 		if( i > 0 )
 			logger.info("변경성공");
 		
@@ -73,7 +71,7 @@ public class LoginController {
 			request.getSession().invalidate(); //기존 세션 파기
 			
 			HttpSession session = request.getSession(true);
-			session.setAttribute("userId", res.getName()); //세션이 없으면 새로운 세션에 유저id값 부여
+			session.setAttribute("userId", res.getuserId()); //세션이 없으면 새로운 세션에 유저id값 부여
 			
 			return "redirect:/";
 		}else {
@@ -87,7 +85,7 @@ public class LoginController {
 	}
 	@PostMapping("memberjoin")
 	public String memberjoin(Model model, 
-							@RequestParam("username")String username, 
+							@RequestParam("userId")String userId, 
 							@RequestParam("password")String password,
 							@RequestParam("passwordcheak")String passwordcheak,
 							@RequestParam("email")String email,
@@ -101,7 +99,7 @@ public class LoginController {
 			logger.info("중복이름");
 		}
 		
-		if(se.checkUsernameDuplicate(username)==1) {
+		if(se.checkuserIdDuplicate(userId)==1) {
 			logger.info("중복아이디");
 		}
 			
@@ -109,7 +107,7 @@ public class LoginController {
 			logger.info("패스워드 체크 틀림");
 		}
 		
-		int i = se.insertUser(new LoginDTO(username,password,name,email,phone,null,null,1,1,age));
+		int i = se.insertUser(new LoginDTO(userId,password,name,email,phone,null,null,1,1,age));
 		if( i > 0 )
 			logger.info("생성성공");
 		
