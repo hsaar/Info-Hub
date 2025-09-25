@@ -2,57 +2,57 @@ package com.infohub.project.hearts;
 
 public class HeartsVO {
 	
-	private String hearts_id;
-	private String login_login_id;
-	private String article_article_id;
-	private String created_data;
+	private String heartsNo;
+	private String login_loginNo;
+	private String article_articleId;
+	private String createdData;
 	
 	HeartsVO(){}
 
-	public HeartsVO(String hearts_id, String login_login_id, String article_article_id, String created_data) {
+	public HeartsVO(String heartsNo, String login_loginNo, String article_articleId, String createdData) {
 		super();
-		this.hearts_id = hearts_id;
-		this.login_login_id = login_login_id;
-		this.article_article_id = article_article_id;
-		this.created_data = created_data;
+		this.heartsNo = heartsNo;
+		this.login_loginNo = login_loginNo;
+		this.article_articleId = article_articleId;
+		this.createdData = createdData;
 	}
 
-	public String getHearts_id() {
-		return hearts_id;
+	public String getHeartsNo() {
+		return heartsNo;
 	}
 
-	public void setHearts_id(String hearts_id) {
-		this.hearts_id = hearts_id;
+	public void setHeartsNo(String heartsNo) {
+		this.heartsNo = heartsNo;
 	}
 
-	public String getLogin_login_id() {
-		return login_login_id;
+	public String getLogin_loginNo() {
+		return login_loginNo;
 	}
 
-	public void setLogin_login_id(String login_login_id) {
-		this.login_login_id = login_login_id;
+	public void setLogin_loginNo(String login_loginNo) {
+		this.login_loginNo = login_loginNo;
 	}
 
-	public String getArticle_article_id() {
-		return article_article_id;
+	public String getArticle_articleId() {
+		return article_articleId;
 	}
 
-	public void setArticle_article_id(String article_article_id) {
-		this.article_article_id = article_article_id;
+	public void setArticle_articleId(String article_articleId) {
+		this.article_articleId = article_articleId;
 	}
 
-	public String getCreated_data() {
-		return created_data;
+	public String getCreatedData() {
+		return createdData;
 	}
 
-	public void setCreated_data(String created_data) {
-		this.created_data = created_data;
+	public void setCreatedData(String createdData) {
+		this.createdData = createdData;
 	}
 
 	@Override
 	public String toString() {
-		return "HeartsVO [hearts_id=" + hearts_id + ", login_login_id=" + login_login_id + ", article_article_id="
-				+ article_article_id + ", created_data=" + created_data + "]";
+		return "HeartsVO [heartsNo=" + heartsNo + ", login_loginNo=" + login_loginNo + ", article_articleId="
+				+ article_articleId + ", createdData=" + createdData + "]";
 	}
 
 	

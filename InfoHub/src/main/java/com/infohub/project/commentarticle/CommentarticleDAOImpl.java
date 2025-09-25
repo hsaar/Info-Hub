@@ -1,4 +1,4 @@
-package com.infohub.project.comment;
+package com.infohub.project.commentarticle;
 
 import java.util.List;
 
@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Repository
-public class CommentDAOImpl implements CommentDAO{
+public class CommentarticleDAOImpl implements CommentarticleDAO{
 	
 	@Autowired
 	SqlSession sqlSession;
 	
-	private final static String nameSpace = "com.infohub.project.commentMapper";
+	private final static String nameSpace = "com.infohub.project.commentarticleMapper";
 	
  // class end
 
@@ -23,15 +23,17 @@ public class CommentDAOImpl implements CommentDAO{
 //	
 
 	@Override
-	public List<CommentVO> commentListAll(int article_article_id) throws Exception {
+	public List<CommentarticleVO> commentarticleListAll(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList(nameSpace+".listAll", article_article_id);
+		return sqlSession.selectList(nameSpace + ".listAll", article_articleId);
 	}
 
 	@Override
-	public int commentInsert(CommentVO commentVO) throws Exception {
+	public int commentarticleInsert(CommentarticleVO commentarticleVO) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.insert(nameSpace+".insert", commentVO);
+		return sqlSession.insert(nameSpace+".insert", commentarticleVO);
 	}
+
+	
 
 }

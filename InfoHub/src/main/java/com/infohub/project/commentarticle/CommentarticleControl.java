@@ -1,4 +1,4 @@
-package com.infohub.project.comment;
+package com.infohub.project.commentarticle;
 
 import java.util.List;
 
@@ -18,38 +18,38 @@ import com.infohub.project.login.LoginServiceImpl;
 
 @RestController
 @RequestMapping("comment/")
-public class CommentControl {
+public class CommentarticleControl {
 
 	@Autowired
-	CommentService service;
+	CommentarticleService service;
 	
 	@Autowired
 	LoginServiceImpl ls;
 	
-	public CommentControl() {
+	public CommentarticleControl() {
 		System.out.println("-----CommentCont() 객체 생성됨");
 	} // end
 	
 	
 	@ResponseBody
 	@PostMapping("insert")
-	private int mCommentServiceInsert(CommentVO commentVO) throws Exception {
+	private int mCommentServiceInsert(CommentarticleVO commentarticleVO) throws Exception {
 		System.out.println("insert");
 		
 		
 	    // 로그인 기능을 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력받아온 값을 사용하면 된다.
 	    // 따로 구현하지 않았기 때문에 아이디는 임시로 "test"
-	    return service.commentInsert(commentVO);
+	    return service.commentarticleInsert(commentarticleVO);
 
 	} // mCommentServiceInsert() end
 	
 	@ResponseBody
 	@PostMapping("listAll")
-	public List<CommentVO> mCommentServiceListAll(int article_article_id) throws Exception {
+	public List<CommentarticleVO> mCommentServiceListAll(int article_articleId) throws Exception {
 		System.out.println("listAll");
 		
 		
-	    return service.commentListAll(article_article_id);
+	    return service.commentarticleListAll(article_articleId);
 
 	}
 	

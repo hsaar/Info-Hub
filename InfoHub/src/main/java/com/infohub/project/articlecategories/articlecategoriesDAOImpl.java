@@ -1,4 +1,4 @@
-package com.infohub.project.article_categories;
+package com.infohub.project.articlecategories;
 
 import java.util.List;
 
@@ -9,19 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class article_categoriesDAOImpl implements article_categoriesDAO{
+public class articlecategoriesDAOImpl implements articlecategoriesDAO{
 
 	@Autowired
 	SqlSession sqlSession;
 	
-	private static final String nameSpace="com.infohub.project.article_categoriesMapper";
+	private static final String nameSpace="com.infohub.project.infoHubMapper";
 	
+
 	@Override
-	public List<article_categoriesDTO> article_categorieslistAll() throws Exception {
+	public List<ArticlecategoriesVO> articlecategorieslistAll() throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList(nameSpace + ".article_categorieslistAll");
-		
-		
+		return sqlSession.selectList(nameSpace + ".listAll");
 	}
 
 }

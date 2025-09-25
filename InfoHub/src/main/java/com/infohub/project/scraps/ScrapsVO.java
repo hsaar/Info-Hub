@@ -2,60 +2,58 @@ package com.infohub.project.scraps;
 
 public class ScrapsVO {
 	
-	private String scaps_id;
-	private String created_date;
-	private String login_login_id;
-	private String article_article_id;
+	private String scapsNo;
+	private String createdDate;
+	private String login_loginNo;
+	private String article_articleId;
 	
 	ScrapsVO(){}
 
-	public ScrapsVO(String scaps_id, String created_date, String login_login_id, String article_article_id,
-			String article_categories_categories_id) {
+	public ScrapsVO(String scapsNo, String createdDate, String login_loginNo, String article_articleId) {
 		super();
-		this.scaps_id = scaps_id;
-		this.created_date = created_date;
-		this.login_login_id = login_login_id;
-		this.article_article_id = article_article_id;
+		this.scapsNo = scapsNo;
+		this.createdDate = createdDate;
+		this.login_loginNo = login_loginNo;
+		this.article_articleId = article_articleId;
 	}
 
-	public String getScaps_id() {
-		return scaps_id;
+	public String getScapsNo() {
+		return scapsNo;
 	}
 
-	public void setScaps_id(String scaps_id) {
-		this.scaps_id = scaps_id;
+	public void setScapsNo(String scapsNo) {
+		this.scapsNo = scapsNo;
 	}
 
-	public String getCreated_date() {
-		return created_date;
+	public String getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreated_date(String created_date) {
-		this.created_date = created_date;
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
 	}
 
-	public String getLogin_login_id() {
-		return login_login_id;
+	public String getLogin_loginNo() {
+		return login_loginNo;
 	}
 
-	public void setLogin_login_id(String login_login_id) {
-		this.login_login_id = login_login_id;
+	public void setLogin_loginNo(String login_loginNo) {
+		this.login_loginNo = login_loginNo;
 	}
 
-	public String getArticle_article_id() {
-		return article_article_id;
+	public String getArticle_articleId() {
+		return article_articleId;
 	}
 
-	public void setArticle_article_id(String article_article_id) {
-		this.article_article_id = article_article_id;
+	public void setArticle_articleId(String article_articleId) {
+		this.article_articleId = article_articleId;
 	}
 
 	@Override
 	public String toString() {
-		return "ScrapsVO [scaps_id=" + scaps_id + ", created_date=" + created_date + ", login_login_id="
-				+ login_login_id + ", article_article_id=" + article_article_id + "]";
+		return "ScrapsVO [scapsNo=" + scapsNo + ", createdDate=" + createdDate + ", login_loginNo=" + login_loginNo
+				+ ", article_articleId=" + article_articleId + "]";
 	}
 
-	
 	
 }

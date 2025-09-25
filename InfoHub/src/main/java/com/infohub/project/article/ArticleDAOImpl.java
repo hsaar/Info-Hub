@@ -13,73 +13,80 @@ public class ArticleDAOImpl implements ArticleDAO{
 	SqlSession session;
 	//private static final String nameSpace = "com.infohub.project.infoHubMapper";
 
+	private final static String nameSpace = "com.infohub.project.articleMapper";
+	
+	
 	@Override
-	public List<ArticleVO> articlListAll() throws Exception {
+	public List<ArticleVO> articlListAll(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList("com.infohub.project.articleMapper.articleListAll");
+		return session.selectList(nameSpace + ".articleListAll", cri);
 	}
 	
 	@Override
 	public List<ArticleVO> articlListAll1() throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList("com.infohub.project.articleMapper.articleListAll1");
+		return session.selectList(nameSpace + ".articleListAll1");
 	}
 
 	@Override
 	public List<ArticleVO> articlListAll2() throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList("com.infohub.project.articleMapper.articleListAll2");
+		return session.selectList(nameSpace + ".articleListAll2");
 	}
 
 	@Override
 	public List<ArticleVO> articlListAll3() throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList("com.infohub.project.articleMapper.articleListAll3");
+		return session.selectList(nameSpace + ".articleListAll3");
 	}
 
 	@Override
 	public List<ArticleVO> articlListAll4() throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList("com.infohub.project.articleMapper.articleListAll4");
+		return session.selectList(nameSpace + ".articleListAll4");
 	}
 
 	@Override
 	public List<ArticleVO> articlListAll5() throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList("com.infohub.project.articleMapper.articleListAll5");
+		return session.selectList(nameSpace + ".articleListAll5");
 	}
 
 	@Override
-	public List<ArticleVO> articleContent(int article_id) throws Exception {
+	public List<ArticleVO> articleContent(int articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList("com.infohub.project.articleMapper.articleContent", article_id);
+		return session.selectList(nameSpace + ".articleContent", articleId);
 	
 	}
 
 	@Override
-	public void updateViews(int article_id) throws Exception{
+	public void updateViews(int articleId) throws Exception{
 		// TODO Auto-generated method stub
-		session.update("com.infohub.project.articleMapper.updateViews",article_id);
+		session.update(nameSpace +".updateViews",articleId);
 	}
 
 	@Override
-	public void updateHearts(int article_id) throws Exception {
+	public void updateHearts(int articleId) throws Exception {
 		// TODO Auto-generated method stub
-		session.update("com.infohub.project.articleMapper.updateHearts",article_id);
+		session.update(nameSpace + ".updateHearts",articleId);
 	}
 
 	@Override
-	public void cancleHearts(int article_id) throws Exception {
+	public void cancleHearts(int articleId) throws Exception {
 		// TODO Auto-generated method stub
-		session.update("com.infohub.project.articleMapper.cancleHearts",article_id);
+		session.update(nameSpace + ".cancleHearts",articleId);
 	}
 
 	@Override
-	public int countHearts(int article_id) throws Exception {
+	public int countHearts(int articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectOne("com.infohub.project.articleMapper.countHearts",article_id);
+		return session.selectOne(nameSpace + ".countHearts",articleId);
 	}
 
-	
+	@Override
+	public int getTotal() {
+		// TODO Auto-generated method stub
+		return session.selectOne(nameSpace + ".getTotal");
+	}
 
 }

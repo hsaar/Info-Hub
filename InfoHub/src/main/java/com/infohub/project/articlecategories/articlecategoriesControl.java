@@ -1,4 +1,4 @@
-package com.infohub.project.article_categories;
+package com.infohub.project.articlecategories;
 
 import java.util.List;
 
@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.infohub.project.HomeController;
 
 @Controller
-public class article_categoriesControl { 
+public class articlecategoriesControl { 
 	
-	private static final Logger logger = LoggerFactory.getLogger(article_categoriesControl.class);
+	private static final Logger logger = LoggerFactory.getLogger(articlecategoriesControl.class);
 	
 	@Autowired
-	private article_categoriesService service;
+	private articlecategoriesService service;
 	
-	@RequestMapping("article_categorieslistAll")
-	public String listAll(Model model) throws Exception{
+	@RequestMapping("listAll")
+	public String articlecategorieslistAll(Model model) throws Exception{
 		logger.info("전체조회");
-		List<article_categoriesDTO> article_categorieslistAll = service.article_categorieslistAll();
+		List<ArticlecategoriesVO> listAll = service.articlecategorieslistAll();
 		
-		model.addAttribute("article_categorieslistAll", article_categorieslistAll);
-		return "article_categorieslistAll";
+		model.addAttribute("listAll", listAll);
+		return "listAll";
 	}
 	
 	

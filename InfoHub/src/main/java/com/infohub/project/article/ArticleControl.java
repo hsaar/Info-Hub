@@ -24,12 +24,18 @@ public class ArticleControl {
 	@Autowired
 	ArticleService service;
 	
+	
 	@RequestMapping("articleListAll")
-	public String articleListAll(Model model) throws Exception{
+	public String articleListAll(Model model, Criteria cri) throws Exception{
 		logger.info("articleListAll..");
 		
-		List<ArticleVO> articleListAll = service.articlListAll();
+		List<ArticleVO> articleListAll = service.articlListAll(cri);
 		model.addAttribute("articleListAll", articleListAll);
+		
+		int total = service.getTotal();
+		
+		PageMakeVO pageMake = new PageMakeVO(cri, total);
+		model.addAttribute("pageMake", pageMake);
 		
 		return "article/articleListAll";
 	}
@@ -85,10 +91,10 @@ public class ArticleControl {
 	}
 	
 	@RequestMapping("articleContent")
-	public String articleContent(Model model, int article_id) throws Exception{
+	public String articleContent(Model model, int articleId) throws Exception{
 		logger.info("articleContent..");
 		
-		List<ArticleVO> articleContent = service.articleContent(article_id);
+		List<ArticleVO> articleContent = service.articleContent(articleId);
 		model.addAttribute("articleContent", articleContent);
 		
 		return "article/articleContent";
@@ -96,12 +102,13 @@ public class ArticleControl {
 	
 	@ResponseBody
 	@PostMapping("countHearts")
-	public int countHearts(int article_id) throws Exception {
+	public int countHearts(int articleId) throws Exception {
 		System.out.println("countHearts");
 		
-		int countHearts = service.countHearts(article_id);
+		int countHearts = service.countHearts(articleId);
 		
 		return countHearts;
 	}
+	
 
 }

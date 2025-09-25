@@ -1,4 +1,4 @@
-package com.infohub.project.comment;
+package com.infohub.project.commentarticle;
 
 import java.util.List;
 
@@ -6,22 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommentServiceImpl implements CommentService{
+public class CommentarticleServiceImpl implements CommentarticleService{
 
 	@Autowired
-	CommentDAO dao;
+	CommentarticleDAO dao;
 	
 
 	@Override
-	public List<CommentVO> commentListAll(int article_article_id) throws Exception {
+	public List<CommentarticleVO> commentarticleListAll(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.commentListAll(article_article_id);
+		return dao.commentarticleListAll(article_articleId);
 	}
 
 	@Override
-	public int commentInsert(CommentVO commentVO) throws Exception {
+	public int commentarticleInsert(CommentarticleVO commentarticleVO) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.commentInsert(commentVO);
+		return dao.commentarticleInsert(commentarticleVO);
 	}
 
 }

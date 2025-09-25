@@ -17,23 +17,21 @@ public class ScrapsServiceImpl implements ScrapsService {
 	}
 
 	@Override
-	public int scrapsCheck(int article_article_id) throws Exception {
+	public int scrapsCheck(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.scrapsCheck(article_article_id);
+		return dao.scrapsCheck(article_articleId);
 	}
 
 	@Override
-	public int scrapsInsert(int article_article_id) throws Exception {
+	public int scrapsInsert(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.scrapsInsert(article_article_id);
+		return dao.scrapsInsert(article_articleId);
 	}
 
 	@Override
-	public int scrapsDelete(int article_article_id) throws Exception {
+	public int scrapsDelete(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.scrapsDelete(article_article_id);
+		return dao.scrapsDelete(article_articleId);
 	}
-	
-	
 
 }

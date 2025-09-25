@@ -1,12 +1,12 @@
-package com.infohub.project.comment;
+package com.infohub.project.commentarticle;
 
 import java.util.List;
 
-public interface CommentService {
+public interface CommentarticleService {
 	
-	List<CommentVO> commentListAll(int article_article_id) throws Exception;
+	List<CommentarticleVO> commentarticleListAll(int article_articleId) throws Exception;
 	
-	public int commentInsert(CommentVO commentVO) throws Exception;
+	public int commentarticleInsert(CommentarticleVO commentarticleVO) throws Exception;
 	
 
 }

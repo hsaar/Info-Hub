@@ -1,7 +1,7 @@
-package com.infohub.project.article_categories;
+package com.infohub.project.articlecategories;
 
 import java.util.List;
 
-public interface article_categoriesService {
-	List<article_categoriesDTO> article_categorieslistAll() throws Exception;
+public interface articlecategoriesService {
+	List<ArticlecategoriesVO> articlecategorieslistAll() throws Exception;
 }

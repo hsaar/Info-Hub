@@ -66,7 +66,7 @@
       		
       		
 			
-            <h3><a href="articleContent?article_id=${article.article_id}">${article.title}</a></h3>
+            <h3><a href="articleContent?articleId=${article.articleId}">${article.title}</a></h3>
             <p class="news-summary">${article.content}(기사내용)</p>
       		<div class="news-meta">
             ${article.name} | ${article.source}<br>

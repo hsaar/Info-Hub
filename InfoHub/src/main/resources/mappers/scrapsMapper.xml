@@ -7,25 +7,23 @@
 	
 	<select id="scrapsCount" resultType="int">
 	select count(*) from scraps
-	where article_article_id = #{article_article_id}
+	where article_articleId = #{article_articleId}
 	</select>
 	
 	<select id="scrapsCheck" resultType="int">
 	select count(*) from scraps
-	where article_article_id = #{article_article_id}
-	and login_login_id = 2
+	where article_articleId = #{article_articleId}
+	and login_loginNo = 2
 	</select>
 	
 	<insert id="scrapsInsert">
-	insert into scraps(created_date, login_login_id, article_article_id) values(now(), 2, #{article_article_id})
+	insert into scraps(createdDate, login_loginNo, article_articleId) values(now(), 2, #{article_articleId})
 	</insert>
 	
 	<delete id="scrapsDelete">
 	delete from scraps
-	where article_article_id = #{article_article_id}
-	and login_login_id = 2
+	where article_articleId = #{article_articleId}
+	and login_loginNo = 2
 	</delete>
 	
-
-
 </mapper>

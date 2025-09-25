@@ -4,7 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.infohub.project.comment.CommentDAOImpl;
+import com.infohub.project.commentarticle.CommentarticleDAOImpl;
 
 @Repository
 public class ScrapsDAOImpl implements ScrapsDAO {
@@ -23,23 +23,23 @@ public class ScrapsDAOImpl implements ScrapsDAO {
 
 
 	@Override
-	public int scrapsCheck(int article_article_id) throws Exception {
+	public int scrapsCheck(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectOne(nameSpace+".scrapsCheck", article_article_id);
+		return session.selectOne(nameSpace+".scrapsCheck", article_articleId);
 	}
 
 
 	@Override
-	public int scrapsInsert(int article_article_id) throws Exception {
+	public int scrapsInsert(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return session.insert(nameSpace+".scrapsInsert", article_article_id);
+		return session.insert(nameSpace+".scrapsInsert", article_articleId);
 	}
 
 
 	@Override
-	public int scrapsDelete(int article_article_id) throws Exception {
+	public int scrapsDelete(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return session.delete(nameSpace+".scrapsDelete", article_article_id);
+		return session.delete(nameSpace+".scrapsDelete", article_articleId);
 	}
 
 }

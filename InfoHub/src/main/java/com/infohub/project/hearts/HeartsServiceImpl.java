@@ -11,33 +11,33 @@ public class HeartsServiceImpl implements HeartsService {
 	
 
 	@Override
-	public int heartsCount(int article_article_id) throws Exception {
+	public int heartsCount(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.heartsCount(article_article_id);
+		return dao.heartsCount(article_articleId);
 	}
 
 	@Override
-	public int heartsCheck(int article_article_id) throws Exception {
+	public int heartsCheck(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.heartsCheck(article_article_id);
+		return dao.heartsCheck(article_articleId);
 	}
 
 	@Override
-	public int heartsInsert(int article_article_id) throws Exception {
+	public int heartsInsert(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.heartsInsert(article_article_id);
+		return dao.heartsInsert(article_articleId);
 	}
 
 	@Override
-	public int heartsDelete(int article_article_id) throws Exception {
+	public int heartsDelete(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.heartsDelete(article_article_id);
+		return dao.heartsDelete(article_articleId);
 	}
 
 	@Override
-	public int articleHearts(int article_article_id) throws Exception {
+	public int articleHearts(int article_articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articleHearts(article_article_id);
+		return dao.articleHearts(article_articleId);
 	}
 	
 	

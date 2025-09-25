@@ -14,7 +14,25 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+
+$(document).ready(function(){
+	$(".pageInfo a").on("click", function(e){
+	 
+	    e.preventDefault();
+	    moveForm.find("input[name='pageNum']").val($(this).attr("href"));
+	    moveForm.attr("action", "articleListAll");
+	    moveForm.submit();
+	    
+	});
+});
+
+
+</script>
 </head>
+
 <body>
   <!-- 상단바 -->
 <%@ include file="../include/main_header.jsp"%>
@@ -62,7 +80,7 @@
             <td><br>
          	<div class="news-item">
          	
-            <h3><a href="articleContent?article_id=${article.article_id}" style="font-size: 25; font-weight: bold;">${article.title}</a></h3>
+            <h3><a href="articleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;">${article.title}</a></h3>
             
             <p class="news-summary">${article.content}(기사내용)</p>
       		<div class="news-meta">
@@ -85,13 +103,23 @@
    </table>
    
        <!-- 페이지네이션 -->
-      <nav class="pagination">
-        <a href="#" class="page-btn">이전</a>
-        <a href="#" class="page-btn active">1</a>
-        <a href="#" class="page-btn">2</a>
-        <a href="#" class="page-btn">3</a>
-        <a href="#" class="page-btn">다음</a>
-      </nav>
+    <div class="pageInfo_wrap" >
+		<div class="pageInfo_area">
+ 			<ul id="pageInfo" class="pageInfo">
+ 		 <!-- 각 번호 페이지 버튼 -->
+         		<c:forEach var="num" begin="${pageMake.startPage}" end="${pageMake.endPage}">
+            		<li class="pageInfo_btn"><a href="${num}">${num}</a></li>
+            	</c:forEach>
+ 			</ul>
+		</div>
+    </div>
+       
+       
+       
+    <from id="moveForm" method="get">
+        <input type="hidden" name="pageNum" value="${pageMake.cri.pageNum }">
+        <input type="hidden" name="amount" value="${pageMake.cri.amount }">   
+    </from>
     
 
     </main> 
@@ -167,6 +195,7 @@
         behavior: 'smooth'
       });
     });
+    
   </script>  
 </body>
 </html>

@@ -1,24 +1,24 @@
-package com.infohub.project.article_categories;
+package com.infohub.project.articlecategories;
 
-public class Article_categoriesVO {
+public class ArticlecategoriesVO {
 	
-	private int categories_id;
+	private int categoriesNo;
 	private String name;
 	
-	Article_categoriesVO(){}
+	ArticlecategoriesVO(){}
 
-	public Article_categoriesVO(int categories_id, String name) {
+	public ArticlecategoriesVO(int categoriesNo, String name) {
 		super();
-		this.categories_id = categories_id;
+		this.categoriesNo = categoriesNo;
 		this.name = name;
 	}
 
-	public int getCategories_id() {
-		return categories_id;
+	public int getCategoriesNo() {
+		return categoriesNo;
 	}
 
-	public void setCategories_id(int categories_id) {
-		this.categories_id = categories_id;
+	public void setCategoriesNo(int categoriesNo) {
+		this.categoriesNo = categoriesNo;
 	}
 
 	public String getName() {
@@ -31,9 +31,8 @@ public class Article_categoriesVO {
 
 	@Override
 	public String toString() {
-		return "Article_categoriesVO [categories_id=" + categories_id + ", name=" + name + "]";
+		return "ArticlecategoriesVO [categoriesNo=" + categoriesNo + ", name=" + name + "]";
 	}
-	
-	
 
+	
 }

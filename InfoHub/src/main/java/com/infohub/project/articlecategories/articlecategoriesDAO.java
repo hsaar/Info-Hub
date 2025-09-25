@@ -1,10 +1,10 @@
-package com.infohub.project.article_categories;
+package com.infohub.project.articlecategories;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface article_categoriesDAO {
-	List<article_categoriesDTO> article_categorieslistAll() throws Exception;
+public interface articlecategoriesDAO {
+	List<ArticlecategoriesVO> articlecategorieslistAll() throws Exception;
 }

@@ -25,28 +25,27 @@ public class ScrapsControl {
 	
 	@ResponseBody
 	@PostMapping("scrapsCheck")
-	public int scrapsCount(int article_article_id) throws Exception {
+	public int scrapsCount(int article_articleId) throws Exception {
 		System.out.println("scrapsCheck");
 		
-		int scrapsCheck = service.scrapsCheck(article_article_id);
+		int scrapsCheck = service.scrapsCheck(article_articleId);
 		
 		return scrapsCheck;
 	}
 	
 	@ResponseBody
 	@PostMapping("scrap")
-	public int scrap(int article_article_id) throws Exception {
+	public int scrap(int article_articleId) throws Exception {
 		System.out.println("scrap");
 		
-		int scrap = service.scrapsCheck(article_article_id);
+		int scrap = service.scrapsCheck(article_articleId);
 		if (scrap==0) {
-			service.scrapsInsert(article_article_id);
+			service.scrapsInsert(article_articleId);
 		}else if(scrap==1) {
-			service.scrapsDelete(article_article_id);
+			service.scrapsDelete(article_articleId);
 		}
 		return scrap;
 	}
-	
 	
 
 }

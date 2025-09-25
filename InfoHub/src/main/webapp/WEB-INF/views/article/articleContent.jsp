@@ -21,7 +21,7 @@
 	
 	
 	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 
 <!-- 댓글 관련 자바스크립트 -->
@@ -36,12 +36,12 @@
 		
 		
   	  	$("#commentInsertBtn").click(function(){
-	        var article_article_id =$("#article_article_id").val();
+	        var article_articleId =$("#article_articleId").val();
 	        var comment = $("#comment").val();
 	        
 	        var url = "comment/insert";
 	        var paramData ={
-	        		"article_article_id" : article_article_id,
+	        		"article_articleId" : article_articleId,
 	        		"comment" : comment
 	        		
 	        };
@@ -67,11 +67,11 @@
 	   	
 	   	
 	   	function commentList(){
-	   		var article_article_id =$("#article_article_id").val();
+	   		var article_articleId =$("#article_articleId").val();
 	   		
 	   		url ="comment/listAll";
 	   		var paramData ={
-	        		"article_article_id" : article_article_id
+	        		"article_articleId" : article_articleId
 	        };
 	   		
 	   		console.log(paramData);
@@ -95,15 +95,13 @@
 	                       htmls += '<hr style="width: 600px; float: left;">';
 	                       htmls += '<br>';
 	                       htmls += '<span class="d-block">';
-	                       htmls += '<strong class="text-gray-dark">' + ' 회원ID : ' +this.login_login_id + '</strong>';
+	                       htmls += '<strong class="text-gray-dark">' + ' 회원ID : ' +this.login_loginNo + '</strong>';
 	                       htmls += '</span><br>';
 	                       htmls += '<br>';
 	                       htmls += this.comment;
 	                       htmls += '<br>';
 	                       htmls += '<br>';
-	                       htmls += ' 작성일 : ' + this.created_date + ' | 수정일 : ' + this.last_modified;
-	                       htmls += '<br>';
-	                       htmls += ' 좋아요 수 ' + this.hearts;
+	                       htmls += ' 작성일 : ' + this.createdDate + ' | 수정일 : ' + this.lastModified;
 	                       htmls += '<br>';
 	                       //htmls += '</div>';   
 	                    });  // each End
@@ -119,11 +117,11 @@
 			
 			$("#scrapBtn").click(function(scrap){
 				
-				var article_article_id =$("#article_article_id").val();
+				var article_articleId =$("#article_articleId").val();
 		   		
 		   		url ="scrap";
 		   		var paramData ={
-		        		"article_article_id" : article_article_id
+		        		"article_articleId" : article_articleId
 		        		
 		        };
 		   		
@@ -152,11 +150,11 @@
 			});//scrapbtn
 			
 			function scrapsCheck(){
-		   		var article_article_id =$("#article_article_id").val();
+		   		var article_articleId =$("#article_articleId").val();
 		   		
 		   		url ="scrapsCheck";
 		   		var paramData ={
-		        		"article_article_id" : article_article_id
+		        		"article_articleId" : article_articleId
 		        };
 		   		
 		   		console.log(paramData);
@@ -188,11 +186,11 @@
 		   	
 			$("#heartBtn").click(function(heart){
 				
-				var article_article_id =$("#article_article_id").val();
+				var article_articleId =$("#article_articleId").val();
 		   		
 		   		url ="heart";
 		   		var paramData ={
-		        		"article_article_id" : article_article_id
+		        		"article_articleId" : article_articleId
 		        };
 		   		
 		   		console.log(paramData);
@@ -223,11 +221,11 @@
 			
 			
 			function heartsCheck(){
-		   		var article_article_id =$("#article_article_id").val();
+		   		var article_articleId =$("#article_articleId").val();
 		   		
 		   		url ="heartsCheck";
 		   		var paramData ={
-		        		"article_article_id" : article_article_id
+		        		"article_articleId" : article_articleId
 		        };
 		   		
 		   		console.log(paramData);
@@ -259,11 +257,11 @@
 		   	}; //heartsCheck()
 		   	
 		   	function articleHearts(){
-		   		var article_article_id = $("#article_article_id").val();
+		   		var article_articleId = $("#article_articleId").val();
 		   		
 		   		url ="articleHearts";
 		   		var paramData ={
-		        		"article_article_id" : article_article_id
+		        		"article_articleId" : article_articleId
 		        };
 		   		
 		   		console.log(paramData);
@@ -367,7 +365,7 @@
     <label for="content">댓글</label>
     <form name="commentInsertForm" id="commentInsertForm">
     <div>
-        <input type="hidden" name="article_article_id" id="article_article_id" value="${article.article_id}">
+        <input type="hidden" name="article_articleId" id="article_articleId" value="${article.articleId}">
         <input type="text" name="comment" id="comment" placeholder="내용을 입력하세요">
         <button type="button" id="commentInsertBtn">등록</button>
     </div>

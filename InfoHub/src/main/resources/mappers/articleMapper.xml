@@ -5,49 +5,51 @@
 	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.infohub.project.articleMapper">
 	<select id="articleListAll" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id order by published desc;
+	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo order by published desc;
 	</select>
 	
 	<select id="articleListAll1" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 1 order by published desc;
+	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 1 order by published desc;
 	</select>
 	
 	<select id="articleListAll2" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 2 order by published desc;
+	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 2 order by published desc;
 	</select>
 	
 	<select id="articleListAll3" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 3 order by published desc;
+	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 3 order by published desc;
 	</select>
 	
 	<select id="articleListAll4" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 4 order by published desc;
+	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 4 order by published desc;
 	</select>
 	
 	<select id="articleListAll5" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 5 order by published desc;
+	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 5 order by published desc;
 	</select>
 	
 	<select id="articleContent" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_id = #{article_id} order by published desc;
+	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articleId = #{articleId} order by published desc;
 	</select>
 	
 	<update id="updateViews" parameterType="java.lang.Integer">
-	UPDATE article SET views = views + 1 WHERE article_id = #{article_id}
+	UPDATE article SET views = views + 1 WHERE articleId = #{articleId}
 	</update>
 	
 	<update id="updateHearts" parameterType="java.lang.Integer">
-	UPDATE article SET hearts = hearts + 1 WHERE article_id = #{article_id}
+	UPDATE article SET hearts = hearts + 1 WHERE articleId = #{articleId}
 	</update>
 	
 	<update id="cancleHearts" parameterType="java.lang.Integer">
-	UPDATE article SET hearts = hearts - 1 WHERE article_id = #{article_id}
+	UPDATE article SET hearts = hearts - 1 WHERE articleId = #{articleId}
 	</update>
 	
 	<select id="countHearts" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT hearts FROM article WHERE article_id = #{article_id}
+	SELECT hearts FROM article WHERE articleId = #{articleId}
 	</select>
 	
-	
+	<select id="getTotal" resultType="int">
+	select count(*) as articlecount from article
+	</select>
 	
 </mapper>

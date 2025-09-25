@@ -1,51 +1,49 @@
-package com.infohub.project.comment;
+package com.infohub.project.commentarticle;
 
-public class CommentVO {
+public class CommentarticleVO {
 	
-	private String comment_id;
-	private String created_date;
-	private String last_modified;
+	private String commentId;
+	private String createdDate;
+	private String lastModified;
 	private String comment;
-	private String hearts;
-	private String login_login_id;
-	private String article_article_id;
+	private String login_loginNo;
+	private String article_articleId;
 	
-	CommentVO(){}
+	CommentarticleVO(){}
 
-	public CommentVO(String comment_id, String created_date, String last_modified, String comment, String hearts,
-			String login_login_id, String article_article_id) {
+	public CommentarticleVO(String commentId, String createdDate, String lastModified, String comment,
+			String login_loginNo, String article_articleId) {
 		super();
-		this.comment_id = comment_id;
-		this.created_date = created_date;
-		this.last_modified = last_modified;
+		this.commentId = commentId;
+		this.createdDate = createdDate;
+		this.lastModified = lastModified;
 		this.comment = comment;
-		this.hearts = hearts;
-		this.login_login_id = login_login_id;
-		this.article_article_id = article_article_id;
+		this.login_loginNo = login_loginNo;
+		this.article_articleId = article_articleId;
 	}
 
-	public String getComment_id() {
-		return comment_id;
+	public String getCommentId() {
+		return commentId;
 	}
 
-	public void setComment_id(String comment_id) {
-		this.comment_id = comment_id;
+	public void setCommentId(String commentId) {
+		this.commentId = commentId;
 	}
 
-	public String getCreated_date() {
-		return created_date;
+	public String getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreated_date(String created_date) {
-		this.created_date = created_date;
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
 	}
 
-	public String getLast_modified() {
-		return last_modified;
+	public String getLastModified() {
+		return lastModified;
 	}
 
-	public void setLast_modified(String last_modified) {
-		this.last_modified = last_modified;
+	public void setLastModified(String lastModified) {
+		this.lastModified = lastModified;
 	}
 
 	public String getComment() {
@@ -56,37 +54,28 @@ public class CommentVO {
 		this.comment = comment;
 	}
 
-	public String getHearts() {
-		return hearts;
+	public String getLogin_loginNo() {
+		return login_loginNo;
 	}
 
-	public void setHearts(String hearts) {
-		this.hearts = hearts;
+	public void setLogin_loginNo(String login_loginNo) {
+		this.login_loginNo = login_loginNo;
 	}
 
-	public String getLogin_login_id() {
-		return login_login_id;
+	public String getArticle_articleId() {
+		return article_articleId;
 	}
 
-	public void setLogin_login_id(String login_login_id) {
-		this.login_login_id = login_login_id;
-	}
-
-	public String getArticle_article_id() {
-		return article_article_id;
-	}
-
-	public void setArticle_article_id(String article_article_id) {
-		this.article_article_id = article_article_id;
+	public void setArticle_articleId(String article_articleId) {
+		this.article_articleId = article_articleId;
 	}
 
 	@Override
 	public String toString() {
-		return "CommentVO [comment_id=" + comment_id + ", created_date=" + created_date + ", last_modified="
-				+ last_modified + ", comment=" + comment + ", hearts=" + hearts + ", login_login_id=" + login_login_id
-				+ ", article_article_id=" + article_article_id + "]";
+		return "CommentarticleVO [commentId=" + commentId + ", createdDate=" + createdDate + ", lastModified="
+				+ lastModified + ", comment=" + comment + ", login_loginNo=" + login_loginNo + ", article_articleId="
+				+ article_articleId + "]";
 	}
-	
-	
+
 	
 }

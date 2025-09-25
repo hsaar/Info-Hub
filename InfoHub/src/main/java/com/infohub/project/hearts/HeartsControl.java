@@ -22,20 +22,20 @@ public class HeartsControl {
 	
 	@ResponseBody
 	@PostMapping("articleHearts")
-	public int articleHearts(int article_article_id) throws Exception {
+	public int articleHearts(int article_articleId) throws Exception {
 		System.out.println("articleHearts");
 		
-		int articleHearts = service.articleHearts(article_article_id);
+		int articleHearts = service.articleHearts(article_articleId);
 		
 		return articleHearts;
 	}
 	
 	@ResponseBody
 	@PostMapping("heartsCheck")
-	public int heartsCheck(int article_article_id) throws Exception {
+	public int heartsCheck(int article_articleId) throws Exception {
 		System.out.println("heartsCheck");
 		
-		int heartsCheck = service.heartsCheck(article_article_id);
+		int heartsCheck = service.heartsCheck(article_articleId);
 		//service.heartsCount(article_article_id);
 		
 		return heartsCheck;
@@ -43,20 +43,18 @@ public class HeartsControl {
 	
 	@ResponseBody
 	@PostMapping("heart")
-	public int heart(int article_article_id) throws Exception {
+	public int heart(int article_articleId) throws Exception {
 		System.out.println("heart");
 		
-		int heart = service.heartsCheck(article_article_id);
+		int heart = service.heartsCheck(article_articleId);
 		if (heart==0) {
-			service.heartsInsert(article_article_id);
-			articleDAO.updateHearts(article_article_id);
+			service.heartsInsert(article_articleId);
+			articleDAO.updateHearts(article_articleId);
 		}else if(heart==1) {
-			service.heartsDelete(article_article_id);
-			articleDAO.cancleHearts(article_article_id);
+			service.heartsDelete(article_articleId);
+			articleDAO.cancleHearts(article_articleId);
 		}
 		return heart;
 	}
 	
-	
-
 }
