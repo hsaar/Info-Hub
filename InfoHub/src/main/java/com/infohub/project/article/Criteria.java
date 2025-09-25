@@ -1,100 +1,81 @@
 package com.infohub.project.article;
 
-import java.util.Arrays;
+import org.springframework.web.util.UriComponentsBuilder;
 
-public class Criteria {
+public class Criteria { 
 	
-	/* 현재 페이지 */
-	private int pageNum;
-	
-	/* 한 페이지 당 보여질 게시물 갯수 */
-	private int amount;
-	
-	/* 스킵 할 게시물 수( (pageNum-1) * amount ) */
-	private int skip;
-	
-	/* 검색어 키워드 */
+	private int page;
+	private int perPageNum;
+	private String searchType;
 	private String keyword;
+
 	
-	/* 검색 타입 */
-	private String type;
-	
-	/* 검색 타입 배열 */
-	private String[] typeArr;
-	
-	/* 기본 생성자 -> 기봅 세팅 : pageNum = 1, amount = 10 */
 	public Criteria() {
-		this(1,10);
-		this.skip = 0;
+		this.page = 1;
+		this.perPageNum = 10;
+	    this.searchType = null;
+		this.keyword = null;
+		
+	}
+	public void setPage(int page) {
+		if(page <= 0) {			
+			this.page = 1;
+			return;
+		}
+		this.page = page;
+	}
+
+	public void setPerPageNum(int perPageNum) {
+		if(perPageNum <= 0 || perPageNum > 100) {
+			this.perPageNum = 10;
+			return;
+		}
+		this.perPageNum = perPageNum;
 	}
 	
-	/* 생성자 => 원하는 pageNum, 원하는 amount */
-	public Criteria(int pageNum, int amount) {
-		this.pageNum = pageNum;
-		this.amount = amount;
-		this.skip = (pageNum-1)*amount;
+	public int getPage() {
+		return page;
+	}
+	
+	// method for MyBatis SQL Mapper
+	public int getPageStart() {
+		return (this.page -1) * perPageNum;
 	}
 
-	public int getPageNum() {
-		return pageNum;
+	// method for MyBatis SQL Mapper	
+	public int getPerPageNum() {
+		return this.perPageNum;
 	}
-
-	public void setPageNum(int pageNum) {
-		
-		this.skip= (pageNum-1)*this.amount;
-		
-		this.pageNum = pageNum;
+	public String getSearchType() {
+		return searchType;
 	}
-
-	public int getAmount() {
-		return amount;
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
 	}
-
-	public void setAmount(int amount) {
-		
-		this.skip= (this.pageNum-1)*amount;
-		
-		this.amount = amount;
-	}
-
-
-	public int getSkip() {
-		return skip;
-	}
-
-	public void setSkip(int skip) {
-		this.skip = skip;
-	}
-
 	public String getKeyword() {
 		return keyword;
 	}
-
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-		this.typeArr = type.split("");
-	}
-
-	public String[] getTypeArr() {
-		return typeArr;
-	}
-
-	public void setTypeArr(String[] typeArr) {
-		this.typeArr = typeArr;
-	}
-
-	@Override
-	public String toString() {
-		return "Criteria [pageNum=" + pageNum + ", amount=" + amount + ", skip=" + skip + ", keyword=" + keyword
-				+ ", type=" + type + ", typeArr=" + Arrays.toString(typeArr) + "]";
+	
+	public String makeQuery() {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance()
+				.queryParam("page", page)
+				.queryParam("perPageNum", this.perPageNum);
+				
+		if (searchType!=null) {
+			uriComponentsBuilder
+					.queryParam("searchType", this.searchType)
+					.queryParam("keyword", this.keyword);
+		}
+		return uriComponentsBuilder.build().encode().toString();
 	}
 	
+	@Override
+	public String toString() {
+		return "Criteria [page=" + page + ", perPageNum=" + perPageNum + ", searchType=" + searchType + ", keyword="
+				+ keyword + "]";
+	}
 }
+

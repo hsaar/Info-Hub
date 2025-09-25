@@ -5,11 +5,16 @@
 	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.infohub.project.articleMapper">
 	<select id="articleListAll" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo order by published desc;
+	SELECT a.*, b.name
+	FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo 
+	<include refid="searchCondition"></include>
+	order by published desc
+	limit #{pageStart}, #{perPageNum}
 	</select>
 	
 	<select id="articleListAll1" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 1 order by published desc;
+	SELECT a.*, b.name
+	FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 1 order by published desc;
 	</select>
 	
 	<select id="articleListAll2" resultType = "com.infohub.project.article.ArticleVO">
@@ -47,9 +52,31 @@
 	<select id="countHearts" resultType = "com.infohub.project.article.ArticleVO">
 	SELECT hearts FROM article WHERE articleId = #{articleId}
 	</select>
+	 
+	 <sql id="searchCondition">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and title like concat('%', #{keyword}, '%')
+			</if>
+			
+			<if test="searchType == 'c'.toString()">
+				and content like concat('%', #{keyword}, '%')
+			</if>
+						
+			<if test="searchType == 'tc'.toString()">
+				and (title like concat('%', #{keyword}, '%')
+					or content like concat('%', #{keyword}, '%'))
+			</if>
+		</if>
+	</sql>
 	
-	<select id="getTotal" resultType="int">
-	select count(*) as articlecount from article
+	<select id="gettotalcount" resultType="int">
+		select count(articleID)
+		from article
+		where articleID > 0
+		<include refid="searchCondition"></include>
+		order by published desc
+		
 	</select>
 	
 </mapper>

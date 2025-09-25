@@ -301,7 +301,7 @@
 <!-- 네비게이션 -->
   	<div class="news-header">
     <nav class="news-nav">
-      <a href="#" class="active">종합</a>
+      <a href="articleListAll">종합</a>
       <a href="articleListAll1">부동산</a>
       <a href="articleListAll2">주식</a>
       <a href="articleListAll3">적금</a>

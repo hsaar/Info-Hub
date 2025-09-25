@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.infohub.project.article.Criteria;
+
 @Repository
 public class ArticleDAOImpl implements ArticleDAO{
 	
@@ -83,10 +85,17 @@ public class ArticleDAOImpl implements ArticleDAO{
 		return session.selectOne(nameSpace + ".countHearts",articleId);
 	}
 
+
 	@Override
-	public int getTotal() {
+	public List<ArticleVO> result(int articleId) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectOne(nameSpace + ".getTotal");
+		return session.selectOne(nameSpace + ".read", articleId);
+	}
+
+	@Override
+	public int getTotalCount(Criteria cri) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectOne(nameSpace + ".gettotalcount", cri);
 	}
 
 }

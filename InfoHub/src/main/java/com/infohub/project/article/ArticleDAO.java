@@ -2,6 +2,8 @@ package com.infohub.project.article;
 
 import java.util.List;
 
+import com.infohub.project.article.Criteria;
+
 public interface ArticleDAO {
 	
 	List<ArticleVO> articlListAll(Criteria cri) throws Exception;
@@ -19,6 +21,8 @@ public interface ArticleDAO {
 	public void cancleHearts(int articleId) throws Exception;
 	int countHearts(int articleId) throws Exception;
 	
-	public int getTotal();
+	
+	public List<ArticleVO> result(int articleId) throws Exception;
+	public int getTotalCount(Criteria cri)throws Exception;
 	
 }

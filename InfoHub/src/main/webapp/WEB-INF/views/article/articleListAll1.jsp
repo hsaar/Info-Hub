@@ -66,6 +66,7 @@
             <td><br>
          	<div class="news-item">
 			
+            <h3><a href="articleContent?articleId=${article.articleId}">${article.title}</a></h3>
             
             <p class="news-summary">${article.content}(기사내용)</p>
       		<div class="news-meta">

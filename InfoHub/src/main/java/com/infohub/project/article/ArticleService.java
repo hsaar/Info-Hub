@@ -2,6 +2,8 @@ package com.infohub.project.article;
 
 import java.util.List;
 
+import com.infohub.project.article.Criteria;
+
 public interface ArticleService {
 	
 	List<ArticleVO> articlListAll(Criteria cri) throws Exception;
@@ -15,5 +17,7 @@ public interface ArticleService {
 	
 	int countHearts(int articleId) throws Exception;
 	
-	public int getTotal();
+	public List<ArticleVO> result(int articleId) throws Exception;
+	public int getTotalCount(Criteria cri)throws Exception;	
+	
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.infohub.project.HomeController;
+import com.infohub.project.article.PageMaker;
 
 
 @Controller
@@ -32,10 +33,10 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll = service.articlListAll(cri);
 		model.addAttribute("articleListAll", articleListAll);
 		
-		int total = service.getTotal();
-		
-		PageMakeVO pageMake = new PageMakeVO(cri, total);
-		model.addAttribute("pageMake", pageMake);
+		PageMaker pageMaker = new PageMaker(cri);
+		int totalCount = service.getTotalCount(cri);
+		pageMaker.setTotalCount(totalCount);
+		model.addAttribute("pageMaker", pageMaker);
 		
 		return "article/articleListAll";
 	}
@@ -108,6 +109,20 @@ public class ArticleControl {
 		int countHearts = service.countHearts(articleId);
 		
 		return countHearts;
+	}
+	
+	@RequestMapping("article_result")
+	public String result(int articleId, Model model) throws Exception {
+			
+		logger.info("read");
+			
+		List<ArticleVO> listSearchVO = service.result(articleId);
+		
+		model.addAttribute("listSearch", listSearchVO);
+			
+		logger.info(" article_result : " + listSearchVO);
+		
+		return "/article/article_result";
 	}
 	
 
