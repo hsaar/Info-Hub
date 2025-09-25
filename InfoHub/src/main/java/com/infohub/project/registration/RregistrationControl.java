@@ -30,8 +30,7 @@ public class RregistrationControl {
 		List<RegistrationDTO> registrationlistAll = service.registrationlistAll();
 		model.addAttribute("registrationlistAll", registrationlistAll);
 		
-
-		return "./article/registrationlistAll";
+		return "/article/registrationlistAll";
 	}
 	
 	

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.infohub.project.HomeController;
+import com.infohub.project.article_search.article_searchDTO;
 
 @Controller
 public class article_searchControl { 
@@ -23,17 +24,36 @@ public class article_searchControl {
 	@Autowired
 	private article_searchService service;
 	
-	@RequestMapping("article_search")
-	public String articlelistAll(Model model) throws Exception{
-		logger.info("기사전체조회");
-		List<article_searchDTO> articlelistAll = service.articlelistAll();
-		
-		model.addAttribute("article_search", articlelistAll);
-
-		return "./article/article_search";
-
-	}
 	
+	@RequestMapping("article_search")
+	public String slistPage(Criteria cri, Model model) throws Exception {
+
+		logger.info("article_search");
+		List<article_searchDTO> slistPage = service.slistPage(cri);
+		model.addAttribute("slistPage", slistPage);
+	
+		PageMaker pageMaker = new PageMaker(cri);
+		int totalCount = service.getTotalCount(cri);
+		pageMaker.setTotalCount(totalCount);
+		model.addAttribute("pageMaker", pageMaker);
+		
+		logger.info(" article_search : " + slistPage);
+		
+		return "article/article_search";
+		}
+		
+	@RequestMapping("article_search_result")
+	public String read(String title, Model model) throws Exception {
+			
+		logger.info("readPage");
+			
+		List<article_searchDTO> read = service.read(title);
+		model.addAttribute("read", read);
+			
+		logger.info(" article_search_result : " + read);
+		return "article/article_search_result";
+	}
+		
 	
 	
 //	@RequestMapping("emplistAll")

@@ -15,16 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.infohub.project.test.testDAO;
-
 /**
  * Handles requests for the application home page.
  */
 @Controller
 public class HomeController {
-	
-	@Autowired
-	testDAO dao = new testDAO();
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -39,10 +34,8 @@ public class HomeController {
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 		
 		String formattedDate = dateFormat.format(date);
-		int i = dao.test();
 		
 		model.addAttribute("serverTime", formattedDate );
-		model.addAttribute("test", i);
 		
 	    if(userId != null) { 
 	        model.addAttribute("userId",userId);
