@@ -55,6 +55,16 @@ public class BoardController {
 	 * session.invalidate(); rttr.addFlashAttribute("msg", "로그아웃되었습니다"); return
 	 * "redirect:/"; }
 	 */
+	
+	// 카테고리별 게시판
+	@RequestMapping("board/listcategory")
+	public String list(@RequestParam("category") int categoryId, Model model) throws Exception {
+	    List<BoardVO> list = service.getListByCategory(categoryId);
+	    model.addAttribute("list", list);
+	    model.addAttribute("category", categoryId);
+	    return "board/boardlist"; // jsp 하나만 사용
+	}
+	    
 	// 글목록
 	@RequestMapping(value = "board/list", method = RequestMethod.GET)
 	public ModelAndView list() {
@@ -66,7 +76,11 @@ public class BoardController {
 		mav.setViewName("list");
 		return mav;
 	}
-
+	/*
+	//실시간 인기글
+	@RequestMapping(value = "board/popular", method=RequestMethod.GET)
+	public String list()
+*/
 	// 게시글 조회
 	@RequestMapping(value = "board/detail", method = RequestMethod.GET)
 	public String detail(@RequestParam("bno") int bno, Model model) {
@@ -81,13 +95,17 @@ public class BoardController {
 	}
 
 	// 글쓰기 페이지 이동
-	@RequestMapping(value = "/boardregister", method = RequestMethod.GET)
-	public String register(Model model) {
-		logger.info("글쓰기 이동");
-		model.addAttribute("serverTime", new java.util.Date());
-		List<CategoryVO> mainCategories = cService.getMainCategories();
-		model.addAttribute("mainCategories", mainCategories);
-		return "board/boardregister";
+	@RequestMapping(value = "/board/register", method = RequestMethod.GET)
+	public String register(@RequestParam(value = "category", required = false) Integer categoryId,
+	                       Model model) {
+	    // 드롭다운용 전체 카테고리 불러오기
+	    List<CategoryVO> mainCategories = cService.getMainCategories();
+	    model.addAttribute("mainCategories", mainCategories);
+
+	    // 카테고리별 게시판에서 왔을 경우 hidden으로 넘길 categoryId 세팅
+	    model.addAttribute("categoryId", categoryId);
+
+	    return "board/boardregister";
 	}
 	 //카테고리 소분류
 	@RequestMapping(value = "/selectcategory/sub", method = RequestMethod.GET)
@@ -97,17 +115,17 @@ public class BoardController {
 	    return cService.getSubCategories(parentId);
 	}
  
-	// 글쓰기 페이지
-	@RequestMapping(value = "/boardregister", method = RequestMethod.POST)
-	public String register(BoardVO boardVO,HttpServletRequest request, RedirectAttributes rttr) throws Exception {
-		request.setCharacterEncoding("UTF-8");
-		logger.info("내용" + boardVO);
-		int r = service.register(boardVO);
+	@RequestMapping(value = "/board/register", method = RequestMethod.POST)
+	public String register(BoardVO boardVO, RedirectAttributes rttr) throws Exception {
+	    logger.info("내용: " + boardVO);
 
-		if (r > 0) {
-			rttr.addFlashAttribute("msg", "추가에 성공하였습니다.");
-		}
-		return "redirect:boardlist";
+	    int r = service.register(boardVO);
+	    if (r > 0) {
+	        rttr.addFlashAttribute("msg", "추가에 성공하였습니다.");
+	    }
+
+	    // 등록한 카테고리 게시판으로 리다이렉트
+	    return "redirect:/board/list?category=" + boardVO.getCategoryId();
 	}
 
 	// 글수정 페이지 이동

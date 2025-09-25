@@ -7,22 +7,22 @@
 <meta charset="UTF-8">
 <title>새 글쓰기</title>
 <script>
+	
 </script>
 </head>
 <body>
 	<center>
 		<h1>글쓰기</h1>
 		<form method="post"
-			action="${pageContext.request.contextPath}/boardregister"
+			action="${pageContext.request.contextPath}/board/register"
 			name="write_frm">
 			<table>
 				<tr height="30">
 					<td width="80">작성자</td>
 					<td width="100"><input type="text" id="name" name="regi_id"
 						size="10" maxlength="20" /></td>
-				
-					<td>
-					<%@ include file="selectcategory.jsp"%>
+
+					<td><%@ include file="selectcategory.jsp"%>
 					</td>
 				</tr>
 				<tr>
@@ -33,19 +33,22 @@
 				<tr>
 					<td colspan="4"><textarea cols="70" rows="10" id="content"
 							name="content" maxlength="3000"></textarea></td>
-				<tr>
-				<tr>
-					<td width="80">암&nbsp;&nbsp;호</td>
-					<td width="200"><input type="password" id="pwd" name="pwd"
-						size="12" maxlength="12" /></td>
 				</tr>
 				<tr height="50">
-					<td colspan="4" align="center"><input type="button"
-						value="글쓰기" onclick="${pageContext.request.contextPath}redirect:list" />
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input
-						type="reset" value="다시작성" />
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input
-						type="button" value="글목록" onclick="location.href='list.jsp'" /></td>
+					<td colspan="4" align="center">
+						<!-- 글쓰기 완료: submit으로 변경 -->
+						 <input type="submit" value="글쓰기" />
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						 <!-- 다시작성: reset 그대로 사용 -->
+						<input type="reset" value="다시작성" />
+
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						 <!-- 글목록: 목록 페이지로 이동 -->
+						<input type="button" value="글목록"
+						onclick="location.href='${pageContext.request.contextPath}board/list'" />
+					</td>
 				</tr>
 			</table>
 		</form>

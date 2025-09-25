@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BoardServiceImpl implements BoardService{
-	
+public class BoardServiceImpl implements BoardService {
+
 	@Autowired
 	BoardDAO dao;
 
@@ -19,9 +19,15 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int updateReadCnt(int boardno) {
+	public List<BoardVO> getListByCategory(int categoryId) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.updateReadCnt(boardno);
+		return dao.getListByCategory(categoryId);
+	}
+
+	@Override
+	public void updateReadCnt(int boardNo) {
+		// TODO Auto-generated method stub
+		dao.updateReadCnt(boardNo);
 	}
 
 	@Override
@@ -31,9 +37,7 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int register(BoardVO boardVO) {
-		// 1. 게시글 정보를 Board 테이블에 저장 (게시글 ID가 반환되거나, VO에 자동 주입)
-		int boardId=dao.register(boardVO);
+	public int register(BoardVO boardVO) throws Exception {
 		return dao.register(boardVO);
 	}
 
@@ -50,13 +54,16 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
+	public List<BoardVO> selectPopularBoardsByCategory(int categoryId) {
+		// TODO Auto-generated method stub
+		return dao.selectPopularBoardsByCategory(categoryId);
+	}
+
+	@Override
 	public Map login(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return dao.login(map);
 	}
 
-	
-	
-	
 
 }

@@ -7,91 +7,102 @@
 	<!-- 전체 게시글 목록 -->
 	<select id="selectBoardList" parameterType="map"
 		resultType="com.infohub.project.board.BoardVO">
-		SELECT b.boardno, b.title, b.login_login_id, b.regi_date,
-		(SELECT COUNT(*) FROM comment_board c WHERE c.board_boardno =
-		b.boardno) AS
-		commentCount,
-		(SELECT COUNT(*) FROM hearts h WHERE
-		h.board_boardno = b.boardno) AS
-		likeCount
-		FROM board b
-		ORDER BY
-		b.regi_date DESC
-		LIMIT #{offset}, #{limit}
+		SELECT boardno AS boardno,
+		title AS title,
+		content AS content,
+		regiId AS regiId,
+		regiDate AS regiDate,
+		readcnt AS readcnt,
+		login_loginNo AS loginLoginNo,
+		categoryboard_categoryId AS categoryId,
+		subCategoryId AS subCategoryId
+		FROM board
+		ORDER BY boardno DESC;
+	</select>
+
+	<!-- 연령대 카테고리 별 게시판 목록 -->
+	<select id="getListByCategory" parameterType="int"
+		resultType="com.infohub.project.board.BoardVO">
+		 SELECT *
+    FROM board
+    WHERE categoryboard_categoryId = #{categoryId}
+    ORDER BY boardno DESC
 	</select>
 
 	<!-- 단일 게시글 조회 -->
 	<select id="selectBoardById" parameterType="int"
 		resultType="com.infohub.project.board.BoardVO">
-		SELECT b.boardno, b.title, b.content, b.login_login_id,
-		b.age_category_id, b.sub_category_id, b.regi_date,
-		(SELECT COUNT(*) FROM hearts h WHERE h.board_boardno = b.boardno) AS
-		likeCount
-		FROM board b
-		WHERE b.boardno = #{boardNo}
+		SELECT boardNo AS boardNo,
+		title AS title,
+		content AS content,
+		regiId AS regiId,
+		regiDate AS regiDate,
+		readcnt AS readcnt,
+		login_loginNo AS loginLoginNo,
+		categoryboard_categoryId AS categoryId,
+		subCategoryId AS subCategoryId
+		FROM board
+		WHERE boardNo = #{boardNo}
 	</select>
 
 	<!-- 조회수 1 증가하는 SQL "updateReadCnt" -->
 	<update id="updateReadCnt" parameterType="java.lang.Integer">
-		update board
-		set
-		readcnt = readcnt + 1
-		where boardno = #{boardno}
-		</update>
+		UPDATE board
+		SET readcnt = readcnt + 1
+		WHERE boardNo = #{boardNo}
+	</update>
 
 
-		<!-- 글쓰기 -->
-		<insert id="register" parameterType="BoardVO"
-			useGeneratedKeys="true" keyProperty="BoardNO">
-			INSERT INTO board (title, content, login_login_id, age_category_id,
-			sub_category_id, regi_date)
-			VALUES (#{title}, #{content},
-			#{loginLoginId}, #{ageCategoryId},
-			#{subCategoryId}, NOW())
-			<selectKey keyProperty="boardno" resultType="int"
-				order="AFTER">
-				select last_insert_ID()
-			</selectKey>
-		</insert>
+	<!-- 글쓰기 -->
+	<insert id="register" parameterType="BoardVO"
+		useGeneratedKeys="true" keyProperty="BoardNO">
+		INSERT INTO board
+		(title, content, regiId, regiDate, readcnt, login_loginNo,
+		categoryboard_categoryId, subCategoryId)
+		VALUES
+		(#{title}, #{content}, #{regiId}, NOW(), #{readcnt}, #{loginLoginNo},
+		#{categoryId}, #{subCategoryId})
+	</insert>
 
-		<!-- 수정하기 -->
-		<update id="updateBoard"
-			parameterType="com.infohub.project.board.BoardVO">
-			UPDATE board
-			SET title = #{title},
-			content = #{content},
-			sub_category_id
-			= #{subCategoryId},
-			last_modified = NOW()
-			WHERE boardno
-			= #{boardNo}
-			AND
-			login_login_id = #{loginLoginId} <!-- 본인 글만 수정 가능 -->
-		</update>
+	<!-- 수정하기 -->
+	<update id="updateBoard"
+		parameterType="com.infohub.project.board.BoardVO">
+		UPDATE board
+		SET title = #{title},
+		content = #{content},
+		categoryboard_categoryId = #{categoryId},
+		subCategoryId = #{subCategoryId}
+		WHERE boardNo = #{boardNo}
+		AND
+		login_login_id = #{loginLoginId} <!-- 본인 글만 수정 가능 -->
+	</update>
 
-		<!-- 삭제하기 -->
-		<delete id="deleteBoard" parameterType="int">
-			DELETE FROM board
-			WHERE
-			boardno = #{boardNo}
-		</delete>
+	<!-- 삭제하기 -->
+	<delete id="deleteBoard" parameterType="int">
+		DELETE FROM board
+		WHERE
+		boardno = #{boardNo}
+		AND
+		login_login_id = #{loginLoginId} <!-- 본인 글만 수정 가능 -->
+	</delete>
 
 
-		<!-- 연령카테고리별 최신 인기글 (좋아요 3개 이상, 최신순) -->
-		<select id="selectPopularBoardsByCategory" parameterType="map"
-			resultType="com.infohub.project.board.BoardVO">
-			SELECT b.boardno, b.title, b.regi_date,
-			COUNT(h.heart_id)
-			AS likeCount
-			FROM board b
-			LEFT JOIN hearts h ON b.boardno =
-			h.board_boardno
-			WHERE b.age_category_id = #{ageCategoryId}
-			GROUP BY
-			b.boardno, b.title, b.regi_date
-			HAVING likeCount >= 3
-			ORDER BY
-			b.regi_date DESC
-			LIMIT #{limit}
-		</select>
+	<!-- 연령카테고리별 최신 인기글 (좋아요 3개 이상, 최신순) -->
+	<select id="selectPopularBoardsByCategory" parameterType="map"
+		resultType="com.infohub.project.board.BoardVO">
+		SELECT b.boardNo AS boardNo,
+		b.title AS title,
+		b.content AS content,
+		b.regiId AS regiId,
+		b.regiDate AS regiDate,
+		b.readcnt AS readcnt,
+		b.login_loginNo AS loginLoginNo,
+		b.categoryboard_categoryId AS categoryId,
+		b.subCategoryId AS subCategoryId
+		FROM board b
+		JOIN board_like bl ON b.boardNo = bl.board_boardNo
+		WHERE b.categoryboard_categoryId = #{categoryId}
+		AND bl.likeCount >= 3
+		ORDER BY b.regiDate DESC
+	</select>
 </mapper>

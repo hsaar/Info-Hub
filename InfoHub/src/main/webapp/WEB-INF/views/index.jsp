@@ -12,8 +12,8 @@
 
 	<P>The time on the server is ${serverTime}.</P>
 
-	<a href="boardlist">
-		<h5 class="box-title">커뮤니티 페이지</h5>
+	<a href="${pageContext.request.contextPath}/boardlistmain">
+		<h5 class="box-title">커뮤니티 메인 페이지</h5>
 	</a>
 </body>
 </html>
