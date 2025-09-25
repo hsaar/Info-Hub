@@ -1,11 +1,11 @@
 package com.infohub.project.mypage;
 
 public class ScrapDTO {
-    private int scrapId;
-    private int loginId;
+    private int scrapsNo;
+    private int loginNo;
     private int policyId;
     private int articleId;
-    private String createdAt;
+    private String createdDate;
 
     // 정책 정보 임시 필드(title, content)
     private String policyTitle;
@@ -22,11 +22,11 @@ public class ScrapDTO {
     public ScrapDTO() {}
 
     // getter & setter
-    public int getScrapId() { return scrapId; }
-    public void setScrapId(int scrapId) { this.scrapId = scrapId; }
+    public int getScrapId() { return scrapsNo; }
+    public void setScrapId(int scrapId) { this.scrapsNo = scrapId; }
 
-    public int getLoginId() { return loginId; }
-    public void setLoginId(int loginId) { this.loginId = loginId; }
+    public int getLoginId() { return loginNo; }
+    public void setLoginId(int loginId) { this.loginNo = loginId; }
 
     public int getPolicyId() { return policyId; }
     public void setPolicyId(int policyId) { this.policyId = policyId; }
@@ -34,8 +34,8 @@ public class ScrapDTO {
     public int getArticleId() { return articleId; }
     public void setArticleId(int articleId) { this.articleId = articleId; }
 
-    public String getCreatedAt() { return createdAt; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public String getCreatedAt() { return createdDate; }
+    public void setCreatedAt(String createdAt) { this.createdDate = createdAt; }
 
     public String getPolicyTitle() { return policyTitle; }
     public void setPolicyTitle(String policyTitle) { this.policyTitle = policyTitle; }

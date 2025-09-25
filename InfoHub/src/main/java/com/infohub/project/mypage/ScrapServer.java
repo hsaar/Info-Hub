@@ -24,7 +24,7 @@ public class ScrapServer extends HttpServlet {
         resp.setContentType("application/json; charset=UTF-8");
 
         try (PrintWriter out = resp.getWriter()) {
-            int loginId = Integer.parseInt(req.getParameter("loginId"));
+            int loginId = Integer.parseInt(req.getParameter("loginNo"));
             String type = req.getParameter("type"); // 정책, 기사 구분(파라미터)
 
             if ("article".equals(type)) {   // 기사 스크랩 목록
@@ -45,7 +45,7 @@ public class ScrapServer extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         try {
-            int loginId = Integer.parseInt(req.getParameter("loginId"));
+            int loginId = Integer.parseInt(req.getParameter("loginNo"));
             String type = req.getParameter("type"); // 정책, 기사 구분
 
             if ("article".equals(type)) {   // 기사 스크랩 추가
@@ -68,7 +68,7 @@ public class ScrapServer extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         try {
-            int scrapId = Integer.parseInt(req.getParameter("scrapId"));
+            int scrapId = Integer.parseInt(req.getParameter("scrapsNo"));
             service.deleteScrap(scrapId);
             resp.getWriter().print("{\"result\":\"delete_success\"}");
         } catch (SQLException e) {
