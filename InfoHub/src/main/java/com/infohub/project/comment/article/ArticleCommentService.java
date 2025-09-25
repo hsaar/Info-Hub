@@ -16,7 +16,7 @@ public class ArticleCommentService {
         return dao.getCommentsByUser(loginNo);
     }
 
-    // 내가 쓴 댓글 상세 조회
+    // 내가 쓴 댓글 상세 조회 → 해당 기사로 이동
     public ArticleCommentDTO getMyCommentDetail(int commentId, int loginNo) throws SQLException {
         return dao.getCommentDetail(commentId, loginNo);
     }

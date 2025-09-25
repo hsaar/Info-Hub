@@ -35,7 +35,7 @@ public class ArticleCommentController {
         try {
             ArticleCommentDTO dto = service.getMyCommentDetail(commentId, loginNo);
             if (dto != null) {
-                // 해당 댓글이 달린 기사 상세 페이지
+                // 해당 댓글이 달린 기사 상세 페이지로 이동
                 return "redirect:/article/detail?articleId=" + dto.getArticleId();
             } else {
                 return "error";

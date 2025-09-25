@@ -38,7 +38,7 @@ public class ArticleCommentDAO {
         return list;
     }
 
-    // 내가 쓴 댓글 상세 조회
+    // 내가 쓴 댓글 상세 조회 → 해당 기사로 이동
     public ArticleCommentDTO getCommentDetail(int commentId, int loginNo) throws SQLException {
         String sql = "SELECT * FROM commentarticle WHERE commentId = ? AND login_loginNo = ?";
         try (Connection conn = dataSource.getConnection();
