@@ -11,9 +11,9 @@ public class PolicyService {
     @Autowired
     private PolicyDAO dao;
 
-    // 목록조회 (검색 + 정렬 포함)
-    public List<PolicyDTO> getPolicies(Integer regionId, Integer categoryId, String keyword, String orderBy) throws SQLException {
-        return dao.findPolicies(regionId, categoryId, keyword, orderBy);
+    // 목록조회 (지역 + 카테고리 + 정렬)
+    public List<PolicyDTO> getPolicies(Integer regionId, Integer categoryId, String orderBy) throws SQLException {
+        return dao.findPolicies(regionId, categoryId, orderBy);
     }
 
     // 상세조회

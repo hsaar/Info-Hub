@@ -13,25 +13,22 @@ public class PolicyDAO {
     @Autowired
     private DataSource dataSource;   // root-context.xml
 
-    // 목록 조회 → 지역, 카테고리, 키워드 조건 적용 + 정렬
-    public List<PolicyDTO> findPolicies(Integer regionId, Integer categoryId, String keyword, String orderBy) throws SQLException {
+    // 목록 조회 → 지역, 카테고리 조건 적용 + 정렬
+    public List<PolicyDTO> findPolicies(Integer regionId, Integer categoryId, String orderBy) throws SQLException {
         List<PolicyDTO> results = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
-            "SELECT policy_id, title, content, region_id, category_id, keyword, created_at, likes " +
+            "SELECT policyId, title, content, regionId, categoryId, createdAt, likes " +
             "FROM policy WHERE 1=1"
         );
 
-        if (regionId != null) sql.append(" AND region_id = ?");
-        if (categoryId != null) sql.append(" AND category_id = ?");
-        if (keyword != null && !keyword.isEmpty()) {
-            sql.append(" AND (title LIKE ? OR content LIKE ? OR keyword LIKE ?)");
-        }
+        if (regionId != null) sql.append(" AND regionId = ?");
+        if (categoryId != null) sql.append(" AND categoryId = ?");
 
         // 정렬 조건
         if ("likes".equalsIgnoreCase(orderBy)) {
-            sql.append(" ORDER BY likes DESC");			// 인기순
+            sql.append(" ORDER BY likes DESC");   // 인기순
         } else {
-            sql.append(" ORDER BY created_at DESC");	// 최신순
+            sql.append(" ORDER BY createdAt DESC"); // 최신순
         }
 
         try (Connection conn = dataSource.getConnection();
@@ -40,23 +37,16 @@ public class PolicyDAO {
             int idx = 1;
             if (regionId != null) pstmt.setInt(idx++, regionId);
             if (categoryId != null) pstmt.setInt(idx++, categoryId);
-            if (keyword != null && !keyword.isEmpty()) {
-                String like = "%" + keyword + "%";
-                pstmt.setString(idx++, like);
-                pstmt.setString(idx++, like);
-                pstmt.setString(idx++, like);
-            }
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     PolicyDTO dto = new PolicyDTO();
-                    dto.setPolicyId(rs.getInt("policy_id"));
+                    dto.setPolicyId(rs.getInt("policyId"));
                     dto.setTitle(rs.getString("title"));
                     dto.setContent(rs.getString("content"));
-                    dto.setRegionId(rs.getInt("region_id"));
-                    dto.setCategoryId(rs.getInt("category_id"));
-                    dto.setKeyword(rs.getString("keyword"));
-                    dto.setCreatedAt(rs.getString("created_at"));
+                    dto.setRegionId(rs.getInt("regionId"));
+                    dto.setCategoryId(rs.getInt("categoryId"));
+                    dto.setCreatedAt(rs.getString("createdAt"));
                     dto.setLikes(rs.getInt("likes"));
                     results.add(dto);
                 }
@@ -65,7 +55,7 @@ public class PolicyDAO {
         return results;
     }
 
-    // 상세 조회 → policy_id 단일 정책 불러오기
+    // 상세 조회 → policyId 단일 정책 불러오기
     public PolicyDTO findPolicyDetail(int policyId) throws SQLException {
         PolicyDTO dto = null;
         String sql = "SELECT policyId, title, content, applicationLink, " +
@@ -99,8 +89,8 @@ public class PolicyDAO {
     // 정책 추가 (관리자용)
     public void insertPolicy(PolicyDTO dto) throws SQLException {
         String sql = "INSERT INTO policy " +
-                     "(title, content, applicationLink, applicationStart, applicationEnd, regionId, categoryId, keyword, createdAt, minAge, maxAge) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)";
+                     "(title, content, applicationLink, applicationStart, applicationEnd, regionId, categoryId, createdAt, minAge, maxAge) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -112,9 +102,8 @@ public class PolicyDAO {
             pstmt.setString(5, dto.getApplicationEnd());
             pstmt.setInt(6, dto.getRegionId());
             pstmt.setInt(7, dto.getCategoryId());
-            pstmt.setString(8, dto.getKeyword());
-            pstmt.setInt(9, dto.getMinAge());
-            pstmt.setInt(10, dto.getMaxAge());
+            pstmt.setInt(8, dto.getMinAge());
+            pstmt.setInt(9, dto.getMaxAge());
 
             pstmt.executeUpdate();
         }
@@ -124,7 +113,7 @@ public class PolicyDAO {
     public void updatePolicy(PolicyDTO dto) throws SQLException {
         String sql = "UPDATE policy SET title=?, content=?, applicationLink=?, " +
                      "applicationStart=?, applicationEnd=?, regionId=?, categoryId=?, " +
-                     "keyword=?, minAge=?, maxAge=? WHERE policyId=?";
+                     "minAge=?, maxAge=? WHERE policyId=?";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -136,10 +125,9 @@ public class PolicyDAO {
             pstmt.setString(5, dto.getApplicationEnd());
             pstmt.setInt(6, dto.getRegionId());
             pstmt.setInt(7, dto.getCategoryId());
-            pstmt.setString(8, dto.getKeyword());
-            pstmt.setInt(9, dto.getMinAge());
-            pstmt.setInt(10, dto.getMaxAge());
-            pstmt.setInt(11, dto.getPolicyId());
+            pstmt.setInt(8, dto.getMinAge());
+            pstmt.setInt(9, dto.getMaxAge());
+            pstmt.setInt(10, dto.getPolicyId());
 
             pstmt.executeUpdate();
         }

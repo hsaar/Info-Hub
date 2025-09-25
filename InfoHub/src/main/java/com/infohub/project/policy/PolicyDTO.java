@@ -18,9 +18,6 @@ public class PolicyDTO {
     private int regionId;
     private int categoryId;
     
-    // 분류
-    private String keyword;
-    
     // 정렬
     private String createdAt;
 
@@ -53,9 +50,6 @@ public class PolicyDTO {
 
     public int getCategoryId() { return categoryId; }
     public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
-    
-    public String getKeyword() { return keyword; }
-    public void setKeyword(String keyword) { this.keyword = keyword; }
     
     public String getCreatedAt() { return createdAt; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }

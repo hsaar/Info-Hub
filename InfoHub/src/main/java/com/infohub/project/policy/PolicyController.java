@@ -20,7 +20,6 @@ public class PolicyController {
             @RequestParam(value = "policyId", required = false) Integer policyId,
             @RequestParam(value = "regionId", required = false) Integer regionId,
             @RequestParam(value = "category", required = false) Integer categoryId,
-            @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "orderBy", required = false) String orderBy,
             Model model) {
 
@@ -29,7 +28,7 @@ public class PolicyController {
                 model.addAttribute("policyDetail", service.getPolicyDetail(policyId));
                 return "policyDetail"; // policyDetail.jsp
             }
-            model.addAttribute("policyList", service.getPolicies(regionId, categoryId, keyword, orderBy));  // 목록 조회
+            model.addAttribute("policyList", service.getPolicies(regionId, categoryId, orderBy));  // 목록 조회
             return "policyList"; // policyList.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
