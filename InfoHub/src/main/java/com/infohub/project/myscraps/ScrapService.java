@@ -1,4 +1,4 @@
-package com.infohub.project.scraps;
+package com.infohub.project.myscraps;
 
 import java.sql.SQLException;
 import java.util.List;
