@@ -36,6 +36,7 @@ public class SearchListAllControl {
 		model.addAttribute("searchlistAll", searchlistAll);
 		
 		return "./article/searchlistAll";
+
 	} 
 	
 }
