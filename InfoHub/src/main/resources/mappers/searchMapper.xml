@@ -5,11 +5,12 @@
 <mapper namespace="com.infohub.project.searchMapper"> <!-- 다음에 자바에서 호출해서 사용 -->
 
 	
-	<select id="read" resultType="SearchListAllDTO">
-		select a.article_id, a.title, a.content, a.tags, a.published, a.source, a.views, a.hearts, a.image, a.login_login_id, a.article_categories_categories_id, b.name 
-		from article a join article_categories b on b.categories_id = a.article_categories_categories_id
-		where title = #{title} 
+	<select id="read" resultType="article_searchDTO">
+		select a.articleId, a.title, a.content, a.tags, a.published, a.source, a.views, a.hearts, a.image, a.login_loginNo, a.articlecategories_categoriesNo, b.name 
+		from article a join articleCategories b on b.categoriesNo = a.articlecategories_categoriesNo
+		where articleId = #{articleId}
 		order by published desc;
+		
 	</select> 	
 	 
 	 <sql id="searchCondition">
@@ -31,30 +32,30 @@
 	
 
 	 	 
-	<select id="slistPage" resultType="SearchListAllDTO">
-		select a.article_id, a.title, a.content, a.tags, a.published, a.source, a.views, a.hearts, a.image, a.login_login_id, a.article_categories_categories_id, b.name 
-		from article a join article_categories b on b.categories_id = a.article_categories_categories_id
+	<select id="slistPage" resultType="article_searchDTO">
+		select a.articleId, a.title, a.content, a.tags, a.published, a.source, a.views, a.hearts, a.image, a.login_loginNo, a.articlecategories_categoriesNo, b.name 
+		from article a join articleCategories b on b.categoriesNo = a.articlecategories_categoriesNo
 		order by published desc
-		limit #{pageStart}, #{perPageNum};
+		limit #{pageStart}, #{perPageNum}
 	</select>
 
 	<select id="gettotalcount" resultType="int">
-		select count(article_id)
+		select count(articleID)
 		from article
-		where article_id > 0
+		where articleID > 0
 		<include refid="searchCondition"></include>
-		order by published desc;
+		order by published desc
 		
 	</select>
 
-	<select id="listSearch" resultType="SearchListAllDTO">
+	<select id="listSearch" resultType="article_searchDTO">
 		
-		select a.article_id, a.title, a.content, a.tags, a.published, a.source, a.views, a.hearts, a.image, a.login_login_id, a.article_categories_categories_id, b.name 
-		from article a join article_categories b on categories_id = article_categories_categories_id
-		where article_id > 0
+		select a.articleId, a.title, a.content, a.tags, a.published, a.source, a.views, a.hearts, a.image, a.login_loginNo, a.articlecategories_categoriesNo, b.name 
+		from article a join articleCategories b on b.categoriesNo = a.articlecategories_categoriesNo
+		where articleId = #{articleID}
 		<include refid="searchCondition"></include>	
         order by published desc   
-        limit #{pageStart}, #{perPageNum};
+        limit #{pageStart}, #{perPageNum}
 	</select>
 </mapper>
 
