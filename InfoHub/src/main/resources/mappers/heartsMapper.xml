@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.heartsMapper">
+	
+	<select id="heartsCount" resultType="int">
+	select a.hearts from hearts h join article a on articleId = article_articleId
+	where article_articleId = #{article_articleId}
+	</select>
+	
+	<select id="articleHearts" resultType="int">
+	select hearts from article
+	where articleId = #{article_articleId}
+	</select>
+	
+	<select id="heartsCheck" resultType="int">
+	select count(*) from hearts
+	where article_articleId = #{article_articleId}
+	and login_loginNo = 2
+	</select>
+	
+	<insert id="heartsInsert">
+	insert into hearts(login_loginNo, article_articleId, createdDate) values(2, #{article_articleId}, now())
+	</insert>
+	
+	<delete id="heartsDelete">
+	delete from hearts
+	where article_articleId = #{article_articleId}
+	and login_loginNo = 2
+	</delete>
+	
+</mapper>

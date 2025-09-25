@@ -29,43 +29,43 @@ public class LoginDAOImpl implements LoginDAO{
 	@Override
 	public LoginDTO getUserByUsername(String username) {
 		// TODO Auto-generated method stub
-		return null;
+		return sqlsession.selectOne(namespace+".getUserByUsername", username);
 	}
 
 	@Override
-	public boolean checkUsernameDuplicate(String username) {
+	public int checkUsernameDuplicate(String username) {
 		// TODO Auto-generated method stub
-		return false;
+		return sqlsession.selectOne(namespace+".checkUsernameDuplicate", username);
 	}
 
 	@Override
-	public boolean checkNameDuplicate(String name) {
+	public int checkNameDuplicate(String name) {
 		// TODO Auto-generated method stub
-		return false;
+		return sqlsession.selectOne(namespace+".checkNameDuplicate", name);
 	}
 
 	@Override
 	public int insertUser(LoginDTO dto) {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlsession.insert(namespace+".insertUser", dto);
 	}
 
 	@Override
 	public int updateUser(LoginDTO dto) {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlsession.update(namespace+".updateUser", dto);
 	}
 
 	@Override
 	public int deleteUser(String username) {
 		// TODO Auto-generated method stub
-		return 0;
+		return sqlsession.update(namespace+".deleteUser", username);
 	}
 
 	@Override
 	public LoginDTO login(LoginRequest req) {
 		// TODO Auto-generated method stub
-		return null;
+		return sqlsession.selectOne(namespace+".login",req);
 	}
 
 }

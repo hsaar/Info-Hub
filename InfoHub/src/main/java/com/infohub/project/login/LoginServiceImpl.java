@@ -23,4 +23,46 @@ public class LoginServiceImpl implements LoginService{
 		return dao.getUserById(login_id);
 	}
 
+	@Override
+	public LoginDTO getUserByUsername(String username) {
+		// TODO Auto-generated method stub
+		return dao.getUserByUsername(username);
+	}
+
+	@Override
+	public int checkUsernameDuplicate(String username) {
+		// TODO Auto-generated method stub
+		return dao.checkUsernameDuplicate(username);
+	}
+
+	@Override
+	public int checkNameDuplicate(String name) {
+		// TODO Auto-generated method stub
+		return dao.checkNameDuplicate(name);
+	}
+
+	@Override
+	public int insertUser(LoginDTO dto) {
+		// TODO Auto-generated method stub
+		return dao.insertUser(dto);
+	}
+
+	@Override
+	public int updateUser(LoginDTO dto) {
+		// TODO Auto-generated method stub
+		return dao.updateUser(dto);
+	}
+
+	@Override
+	public int deleteUser(String username) {
+		// TODO Auto-generated method stub
+		return dao.deleteUser(username);
+	}
+
+	@Override
+	public LoginDTO login(LoginRequest req) {
+		// TODO Auto-generated method stub
+		return dao.login(req);
+	}
+
 }

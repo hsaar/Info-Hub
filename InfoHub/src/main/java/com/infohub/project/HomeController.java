@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.infohub.project.test.testDAO;
 
@@ -30,7 +31,7 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping("/")
-	public String home(Locale locale, Model model) {
+	public String home(Locale locale, Model model, @SessionAttribute(name = "userId", required = false)String userId) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		Date date = new Date();
@@ -42,14 +43,14 @@ public class HomeController {
 		model.addAttribute("serverTime", formattedDate );
 		model.addAttribute("test", i);
 		
+	    if(userId != null) { 
+	        model.addAttribute("userId",userId);
+	    }
+		
 		return "index";
 	}
 	
-	@GetMapping("article_home")
-	public String article_home(Model model) {
-		return "/article/article_home";
-	}
-	
+
 	@GetMapping("timeline")
 	public String timeline(Model model) {
 		return "timeline";

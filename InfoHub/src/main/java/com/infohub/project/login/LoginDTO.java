@@ -14,6 +14,16 @@ public class LoginDTO {
 	
 	public LoginDTO() {}
 	
+	public LoginDTO(String username, String password, String name, String email, String phone, int age) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.age = age;
+	}
+
 	public LoginDTO(String username, String password, String name, String email, String phone, String created_date,
 			String last_login, int status, int role, int age) {
 		super();
