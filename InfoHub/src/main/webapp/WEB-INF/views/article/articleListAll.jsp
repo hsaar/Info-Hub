@@ -16,7 +16,21 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+.pageInfo {
+	list-style: none;
+	display: inline-block;
+	margin: 50px 0 0 100px;
+}
 
+.pageInfo li {
+	float: left;
+	font-size: 20px;
+	margin-left: 18px;
+	padding: 7px;
+	font-weight: 500;
+	}
+</style>
 </head>
 
 <body>
@@ -232,7 +246,7 @@
 						"click",
 						function(event) {
 
-							self.location = "article_search"
+							self.location = "articleListAll"
 									+ '${pageMaker.makeQuery(1)}'
 									+ "&searchType="
 									+ $("select option:selected").val()
@@ -242,7 +256,7 @@
 						});
 				$('#newBtn').on("click", function(evt) {
 
-					self.location = "article_search";
+					self.location = "articleListAll";
 
 				});
 
@@ -276,7 +290,7 @@
 
 		$perPageSel.val(perPageNum).prop("selected", true);
 		$perPageSel.on('change', function() {
-			window.location.href = "article_search?page=" + thisPage
+			window.location.href = "articleListAll?page=" + thisPage
 					+ "&perPageNum=" + $perPageSel.val();
 		})
 	}
@@ -306,7 +320,7 @@
 						keyword.focus();
 						return;
 					}
-					var url = "article_search?page=1" 
+					var url = "articleListAll?page=1" 
 							+ "&perPageNum="
 							+ "${pageMaker.cri.perPageNum}"
 							+ "&searchType=" + searchTypeVal

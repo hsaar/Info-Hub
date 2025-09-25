@@ -182,7 +182,7 @@ body::before{
 .split .card {
   display: flex !important;
   flex-direction: column !important;
-  height: 100% !important;
+  height: 50% !important;
   min-height: 350px !important; /* 최소 높이 증가 */
   background: #fff;
   border: 1px solid var(--mist-200);
