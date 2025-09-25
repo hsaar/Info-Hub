@@ -9,10 +9,4 @@
 	</select>
 </mapper>
 
-
-	<!-- <select id="count" resultType="int">
-		select count(*) from article_categories
-	</select>
-	-->
-	
 	
