@@ -1,4 +1,4 @@
-package com.infohub.project.scrap;
+package com.infohub.project.scraps;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/scraps")	// HTTP 요청 처리
-public class ScrapServer {
+public class ScrapController {
 
     @Autowired
     private ScrapService service;

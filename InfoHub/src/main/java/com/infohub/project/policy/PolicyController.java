@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 @Controller 
 @RequestMapping("/policies")
-public class PolicyServer {
+public class PolicyController {
 
     @Autowired
     private PolicyService service;
