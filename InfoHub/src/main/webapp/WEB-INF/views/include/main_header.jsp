@@ -9,7 +9,9 @@
 %>
 <header class="topbar">
 	<nav class="nav">
-		<a class="logo" href="<c:url value='/'/>">INFO HUB</a>
+    <a class="logo" href="index">
+      <img src="<c:url value='/resources/image/5.png'/>" alt="INFO HUB 로고">
+    </a>
 		<ul class="menu">
 			<li><a href="article_home">기사</a></li>
 			<li><a href="timeline">타임라인</a></li>
@@ -29,6 +31,8 @@
 						href="<c:url value="logout"/>">로그아웃 </a></li>
 					<li class="nav-item"><a class="nav-link"
 						href="<c:url value="myinfo?name=${userId}"/>">회원 수정</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="<c:url value="withdrawal?name=${userId}"/>">회원 탈퇴</a></li>
 				</c:if>
 			
 		</ul>

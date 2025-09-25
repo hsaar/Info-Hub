@@ -9,6 +9,11 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/login.css' />">
 </head>
 <body>
-	<p>일단 성공</p>
+<div class="container" id="container">
+  <div>
+    <h2>회원가입 성공!</h2>
+    <a class="login-btn" href="index">메인화면</a>
+  </div>
+</div>
 </body>
 </html>

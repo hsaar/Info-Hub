@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -48,23 +49,29 @@ public class LoginController {
 	}
 	@PostMapping("myinfo")
 	public String myinfo(Model model, 
+						HttpServletRequest request,
 						@RequestParam("userId")String userId,
 						@RequestParam("password")String password,
 						@RequestParam("email")String email,
 						@RequestParam("name")String name,
 						@RequestParam("phone")String phone) {
 		
-		String username = se.getUserByUsername(userId).getUsername();
-		int i = se.updateUser(new LoginDTO(username,password,name,email,phone,null,null,1,1,0));
-		if( i > 0 )
+		int i = se.updateUser(new LoginDTO(userId,password,name,email,phone,null,null,1,1,0));
+		if( i > 0 ) {
 			logger.info("변경성공");
+			request.getSession().invalidate();
+			HttpSession session = request.getSession(true);
+			session.setAttribute("userId", userId);
+		}
 		
 		return "redirect:/";
 	}
+	
 	@GetMapping("passwordfind")
 	public String passwordfind(Model model) {
 		return "./login/passwordfind";
 	}
+	
 	@PostMapping("login_ok")
 	public String login_ok(Model model, LoginRequest lr, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		LoginDTO res = se.login(lr);
@@ -73,7 +80,7 @@ public class LoginController {
 			request.getSession().invalidate(); //기존 세션 파기
 			
 			HttpSession session = request.getSession(true);
-			session.setAttribute("userId", res.getName()); //세션이 없으면 새로운 세션에 유저id값 부여
+			session.setAttribute("userId", res.getuserId()); //세션이 없으면 새로운 세션에 유저id값 부여
 			
 			return "redirect:/";
 		}else {
@@ -81,13 +88,15 @@ public class LoginController {
 			return "redirect:/login";
 		}
 	}
+	
 	@GetMapping("memberjoin")
 	public String movememberjoin(Model model){
 		return "./login/memberjoin";
 	}
+	@ResponseBody
 	@PostMapping("memberjoin")
 	public String memberjoin(Model model, 
-							@RequestParam("username")String username, 
+							@RequestParam("userId")String userId, 
 							@RequestParam("password")String password,
 							@RequestParam("passwordcheak")String passwordcheak,
 							@RequestParam("email")String email,
@@ -96,25 +105,44 @@ public class LoginController {
 							@RequestParam("birthyear")int birthyear) {
 		int currentYear = java.time.LocalDate.now().getYear();
 		int age = currentYear - birthyear;
+		boolean nameCheck = false;
+		boolean userIdCheck = false;
+		boolean passwordCheck = false;
 		
-		if(se.checkNameDuplicate(name)==1) {
+		if(se.checkNameDuplicate(name)>0) {
+			model.addAttribute("nameCheck",nameCheck);
 			logger.info("중복이름");
 		}
 		
-		if(se.checkUsernameDuplicate(username)==1) {
+		if(se.checkuserIdDuplicate(userId)>0) {
+			model.addAttribute("userIdCheck",userIdCheck);
 			logger.info("중복아이디");
 		}
 			
 		if(!password.equals(passwordcheak)) {
+			model.addAttribute("passwordCheck",passwordCheck);
 			logger.info("패스워드 체크 틀림");
 		}
 		
-		int i = se.insertUser(new LoginDTO(username,password,name,email,phone,null,null,1,1,age));
+		int i = se.insertUser(new LoginDTO(userId,password,name,email,phone,null,null,1,1,age));
 		if( i > 0 )
 			logger.info("생성성공");
 		
 		return "./login/memberjoin";
 	}
 	
-
+	@GetMapping("withdrawal")
+	public String withdrawal(Model medel,@RequestParam("name")String name, HttpServletRequest request) {
+		
+		String userId = se.getUserByname(name).getuserId();
+		
+		int i = se.deleteUser(userId);
+		
+		if(i>0) {
+			request.getSession().invalidate();
+			logger.info("삭제성공");
+		}
+		
+		return "./login/withdrawal";
+	}
 }

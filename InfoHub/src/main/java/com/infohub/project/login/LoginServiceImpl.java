@@ -18,21 +18,21 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public LoginDTO getUserById(int login_id) {
+	public LoginDTO getUserById(int userId) {
 		// TODO Auto-generated method stub
-		return dao.getUserById(login_id);
+		return dao.getUserById(userId);
 	}
 
 	@Override
-	public LoginDTO getUserByUsername(String username) {
+	public LoginDTO getUserByname(String name) {
 		// TODO Auto-generated method stub
-		return dao.getUserByUsername(username);
+		return dao.getUserByname(name);
 	}
 
 	@Override
-	public int checkUsernameDuplicate(String username) {
+	public int checkuserIdDuplicate(String userId) {
 		// TODO Auto-generated method stub
-		return dao.checkUsernameDuplicate(username);
+		return dao.checkuserIdDuplicate(userId);
 	}
 
 	@Override
@@ -54,9 +54,9 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public int deleteUser(String username) {
+	public int deleteUser(String userId) {
 		// TODO Auto-generated method stub
-		return dao.deleteUser(username);
+		return dao.deleteUser(userId);
 	}
 
 	@Override

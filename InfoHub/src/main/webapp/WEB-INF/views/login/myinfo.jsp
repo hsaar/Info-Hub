@@ -11,7 +11,7 @@
 	        .getRequest()
 	        .getSession();
 	
-	String userId = (String) session.getAttribute("userId");
+	String userId = (String)session.getAttribute("userId");
 %>
 <html>
 <head>
@@ -29,7 +29,7 @@
       <h1>Update Account</h1>
       <span>change your account info</span>
       <%=userId %>
-      <input type = "hidden" value=" <%=userId %>" name = "userId"/>
+      <input type = "hidden" value="<%=userId %>" name = "userId"/>
       <input type="password" placeholder="Password" name = "password" required/>
       <input type="email" placeholder="Email" name = "email" required/>
       <input type="text" placeholder="Nickname" name = "name" required/>

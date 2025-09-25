@@ -1,7 +1,7 @@
 package com.infohub.project.login;
 
 public class LoginDTO {
-	private String username;
+	private String userId;
 	private String password;
 	private String name;
 	private String email;
@@ -14,9 +14,9 @@ public class LoginDTO {
 	
 	public LoginDTO() {}
 	
-	public LoginDTO(String username, String password, String name, String email, String phone, int age) {
+	public LoginDTO(String userId, String password, String name, String email, String phone, int age) {
 		super();
-		this.username = username;
+		this.userId = userId;
 		this.password = password;
 		this.name = name;
 		this.email = email;
@@ -24,10 +24,10 @@ public class LoginDTO {
 		this.age = age;
 	}
 
-	public LoginDTO(String username, String password, String name, String email, String phone, String created_date,
+	public LoginDTO(String userId, String password, String name, String email, String phone, String created_date,
 			String last_login, int status, int role, int age) {
 		super();
-		this.username = username;
+		this.userId = userId;
 		this.password = password;
 		this.name = name;
 		this.email = email;
@@ -39,12 +39,12 @@ public class LoginDTO {
 		this.age = age;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getuserId() {
+		return userId;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setuserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getPassword() {
@@ -121,7 +121,7 @@ public class LoginDTO {
 
 	@Override
 	public String toString() {
-		return "LoginDTO [username=" + username + ", password=" + password + ", name=" + name + ", email=" + email
+		return "LoginDTO [username=" + userId + ", password=" + password + ", name=" + name + ", email=" + email
 				+ ", phone=" + phone + ", created_date=" + created_date + ", last_login=" + last_login + ", status="
 				+ status + ", role=" + role + ", age=" + age + "]";
 	}

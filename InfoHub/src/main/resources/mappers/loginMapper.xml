@@ -9,19 +9,19 @@
 	</select>
 	
 	<select id="getUserById" resultType="com.infohub.project.login.LoginDTO">
-		SELECT * FROM infohub.login where login_id = #{login_id}
+		SELECT * FROM infohub.login where userId = #{userId}
 	</select>
 	
-	<select id="getUserByUsername" resultType="com.infohub.project.login.LoginDTO">
-		SELECT * FROM infohub.login where username = #{username}
+	<select id="getUserByname" resultType="com.infohub.project.login.LoginDTO">
+		SELECT * FROM infohub.login where name = #{name}
 	</select>
 	
 	<select id="login" resultType="com.infohub.project.login.LoginDTO">
-		SELECT * FROM infohub.login where username = #{username} and password = #{password}
+		SELECT * FROM infohub.login where userId = #{userId} and password = #{password}
 	</select>
 	
-	<select id="checkUsernameDuplicate" resultType="int">
-		SELECT count(username) FROM infohub.login where username = #{username}
+	<select id="checkuserIdDuplicate" resultType="int">
+		SELECT count(userId) FROM infohub.login where userId = #{userId}
 	</select>
 	
 	<select id="checkNameDuplicate" resultType="int">
@@ -29,19 +29,19 @@
 	</select>
 	
 	<insert id="insertUser">
-		INSERT INTO infohub.login (username, password, name, email, phone, created_date, status, role, age) 
-		VALUES (#{username}, #{password}, #{name}, #{email}, #{phone}, now(), 1, 1, #{age});
+		INSERT INTO infohub.login (userId, password, name, email, phone, created_date, status, role, age) 
+		VALUES (#{userId}, #{password}, #{name}, #{email}, #{phone}, now(), 1, 1, #{age});
 	</insert>
 	
 	<update id="updateUser">
 		UPDATE infohub.login 
 		SET password = #{password}, name = #{name}, email = #{email}, phone = #{phone}, age = #{age} 
-		WHERE (username = #{username});
+		WHERE (userId = #{userId});
 	</update>
 	
 	<update id="deleteUser">
 		UPDATE infohub.login SET status = 0
-		WHERE (username = #{username});
+		WHERE (userId = #{userId});
 	</update>
 	
 	

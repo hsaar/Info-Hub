@@ -95,5 +95,9 @@ public class HomeController {
 		return "/mypage/mypage_main";
 	}
 	
+	@GetMapping("index")
+	public String index(Model model) {
+		return "index";
+	}
 	
 }
