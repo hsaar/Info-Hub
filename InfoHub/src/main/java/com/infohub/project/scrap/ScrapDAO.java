@@ -25,18 +25,6 @@ public class ScrapDAO {
         }
     }
 
-    // 스크랩 추가 (기사)
-    public void addArticleScrap(int loginNo, int articleId) throws SQLException {
-        String sql = "INSERT INTO scraps (login_loginNo, article_articleId, createdDate) VALUES (?, ?, NOW())";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, loginNo);
-            pstmt.setInt(2, articleId);
-            pstmt.executeUpdate();
-        }
-    }
-
     // 스크랩 목록 (정책)
     public List<ScrapDTO> getPolicyScrapsByUser(int loginNo) throws SQLException {
         List<ScrapDTO> results = new ArrayList<>();
@@ -56,35 +44,6 @@ public class ScrapDAO {
                     dto.setPolicyId(rs.getInt("policy_policyId"));
                     dto.setPolicyTitle(rs.getString("title"));
                     dto.setPolicyContent(rs.getString("content"));
-                    dto.setType("policy"); 
-                    results.add(dto);
-                }
-            }
-        }
-        return results;
-    }
-
-    // 스크랩 목록 (기사)
-    public List<ScrapDTO> getArticleScrapsByUser(int loginNo) throws SQLException {
-        List<ScrapDTO> results = new ArrayList<>();
-        String sql = "SELECT s.scrapsNo, s.createdDate, a.article_articleId, a.title, a.content, a.image " +
-                     "FROM scraps s JOIN article a ON s.article_articleId = a.article_articleId " +
-                     "WHERE s.login_loginNo = ? ORDER BY s.createdDate DESC";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, loginNo);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    ScrapDTO dto = new ScrapDTO();
-                    dto.setScrapId(rs.getInt("scrapsNo"));
-                    dto.setCreatedAt(rs.getString("createdDate"));
-                    dto.setArticleId(rs.getInt("article_articleId"));
-                    dto.setArticleTitle(rs.getString("title"));
-                    dto.setArticleContent(rs.getString("content"));
-                    dto.setArticleImage(rs.getString("image"));
-                    dto.setType("article"); 
                     results.add(dto);
                 }
             }
