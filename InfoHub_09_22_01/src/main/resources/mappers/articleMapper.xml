@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.articleMapper">
+	<select id="articleListAll" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id order by published desc;
+	</select>
+	
+	<select id="articleListAll1" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 1 order by published desc;
+	</select>
+	
+	<select id="articleListAll2" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 2 order by published desc;
+	</select>
+	
+	<select id="articleListAll3" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 3 order by published desc;
+	</select>
+	
+	<select id="articleListAll4" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 4 order by published desc;
+	</select>
+	
+	<select id="articleListAll5" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where article_categories_categories_id = 5 order by published desc;
+	</select>
+	
+	<select id="articleContent" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT a.*, b.name FROM article a join article_categories b on article_categories_categories_id = categories_id where title = #{title} order by published desc;
+	</select>
+	
+	<update id="updateViews" parameterType="String">
+	UPDATE article SET views = views + 1 WHERE title = #{title}
+	</update>
+	
+	
+	
+</mapper>

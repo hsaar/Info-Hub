@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.infohub.project.commentarticleMapper">
+
+	<insert id="insert" parameterType="com.infohub.project.commentarticle.CommentarticleVO">
+	    
+	    INSERT INTO commentarticle( createdDate, lastModified, comment, login_loginNo, article_articleId)
+	    VALUES (now(), now(), #{comment}, 2, #{article_articleId})
+	    
+	</insert>
+	
+	
+	<select id="listAll"  resultType="com.infohub.project.commentarticle.CommentarticleVO">
+		SELECT c.* FROM commentarticle c join article a on articleId = article_articleId
+		WHERE article_articleId = #{article_articleId}
+	
+	</select>
+
+</mapper>

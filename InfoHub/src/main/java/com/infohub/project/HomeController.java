@@ -44,19 +44,10 @@ public class HomeController {
 		return "index";
 	}
 	
-	@GetMapping("article_home")
-	public String article_home(Model model) {
-		return "/article/article_home";
-	}
-	
+
 	@GetMapping("timeline")
 	public String timeline(Model model) {
 		return "timeline";
-	}
-	
-	@GetMapping("registrationlistAll")
-	public String registrationlistAll(Model model) {
-		return "/article/registrationlistAll";
 	}
 	
 	@GetMapping("my_benifit")

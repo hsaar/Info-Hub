@@ -2,7 +2,7 @@ package com.infohub.project.article;
 
 public class ArticleVO {
 	
-	private int article_id;
+	private int articleId;
 	private String title;
 	private String content;
 	private String tags;
@@ -11,8 +11,8 @@ public class ArticleVO {
 	private int views;
 	private int hearts;
 	private String image;
-	private int login_login_id;
-	private int article_categories_categories_id;
+	private int login_loginNo;
+	private int articlecategories_categoriesNo;
 	private String name;
 	
 	ArticleVO(){}
@@ -25,11 +25,10 @@ public class ArticleVO {
 		this.name = name;
 	}
 
-	public ArticleVO(int article_id, String title, String content, String tags, String published, String source,
-			int views, int hearts, String image, int login_login_id, int article_categories_categories_id,
-			String name) {
+	public ArticleVO(int articleId, String title, String content, String tags, String published, String source,
+			int views, int hearts, String image, int login_loginNo, int articlecategories_categoriesNo, String name) {
 		super();
-		this.article_id = article_id;
+		this.articleId = articleId;
 		this.title = title;
 		this.content = content;
 		this.tags = tags;
@@ -38,16 +37,15 @@ public class ArticleVO {
 		this.views = views;
 		this.hearts = hearts;
 		this.image = image;
-		this.login_login_id = login_login_id;
-		this.article_categories_categories_id = article_categories_categories_id;
+		this.login_loginNo = login_loginNo;
+		this.articlecategories_categoriesNo = articlecategories_categoriesNo;
 		this.name = name;
 	}
 
-
-	public ArticleVO(int article_id, String title, String content, String tags, String published, String source,
-			int views, int hearts, String image, int login_login_id, int article_categories_categories_id) {
+	public ArticleVO(int articleId, String title, String content, String tags, String published, String source,
+			int views, int hearts, String image, int login_loginNo, int articlecategories_categoriesNo) {
 		super();
-		this.article_id = article_id;
+		this.articleId = articleId;
 		this.title = title;
 		this.content = content;
 		this.tags = tags;
@@ -56,16 +54,16 @@ public class ArticleVO {
 		this.views = views;
 		this.hearts = hearts;
 		this.image = image;
-		this.login_login_id = login_login_id;
-		this.article_categories_categories_id = article_categories_categories_id;
+		this.login_loginNo = login_loginNo;
+		this.articlecategories_categoriesNo = articlecategories_categoriesNo;
 	}
 
-	public int getArticle_id() {
-		return article_id;
+	public int getArticleId() {
+		return articleId;
 	}
 
-	public void setArticle_id(int article_id) {
-		this.article_id = article_id;
+	public void setArticle_id(int articleId) {
+		this.articleId = articleId;
 	}
 
 	public String getTitle() {
@@ -132,36 +130,29 @@ public class ArticleVO {
 		this.image = image;
 	}
 
-	public int getLogin_login_id() {
-		return login_login_id;
+	public int getLogin_loginNo() {
+		return login_loginNo;
 	}
 
-	public void setLogin_login_id(int login_login_id) {
-		this.login_login_id = login_login_id;
+	public void setLogin_loginNo(int login_loginNo) {
+		this.login_loginNo = login_loginNo;
 	}
 
-	public int getArticle_categories_categories_id() {
-		return article_categories_categories_id;
+	public int getArticlecategories_categoriesNo() {
+		return articlecategories_categoriesNo;
 	}
 
-	public void setArticle_categories_categories_id(int article_categories_categories_id) {
-		this.article_categories_categories_id = article_categories_categories_id;
+	public void setArticlecategories_categoriesNo(int articlecategories_categoriesNo) {
+		this.articlecategories_categoriesNo = articlecategories_categoriesNo;
 	}
 
 	@Override
 	public String toString() {
-		return "Comment_articleVO [article_id=" + article_id + ", title=" + title + ", content=" + content + ", tags=" + tags
+		return "ArticleVO [articleId=" + articleId + ", title=" + title + ", content=" + content + ", tags=" + tags
 				+ ", published=" + published + ", source=" + source + ", views=" + views + ", hearts=" + hearts
-				+ ", image=" + image + ", login_login_id=" + login_login_id + ", article_categories_categories_id="
-				+ article_categories_categories_id + ", name=" + name + "]";
+				+ ", image=" + image + ", login_loginNo=" + login_loginNo + ", articlecategories_categoriesNo="
+				+ articlecategories_categoriesNo + ", name=" + name + "]";
 	}
 
-	
-	
-	
-
-	
-	
-	
 
 }

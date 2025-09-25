@@ -67,6 +67,8 @@
 								title="혜택 페이지로 이동"></a>
 						</div>
 					</article>
+					
+					
 				</section>
 
 			</section> <!-- ⬅ left-col 닫기 태그 추가 -->

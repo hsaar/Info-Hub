@@ -8,11 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.infohub.project.HomeController;
+import com.infohub.project.article.PageMaker;
 
 
 @Controller
@@ -23,14 +25,20 @@ public class ArticleControl {
 	@Autowired
 	ArticleService service;
 	
+	
 	@RequestMapping("articleListAll")
-	public String articleListAll(Model model) throws Exception{
+	public String articleListAll(Model model, Criteria cri) throws Exception{
 		logger.info("articleListAll..");
 		
-		List<ArticleVO> articleListAll = service.articlListAll();
+		List<ArticleVO> articleListAll = service.articlListAll(cri);
 		model.addAttribute("articleListAll", articleListAll);
 		
-		return "./article/articleListAll";
+		PageMaker pageMaker = new PageMaker(cri);
+		int totalCount = service.getTotalCount(cri);
+		pageMaker.setTotalCount(totalCount);
+		model.addAttribute("pageMaker", pageMaker);
+		
+		return "article/articleListAll";
 	}
 	
 	@RequestMapping("articleListAll1")
@@ -40,7 +48,7 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll1 = service.articlListAll1();
 		model.addAttribute("articleListAll1", articleListAll1);
 		
-		return "./article/articleListAll1";
+		return "article/articleListAll1";
 	}
 	
 	@RequestMapping("articleListAll2")
@@ -50,7 +58,7 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll2 = service.articlListAll2();
 		model.addAttribute("articleListAll2", articleListAll2);
 		
-		return "./article/articleListAll2";
+		return "article/articleListAll2";
 	}
 	
 	@RequestMapping("articleListAll3")
@@ -60,7 +68,7 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll3 = service.articlListAll3();
 		model.addAttribute("articleListAll3", articleListAll3);
 		
-		return "./article/articleListAll3";
+		return "article/articleListAll3";
 	}
 	
 	@RequestMapping("articleListAll4")
@@ -70,7 +78,7 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll4 = service.articlListAll4();
 		model.addAttribute("articleListAll4", articleListAll4);
 		
-		return "./article/articleListAll4";
+		return "article/articleListAll4";
 	}
 	
 	@RequestMapping("articleListAll5")
@@ -80,19 +88,42 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll5 = service.articlListAll5();
 		model.addAttribute("articleListAll5", articleListAll5);
 		
-		return "./article/articleListAll5";
+		return "article/articleListAll5";
 	}
 	
 	@RequestMapping("articleContent")
-	public String articleContent(Model model, String title) throws Exception{
+	public String articleContent(Model model, int articleId) throws Exception{
 		logger.info("articleContent..");
 		
-		List<ArticleVO> articleContent = service.articleContent(title);
+		List<ArticleVO> articleContent = service.articleContent(articleId);
 		model.addAttribute("articleContent", articleContent);
 		
-		return "./article/articleContent";
+		return "article/articleContent";
 	}
 	
+	@ResponseBody
+	@PostMapping("countHearts")
+	public int countHearts(int articleId) throws Exception {
+		System.out.println("countHearts");
+		
+		int countHearts = service.countHearts(articleId);
+		
+		return countHearts;
+	}
+	
+	@RequestMapping("article_result")
+	public String result(int articleId, Model model) throws Exception {
+			
+		logger.info("read");
+			
+		List<ArticleVO> listSearchVO = service.result(articleId);
+		
+		model.addAttribute("listSearch", listSearchVO);
+			
+		logger.info(" article_result : " + listSearchVO);
+		
+		return "/article/article_result";
+	}
 	
 
 }

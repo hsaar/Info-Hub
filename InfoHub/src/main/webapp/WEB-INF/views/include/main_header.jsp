@@ -9,11 +9,9 @@
 %>
 <header class="topbar">
 	<nav class="nav">
-    <a class="logo" href="index">
-      <img src="<c:url value='/resources/image/5.png'/>" alt="INFO HUB 로고">
-    </a>
+		<a class="logo" href="<c:url value='/'/>"><img src="<c:url value='/resources/image/5.png'/>" alt="INFO HUB 로고"></a>
 		<ul class="menu">
-			<li><a href="article_home">기사</a></li>
+			<li><a href="articleListAll">기사</a></li>
 			<li><a href="timeline">타임라인</a></li>
 			<li><a href="registrationlistAll">정책 및 혜택 바로가기</a></li>
 			<li><a href="my_benifit">내 혜택 모아보기</a></li>

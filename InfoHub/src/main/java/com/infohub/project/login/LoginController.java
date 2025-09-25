@@ -24,7 +24,6 @@ public class LoginController {
 	@GetMapping("login")
 	public String login(Model model) {
 		model.addAttribute("listAll", se.listAll());
-		model.addAttribute("getUserById", se.getUserById(1));
 		return "./login/login";
 	}
 	
@@ -116,6 +115,8 @@ public class LoginController {
 		
 		if(se.checkuserIdDuplicate(userId)>0) {
 			model.addAttribute("userIdCheck",userIdCheck);
+		}
+		if(se.checkuserIdDuplicate(userId)==1) {
 			logger.info("중복아이디");
 		}
 			

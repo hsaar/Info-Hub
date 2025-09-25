@@ -29,7 +29,7 @@
 	</select>
 	
 	<insert id="insertUser">
-		INSERT INTO infohub.login (userId, password, name, email, phone, created_date, status, role, age) 
+		INSERT INTO infohub.login (userId, password, name, email, phone, createdDate, status, role, age) 
 		VALUES (#{userId}, #{password}, #{name}, #{email}, #{phone}, now(), 1, 1, #{age});
 	</insert>
 	

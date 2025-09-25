@@ -14,9 +14,9 @@ public class ArticleServiceImpl implements ArticleService{
 	ArticleDAO dao;
 
 	@Override
-	public List<ArticleVO> articlListAll() throws Exception {
+	public List<ArticleVO> articlListAll(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll();
+		return dao.articlListAll(cri);
 	}
 	
 	@Override
@@ -50,10 +50,29 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public List<ArticleVO> articleContent(String title) throws Exception {
+	public List<ArticleVO> articleContent(int articleId) throws Exception {
 		// TODO Auto-generated method stub
-		dao.updateViews(title);
-		return dao.articleContent(title);
+		dao.updateViews(articleId);
+		return dao.articleContent(articleId);
 	}
+
+	@Override
+	public int countHearts(int articleId) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.countHearts(articleId);
+	}
+
+	@Override
+	public List<ArticleVO> result(int articleId) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.result(articleId);
+	}
+
+	@Override
+	public int getTotalCount(Criteria cri) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getTotalCount(cri);
+	}
+
 
 }

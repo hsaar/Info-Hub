@@ -28,6 +28,31 @@
 	padding: 7px;
 	font-weight: 500;
 }
+.pageInfo li {
+	float: left;
+	font-size: 20px;
+	margin-left: 18px;
+	padding: 7px;
+	font-weight: 500;
+	
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th {
+    padding: 10px;
+    text-align: left;
+}
+
+.table thead {
+    background-color: #f4f4f4;
+}	
+	
+}
 </style>
 
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
@@ -142,9 +167,10 @@
 						<!-- 처음 목록 버튼 추가 -->
 						<li id = "page-fitst">
 						<a href="slistPage" class="btn btn-warning">처음목록</a></li>
+
 					</ul>
 				</div>
-			</table>
+			
 		</main>
 		</div>
 		<!-- 사이드바 -->

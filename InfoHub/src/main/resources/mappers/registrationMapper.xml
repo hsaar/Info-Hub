@@ -5,7 +5,7 @@
 <mapper namespace="com.infohub.project.registrationMapper"> <!-- 다음에 자바에서 호출해서 사용 -->
 	
 	<select id="registrationlistAll" resultType="com.infohub.project.registration.RegistrationDTO">
-		select login_loginNo, registrationNo, title, content, link, period, trachea, call, type  from registration;
+		select * from registration;
 	</select>
 </mapper>
 
