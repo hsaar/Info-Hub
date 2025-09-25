@@ -1,4 +1,4 @@
-package com.infohub.project.mypage;
+package com.infohub.project.scrap;
 
 public class ScrapDTO {
     private int scrapsNo;

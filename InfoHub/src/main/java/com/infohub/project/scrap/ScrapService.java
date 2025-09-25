@@ -1,4 +1,4 @@
-package com.infohub.project.mypage;
+package com.infohub.project.scrap;
 
 import java.sql.SQLException;
 import java.util.List;
