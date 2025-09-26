@@ -5,10 +5,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>새 글쓰기</title>
+<title>게시글 수정</title>
 <script>
 function validateForm() {
-    // 1. 요소 가져오기
+    /// 1. 요소 가져오기
     const title = document.getElementById('title').value;
     const content = document.getElementById('content').value.trim();
     const mainCategory = document.getElementById('mainCategory').value;
@@ -50,9 +50,9 @@ function validateForm() {
 </head>
 <body>
 	<center>
-		<h1>글쓰기</h1>
+		<h1>게시글 수정하기</h1>
 		<form method="post"
-			action="${pageContext.request.contextPath}/board/register" onsubmit="return validateForm()"
+			action="${pageContext.request.contextPath}/board/update" onsubmit="return validateForm()"
 			name="write_frm">
 			<table>
 				<tr height="30">
@@ -66,16 +66,16 @@ function validateForm() {
 				<tr>
 					<td width="80">글제목</td>
 					<td colspan="3" width="460"><input type="text" id="title"
-						name="title" size="58" maxlength="80" /></td>
+						name="title" size="58" maxlength="80" value="${board.title}"/></td>
 				</tr>
 				<tr>
 					<td colspan="4"><textarea cols="70" rows="10" id="content"
-							name="content" maxlength="3000"></textarea></td>
+							name="content" maxlength="3000">${board.content}</textarea></td>
 				</tr>
 				<tr height="50">
 					<td colspan="4" align="center">
 						<!-- 글쓰기 완료: submit으로 변경 -->
-						 <input type="submit" value="글쓰기" />
+						 <input type="submit" value="수정하기" />
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						
 						

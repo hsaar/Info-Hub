@@ -4,12 +4,17 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.infohub.project.BoardMapper">
 
+	<select id="list" resultType="BoardVO">
+		  SELECT boardno, title, content, regiId AS regiId, regiDate, readcnt, login_loginNo, categoryboard_categoryId AS categoryId, subCategoryId
+    FROM board
+	</select>
 	<!-- 전체 게시글 목록 -->
 	<select id="selectBoardList" parameterType="map"
 		resultType="com.infohub.project.board.BoardVO">
 		SELECT boardno AS boardno,
 		title AS title,
-		content AS content,
+		content AS
+		content,
 		regiId AS regiId,
 		regiDate AS regiDate,
 		readcnt AS readcnt,
@@ -23,18 +28,19 @@
 	<!-- 연령대 카테고리 별 게시판 목록 -->
 	<select id="getListByCategory" parameterType="int"
 		resultType="com.infohub.project.board.BoardVO">
-		 SELECT *
-    FROM board
-    WHERE categoryboard_categoryId = #{categoryId}
-    ORDER BY boardno DESC
+		SELECT *
+		FROM board
+		WHERE categoryboard_categoryId = #{categoryId}
+		ORDER BY boardno DESC
 	</select>
 
 	<!-- 단일 게시글 조회 -->
-	<select id="selectBoardById" parameterType="int"
+	<select id="getDetail" parameterType="int"
 		resultType="com.infohub.project.board.BoardVO">
-		SELECT boardNo AS boardNo,
+		SELECT boardno AS boardno,
 		title AS title,
-		content AS content,
+		content AS
+		content,
 		regiId AS regiId,
 		regiDate AS regiDate,
 		readcnt AS readcnt,
@@ -42,25 +48,29 @@
 		categoryboard_categoryId AS categoryId,
 		subCategoryId AS subCategoryId
 		FROM board
-		WHERE boardNo = #{boardNo}
+		WHERE boardNo = #{boardno}
 	</select>
 
 	<!-- 조회수 1 증가하는 SQL "updateReadCnt" -->
 	<update id="updateReadCnt" parameterType="java.lang.Integer">
 		UPDATE board
-		SET readcnt = readcnt + 1
-		WHERE boardNo = #{boardNo}
+		SET readcnt
+		= readcnt + 1
+		WHERE boardno = #{boardno}
 	</update>
 
 
 	<!-- 글쓰기 -->
 	<insert id="register" parameterType="BoardVO"
-		useGeneratedKeys="true" keyProperty="BoardNO">
+		useGeneratedKeys="true" keyProperty="boardno">
 		INSERT INTO board
-		(title, content, regiId, regiDate, readcnt, login_loginNo,
-		categoryboard_categoryId, subCategoryId)
+		(title, content,
+		regiId, regiDate, login_loginNo,
+		categoryboard_categoryId,
+		subCategoryId)
 		VALUES
-		(#{title}, #{content}, #{regiId}, NOW(), #{readcnt}, #{loginLoginNo},
+		(#{title}, #{content}, #{regiId}, NOW(),
+		#{login_loginNo},
 		#{categoryId}, #{subCategoryId})
 	</insert>
 
@@ -71,19 +81,22 @@
 		SET title = #{title},
 		content = #{content},
 		categoryboard_categoryId = #{categoryId},
-		subCategoryId = #{subCategoryId}
-		WHERE boardNo = #{boardNo}
+		subCategoryId =
+		#{subCategoryId}
+		WHERE boardNo = #{boardno}
 		AND
-		login_login_id = #{loginLoginId} <!-- 본인 글만 수정 가능 -->
+		login_loginNo =
+		#{login_loginNo} <!-- 본인 글만 수정 가능 -->
 	</update>
 
 	<!-- 삭제하기 -->
-	<delete id="deleteBoard" parameterType="int">
+	<delete id="delete" parameterType="int">
 		DELETE FROM board
 		WHERE
-		boardno = #{boardNo}
-		AND
-		login_login_id = #{loginLoginId} <!-- 본인 글만 수정 가능 -->
+		boardno = #{boardno}
+		<!-- AND
+		login_loginNo =
+		#{login_loginNo}  본인 글만 수정 가능 로그인 구현하면 주석 없애기--> 
 	</delete>
 
 
@@ -92,16 +105,21 @@
 		resultType="com.infohub.project.board.BoardVO">
 		SELECT b.boardNo AS boardNo,
 		b.title AS title,
-		b.content AS content,
+		b.content AS
+		content,
 		b.regiId AS regiId,
 		b.regiDate AS regiDate,
-		b.readcnt AS readcnt,
+		b.readcnt AS
+		readcnt,
 		b.login_loginNo AS loginLoginNo,
-		b.categoryboard_categoryId AS categoryId,
+		b.categoryboard_categoryId AS
+		categoryId,
 		b.subCategoryId AS subCategoryId
 		FROM board b
-		JOIN board_like bl ON b.boardNo = bl.board_boardNo
-		WHERE b.categoryboard_categoryId = #{categoryId}
+		JOIN board_like
+		bl ON b.boardNo = bl.board_boardNo
+		WHERE b.categoryboard_categoryId =
+		#{categoryId}
 		AND bl.likeCount >= 3
 		ORDER BY b.regiDate DESC
 	</select>

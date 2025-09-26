@@ -55,16 +55,16 @@ public class BoardController {
 	 * session.invalidate(); rttr.addFlashAttribute("msg", "로그아웃되었습니다"); return
 	 * "redirect:/"; }
 	 */
-	
+
 	// 카테고리별 게시판
 	@RequestMapping("board/listcategory")
 	public String list(@RequestParam("category") int categoryId, Model model) throws Exception {
-	    List<BoardVO> list = service.getListByCategory(categoryId);
-	    model.addAttribute("list", list);
-	    model.addAttribute("category", categoryId);
-	    return "board/boardlist"; // jsp 하나만 사용
+		List<BoardVO> list = service.getListByCategory(categoryId);
+		model.addAttribute("list", list);
+		model.addAttribute("category", categoryId);
+		return "board/boardlist"; // jsp 하나만 사용
 	}
-	    
+
 	// 글목록
 	@RequestMapping(value = "board/list", method = RequestMethod.GET)
 	public ModelAndView list() {
@@ -76,64 +76,86 @@ public class BoardController {
 		mav.setViewName("list");
 		return mav;
 	}
+
 	/*
-	//실시간 인기글
-	@RequestMapping(value = "board/popular", method=RequestMethod.GET)
-	public String list()
-*/
+	 * //실시간 인기글 만드는중
+	 * 
+	 * @RequestMapping(value = "board/popular", method=RequestMethod.GET) public
+	 * String list()
+	 */
 	// 게시글 조회
 	@RequestMapping(value = "board/detail", method = RequestMethod.GET)
-	public String detail(@RequestParam("bno") int bno, Model model) {
+	public String detail(@RequestParam("boardno") int boardno, Model model) {
 
 		// 비지니스모델 , 서비스
-		BoardVO boardVO = service.getDetail(bno);
-		service.updateReadCnt(bno);
+		service.updateReadCnt(boardno);
+		BoardVO boardVO = service.getDetail(boardno);
 
 		model.addAttribute("board", boardVO);
 
-		return "boarddetail";
+		return "board/boarddetail";
 	}
 
 	// 글쓰기 페이지 이동
 	@RequestMapping(value = "/board/register", method = RequestMethod.GET)
-	public String register(@RequestParam(value = "category", required = false) Integer categoryId,
-	                       Model model) {
-	    // 드롭다운용 전체 카테고리 불러오기
-	    List<CategoryVO> mainCategories = cService.getMainCategories();
-	    model.addAttribute("mainCategories", mainCategories);
+	public String register(@RequestParam(value = "category", required = false) Integer categoryId, Model model) {
+		// 드롭다운용 전체 카테고리 불러오기
+		List<CategoryVO> mainCategories = cService.getMainCategories();
+		model.addAttribute("mainCategories", mainCategories);
 
-	    // 카테고리별 게시판에서 왔을 경우 hidden으로 넘길 categoryId 세팅
-	    model.addAttribute("categoryId", categoryId);
+		// 카테고리별 게시판에서 왔을 경우 hidden으로 넘길 categoryId 세팅
+		model.addAttribute("categoryId", categoryId);
 
-	    return "board/boardregister";
+		return "board/boardregister";
 	}
-	 //카테고리 소분류
+
+	// 카테고리 소분류
 	@RequestMapping(value = "/selectcategory/sub", method = RequestMethod.GET)
 	@ResponseBody
 	public List<CategoryVO> getSubCategories(@RequestParam("parentId") int parentId) {
-	    System.out.println("받은 parentId = " + parentId);
-	    return cService.getSubCategories(parentId);
+		System.out.println("받은 parentId = " + parentId);
+		return cService.getSubCategories(parentId);
 	}
- 
+
 	@RequestMapping(value = "/board/register", method = RequestMethod.POST)
 	public String register(BoardVO boardVO, RedirectAttributes rttr) throws Exception {
-	    logger.info("내용: " + boardVO);
+		// 임시 로그인 id 세팅 (나중에 로그인 구현 시 세션값으로 교체)
+		boardVO.setlogin_loginNo(1); // 예: 관리자 계정 ID
+		int r = service.register(boardVO);
 
-	    int r = service.register(boardVO);
-	    if (r > 0) {
-	        rttr.addFlashAttribute("msg", "추가에 성공하였습니다.");
-	    }
+		if (r > 0) {
+			rttr.addFlashAttribute("msg", "추가에 성공하였습니다.");
+		}
 
-	    // 등록한 카테고리 게시판으로 리다이렉트
-	    return "redirect:/board/list?category=" + boardVO.getCategoryId();
+		// 등록한 글이 속한 카테고리 게시판으로 리다이렉트
+		return "redirect:/board/listcategory?category=" + boardVO.getCategoryId();
 	}
 
 	// 글수정 페이지 이동
 	@RequestMapping(value = "board/update", method = RequestMethod.GET)
-	public String update(@RequestParam("bno") int bno, Model model) {
-		BoardVO board = service.getDetail(bno);
-		model.addAttribute("board", board);
-		return "update";
+	public String update(@RequestParam("boardno") int boardno, Model model) {
+
+		// 1. 게시글 상세 정보 조회
+		BoardVO boardVO = service.getDetail(boardno);
+		model.addAttribute("board", boardVO);
+
+		// 2. 드롭다운용 전체 카테고리 불러오기
+		List<CategoryVO> mainCategories = cService.getMainCategories();
+		model.addAttribute("mainCategories", mainCategories);
+
+		// 3. (가장 중요한 수정 부분)
+		// 기존 카테고리 JSP의 <c:if>를 활용하기 위해
+		// BoardVO에서 현재 게시글의 메인 카테고리 ID를 'categoryId'라는 이름으로 Model에 추가합니다.
+		// boardVO.getCategoryId() 메서드가 메인 카테고리 ID를 반환한다고 가정합니다.
+		model.addAttribute("categoryId", boardVO.getCategoryId());
+
+		// 서브 카테고리도 필요하다면 따로 currentSubCategoryId 등으로 추가하여 활용할 수 있습니다.
+		// model.addAttribute("currentSubCategoryId", boardVO.getSubCategoryId());
+
+		// (기존 코드에서 카테고리별 게시판에서 왔을 때의 categoryId 설정 부분은 주석 처리 또는 제거합니다.)
+		// model.addAttribute("categoryId", categoryId);
+
+		return "/board/boardupdate";
 	}
 
 	// 글수정
@@ -147,18 +169,32 @@ public class BoardController {
 			return "redirect:list";
 		}
 		// 수정에 실패하면 수정보기 화면으로 이동
-		return "redirect:update?bno=" + boardVO.getBoardno();
+		return "redirect:update?boardno=" + boardVO.getBoardno();
 	}
 
 	// 글삭제
 	@RequestMapping(value = "board/delete", method = RequestMethod.GET)
-	public String delete(@RequestParam("bno") int bno, RedirectAttributes rttr) {
-		int r = service.delete(bno);
+	public String delete(@RequestParam("boardno") int boardno,
+			@RequestParam(value = "categoryId", required = false) Integer categoryId, // 카테고리 ID 추가
+			RedirectAttributes rttr) {
 
-		if (r > 0) {
-			rttr.addFlashAttribute("msg", "글삭제에 성공하였습니다.");
-			return "redirect:list";
-		}
-		return "redirect:detail?bno=" + bno;
+		int r = service.delete(boardno);
+		 if (r > 0) {
+		        rttr.addFlashAttribute("msg", "글삭제에 성공하였습니다.");
+		        // 삭제 성공 시 목록으로 이동 (카테고리가 있으면 카테고리 목록으로)
+		        if (categoryId != null) {
+		            return "redirect:list?categoryId=" + categoryId;
+		        }
+		        return "redirect:list"; // 카테고리가 없으면 전체 목록으로
+		    }
+		 // **수정된 부분:** 삭제 실패 시 페이지 유지
+		    if (categoryId != null) {
+		        rttr.addFlashAttribute("msg", "글삭제에 실패하였습니다.");
+		        // 카테고리 정보 없이 접근했거나, 카테고리가 없는 게시판이라면 상세 페이지 유지 (원래 로직)
+		        return "redirect:detail?boardno=" + boardno; 
+		    }
+		    // 해당 카테고리 목록 페이지로 돌아가기
+	        return "redirect:list?categoryId=" + categoryId;
 	}
-}
+
+}// controllerend

@@ -37,7 +37,7 @@ public class BoardDAOImpl implements BoardDAO {
 	@Override
 	public BoardVO getDetail(int boardno) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectOne(nameSpace + ".detail", boardno);
+		return sqlsession.selectOne(nameSpace + ".getDetail", boardno);
 	}
 
 	@Override
