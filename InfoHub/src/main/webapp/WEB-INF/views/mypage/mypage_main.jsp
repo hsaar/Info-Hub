@@ -31,7 +31,10 @@
           <span class="menu-text">나의 정보</span>
         </a>
         <a href="#" class="menu-item" data-page="my-policy">
-          <span class="menu-text">나의 정책</span>
+          <span class="menu-text">스크랩 정책</span>
+        </a>
+        <a href="#" class="menu-item" data-page="likes">
+          <span class="menu-text">스크랩 기사</span>
         </a>
         <a href="#" class="menu-item" data-page="timeline">
           <span class="menu-text">타임라인</span>
@@ -39,76 +42,23 @@
         <a href="#" class="menu-item" data-page="board">
           <span class="menu-text">게시판</span>
         </a>
-        <a href="#" class="menu-item" data-page="likes">
-          <span class="menu-text">스크랩</span>
-        </a>
-     
+
       </nav>
 
-      <div class="sidebar-categories">
-        <h4 class="category-title">카테고리</h4>
-        <ul class="category-list">
-          <li>나의 정보 - 개인 정보</li>
-          <li>나의 정책 - 스크랩</li>
-          <li>타임라인 - 스크랩한 정책 타임라인</li>
-          <li>게시판 - 작성한 게시글, 댓글 표시</li>
-          <li>좋아요 - 좋아요 누른 게시글</li>
-          <li>알림 관리 - 알림 설정한 정책 목록</li>
-        </ul>
-      </div>
+    
     </aside>
 
     <!-- 메인 콘텐츠 영역 -->
     <main class="mypage-content">
       
-      <!-- 나의 정보 페이지 -->
+      <!-- 나의 정보 페이지 (mypage_box.jsp 포함) -->
       <div id="my-info-content" class="content-box" style="display: none;">
-        <h2 class="content-title">프로필 정보</h2>
-        
-        <form class="profile-form">
-          <div class="form-section">
-            <label class="form-label">프로필 사진</label>
-            <div class="profile-image-upload">
-              <div class="profile-image-preview">
-                <img src="https://via.placeholder.com/120" alt="프로필 이미지">
-              </div>
-              <div class="upload-buttons">
-                <button type="button" class="btn-upload">사진 업로드</button>
-                <button type="button" class="btn-delete">삭제</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-section">
-            <label class="form-label">이름</label>
-            <input type="text" class="form-input" value="홍길동" placeholder="이름을 입력하세요">
-          </div>
-
-          <div class="form-section">
-            <label class="form-label">이메일</label>
-            <input type="email" class="form-input" value="hong@example.com" placeholder="이메일을 입력하세요">
-          </div>
-
-          <div class="form-section">
-            <label class="form-label">전화번호</label>
-            <input type="tel" class="form-input" value="010-1234-5678" placeholder="전화번호를 입력하세요">
-          </div>
-
-          <div class="form-section">
-            <label class="form-label">생년월일</label>
-            <input type="date" class="form-input" value="1990-01-01">
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn-primary">저장하기</button>
-            <button type="button" class="btn-secondary">취소</button>
-          </div>
-        </form>
+        <%@ include file="my_box.jsp"%>
       </div>
 
       <!-- 나의 정책 페이지 -->
       <div id="my-policy-content" class="content-box" style="display: none;">
-        <h2 class="content-title">스크랩한 정책</h2>
+          <%@ include file="my_scrap.jsp"%>
         <p>스크랩한 정책 목록이 표시됩니다.</p>
       </div>
 
@@ -137,7 +87,7 @@
 
       <!-- 좋아요 페이지 -->
       <div id="likes-content" class="content-box" style="display: none;">
-        <h2 class="content-title">좋아요 목록</h2>
+         <%@ include file="my_scrap.jsp"%>
         <p>좋아요 누른 게시글이 표시됩니다.</p>
       </div>
 
@@ -151,7 +101,7 @@
       <div id="default-content" class="content-box">
         <div class="welcome-message">
           <h2>마이페이지에 오신 것을 환영합니다</h2>
-          <p>비밀번호를 입력해 주세요.</p>
+          <p>좌측 메뉴에서 원하는 항목을 선택해 주세요.</p>
         </div>
       </div>
 

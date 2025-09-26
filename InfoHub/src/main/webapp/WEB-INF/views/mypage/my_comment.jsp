@@ -16,7 +16,7 @@
 <body>
 
 <!-- 상단바 -->
-<%@ include file="../include/main_header.jsp"%>
+<%@ include file="../include/header.jsp"%>
 <!-- 페이지 헤더 -->
 <div class="page-header">
   <div class="container">

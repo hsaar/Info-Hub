@@ -10,7 +10,7 @@ public class MyBoardDTO {
 
     public MyBoardDTO() {}
 
-    // Getter & Setter
+    // getter & setter
     public int getBoardNo() {
         return boardNo;
     }
