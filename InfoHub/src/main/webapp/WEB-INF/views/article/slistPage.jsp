@@ -49,7 +49,7 @@ a:hover {
 </head>
 <body>
 	<!-- 상단바 -->
-	<jsp:include page="../include/main_header.jsp" />
+	<jsp:include page="../include/header.jsp" />
 
 	<!-- 네비게이션 -->
 	<div class="news-header">

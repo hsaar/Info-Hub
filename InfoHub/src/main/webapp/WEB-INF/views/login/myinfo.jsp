@@ -17,7 +17,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-<jsp:include page="../include/main_header.jsp"></jsp:include>
+<jsp:include page="../include/header.jsp"></jsp:include>
 <h2>회원정보 수정</h2>
 <div class="container" id="container">
   <div>

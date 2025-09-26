@@ -226,7 +226,7 @@
 <body>
 
 <!-- 상단바 -->
-<%@ include file="../include/main_header.jsp"%>
+<%@ include file="../include/header.jsp"%>
 
 <!-- 네비게이션 -->
   	<div class="news-header">

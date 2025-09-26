@@ -8,10 +8,11 @@
 	<title>Home</title>
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
-
-<P>  The time on the server is ${serverTime}. </P>
+	<div>
+		<%@ include file = "map.jsp" %>	
+	</div>
+	<div>
+		<%@ include file = "keyword.jsp" %>
+	</div>
 </body>
 </html>

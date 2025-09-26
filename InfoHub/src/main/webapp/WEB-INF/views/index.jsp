@@ -20,13 +20,12 @@
 	href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
-<%@ include file="include/header.jsp"%>
 
 </head>
 
 <body>
-	<header class="main-header">
-		<jsp:include page="include/main_header.jsp" />
+	<header class="header">
+		<%@ include file="include/header.jsp"%>
 	</header>
 
 	<!-- 메인 히어로(양분) -->
@@ -47,27 +46,26 @@
 
 				<section class="split">
 					<!-- 좌: 정책 -->
+					<article class="col benefit" aria-labelledby="benefit-title">
+						<div class="inner">
+							<span class="eyebrow">Articles</span>
+							<h2 id="article" class="title">정책기사</h2>
+							<p class="desc">장학금·주거·교통·문화·건강 혜택을 프로필 기반으로 추천합니다.</p>
+							<a class="panel-link" href="articleListAll" aria-label="전체기사 페이지로 이동"
+								title="전체기사 페이지로 이동"></a>
+						</div>
+					</article>
+
+					<!-- 우: 혜택(워터릴) -->
 					<article class="col policy">
 						<div class="inner">
-							<span class="eyebrow">POLICY</span>
-							<h2 class="title">정책</h2>
+							<span class="eyebrow">Benefits</span>
+							<h2 class="title">혜택</h2>
 							<p class="desc">분야/지역/대상 필터와 마감일 알림으로, 필요한 정책만 빠르게 모아보세요.</p>
 							<a class="panel-link" href="policy" aria-label="정책 페이지로 이동"
 								title="정책 페이지로 이동"></a>
 						</div>
 					</article>
-
-					<!-- 우: 혜택(워터릴) -->
-					<article class="col benefit" aria-labelledby="benefit-title">
-						<div class="inner">
-							<span class="eyebrow">BENEFITS</span>
-							<h2 id="benefit-title" class="title">혜택</h2>
-							<p class="desc">장학금·주거·교통·문화·건강 혜택을 프로필 기반으로 추천합니다.</p>
-							<a class="panel-link" href="benefits" aria-label="혜택 페이지로 이동"
-								title="혜택 페이지로 이동"></a>
-						</div>
-					</article>
-					
 					
 				</section>
 
@@ -95,10 +93,13 @@
 								<span class="icon" style="mask: url('mypage.svg')"></span>
 								<span>나의 정책</span>
 							</a></li>
-							<li><a href="mypage_main" class="dot-link"> 
+							<li><a href="timeline" class="dot-link"> 
 								<span class="icon" style="mask: url('alarm.svg')"></span>
-								<span>마이페이지</span>
+								<span>타임라인</span>
 							</a></li>
+							
+							
+							 
 						</ul>
 
 						<a class="login-btn" href="login">로그인</a>

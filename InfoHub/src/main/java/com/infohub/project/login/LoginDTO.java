@@ -1,6 +1,7 @@
 package com.infohub.project.login;
 
 public class LoginDTO {
+	private int loginNo;
 	private String userId;
 	private String password;
 	private String name;
@@ -37,6 +38,14 @@ public class LoginDTO {
 		this.status = status;
 		this.role = role;
 		this.age = age;
+	}
+
+	public int getLoginNo() {
+		return loginNo;
+	}
+
+	public void setLoginNo(int loginNo) {
+		this.loginNo = loginNo;
 	}
 
 	public String getuserId() {
