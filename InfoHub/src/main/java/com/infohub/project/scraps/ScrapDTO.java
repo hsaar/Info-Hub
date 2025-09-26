@@ -1,4 +1,4 @@
-package com.infohub.project.myscraps;
+package com.infohub.project.scraps;
 
 public class ScrapDTO {
     private int scrapsNo;

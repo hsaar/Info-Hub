@@ -1,4 +1,4 @@
-package com.infohub.project.myscraps;
+package com.infohub.project.scraps;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

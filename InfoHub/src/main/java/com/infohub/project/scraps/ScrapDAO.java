@@ -1,4 +1,4 @@
-package com.infohub.project.myscraps;
+package com.infohub.project.scraps;
 
 import java.sql.*;
 import java.util.ArrayList;

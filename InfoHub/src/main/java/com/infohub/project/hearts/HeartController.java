@@ -1,4 +1,4 @@
-package com.infohub.project.myhearts;
+package com.infohub.project.hearts;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
