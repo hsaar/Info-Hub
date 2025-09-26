@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page session="true"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -49,7 +49,7 @@ a:hover {
 </head>
 <body>
 	<!-- 상단바 -->
-	<%@ include file="../include/header.jsp"%>
+	<jsp:include page="../include/main_header.jsp" />
 
 	<!-- 네비게이션 -->
 	<div class="news-header">
