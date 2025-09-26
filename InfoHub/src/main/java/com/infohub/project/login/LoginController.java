@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -24,7 +25,29 @@ public class LoginController {
 	@GetMapping("login")
 	public String login(Model model) {
 		model.addAttribute("listAll", se.listAll());
-		return "./login/login";
+
+		return "/login/login";
+	}
+	
+	@GetMapping("/idCheck")
+	@ResponseBody
+	public String idCheck(@RequestParam("userId")String userId) {
+		
+		boolean exists = se.checkuserIdDuplicate(userId);
+		return exists ? "EXISTS" : "OK";
+	}
+	@GetMapping("/nameCheck")
+	@ResponseBody
+	public String nameCheck(@RequestParam("name")String name) {
+		
+		boolean exists = se.checkNameDuplicate(name);
+		return exists ? "EXISTS" : "OK";
+	}
+	@GetMapping("/passwordCheck")
+	@ResponseBody
+	public String passwordCheck(@RequestParam("password")String password,
+								@RequestParam("passwordConfirm")String passwordConfirm) {
+		return password.equals(passwordConfirm) ? "MATCH" : "MISMATCH";
 	}
 	
 	@GetMapping("idfind")
@@ -97,7 +120,7 @@ public class LoginController {
 	public String memberjoin(Model model, 
 							@RequestParam("userId")String userId, 
 							@RequestParam("password")String password,
-							@RequestParam("passwordcheak")String passwordcheak,
+							@RequestParam("passwordConfirm")String passwordConfirm,
 							@RequestParam("email")String email,
 							@RequestParam("name")String name,
 							@RequestParam("phone")String phone,
@@ -108,20 +131,15 @@ public class LoginController {
 		boolean userIdCheck = false;
 		boolean passwordCheck = false;
 		
-		if(se.checkNameDuplicate(name)>0) {
-			model.addAttribute("nameCheck",nameCheck);
+		if(se.checkNameDuplicate(name)) {
 			logger.info("중복이름");
 		}
 		
-		if(se.checkuserIdDuplicate(userId)>0) {
-			model.addAttribute("userIdCheck",userIdCheck);
-		}
-		if(se.checkuserIdDuplicate(userId)==1) {
+		if(se.checkuserIdDuplicate(userId)) {
 			logger.info("중복아이디");
 		}
 			
-		if(!password.equals(passwordcheak)) {
-			model.addAttribute("passwordCheck",passwordCheck);
+		if(!password.equals(passwordConfirm)) {
 			logger.info("패스워드 체크 틀림");
 		}
 		

@@ -30,15 +30,15 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public int checkuserIdDuplicate(String userId) {
+	public boolean checkuserIdDuplicate(String userId) {
 		// TODO Auto-generated method stub
-		return dao.checkuserIdDuplicate(userId);
+		return dao.checkuserIdDuplicate(userId) > 0;
 	}
 
 	@Override
-	public int checkNameDuplicate(String name) {
+	public boolean checkNameDuplicate(String name) {
 		// TODO Auto-generated method stub
-		return dao.checkNameDuplicate(name);
+		return dao.checkNameDuplicate(name) > 0;
 	}
 
 	@Override
