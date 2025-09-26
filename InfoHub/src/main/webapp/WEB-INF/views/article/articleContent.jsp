@@ -30,7 +30,6 @@
 	$(document).ready(function(){
 		
 		articleHearts();
-		scrapsCheck();
 		heartsCheck();
 		commentList();
 		
@@ -114,75 +113,6 @@
 	       });
 	   	}//commentList()
 	
-			
-			$("#scrapBtn").click(function(scrap){
-				
-				var article_articleId =$("#article_articleId").val();
-		   		
-		   		url ="scrap";
-		   		var paramData ={
-		        		"article_articleId" : article_articleId
-		        		
-		        };
-		   		
-				$.ajax({
-					url: url,
-					data: paramData,
-					type: "post",
-					dataType: "json",
-					success: function(scrap){
-						if(scrap==0){
-							alert("스크랩완료");
-							  var btn = '★'
-								  $("#scrapBtn").html(btn);
-						}else if(scrap==1){
-							alert("스크랩취소");
-							 var btn = '☆'
-								  $("#scrapBtn").html(btn);
-						}
-						
-					},
-					error : function(){
-		                alert("스크랩 에러");
-		             }     
-				
-				})//ajax
-			});//scrapbtn
-			
-			function scrapsCheck(){
-		   		var article_articleId =$("#article_articleId").val();
-		   		
-		   		url ="scrapsCheck";
-		   		var paramData ={
-		        		"article_articleId" : article_articleId
-		        };
-		   		
-		   		console.log(paramData);
-		   		
-		   	  	$.ajax({
-		        	url : url,         // 주소 -> controller 매핑주소
-		          	data : paramData,    // 요청데이터
-		          	dataType : "json",  // 데이터타입
-		          	type : "post",      // 전송방식
-		            success : function(result){
-		            	console.log(result.length);
-		                
-		                 if(result.length < 1){
-		                	 var btn = '☆'
-								  $("#scrapBtn").html(btn);
-		                 }
-		                 else if(result.length = 1){
-		                    $(result).each(function(){
-		                    	var btn = '★'
-									  $("#scrapBtn").html(btn);
-		                    });  // each End
-		                 }
-		             },
-		             error : function(data){
-		                alert("스크랩 에러" + data);
-		             }     
-		       });
-		   	}; //scrapsCheck()
 		   	
 			$("#heartBtn").click(function(heart){
 				
@@ -339,16 +269,12 @@
       		<div style="flex:1; margin-right:15px;">
 			
             <div style="font-size: 12;"> ${article.name}</div>
-            <div style="font-size: 35; font-weight: bold;">${article.title}</div>
+            <h1 style="font-size: 35; font-weight: bold;">${article.title}</h1>
             <p style="font-size: 12;"> 
             ${article.source} | ${article.published}</p>
-            views: ${article.views} <!--  | ${article.hearts}(좋아요수)</p>-->
+            views: ${article.views}
             <div id="heartsCount"></div>
-            
-            <p><button type="button" class="btn btn-success" id="scrapBtn">☆</button>
-            <button type="button" class="btn btn-success" id="heartBtn">♡</button>
-            </p>
-            
+            <p><button type="button" class="btn btn-success" id="heartBtn">♡</button></p>
             <div style="flex:0 0 450px;">
             <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 650px; height: 450px;">
             </div>

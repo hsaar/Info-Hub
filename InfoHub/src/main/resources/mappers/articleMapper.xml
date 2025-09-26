@@ -14,23 +14,47 @@
 	
 	<select id="articleListAll1" resultType = "com.infohub.project.article.ArticleVO">
 	SELECT a.*, b.name
-	FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 1 order by published desc;
+	FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo
+	where articlecategories_categoriesNo = 1
+	<include refid="searchCondition"></include>
+	order by published desc
+	limit #{pageStart}, #{perPageNum}
 	</select>
 	
 	<select id="articleListAll2" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 2 order by published desc;
+	SELECT a.*, b.name 
+	FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo
+	where articlecategories_categoriesNo = 2
+	<include refid="searchCondition"></include>
+	order by published desc
+	limit #{pageStart}, #{perPageNum}
 	</select>
 	
 	<select id="articleListAll3" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 3 order by published desc;
+	SELECT a.*, b.name 
+	FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo
+	where articlecategories_categoriesNo = 3
+	<include refid="searchCondition"></include>
+	order by published desc
+	limit #{pageStart}, #{perPageNum}
 	</select>
 	
 	<select id="articleListAll4" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 4 order by published desc;
+	SELECT a.*, b.name 
+	FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo
+	where articlecategories_categoriesNo = 4
+	<include refid="searchCondition"></include>
+	order by published desc
+	limit #{pageStart}, #{perPageNum}
 	</select>
 	
 	<select id="articleListAll5" resultType = "com.infohub.project.article.ArticleVO">
-	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articlecategories_categoriesNo = 5 order by published desc;
+	SELECT a.*, b.name 
+	FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo
+	where articlecategories_categoriesNo = 5
+	<include refid="searchCondition"></include>
+	order by published desc
+	limit #{pageStart}, #{perPageNum}
 	</select>
 	
 	<select id="articleContent" resultType = "com.infohub.project.article.ArticleVO">
@@ -77,6 +101,12 @@
 		<include refid="searchCondition"></include>
 		order by published desc
 		
+	</select>
+	
+	<select id="slistPage" resultType="com.infohub.project.article.ArticleVO">
+	select a.articleId, a.title, a.content, a.tags, a.published, a.source, a.views, a.hearts, a.image, a.login_loginNo, a.articlecategories_categoriesNo, b.name from article a join articleCategories b on b.categoriesNo = a.articlecategories_categoriesNo
+	<include refid="searchCondition"/>
+	order by published desc limit #{pageStart}, #{perPageNum}
 	</select>
 	
 </mapper>
