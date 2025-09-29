@@ -5,8 +5,11 @@
 <mapper namespace="com.infohub.project.BoardMapper">
 
 	<select id="list" resultType="BoardVO">
-		  SELECT boardno, title, content, regiId AS regiId, regiDate, readcnt, login_loginNo, categoryboard_categoryId AS categoryId, subCategoryId
-    FROM board
+		SELECT boardno, title, content,
+		regiId AS regiId, regiDate, readcnt,
+		login_loginNo,
+		categoryboard_categoryId AS categoryId, subCategoryId
+		FROM board
 	</select>
 	<!-- 전체 게시글 목록 -->
 	<select id="selectBoardList" parameterType="map"
@@ -30,25 +33,35 @@
 		resultType="com.infohub.project.board.BoardVO">
 		SELECT *
 		FROM board
-		WHERE categoryboard_categoryId = #{categoryId}
+		WHERE categoryboard_categoryId =
+		#{categoryId}
 		ORDER BY boardno DESC
 	</select>
 
 	<!-- 단일 게시글 조회 -->
-	<select id="getDetail" parameterType="int"
-		resultType="com.infohub.project.board.BoardVO">
-		SELECT boardno AS boardno,
-		title AS title,
-		content AS
-		content,
-		regiId AS regiId,
-		regiDate AS regiDate,
-		readcnt AS readcnt,
-		login_loginNo AS loginLoginNo,
-		categoryboard_categoryId AS categoryId,
-		subCategoryId AS subCategoryId
-		FROM board
-		WHERE boardNo = #{boardno}
+	<select id="getDetail" parameterType="int" resultType="BoardVO">
+		SELECT 
+        b.boardNo,
+        b.title,
+        b.content,
+        b.regiId,
+        b.regiDate,
+        b.readcnt,
+        b.login_loginNo AS loginLoginNo,
+        b.categoryboard_categoryId AS categoryId,
+        b.subCategoryId,
+        p.name AS categoryName, -- 대분류 이름
+		c.name AS subCategoryName, -- 소분류 이름
+        COALESCE(hc.heartCount, 0) AS heartCount
+    FROM board b
+    LEFT JOIN (
+        SELECT boardNo, COUNT(*) AS heartCount
+        FROM heartsboard
+        GROUP BY boardNo
+    ) hc ON b.boardNo = hc.boardNo
+    LEFT JOIN categoryboard p ON b.categoryboard_categoryId = p.categoryId
+    LEFT JOIN categoryboard c ON b.subCategoryId = c.categoryId
+    WHERE b.boardNo = #{boardNo}
 	</select>
 
 	<!-- 조회수 1 증가하는 SQL "updateReadCnt" -->
@@ -94,15 +107,32 @@
 		DELETE FROM board
 		WHERE
 		boardno = #{boardno}
-		<!-- AND
-		login_loginNo =
-		#{login_loginNo}  본인 글만 수정 가능 로그인 구현하면 주석 없애기--> 
+		<!-- AND login_loginNo = #{login_loginNo} 본인 글만 수정 가능 로그인 구현하면 주석 없애기 -->
 	</delete>
 
 
+	<!-- 전체 최신 인기글 -->
+	<select id="selectPopularBoards" resultType="BoardVO">
+		SELECT b.boardNo,
+		b.title,
+		b.content,
+		b.regiId,
+		b.regiDate,
+		b.readcnt,
+		b.login_loginNo AS loginLoginNo,
+		b.categoryboard_categoryId AS categoryId,
+		b.subCategoryId,
+		COALESCE(COUNT(h.heartId), 0) AS heartCount
+		FROM board b
+		LEFT JOIN heartsboard h ON b.boardNo = h.boardNo
+		GROUP BY b.boardNo
+		HAVING heartCount >= 3
+		ORDER BY b.regiDate DESC
+	</select>
+
 	<!-- 연령카테고리별 최신 인기글 (좋아요 3개 이상, 최신순) -->
 	<select id="selectPopularBoardsByCategory" parameterType="map"
-		resultType="com.infohub.project.board.BoardVO">
+		resultType="BoardVO">
 		SELECT b.boardNo AS boardNo,
 		b.title AS title,
 		b.content AS

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.infohub.project.category.CategoryVO;
+import com.infohub.project.commentboard.CommentBoardService;
+import com.infohub.project.commentboard.CommentBoardVO;
 import com.infohub.project.category.CategoryService;
 
 import com.infohub.project.board.BoardController;
@@ -31,6 +34,8 @@ public class BoardController {
 	BoardService service;
 	@Autowired
 	CategoryService cService;
+	@Autowired
+	CommentBoardService rService;
 
 	/*
 	 * @RequestMapping(value = "board/login", method = RequestMethod.GET) public
@@ -67,31 +72,68 @@ public class BoardController {
 
 	// 글목록
 	@RequestMapping(value = "board/list", method = RequestMethod.GET)
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam(value = "categoryId", required = false) Integer categoryId) {
 		logger.info("====list=====");
 		ModelAndView mav = new ModelAndView();
 
-		List<BoardVO> list = service.list();
+		List<BoardVO> list = service.list(); // 필요하다면 categoryId 조건도 추가
 		mav.addObject("list", list);
-		mav.setViewName("list");
+
+		// 실제 JSP 경로: /WEB-INF/views/board/boardlist.jsp
+		mav.setViewName("board/boardlist");
 		return mav;
 	}
 
-	/*
-	 * //실시간 인기글 만드는중
-	 * 
-	 * @RequestMapping(value = "board/popular", method=RequestMethod.GET) public
-	 * String list()
-	 */
-	// 게시글 조회
+	 // 카테고리별 인기글
+    @GetMapping("/popularByCategory/{categoryId}")
+    public String getPopularBoardsByCategory(@PathVariable int categoryId, Model model) {
+        List<BoardVO> boardList = service.selectPopularBoardsByCategory(categoryId);
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("category", categoryId);
+        return "board/boardlist";
+    }
+	
+	
+    // ✅ 전체 인기글
+    @GetMapping("/popular")
+    public String getPopularBoards(Model model) {
+        List<BoardVO> boardList = service.getPopularBoards();
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("popular", true);
+        return "board/boardlist";
+    }
+	
+	// 게시글 조회(log4jdbc 4.1이상에서 작동함 log4jdbc-log4j2-jdbc4.1)
 	@RequestMapping(value = "board/detail", method = RequestMethod.GET)
-	public String detail(@RequestParam("boardno") int boardno, Model model) {
+	public String detail(@RequestParam("boardno") int boardno,
+			@RequestParam(value = "categoryId", required = false) Integer categoryId, Model model,
+			RedirectAttributes rttr) {
 
-		// 비지니스모델 , 서비스
 		service.updateReadCnt(boardno);
 		BoardVO boardVO = service.getDetail(boardno);
-
+		 //List<CommentBoardVO> comments = rService.getComments(boardno);
+		
 		model.addAttribute("board", boardVO);
+		model.addAttribute("categoryId", categoryId); // 뷰에서도 categoryId 쓸 수 있게 전달
+		 //model.addAttribute("comments", comments);
+		// 1. (추가된 부분) 게시글이 존재하지 않으면 목록으로 리다이렉트
+		if (boardVO == null) {
+			rttr.addFlashAttribute("msg", "존재하지 않거나 삭제된 게시글입니다.");
+			// (수정된 부분) categoryId의 유무에 따라 리다이렉트 경로 결정
+			if (categoryId != null) {
+				// 카테고리 ID가 있으면 해당 카테고리 목록으로 이동
+				// URL 형식: /board/listcategory?category=1
+				return "redirect:listcategory?category=" + categoryId;
+			} else {
+				// 카테고리 ID가 없으면 전체 목록 페이지로 이동
+				// URL 형식: /board/list
+				return "redirect:list";
+			}
+		}
+
+		// 3. 정상 조회 시 Model에 데이터 추가 및 상세 페이지 뷰 반환
+		model.addAttribute("board", boardVO);
+		model.addAttribute("categoryId", categoryId); // 뷰에서도 categoryId 쓸 수 있게 전달
 
 		return "board/boarddetail";
 	}
@@ -120,7 +162,7 @@ public class BoardController {
 	@RequestMapping(value = "/board/register", method = RequestMethod.POST)
 	public String register(BoardVO boardVO, RedirectAttributes rttr) throws Exception {
 		// 임시 로그인 id 세팅 (나중에 로그인 구현 시 세션값으로 교체)
-		boardVO.setlogin_loginNo(1); // 예: 관리자 계정 ID
+		boardVO.setLogin_loginNo(1); // 예: 관리자 계정 ID
 		int r = service.register(boardVO);
 
 		if (r > 0) {
@@ -175,26 +217,33 @@ public class BoardController {
 	// 글삭제
 	@RequestMapping(value = "board/delete", method = RequestMethod.GET)
 	public String delete(@RequestParam("boardno") int boardno,
-			@RequestParam(value = "categoryId", required = false) Integer categoryId, // 카테고리 ID 추가
-			RedirectAttributes rttr) {
+			@RequestParam(value = "categoryId", required = false) Integer categoryId, RedirectAttributes rttr) {
 
 		int r = service.delete(boardno);
-		 if (r > 0) {
-		        rttr.addFlashAttribute("msg", "글삭제에 성공하였습니다.");
-		        // 삭제 성공 시 목록으로 이동 (카테고리가 있으면 카테고리 목록으로)
-		        if (categoryId != null) {
-		            return "redirect:list?categoryId=" + categoryId;
-		        }
-		        return "redirect:list"; // 카테고리가 없으면 전체 목록으로
-		    }
-		 // **수정된 부분:** 삭제 실패 시 페이지 유지
-		    if (categoryId != null) {
-		        rttr.addFlashAttribute("msg", "글삭제에 실패하였습니다.");
-		        // 카테고리 정보 없이 접근했거나, 카테고리가 없는 게시판이라면 상세 페이지 유지 (원래 로직)
-		        return "redirect:detail?boardno=" + boardno; 
-		    }
-		    // 해당 카테고리 목록 페이지로 돌아가기
-	        return "redirect:list?categoryId=" + categoryId;
-	}
 
+		if (r > 0) {
+			rttr.addFlashAttribute("msg", "글삭제에 성공하였습니다.");
+			// **수정된 부분 1: 삭제 성공 시**
+			// 카테고리 ID가 있으면 listcategory로, 없으면 전체 목록(list)으로 리다이렉트
+			if (categoryId != null) {
+				// 예시 URL: /board/listcategory?category=1
+				return "redirect:listcategory?category=" + categoryId;
+			}
+			// 전체 게시판 목록으로 이동 (listcategory가 아닌 경우, 현재 list 매핑을 사용)
+			return "redirect:list";
+		}
+
+		// **수정된 부분 2: 삭제 실패 시**
+		rttr.addFlashAttribute("msg", "글삭제에 실패하였습니다.");
+
+		// 카테고리 ID가 있으면 해당 카테고리 목록으로 돌아감
+		if (categoryId != null) {
+			// 예시 URL: /board/listcategory?category=1
+			return "redirect:listcategory?category=" + categoryId;
+		}
+		// 카테고리 ID가 없거나 null이면, 원래 로직대로 상세 페이지를 유지하거나 (원래 의도),
+		// 전체 목록으로 이동하는 것도 고려할 수 있습니다. 여기서는 상세 페이지 유지 로직을 따릅니다.
+		// 참고: 글이 삭제되지 않았으므로 상세 페이지를 보여주는 것이 타당함.
+		return "redirect:detail?boardno=" + boardno;
+	}
 }// controllerend

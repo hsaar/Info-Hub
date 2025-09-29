@@ -49,6 +49,9 @@ function validateForm() {
 </script>
 </head>
 <body>
+</h1>
+<a href="${pageContext.request.contextPath}/boardlistmain">
+    <h5 class="box-title">커뮤니티 메인</h5>
 	<center>
 		<h1>게시글 수정하기</h1>
 		<form method="post"

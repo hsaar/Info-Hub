@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.CommentBoardMapper">
+
+	<!-- 게시글 아래 댓글 전체보기 -->
+	<select id="getCommentsByboardNo" resultMap="commentResultMap">
+		SELECT * FROM
+		commentboard
+		WHERE board_boardNo = #{boardNo} 
+		ORDER BY createdDate ASC
+	</select>
+
+	<!-- 닉네임표시 -->
+	<select id="getCommentsByBoardNo" resultMap="commentResultMap">
+		SELECT c.*, l.userId AS loginUser
+		FROM commentboard c
+		JOIN login l ON c.login_loginNo = l.loginNo
+		WHERE c.board_boardNo = #{boardNo}
+		ORDER BY c.createdDate ASC
+	</select>
+	<!-- 댓글달기 -->
+	<insert id="insertComment" useGeneratedKeys="true"
+		keyProperty="commentId">
+		INSERT INTO commentboard (board_boardNo, login_loginNo,
+		parentCommentId, comment)
+		VALUES (#{boardNo}, #{loginNo},
+		#{parentCommentId}, #{comment})
+	</insert>
+
+	<!-- 대댓글 조회 -->
+	<select id="getRepliesByCommentId" resultMap="commentResultMap">
+		SELECT c.*, l.userId AS loginUser
+		FROM commentboard c
+		JOIN login l ON c.login_loginNo = l.loginNo
+		WHERE c.parentCommentId = #{commentId}
+		ORDER BY c.createdDate ASC
+	</select>
+	<!-- 댓글수정 -->
+	<update id="updateComment" parameterType="CommentBoardVO">
+		UPDATE commentboard
+		SET comment = #{comment},
+		lastModified = NOW()
+		WHERE commentId = #{commentId}
+	</update>
+	<!-- 댓글삭제 -->
+	<delete id="deleteComment">
+		DELETE FROM commentboard WHERE commentId =
+		#{commentId}
+	</delete>
+
+	<!-- ResultMap -->
+	<resultMap id="commentResultMap"
+		type="CommentBoardVO">
+		<id property="commentId" column="commentId" />
+		<result property="boardNo" column="board_boardNo" />
+		<result property="loginNo" column="login_loginNo" />
+		<result property="parentCommentId" column="parentCommentId" />
+		<result property="comment" column="comment" />
+		<result property="hearts" column="hearts" />
+		<result property="createdDate" column="createdDate" />
+		<result property="lastModified" column="lastModified" />
+		<collection property="replies"
+			ofType="CommentBoardVO" select="getRepliesByCommentId"
+			column="commentId" />
+	</resultMap>
+
+</mapper>

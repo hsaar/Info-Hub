@@ -5,15 +5,19 @@
 <title>게시판</title>
 </head>
 <body>
-
+	</h1>
+	<a href="${pageContext.request.contextPath}/boardlistmain">
+		<h5 class="box-title">커뮤니티 메인</h5>
+	</a>
 	<h2>
 		<c:choose>
+			<c:when test="${popular}">실시간 인기글</c:when>
 			<c:when test="${category == 1}">10대 게시판</c:when>
 			<c:when test="${category == 2}">20대 게시판</c:when>
 			<c:when test="${category == 3}">30대 게시판</c:when>
 			<c:when test="${category == 4}">40대 게시판</c:when>
 			<c:when test="${category == 5}">50대 게시판</c:when>
-			<c:otherwise>기타 게시판</c:otherwise>
+			<c:otherwise>통합 게시판</c:otherwise>
 		</c:choose>
 	</h2>
 
@@ -44,6 +48,7 @@
 				<td>${board.regiId}</td>
 				<td>${board.regiDate}</td>
 				<td>${board.readcnt}</td>
+			
 			</tr>
 		</c:forEach>
 

@@ -11,7 +11,9 @@
 <h1>
 	Hello world!  
 </h1>
-
+<a href="${pageContext.request.contextPath}/boardlistmain">
+    <h5 class="box-title">커뮤니티 메인</h5>
+</a>
 <P>  The time on the server is ${serverTime}. </P>
 <p> 게시판 메인 페이지 게시글은 여기 올라옴</p>
 <div>

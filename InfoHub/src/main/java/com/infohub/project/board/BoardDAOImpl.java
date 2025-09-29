@@ -59,11 +59,20 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
+	public List<BoardVO> selectPopularBoards() {
+	    return sqlsession.selectList(nameSpace + ".selectPopularBoards");
+	}
+	
+	
+	@Override
 	public List<BoardVO> selectPopularBoardsByCategory(int categoryId) {
 		// SQL 쿼리를 실행하고 결과를 List<BoardVO> 형태로 반환
 		return sqlsession.selectList(nameSpace + ".selectPopularBoardsByCategory", categoryId);
 	}
 
+	
+	
+	
 	@Override
 	public Map login(Map<String, Object> map) {
 		// TODO Auto-generated method stub

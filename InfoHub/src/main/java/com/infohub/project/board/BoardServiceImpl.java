@@ -60,10 +60,13 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	public List<BoardVO> getPopularBoards() {
+		return dao.selectPopularBoards();
+	}
+	@Override
 	public Map login(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return dao.login(map);
 	}
-
 
 }

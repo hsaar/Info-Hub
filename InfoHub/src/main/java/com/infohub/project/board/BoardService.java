@@ -11,6 +11,9 @@ public interface BoardService {
 	//전체목록을 가져오는 메소드
 			public List<BoardVO> list();
 			
+			//전체인기글
+			public List<BoardVO> getPopularBoards();
+			
 			//카테고리 별 글목록
 			public List<BoardVO> getListByCategory(@Param("categoryId") int categoryId) throws Exception;
 			

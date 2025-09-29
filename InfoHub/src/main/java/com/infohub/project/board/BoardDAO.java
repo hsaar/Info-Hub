@@ -30,10 +30,15 @@ public interface BoardDAO {
 		// 글삭제
 		public int delete(int boardno);
 		
+		//전체인기글
+		public List<BoardVO> selectPopularBoards();
+
+		
 		//연령카테고리별 최신 인기글 (좋아요 3개 이상, 최신순)
 		 List<BoardVO> selectPopularBoardsByCategory(@Param("categoryId") int categoryId);
 		
 		//로그인 처리를 위한 메소드
 		public Map login(Map<String,Object> map);
+
 
 	}
