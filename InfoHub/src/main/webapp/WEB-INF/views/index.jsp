@@ -13,7 +13,6 @@
 <%@ include file="include/plugin.jsp"%>
 
 <!-- 타이틀용 세리프 + 본문 산세리프 -->
-<link href="./index_files/css2" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
