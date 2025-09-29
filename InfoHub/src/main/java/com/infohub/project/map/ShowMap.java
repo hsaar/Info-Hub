@@ -19,31 +19,31 @@ public class ShowMap {
 
             try {
                 System.out.println("=== 전체 정책 목록 ===");
-                List<PolicyDTO> allPolicies = service.getPolicies(null, null, null); // 조건 없음 → 전체 조회
+                List<PolicyDTO> allPolicies = service.findPolicies(null, null, null); // 조건 없음 → 전체 조회
                 for (PolicyDTO p : allPolicies) {
                     System.out.println(p);
                 }
 
                 System.out.println("\n=== 특정 지역 정책 (regionId=1) ===");
-                List<PolicyDTO> regionPolicies = service.getPolicies(1, null, null); // 지역만 조건
+                List<PolicyDTO> regionPolicies = service.findPolicies(1, null, null); // 지역만 조건
                 for (PolicyDTO p : regionPolicies) {
                     System.out.println(p);
                 }
 
                 System.out.println("\n=== 특정 카테고리 정책 (categoryId=2) ===");
-                List<PolicyDTO> categoryPolicies = service.getPolicies(null, 2, null); // 카테고리만 조건
+                List<PolicyDTO> categoryPolicies = service.findPolicies(null, 2, null); // 카테고리만 조건
                 for (PolicyDTO p : categoryPolicies) {
                     System.out.println(p);
                 }
 
                 System.out.println("\n=== 특정 지역 + 카테고리 정책 (regionId=1, categoryId=2) ===");
-                List<PolicyDTO> filteredPolicies = service.getPolicies(1, 2, null); // 지역+카테고리 둘 다 조건
+                List<PolicyDTO> filteredPolicies = service.findPolicies(1, 2, null); // 지역+카테고리 둘 다 조건
                 for (PolicyDTO p : filteredPolicies) {
                     System.out.println(p);
                 }
 
                 System.out.println("\n=== 상세 조회 (policyId=1) ===");
-                PolicyDTO detail = service.getPolicyDetail(1);
+                PolicyDTO detail = service.findPolicyDetail(1); // 메소드명 수정됨
                 System.out.println("제목: " + detail.getTitle());
                 System.out.println("내용: " + detail.getContent());
                 System.out.println("좋아요 수: " + detail.getLikes());
