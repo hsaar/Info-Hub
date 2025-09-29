@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ page session="false"%>
 <html lang="ko">
 
 <head>
@@ -82,16 +82,16 @@
 						<ul class="quick-links">
 							<li><a href="my_benifit" class="dot-link"> 
 								<span class="icon" style="mask: url('clock.svg')"></span>
-								<span>내 혜택 모아보기</span>
+								<span>내 혜택 모음</span>
 							</a></li>
 					
 							<li><a href="customized_article" class="dot-link"> 
 								<span class="icon" style="mask: url('post.svg')"></span>
 								<span>맞춤형 기사 추천</span>
 							</a></li>
-							<li><a href="my_benifit" class="dot-link"> 
+							<li><a href="mypage_main" class="dot-link"> 
 								<span class="icon" style="mask: url('mypage.svg')"></span>
-								<span>나의 정책</span>
+								<span>마이페이지</span>
 							</a></li>
 							<li><a href="timeline" class="dot-link"> 
 								<span class="icon" style="mask: url('alarm.svg')"></span>

@@ -3,8 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!-- 스크랩한 정책 콘텐츠 -->
-<h2 class="content-title">스크랩한 정책</h2>
-
+<h2 class="content-title">스크랩한 혜택</h2>
+<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 <!-- 필터 -->
 <div class="scrap-filter">
   <select class="filter-select">

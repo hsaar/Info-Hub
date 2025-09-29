@@ -24,7 +24,7 @@ public class BoardCommentController {
     public String getMyComments(@RequestParam int loginNo, Model model) throws SQLException {
         List<BoardCommentDTO> comments = service.getMyComments(loginNo);
         model.addAttribute("comments", comments);
-        return "boardComment/myComments"; // 뷰 이름 (JSP/Thymeleaf)
+        return "boardComment/myComments"; 
     }
 
     // 내가 쓴 댓글 상세 조회 → 해당 게시글로 이동
@@ -32,7 +32,7 @@ public class BoardCommentController {
     public String getMyCommentDetail(@PathVariable int commentId, @RequestParam int loginNo, Model model) throws SQLException {
         BoardCommentDTO comment = service.getMyCommentDetail(commentId, loginNo);
         model.addAttribute("comment", comment);
-        return "boardComment/commentDetail";
+        return "boardComment/myComments";
     }
 
     // 내가 쓴 댓글 수정

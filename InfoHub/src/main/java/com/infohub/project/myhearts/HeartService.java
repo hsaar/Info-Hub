@@ -1,4 +1,4 @@
-package com.infohub.project.hearts;
+package com.infohub.project.myhearts;
 
 import java.sql.SQLException;
 import java.util.List;

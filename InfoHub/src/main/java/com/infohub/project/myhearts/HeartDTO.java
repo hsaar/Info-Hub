@@ -1,4 +1,4 @@
-package com.infohub.project.hearts;
+package com.infohub.project.myhearts;
 
 public class HeartDTO {
     private int heartNo;

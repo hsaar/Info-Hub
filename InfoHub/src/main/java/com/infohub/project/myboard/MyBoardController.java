@@ -21,7 +21,7 @@ public class MyBoardController {
         try {
             List<MyBoardDTO> boards = service.getMyBoards(loginNo);
             model.addAttribute("boards", boards);
-            return "myBoardList"; // myBoardList.jsp
+            return "my_board"; // myBoardList.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
             return "error"; // error.jsp
@@ -37,7 +37,7 @@ public class MyBoardController {
             MyBoardDTO board = service.getBoardDetail(boardNo, loginNo);
             if (board != null) {
                 model.addAttribute("board", board);
-                return "myBoardDetail"; // myBoardDetail.jsp
+                return "my_board"; 
             } else {
                 model.addAttribute("error", "본인 게시글만 조회할 수 있습니다.");
                 return "error"; // error.jsp
@@ -54,7 +54,7 @@ public class MyBoardController {
         try {
             service.updateBoard(dto);
             model.addAttribute("result", "update_success");
-            return "myBoardResult"; // myBoardResult.jsp
+            return "my_board"; 
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
             return "error";
@@ -69,7 +69,7 @@ public class MyBoardController {
         try {
             service.deleteBoard(boardNo, loginNo);
             model.addAttribute("result", "delete_success");
-            return "myBoardResult"; // myBoardResult.jsp
+            return "my_board"; 
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
             return "error";

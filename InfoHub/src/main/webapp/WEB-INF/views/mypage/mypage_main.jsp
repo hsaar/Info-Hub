@@ -31,7 +31,7 @@
           <span class="menu-text">나의 정보</span>
         </a>
         <a href="#" class="menu-item" data-page="my-policy">
-          <span class="menu-text">스크랩 정책</span>
+          <span class="menu-text">스크랩 혜택</span>
         </a>
         <a href="#" class="menu-item" data-page="likes">
           <span class="menu-text">스크랩 기사</span>
@@ -59,7 +59,7 @@
       <!-- 나의 정책 페이지 -->
       <div id="my-policy-content" class="content-box" style="display: none;">
           <%@ include file="my_scrap.jsp"%>
-        <p>스크랩한 정책 목록이 표시됩니다.</p>
+        <p>스크랩한 혜택 목록이 표시됩니다.</p>
       </div>
 
       <!-- 타임라인 페이지 -->
@@ -94,7 +94,7 @@
       <!-- 알림 관리 페이지 -->
       <div id="alarm-content" class="content-box" style="display: none;">
         <h2 class="content-title">알림 관리</h2>
-        <p>알림 설정한 정책 목록이 표시됩니다.</p>
+        <p>알림 설정한 혜택 목록이 표시됩니다.</p>
       </div>
 
       <!-- 기본 안내 메시지 -->

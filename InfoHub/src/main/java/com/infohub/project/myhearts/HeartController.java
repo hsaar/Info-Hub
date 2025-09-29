@@ -1,4 +1,4 @@
-package com.infohub.project.hearts;
+package com.infohub.project.myhearts;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class HeartController {
         try {
             List<HeartDTO> hearts = service.getHeartsByUser(loginNo);
             model.addAttribute("hearts", hearts);
-            return "heartList";  // heartList.jsp
+            return "my_hearts";  // heartList.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
             return "error";
@@ -36,7 +36,7 @@ public class HeartController {
         try {
             service.addHeart(loginNo, articleId);
             model.addAttribute("result", "heart_add_success");
-            return "heartResult"; // heartResult.jsp
+            return "my_hearts"; // heartResult.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
             return "error";
@@ -49,7 +49,7 @@ public class HeartController {
         try {
             service.deleteHeart(heartNo);
             model.addAttribute("result", "heart_delete_success");
-            return "heartResult"; // heartResult.jsp
+            return "my_hearts"; // heartResult.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
             return "error";
