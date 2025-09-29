@@ -23,7 +23,7 @@ public class ScrapController {
     ) throws SQLException {
         List<ScrapDTO> scraps = service.getPolicyScrapsByUser(loginId);
         model.addAttribute("scraps", scraps);
-        return "my_scrap";   
+        return "mypage/my_scrap";   
     }
 
     // 정책 스크랩 추가
@@ -35,7 +35,7 @@ public class ScrapController {
     ) throws SQLException {
         service.addPolicyScrap(loginId, policyId);
         model.addAttribute("result", "policy_scrap_success");
-        return "my_scrap";
+        return "mypage/my_scrap";
     }
 
     // 정책 스크랩 삭제
@@ -46,6 +46,6 @@ public class ScrapController {
     ) throws SQLException {
         service.deleteScrap(scrapId);
         model.addAttribute("result", "delete_success");
-        return "my_scrap"; 
+        return "mypage/my_scrap"; 
     }
 }

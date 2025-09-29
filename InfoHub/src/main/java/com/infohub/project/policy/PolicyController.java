@@ -29,10 +29,10 @@ public class PolicyController {
                 return "policyDetail"; // policyDetail.jsp
             }
             model.addAttribute("policyList", service.findPolicies(regionId, categoryId, orderBy));  // 목록 조회
-            return "policyList"; // policyList.jsp
+            return "policy/policyList"; // policyList.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
-            return "error"; // error.jsp
+            return "policy/error"; // error.jsp
         }
     }
 
@@ -48,20 +48,20 @@ public class PolicyController {
             if ("like".equals(action) && policyId != null) {   // 좋아요
                 service.increaseLikes(policyId);  // 수정됨
                 model.addAttribute("result", "like_success");
-                return "policyResult"; // policyResult.jsp
+                return "policy/policyResult"; // policyResult.jsp
             }
 
             // 정책 추가
             service.insertPolicy(dto);  // 수정됨
             model.addAttribute("result", "insert_success");
-            return "policyResult"; // policyResult.jsp
+            return "policy/policyResult"; // policyResult.jsp
 
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류");
-            return "error"; // error.jsp
+            return "policy/error"; // error.jsp
         } catch (Exception e) {
             model.addAttribute("error", "잘못된 요청");
-            return "error"; // error.jsp
+            return "policy/error"; // error.jsp
         }
     }
 
@@ -71,10 +71,10 @@ public class PolicyController {
         try {
             service.updatePolicy(dto);
             model.addAttribute("result", "update_success");
-            return "policyResult"; // policyResult.jsp
+            return "policy/policyResult"; // policyResult.jsp
         } catch (Exception e) {
             model.addAttribute("error", "DB 오류");
-            return "error"; // error.jsp
+            return "policy/error"; // error.jsp
         }
     }
 
@@ -84,10 +84,10 @@ public class PolicyController {
         try {
             service.deletePolicy(policyId);
             model.addAttribute("result", "delete_success");
-            return "policyResult"; // policyResult.jsp
+            return "policy/policyResult"; // policyResult.jsp
         } catch (Exception e) {
             model.addAttribute("error", "DB 오류");
-            return "error"; // error.jsp
+            return "policy/error"; // error.jsp
         }
     }
 }
