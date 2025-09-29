@@ -56,7 +56,6 @@
       <a href="articleListAll3">적금</a>
       <a href="articleListAll4" class="active">복지</a>
       <a href="articleListAll5">창업</a>
-      <a href="#">기타</a>
     </nav>
 	</div>
 	

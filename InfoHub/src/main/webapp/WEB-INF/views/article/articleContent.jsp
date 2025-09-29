@@ -250,8 +250,21 @@
 		   			}
 		   		});
 		   	});
-		   	
+
 		});
+	
+	function clip(){
+
+		var url = '';
+		var textarea = document.createElement("textarea");
+		document.body.appendChild(textarea);
+		url = window.document.location.href;
+		textarea.value = url;
+		textarea.select();
+		document.execCommand("copy");
+		document.body.removeChild(textarea);
+		alert("URL이 복사되었습니다.")
+	}
 	
 	
 </script>  
@@ -308,7 +321,9 @@
             <a href="https://${article.link}">기사원문보기</a> | ${article.source} | ${article.published}</p>
             views: ${article.views}
             <div id="heartsCount"></div>
-            <p><button type="button" class="btn btn-success" id="heartBtn">♡</button></p>
+             
+            <p><button class="button gray medium" onclick="clip(); return false;">URL주소복사</button>
+            <button type="button" class="btn btn-success" id="heartBtn">♡</button></p>
             <div style="flex:0 0 450px;">
             <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 650px; height: 450px;">
             </div>

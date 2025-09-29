@@ -122,6 +122,19 @@
 		   	}; //articleHearts()
 		});
 	
+	function clip(){
+
+		var url = '';
+		var textarea = document.createElement("textarea");
+		document.body.appendChild(textarea);
+		url = window.document.location.href;
+		textarea.value = url;
+		textarea.select();
+		document.execCommand("copy");
+		document.body.removeChild(textarea);
+		alert("URL이 복사되었습니다.")
+	}
+	
 	
 </script>  
 
@@ -174,10 +187,11 @@
             <div style="font-size: 12;"> ${article.name}</div>
             <h1 style="font-size: 35; font-weight: bold;">${article.title}</h1>
             <p style="font-size: 12;"> 
-            ${article.source} | ${article.published}</p>
+            <a href="https://${article.link}">기사원문보기</a> | ${article.source} | ${article.published}</p>
             views: ${article.views}
             <div id="heartsCount"></div>
-            <br>
+            <p><button class="button gray medium" onclick="clip(); return false;">URL주소복사</button></p>
+            
             <div style="flex:0 0 450px;">
             <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 650px; height: 450px;">
             </div>
@@ -185,8 +199,6 @@
       		<br>
             <p>${article.content}(기사내용)</p>
             <br>
-      		<br>
-      		<p><a href="https://${article.link}">기사원문보기</a></p>
       		<br>
             </div>
         </div>
