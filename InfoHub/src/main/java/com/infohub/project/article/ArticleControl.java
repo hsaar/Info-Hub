@@ -38,6 +38,9 @@ public class ArticleControl {
 		pageMaker.setTotalCount(totalCount);
 		model.addAttribute("pageMaker", pageMaker);
 		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
+		
 		return "article/articleListAll";
 	}
 	
@@ -52,6 +55,9 @@ public class ArticleControl {
 		int totalCount = service.getTotalCount(cri);
 		pageMaker.setTotalCount(totalCount);
 		model.addAttribute("pageMaker", pageMaker);
+		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
 		
 		return "article/articleListAll1";
 	}
@@ -68,6 +74,9 @@ public class ArticleControl {
 		pageMaker.setTotalCount(totalCount);
 		model.addAttribute("pageMaker", pageMaker);
 		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
+		
 		return "article/articleListAll2";
 	}
 	
@@ -82,6 +91,9 @@ public class ArticleControl {
 		int totalCount = service.getTotalCount(cri);
 		pageMaker.setTotalCount(totalCount);
 		model.addAttribute("pageMaker", pageMaker);
+		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
 		
 		return "article/articleListAll3";
 	}
@@ -98,6 +110,9 @@ public class ArticleControl {
 		pageMaker.setTotalCount(totalCount);
 		model.addAttribute("pageMaker", pageMaker);
 		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
+		
 		return "article/articleListAll4";
 	}
 	
@@ -113,6 +128,9 @@ public class ArticleControl {
 		pageMaker.setTotalCount(totalCount);
 		model.addAttribute("pageMaker", pageMaker);
 		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
+		
 		return "article/articleListAll5";
 	}
 	
@@ -122,6 +140,9 @@ public class ArticleControl {
 		
 		List<ArticleVO> articleContent = service.articleContent(articleId);
 		model.addAttribute("articleContent", articleContent);
+		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
 		
 		return "article/articleContent";
 	}
@@ -150,5 +171,26 @@ public class ArticleControl {
 		return "/article/article_result";
 	}
 	
-
+	@RequestMapping("noArticleContent")
+	public String noArticleContent(Model model, int articleId) throws Exception{
+		logger.info("noArticleContent..");
+		
+		List<ArticleVO> noArticleContent = service.noArticleContent(articleId);
+		model.addAttribute("noArticleContent", noArticleContent);
+		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
+		
+		return "article/noArticleContent";
+	}
+	
+	@RequestMapping("viewsArticle")
+	public String viewsArticle(Model model) throws Exception{
+		logger.info("viewsArticle..");
+		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
+		
+		return "article/articleListAll";
+	}
 }

@@ -18,5 +18,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return dao.registrationlistAll();
 	}
 
+
+	@Override
+	public List<RegistrationDTO> timelineListAll() throws Exception {
+		// TODO Auto-generated method stub
+		return dao.timelineListAll();
+	}
+
 }
 

@@ -20,4 +20,7 @@ public interface ArticleService {
 	public List<ArticleVO> result(int articleId) throws Exception;
 	public int getTotalCount(Criteria cri)throws Exception;	
 	
+	List<ArticleVO> noArticleContent(int articleId) throws Exception;
+	
+	List<ArticleVO> viewsArticle() throws Exception;
 }

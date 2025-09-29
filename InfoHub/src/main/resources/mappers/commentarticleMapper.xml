@@ -6,7 +6,7 @@
 	<insert id="insert" parameterType="com.infohub.project.commentarticle.CommentarticleVO">
 	    
 	    INSERT INTO commentarticle( createdDate, lastModified, comment, login_loginNo, article_articleId)
-	    VALUES (now(), now(), #{comment}, 2, #{article_articleId})
+	    VALUES (now(), now(), #{comment}, #{login_loginNo}, #{article_articleId})
 	    
 	</insert>
 	

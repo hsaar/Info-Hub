@@ -50,13 +50,6 @@ public class HomeController {
 		return "index";
 	}
 	
-
-	@GetMapping("timeline")
-	public String timeline(Model model) {
-		return "timeline";
-	}
-	
-	
 	@GetMapping("my_benifit")
 	public String my_benifit(Model model) {
 		return "/customized/my_benifit";

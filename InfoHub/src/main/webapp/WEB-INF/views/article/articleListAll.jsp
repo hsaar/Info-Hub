@@ -1,8 +1,17 @@
+<%@page import="java.util.Set"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@ page import="java.util.Random"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
 
+
+<%
+	String userId = request.getParameter("userId");
+	String name = request.getParameter("name");
+%>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -15,12 +24,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
 .pageInfo {
 	list-style: none;
 	display: inline-block;
-	margin: 50px 0 0 100px;
+	margin: 10px 0 0 100px;
 }
 
 .pageInfo li {
@@ -31,11 +41,12 @@
 	font-weight: 500;
 	}
 </style>
+
 </head>
 
 <body>
   <!-- 상단바 -->
-<%@ include file="../include/main_header.jsp"%>
+<jsp:include page="../include/main_header.jsp"/>
 
 <!-- 네비게이션 -->
   	<div class="news-header">
@@ -65,6 +76,8 @@
     <main class="news-main">
       <h1 class="news-title">최신기사 조회
 		</h1>
+		
+	
 	
 	<div class='box-body'>
 					<select id="searchType" name="searchType">
@@ -100,111 +113,143 @@
             <td><br>
          	<div class="news-item">
          	
-            <h3><a href="articleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;">${article.title}</a></h3>
-            
-            <p class="news-summary">${article.content}(기사내용)</p>
       		<div class="news-meta">
+      		<div class="news-summary">
+      		
+         	<c:if test="${empty userId}">
+            <h1><a href="noArticleContent?articleId=${article.articleId}">${article.title}</a></h1>
+            </c:if>
+            
+            <c:if test="${not empty userId}">
+            <h1><a href="articleContent?articleId=${article.articleId}">${article.title}</a></h1>
+            </c:if>
+            
+            <p>${article.content}(기사내용)</p>
             ${article.name} | ${article.source}<br>
             ${article.published}<br>
             ♥${article.hearts}
             </div>
+            </div>
             
-            <div class="news-thumb">
-            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 250px; height: 180px;">
-      		</div>
-           
+            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 250px; height: 180px; border-radius: 8px;">
+      		
           	</div>
           	</td>
             
          </tr>
          
-      </c:forEach>
-      
+   </c:forEach>
    </table>
    
        <!-- 페이지네이션 -->
     <div class="text-cente">
-					<ul class="search_info">
-						<form id="jobForm">
-							<input type='hidden' name="page"
-								value=${pageMaker.cri.perPageNum }></input> <input type='hidden'
-								name="perPageNum" value=${pageMaker.cri.perPageNum }></input>
-						</form>
-					</ul>
-				</div>
+		<ul class="search_info">
+			<form id="jobForm">
+				<input type='hidden' name="page"
+				value=${pageMaker.cri.perPageNum }></input> <input type='hidden'
+				name="perPageNum" value=${pageMaker.cri.perPageNum }></input>
+			</form>
+		</ul>
+	</div>
 
 
-				<div class="text-center">
-					<ul class="pageInfo">
-						<li id="page-prev"><a
-							href="articleListAll${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></li>
+	<div class="text-center">
+		<ul class="pageInfo">
+			<li id="page-prev"><a
+				href="articleListAll${pageMaker.makeSearch(pageMaker.startPage-1)}" style="text-decoration: none; color: inherit;">&laquo;</a></li>
 
-						<c:forEach begin="${pageMaker.startPage }"
-							end="${pageMaker.endPage }" var="idx">
-							<li
-								<c:out value="${pageMaker.cri.page == idx?'class =active':'' }"/>>
-								<a href="articleListAll?page=${idx }">${idx }</a>
-							</li>
-						</c:forEach>
+			<c:forEach begin="${pageMaker.startPage }"
+				end="${pageMaker.endPage }" var="idx">
+				<li
+				<c:out value="${pageMaker.cri.page == idx?'class =active':'' }"/>>
+				<a href="articleListAll?page=${idx }" style="text-decoration: none; color: inherit;">${idx }</a>
+				</li>
+			</c:forEach>
 
-						<c:if test="${pageMaker.next && pageMaker.endPage > 0 }">
-							<li><a
-								href="articleListAll${pageMaker.makeSearch(pageMaker.endPage +1) }">&raquo;</a></li>
-						</c:if>
+			<c:if test="${pageMaker.next && pageMaker.endPage > 0 }">
+				<li><a
+				href="articleListAll${pageMaker.makeSearch(pageMaker.endPage +1) }">&raquo;</a></li>
+			</c:if>
 
-						<c:if test="${pageMaker.prev }">
-							<li><a
-								href="articleListAll${pageMaker.makeSearch(pageMaker.startPage -1) }">&laquo;</a></li>
-						</c:if>
+			<c:if test="${pageMaker.prev }">
+				<li><a
+				href="articleListAll${pageMaker.makeSearch(pageMaker.startPage -1) }">&laquo;</a></li>
+			</c:if>
 
-						<li id="page-next"><a
-							href="articleListAll${pageMaker.makeSearch(pageMaker.startPage-1)}">&raquo;</a></li>
-						<!-- 처음 목록 버튼 추가 -->
-						<li id = "page-fitst">
-						<a href="articleListAll" class="btn btn-warning">처음목록</a></li>
-					</ul>
-				</div>
-    
-    </main> 
+				<li id="page-next"><a
+				href="articleListAll${pageMaker.makeSearch(pageMaker.startPage-1)}" style="text-decoration: none; color: inherit;">&raquo;</a></li>
+			<!-- 처음 목록 버튼 추가 -->
+			<li id = "page-fitst">
+			<a href="articleListAll" class="btn btn-warning" style="text-decoration: none; color: inherit;">처음목록</a></li>
+		</ul>
+	</div>
+    </main>
+     
     <!-- 사이드바 -->
     <aside>
       <div class="sidebar-section">
+    
         <h2>많이 본 기사</h2>
+       
         <ol class="rank-list">
-          <li>
-            <span class="rank-number">1</span>
-            <a href="#">인더스트리뉴스, 제7회 인터넷신문 대상 수상</a>
+        <c:forEach var="article" items="${viewsArticle}" varStatus="status">
+        <li>
+        <span class="rank-number">${status.index + 1}</span>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;">${article.title}</a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=${article.articleId}">${article.title}</a>
+          </c:if>
           </li>
-          <li>
-            <span class="rank-number">2</span>
-            <a href="#">[오늘의 언론동향] 2025년 9월 5일 금요일</a>
-          </li>
-          <li>
-            <span class="rank-number">3</span>
-            <a href="#">투데이신문, 제8회 청년플러스포럼 'NEW Green Generation: ...'</a>
-          </li>
-          <li>
-            <span class="rank-number">4</span>
-            <a href="#">한국인터넷신문협회, 언론 정부직 손배제 강령 추진에 강력 반대</a>
-          </li>
-          <li>
-            <span class="rank-number">5</span>
-            <a href="#">[신연수 칼럼] 누가 누구를 개혁하는가?</a>
-          </li>
+          </c:forEach>
         </ol>
       </div>
 
       <div class="sidebar-section">
+      <%
+      Random random = new Random();
+      
+      Set<Integer> set = new HashSet<>();
+     
+      while(set.size()<2){
+    	  Double d = Math.random()*50+1;
+    	  set.add(d.intValue());
+    	}
+     
+      List<Integer> list = new ArrayList<>(set);
+      
+      int number1 = list.get(0);
+      int number2 = list.get(1);
+      %>
+      
         <h2>포토·영상</h2>
         <div class="photo-grid">
-          <div class="photo-item"></div>
-          <div class="photo-item"></div>
+          <div>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+      	  </div>
+      	 
+         <div>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+      	  </div>
         </div>
       </div>
     </aside>
    </div>
  
-
 
   <!-- Top 버튼 -->
   <button class="top-button" id="topButton" aria-label="맨 위로 이동">
@@ -242,21 +287,20 @@
     $(document).ready(
 			function() {
 
-				$('#searchBtn').on(
-						"click",
-						function(event) {
+			$('#searchBtn').on(
+				"click",
+				function(event) {
 
-							self.location = "articleListAll"
-									+ '${pageMaker.makeQuery(1)}'
-									+ "&searchType="
-									+ $("select option:selected").val()
-									+ "&keyword="
-									+ encodeURIComponent($('#keyword')
-											.val());
-						});
+				self.location = "articleListAll"
+				+ '${pageMaker.makeQuery(1)}'
+				+ "&searchType="
+				+ $("select option:selected").val()
+				+ "&keyword="
+				+ encodeURIComponent($('#keyword').val());
+					});
 				$('#newBtn').on("click", function(evt) {
 
-					self.location = "articleListAll";
+				self.location = "articleListAll";
 
 				});
 
@@ -299,6 +343,7 @@
 	function setSearchTypeSelect() {
 		var searchType = $('#searchType');
 		var keyword = $('#keyword');
+		
 
 		var searchTypeSel = searchType.val(
 				'${pageMaker.cri.searchType}').prop("selected", true);
@@ -309,6 +354,7 @@
 
 					var searchTypeVal = searchTypeSel.val();
 					var keywordVal = keyword.val();
+					
 					//검색 조건 입력 안했으면 경고창 
 					if (!searchTypeVal || searchTypeVal == "n") {
 						alert("검색 조건을 선택하세요!");
@@ -320,7 +366,7 @@
 						keyword.focus();
 						return;
 					}
-					var url = "articleListAll?page=1" 
+					var url = "articleListAll?page=" + thisPage 
 							+ "&perPageNum="
 							+ "${pageMaker.cri.perPageNum}"
 							+ "&searchType=" + searchTypeVal

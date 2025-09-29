@@ -2,27 +2,27 @@ package com.infohub.project.login;
 
 public class JoinRequest {
 	
-	private String username;
+	private String userId;
 	private String password;
 	private String passwordCheck;
 	private String name;
 	
 	public JoinRequest() {}
 	
-	public JoinRequest(String username, String password, String passwordCheck, String name) {
+	public JoinRequest(String userId, String password, String passwordCheck, String name) {
 		super();
-		this.username = username;
+		this.userId = userId;
 		this.password = password;
 		this.passwordCheck = passwordCheck;
 		this.name = name;
 	}
 
 	public String getUsername() {
-		return username;
+		return userId;
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.userId = username;
 	}
 
 	public String getPassword() {
@@ -51,7 +51,7 @@ public class JoinRequest {
 
 	@Override
 	public String toString() {
-		return "JoinDTO [username=" + username + ", password=" + password + ", passwordCheck=" + passwordCheck
+		return "JoinDTO [username=" + userId + ", password=" + password + ", passwordCheck=" + passwordCheck
 				+ ", name=" + name + "]";
 	}
 	

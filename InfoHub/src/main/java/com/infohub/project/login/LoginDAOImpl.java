@@ -21,21 +21,21 @@ public class LoginDAOImpl implements LoginDAO{
 	}
 
 	@Override
-	public LoginDTO getUserById(int login_id) {
+	public LoginDTO getUserById(String userId) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectOne(namespace+".getUserById",login_id);
+		return sqlsession.selectOne(namespace+".getUserById",userId);
 	}
 
 	@Override
-	public LoginDTO getUserByUsername(String username) {
+	public LoginDTO getUserByname(String name) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectOne(namespace+".getUserByUsername", username);
+		return sqlsession.selectOne(namespace+".getUserByname", name);
 	}
 
 	@Override
-	public int checkUsernameDuplicate(String username) {
+	public int checkuserIdDuplicate(String userId) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectOne(namespace+".checkUsernameDuplicate", username);
+		return sqlsession.selectOne(namespace+".checkuserIdDuplicate", userId);
 	}
 
 	@Override
@@ -57,9 +57,9 @@ public class LoginDAOImpl implements LoginDAO{
 	}
 
 	@Override
-	public int deleteUser(String username) {
+	public int deleteUser(String userId) {
 		// TODO Auto-generated method stub
-		return sqlsession.update(namespace+".deleteUser", username);
+		return sqlsession.update(namespace+".deleteUser", userId);
 	}
 
 	@Override

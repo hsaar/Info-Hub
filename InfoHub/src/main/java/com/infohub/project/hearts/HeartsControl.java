@@ -32,10 +32,10 @@ public class HeartsControl {
 	
 	@ResponseBody
 	@PostMapping("heartsCheck")
-	public int heartsCheck(int article_articleId) throws Exception {
+	public int heartsCheck(HeartsVO heartsVO) throws Exception {
 		System.out.println("heartsCheck");
 		
-		int heartsCheck = service.heartsCheck(article_articleId);
+		int heartsCheck = service.heartsCheck(heartsVO);
 		//service.heartsCount(article_article_id);
 		
 		return heartsCheck;
@@ -43,15 +43,15 @@ public class HeartsControl {
 	
 	@ResponseBody
 	@PostMapping("heart")
-	public int heart(int article_articleId) throws Exception {
+	public int heart(HeartsVO heartsVO, int article_articleId) throws Exception {
 		System.out.println("heart");
 		
-		int heart = service.heartsCheck(article_articleId);
+		int heart = service.heartsCheck(heartsVO);
 		if (heart==0) {
-			service.heartsInsert(article_articleId);
+			service.heartsInsert(heartsVO);
 			articleDAO.updateHearts(article_articleId);
 		}else if(heart==1) {
-			service.heartsDelete(article_articleId);
+			service.heartsDelete(heartsVO);
 			articleDAO.cancleHearts(article_articleId);
 		}
 		return heart;

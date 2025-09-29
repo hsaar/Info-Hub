@@ -11,7 +11,7 @@
 <body>
 <div class="container" id="container">
   <div>
-    <h2>회원가입 성공!</h2>
+    <h2>회원탈퇴 성공!</h2>
     <a class="login-btn" href="index">메인화면</a>
   </div>
 </div>

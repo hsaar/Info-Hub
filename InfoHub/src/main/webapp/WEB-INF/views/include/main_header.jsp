@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page session="false"%>
+
 
 <%
 	String userId = request.getParameter("userId");
 	String name = request.getParameter("name");
 %>
+
 <header class="topbar">
 	<nav class="nav">
 		<a class="logo" href="<c:url value='/'/>"><img src="<c:url value='/resources/image/5.png'/>" alt="INFO HUB 로고"></a>

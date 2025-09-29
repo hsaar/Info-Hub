@@ -2,6 +2,9 @@ package com.infohub.project.commentarticle;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,8 +40,7 @@ public class CommentarticleControl {
 		System.out.println("insert");
 		
 		
-	    // 로그인 기능을 구현했거나 따로 댓글 작성자를 입력받는 폼이 있다면 입력받아온 값을 사용하면 된다.
-	    // 따로 구현하지 않았기 때문에 아이디는 임시로 "test"
+		
 	    return service.commentarticleInsert(commentarticleVO);
 
 	} // mCommentServiceInsert() end

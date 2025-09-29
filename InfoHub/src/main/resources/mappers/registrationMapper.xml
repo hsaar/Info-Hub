@@ -7,6 +7,10 @@
 	<select id="registrationlistAll" resultType="com.infohub.project.registration.RegistrationDTO">
 		select * from registration;
 	</select>
+	
+	<select id="timelineListAll" resultType="com.infohub.project.registration.RegistrationDTO">
+		select * from registration;
+	</select>
 </mapper>
 
 

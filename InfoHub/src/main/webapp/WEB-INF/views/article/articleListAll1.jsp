@@ -1,9 +1,17 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
+<%@page import="java.util.Random"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
-<html>
-<head>
+
+
+<%
+	String userId = request.getParameter("userId");
+	String name = request.getParameter("name");
+%>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -35,8 +43,8 @@
 </head>
 <body>
 
-<!-- 상단바 -->
-<%@ include file="../include/main_header.jsp"%>
+  <!-- 상단바 -->
+<jsp:include page="../include/main_header.jsp"/>
 
 <!-- 네비게이션 -->
   	<div class="news-header">
@@ -102,18 +110,25 @@
             <td><br>
          	<div class="news-item">
 			
-            <h3><a href="articleContent?articleId=${article.articleId}">${article.title}</a></h3>
-            
-            <p class="news-summary">${article.content}(기사내용)</p>
       		<div class="news-meta">
+      		<div class="news-summary">
+      		
+			<c:if test="${empty userId}">
+            <h1><a href="noArticleContent?articleId=${article.articleId}">${article.title}</a></h1>
+            </c:if>
+            
+            <c:if test="${not empty userId}">
+            <h1><a href="articleContent?articleId=${article.articleId}">${article.title}</a></h1>
+            </c:if>
+            
+            <p>${article.content}(기사내용)</p>
             ${article.name} | ${article.source}<br>
             ${article.published}<br>
             ♥${article.hearts}
             </div>
+            </div>
             
-            <div class="news-thumb">
-            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 250px; height: 180px;">
-      		</div>
+            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 250px; height: 180px; border-radius: 8px;">
            
           	</div>
           	</td>
@@ -137,13 +152,13 @@
 				<div class="text-center">
 					<ul class="pageInfo">
 						<li id="page-prev"><a
-							href="articleListAll1${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></li>
+							href="articleListAll1${pageMaker.makeSearch(pageMaker.startPage-1)}" style="text-decoration: none; color: inherit;">&laquo;</a></li>
 
 						<c:forEach begin="${pageMaker.startPage }"
 							end="${pageMaker.endPage }" var="idx">
 							<li
 								<c:out value="${pageMaker.cri.page == idx?'class =active':'' }"/>>
-								<a href="articleListAll1?page=${idx }">${idx }</a>
+								<a href="articleListAll1?page=${idx }" style="text-decoration: none; color: inherit;">${idx }</a>
 							</li>
 						</c:forEach>
 
@@ -158,10 +173,10 @@
 						</c:if>
 
 						<li id="page-next"><a
-							href="articleListAll1${pageMaker.makeSearch(pageMaker.startPage-1)}">&raquo;</a></li>
+							href="articleListAll1${pageMaker.makeSearch(pageMaker.startPage-1)}" style="text-decoration: none; color: inherit;">&raquo;</a></li>
 						<!-- 처음 목록 버튼 추가 -->
 						<li id = "page-fitst">
-						<a href="articleListAll1" class="btn btn-warning">처음목록</a></li>
+						<a href="articleListAll1" class="btn btn-warning" style="text-decoration: none; color: inherit;">처음목록</a></li>
 					</ul>
 				</div>
     
@@ -171,34 +186,59 @@
       <div class="sidebar-section">
         <h2>많이 본 기사</h2>
         <ol class="rank-list">
-          <li>
-            <span class="rank-number">1</span>
-            <a href="#">인더스트리뉴스, 제7회 인터넷신문 대상 수상</a>
+        <c:forEach var="article" items="${viewsArticle}" varStatus="status">
+        <li>
+        <span class="rank-number">${status.index + 1}</span>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;">${article.title}</a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=${article.articleId}">${article.title}</a>
+          </c:if>
           </li>
-          <li>
-            <span class="rank-number">2</span>
-            <a href="#">[오늘의 언론동향] 2025년 9월 5일 금요일</a>
-          </li>
-          <li>
-            <span class="rank-number">3</span>
-            <a href="#">투데이신문, 제8회 청년플러스포럼 'NEW Green Generation: ...'</a>
-          </li>
-          <li>
-            <span class="rank-number">4</span>
-            <a href="#">한국인터넷신문협회, 언론 정부직 손배제 강령 추진에 강력 반대</a>
-          </li>
-          <li>
-            <span class="rank-number">5</span>
-            <a href="#">[신연수 칼럼] 누가 누구를 개혁하는가?</a>
-          </li>
+          </c:forEach>
         </ol>
       </div>
 
       <div class="sidebar-section">
+<%
+      Random random = new Random();
+      
+      Set<Integer> set = new HashSet<>();
+     
+      while(set.size()<2){
+    	  Double d = Math.random()*50+1;
+    	  set.add(d.intValue());
+    	}
+     
+      List<Integer> list = new ArrayList<>(set);
+      
+      int number1 = list.get(0);
+      int number2 = list.get(1);
+%>
+      
         <h2>포토·영상</h2>
         <div class="photo-grid">
-          <div class="photo-item"></div>
-          <div class="photo-item"></div>
+          <div>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+      	  </div>
+      	 
+         <div>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+      	  </div>
         </div>
       </div>
     </aside>

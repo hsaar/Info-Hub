@@ -1,23 +1,23 @@
 package com.infohub.project.login;
 
 public class LoginRequest {
-	private String username;
+	private String userId;
 	private String password;
 	
 	public LoginRequest() {}
 	
-	public LoginRequest(String username, String password) {
+	public LoginRequest(String userId, String password) {
 		super();
-		this.username = username;
+		this.userId = userId;
 		this.password = password;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getuserId() {
+		return userId;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setuserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getPassword() {
@@ -30,7 +30,7 @@ public class LoginRequest {
 
 	@Override
 	public String toString() {
-		return "LoginRequest [username=" + username + ", password=" + password + "]";
+		return "LoginRequest [username=" + userId + ", password=" + password + "]";
 	}
 	
 	

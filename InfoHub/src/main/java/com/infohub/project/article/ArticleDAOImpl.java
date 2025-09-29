@@ -98,4 +98,16 @@ public class ArticleDAOImpl implements ArticleDAO{
 		return session.selectOne(nameSpace + ".gettotalcount", cri);
 	}
 
+	@Override
+	public List<ArticleVO> noArticleContent(int articleId) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".articleContent", articleId);
+	}
+
+	@Override
+	public List<ArticleVO> viewsArticle() throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".viewsArticle");
+	}
+
 }

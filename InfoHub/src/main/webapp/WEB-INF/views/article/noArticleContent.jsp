@@ -1,6 +1,6 @@
+<%@page import="java.util.HashSet"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="java.util.HashSet"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Random"%>
 <%@page import="org.springframework.beans.factory.annotation.Autowired"%>
@@ -11,13 +11,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
 
-<%
-		String userId = (String) session.getAttribute("userId");
-		int loginNo = ((Integer) session.getAttribute("loginNo")).intValue();
-
-%>
-	
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -41,44 +36,9 @@
 	$(document).ready(function(){
 		
 		articleHearts();
-		heartsCheck();
 		commentList();
 		
 		
-  	  	$("#commentInsertBtn").click(function(){
-	        var article_articleId =$("#article_articleId").val();
-	        var comment = $("#comment").val();
-	        var login_loginNo = ${loginNo};
-	     
-	        
-	        var url = "comment/insert";
-	        var paramData ={
-	        		"article_articleId" : article_articleId,
-	        		"comment" : comment,
-	        		"login_loginNo" : login_loginNo
-	        		
-	        };
-	        
-	        console.log(paramData);
-	        
-	        $.ajax({
-	        	url: url,
-	            type: "post",
-	            data: paramData,
-	            dataType : "json",
-	            success: function(data){
-	               if(data==1){
-	                   commentList(); // 댓글 작성 후 댓글 목록 함수 호출
-	                   $('#comment').val('');
-	               } // if end
-	            },// success end
-	       		error: function(){
-	       			alert("100자 미만으로 작성해주세요.");
-	       		}
-	        }); // ajax() end
-	   	}); // commentInsert() end
-	   	
-	   	
 	   	function commentList(){
 	   		var article_articleId =$("#article_articleId").val();
 	   		
@@ -130,82 +90,6 @@
 	   	}//commentList()
 	
 		   	
-			$("#heartBtn").click(function(heart){
-				
-				var article_articleId =$("#article_articleId").val();
-				var login_loginNo = ${loginNo};
-		   		
-		   		url ="heart";
-		   		var paramData ={
-		        		"article_articleId" : article_articleId,
-		        		"login_loginNo" : login_loginNo
-		        };
-		   		
-		   		console.log(paramData);
-		   		
-				$.ajax({
-					url: url,
-					data: paramData,
-					type: "post",
-					dataType: "json",
-					success: function(heart){
-						if(heart==0){
-							alert("좋아요완료");
-							  var btn = '🎔'
-								  $("#heartBtn").html(btn);
-						}else if(heart==1){
-							alert("좋아요취소");
-							 var btn = '♡'
-								  $("#heartBtn").html(btn);
-						}
-						location.reload();
-					},
-					error : function(){
-		                alert("좋아요 에러");
-		             }     
-				
-				})//ajax
-			});//heartbtn
-			
-			
-			function heartsCheck(){
-		   		var article_articleId =$("#article_articleId").val();
-		   		var login_loginNo = ${loginNo};
-		   		
-		   		url ="heartsCheck";
-		   		var paramData ={
-		        		"article_articleId" : article_articleId,
-		        		"login_loginNo" : login_loginNo
-		        };
-		   		
-		   		console.log(paramData);
-		   		
-		   	  	$.ajax({
-		        	url : url,         // 주소 -> controller 매핑주소
-		          	data : paramData,    // 요청데이터
-		          	dataType : "json",  // 데이터타입
-		          	type : "post",      // 전송방식
-		            success : function(result){
-		            	console.log(result.length);
-		            	
-		            	
-		                 if(result.length < 1){
-		                	 var btn = '♡'
-		                	$("#heartBtn").html(btn);
-		                 }
-		                 else if(result.length = 1){
-		                    $(result).each(function(){
-		                    	var btn = '🎔'
-		                 		$("#heartBtn").html(btn);
-		                    });  // each End
-		                 }
-		             },
-		             error : function(data){
-		                alert("좋아요 에러" + data);
-		             }     
-		       });
-		   	}; //heartsCheck()
-		   	
 		   	function articleHearts(){
 		   		var article_articleId = $("#article_articleId").val();
 		   		
@@ -236,21 +120,6 @@
 		             }     
 		       });
 		   	}; //articleHearts()
-		   	
-		   	$(function() {
-		   		$("#comment").keypress(function(e){
-		   			//검색어 입력 후 엔터키 입력하면 조회버튼 클릭
-		   			if(e.keyCode && e.keyCode == 13){
-		   				$("#commentInsertBtn").trigger("click");
-		   				return false;
-		   			}
-		   			//엔터키 막기
-		   			if(e.keyCode && e.keyCode == 13){
-		   				  e.preventDefault();	
-		   			}
-		   		});
-		   	});
-		   	
 		});
 	
 	
@@ -295,7 +164,7 @@
 	<div class="container">
 	<div style="padding-top: 1px">
 	
-      <c:forEach var="article" items="${articleContent}"> <!-- JSTL의 반복문 -->
+      <c:forEach var="article" items="${noArticleContent}"> <!-- JSTL의 반복문 -->
     
       	<div style="display:flex; justify-content:space-between; align-items:flex-start;">
          	
@@ -308,7 +177,7 @@
             ${article.source} | ${article.published}</p>
             views: ${article.views}
             <div id="heartsCount"></div>
-            <p><button type="button" class="btn btn-success" id="heartBtn">♡</button></p>
+            <br>
             <div style="flex:0 0 450px;">
             <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 650px; height: 450px;">
             </div>
@@ -328,15 +197,14 @@
     <div>
         <input type="hidden" name="article_articleId" id="article_articleId" value="${article.articleId}">
         
-        <input type="text" onkeyup="enterkey();" name="comment" id="comment" placeholder="내용을 입력하세요">
         
-        <button type="button" id="commentInsertBtn">등록</button>
     </div>
     </form>
-	</div>
-	<div class="container">
+</div>
+<div class="container">
     <div id="commentList"></div><br>
-	</div>
+</div>
+
 
 </c:forEach>
  	

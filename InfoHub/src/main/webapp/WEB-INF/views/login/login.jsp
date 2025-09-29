@@ -9,6 +9,7 @@
 	<title>로그인페이지입니다</title>
 	<link rel="stylesheet" href="<c:url value='/resources/css/login.css' />">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <c:if test="${not empty errorMsg}">
@@ -27,11 +28,14 @@
     <form action="memberjoin" method="post">
       <h1>Create Account</h1>
       <span>or use your email for registration</span>
-      <input type="text" placeholder="ID" name = "username" required/>
-      <input type="password" placeholder="Password" name = "password" required/>
-      <input type="password" placeholder="PasswordCheak" name = "passwordcheak" required/>
-      <input type="email" placeholder="Email" name = "email" required/>
-      <input type="text" placeholder="Nickname" name = "name" required/>
+      <input type="text" placeholder="ID" name = "userId" id = "userId" required autocomplete="off"/>
+      <span id = "idCheckMsg"></span>
+      <input type="password" placeholder="Password" name = "password" id = "password" required/>
+      <input type="password" placeholder="PasswordCheak" name = "passwordConfirm" id = "passwordConfirm" required/>
+      <span id = "passwordCheckMsg"></span>
+      <input type="email" placeholder="Email" name = "email" required />
+      <input type="text" placeholder="Nickname" name = "name" id = "name" required autocomplete="off"/>
+      <span id = "nameCheckMsg"></span>
       <input type="text" placeholder="phone" name = "phone" required/>
       <select id = "birthyear" name="birthyear" required>
       	<option value="">선택</option>
@@ -51,7 +55,7 @@
     <form action="login_ok" method="post">
       <h1>Sign in</h1>
       <span>or use your account</span>
-      <input type="text" placeholder="Email" name = "username"/>
+      <input type="text" placeholder="Id" name = "userId"/>
       <input type="password" placeholder="Password" name="password"/>
       <a href="#">Forgot your password?</a>
       <button>Sign In</button>
@@ -84,6 +88,70 @@
 	signInButton.addEventListener('click', () => {
 	  container.classList.remove("right-panel-active");
 	});
+	
+</script>
+
+<script type="text/javascript">
+function checkDuplicate(inputId, url, msgId, paramName) {
+	$("#"+inputId).on("input", function() {
+		let value = $(this).val();
+		
+		if(value.length < 3){
+			$("#"+msgId).text("아이디는 3자 이상 입력하세요.").css("color", "red");
+			return;
+		}
+		
+		$.ajax({
+			url : url,
+			type: "GET",
+			data: {[paramName] : value},
+			success: function(response){
+				if(response === "OK"){
+					$("#"+msgId).text("사용 가능합니다.").css("color", "green");
+				}else{
+					$("#"+msgId).text("이미 존재합니다.").css("color", "red");
+				}
+			},
+			error: function(xhr, status, error) {
+				console.log("에이젝스에러",error);
+			}
+		});
+	});
+}
+function checkPassword(pwId, pwConfirmId, msgId, url){
+	$("#"+pwId + ",#" + pwConfirmId).on("input", function(){
+		let password = $("#"+pwId).val();
+		let passwordConfirm = $("#"+pwConfirmId).val();
+		
+		if(password.length < 8){
+			$("#"+msgId).text("비밀번호는 8자 이상 입력하세요.").css("color", "red");
+			return;
+		}
+		
+		$.ajax({
+			url: url,
+			type: "GET",
+			data: {password:password, passwordConfirm:passwordConfirm},
+			success: function(response){
+				if(response === "MATCH"){
+					$("#"+msgId).text("비밀번호가 일치합니다.").css("color","green");
+				}
+				else{
+					$("#"+msgId).text("비밀번호가 일치하지 않습니다.").css("color", "red");
+				}
+			},
+			error: function(xhr, status, error){
+				console.log("비밀번호에러",error);
+			}
+		});
+	});
+}
+$(document).ready(function(){
+	checkDuplicate("userId", "${pageContext.request.contextPath}/idCheck", "idCheckMsg", "userId");
+	checkDuplicate("name", "${pageContext.request.contextPath}/nameCheck", "nameCheckMsg", "name");
+	checkPassword("password", "passwordConfirm", "passwordCheckMsg", "${pageContext.request.contextPath}/passwordCheck");
+});
+
 </script>
 </body>
 </html>

@@ -7,7 +7,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
 <%
 	String userId = request.getParameter("userId");
 	String name = request.getParameter("name");
@@ -18,24 +17,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-   <title>registrationlistAll</title>
+   <title>timeline</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 
-	<title>혜택바로가기</title>
+<style>
+#customPopup .smallText {
+  font-size: 0.85em;   /* 글자 크기 조절 */
+  color: #555;         /* 선택 사항: 약간 회색 */
+}
+</style>
+
 </head>
 <body>
-
   <!-- 상단바 -->
 <jsp:include page="../include/main_header.jsp"/>
 
 <!-- 네비게이션 -->
   	<div class="news-header">
     <nav class="news-nav">
-      <a href="articleListAll">종합</a>
+      <a href="articleListAll" class="active">종합</a>
       <a href="articleListAll1">부동산</a>
       <a href="articleListAll2">주식</a>
       <a href="articleListAll3">적금</a>
@@ -56,40 +61,40 @@
 
        <!-- 메인 컨테이너 -->
   <div class="news-container">
-  
-<!-- 메인 콘텐츠 -->
+    <!-- 메인 콘텐츠 -->
     <main class="news-main">
       <h1 class="news-title">
-  		 혜택 전체 목록
-		</h1>
-
-	<h2>혜택</h2>
-
-	<div class="policy-list-container">
-  <div class="policy-grid">
-    <c:forEach var="registrationlistAll" items="${registrationlistAll}">
-      <div class="policy-card">
-        <h3 class="policy-card-title">${registrationlistAll.title}</h3>
-        <p class="policy-description">${registrationlistAll.content}</p>
-        <div class="policy-details">
-          <p><strong>신청기간</strong> <br>
-          ${registrationlistAll.startDate} ~ ${registrationlistAll.endDate}</p>
-          <p><strong>접수기관:</strong> ${registrationlistAll.trachea}</p>
-          <p><strong>전화문의:</strong> ${registrationlistAll.call}</p>
-          <p><strong>지원형태:</strong> ${registrationlistAll.type}</p>
-          <p><strong>신청방법:</strong> 
-            <a href="https:/${registrationlistAll.link}" class="btn-text" target="_blank" title="새창열림">타사이트 이동</a>
-          </p>
-        </div>
+	타임라인  
+	 </h1>
+	 
+	 <div class="container">
+	 <div style="padding-top: 1px">
+	
+      <div id="calendar">
+      
       </div>
-		</c:forEach>
-	</div>
-	</div>	
-	</main>
-	<!-- 사이드바 -->
+      <div id="customPopup" style="display:none; position:fixed; top:60%; left:42%; transform:translate(-50%,-50%);
+      	width: 500px; height: 400px; max-width: 80%;  background-color: rgba(255, 255, 255, 0.97);
+		text-align: center; padding:20px; border:1px solid #333; border-radius:10px; z-index:1000;">
+		  <h3 id="popupTitle">제목</h3>
+		  <p id="popupBody">내용</p>
+		  <button onclick="document.getElementById('customPopup').style.display='none'"
+		  style="position: absolute; left: 20px; bottom: 20px; padding:6px 12px; background-color:#4CAF50;
+		  color:white; border:none; border-radius:6px; cursor:pointer;">닫기</button>
+		</div>
+      
+      </div>
+      </div>
+      </main>
+   
+      
+
+ <!-- 사이드바 -->
     <aside>
       <div class="sidebar-section">
+    
         <h2>많이 본 기사</h2>
+       
         <ol class="rank-list">
         <c:forEach var="article" items="${viewsArticle}" varStatus="status">
         <li>
@@ -150,7 +155,6 @@
    </div>
  
 
-
   <!-- Top 버튼 -->
   <button class="top-button" id="topButton" aria-label="맨 위로 이동">
     <svg viewBox="0 0 24 24">
@@ -158,6 +162,8 @@
     </svg>
   </button>
    
+   
+
   <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
     © 2025 누림 — Mist Blue Theme
   </footer>
@@ -181,7 +187,67 @@
         behavior: 'smooth'
       });
     });
+    
+    var colors = [
+        '#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#FF6FF5',
+        '#FF9F1C', '#00C2FF', '#845EC2', '#FFC75F', '#FF8066'
+      ];
+    
+    var events = [
+        <c:forEach var="timeline" items="${timelineListAll}" varStatus="status">
+          {
+            title: '${timeline.title}',
+            content: '${timeline.content}',
+            start: '${timeline.startDate}',
+            end: '${timeline.endDate}',
+            call: '${timeline.call}',
+            link: '${timeline.link}',
+            backgroundColor: colors[${status.index} % colors.length],
+            borderColor: colors[${status.index} % colors.length],
+            textColor: 'white'
+          }<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+      ];
+      console.log(events);
+
 </script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+	    var calendarEl = document.getElementById('calendar');
+	    var calendar = new FullCalendar.Calendar(calendarEl, {
+	      initialView: 'dayGridMonth',  // 월간 달력
+	      locale: 'ko',                 // 한국어
+	      events: events,               // JSP에서 만든 데이터 주입
+	      selectable: true,             // 드래그 선택 가능
+	      headerToolbar: {
+	        left: 'prev,next today',
+	        center: 'title',
+	        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+	      },
+	      eventClick: function(info) {
+	    	  document.getElementById('popupTitle').innerText = info.event.title;
+	    	
+	    	var content = (info.event.extendedProps.content || "-");
+	    	var start = "시작 : " + info.event.start.toLocaleDateString();
+	    	var end = "종료 : " + (info.event.end ? info.event.end.toLocaleDateString() : "-");
+	    	var call = "call : " + (info.event.extendedProps.call || "-");
+	    	var linkUrl = info.event.extendedProps.link;
+	        var link = "link : " + (linkUrl
+	        		? "<a href='https://" + linkUrl + "' target='_blank'>" + linkUrl + "</a>" 
+	                : "-");
+	        
+	        document.getElementById('popupBody').innerHTML =
+	            "<p>" + content + "</p>" + "<br>" + "<span class='smallText'>" + start + "</span><br>" + "<span class='smallText'>"
+	            + end + "</span><br>" + "<span class='smallText'>" + call + "</span><br>" + "<span class='smallText'>" + link + "</span>";
+
+	    	document.getElementById('customPopup').style.display = 'block';
+	    	}
+	    });
+	    calendar.render();
+	  });
+	
+</script> 
 </body>
 </html>
-
