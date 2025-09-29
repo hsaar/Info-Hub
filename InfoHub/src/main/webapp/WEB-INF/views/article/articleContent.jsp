@@ -110,7 +110,7 @@
 	                       htmls += '<hr style="width: 600px; float: left;">';
 	                       htmls += '<br>';
 	                       htmls += '<span class="d-block">';
-	                       htmls += '<strong class="text-gray-dark">' + ' loginNo : ' + this.login_loginNo + '</strong>';
+	                       htmls += '<strong class="text-gray-dark">' + ' ID: ' + this.userId + '</strong>';
 	                       htmls += '</span><br>';
 	                       htmls += '<br>';
 	                       htmls += this.comment;
@@ -260,7 +260,7 @@
 <body>
 
   <!-- 상단바 -->
-<jsp:include page="../include/main_header.jsp"/>
+<jsp:include page="../include/header.jsp"/>
 
 <!-- 네비게이션 -->
   	<div class="news-header">
@@ -305,7 +305,7 @@
             <div style="font-size: 12;"> ${article.name}</div>
             <h1 style="font-size: 35; font-weight: bold;">${article.title}</h1>
             <p style="font-size: 12;"> 
-            ${article.source} | ${article.published}</p>
+            <a href="https://${article.link}">기사원문보기</a> | ${article.source} | ${article.published}</p>
             views: ${article.views}
             <div id="heartsCount"></div>
             <p><button type="button" class="btn btn-success" id="heartBtn">♡</button></p>
@@ -317,6 +317,9 @@
             <p>${article.content}(기사내용)</p>
             <br>
       		<br>
+      		<p></p>
+      		<br>
+      		
             </div>
         </div>
    

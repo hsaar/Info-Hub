@@ -7,14 +7,14 @@
 	    
 	    INSERT INTO commentarticle( createdDate, lastModified, comment, login_loginNo, article_articleId)
 	    VALUES (now(), now(), #{comment}, #{login_loginNo}, #{article_articleId})
-	    
 	</insert>
 	
 	
 	<select id="listAll"  resultType="com.infohub.project.commentarticle.CommentarticleVO">
-		SELECT c.* FROM commentarticle c join article a on articleId = article_articleId
+		SELECT c.*, l.userId FROM commentarticle as c
+		left join article as a on a.articleId = c.article_articleId
+		left join login as l on l.loginNo = c.login_loginNo
 		WHERE article_articleId = #{article_articleId}
-	
 	</select>
 
 </mapper>

@@ -8,8 +8,37 @@ public class CommentarticleVO {
 	private String comment;
 	private String login_loginNo;
 	private String article_articleId;
+	private String userId;
 	
 	CommentarticleVO(){}
+	
+	
+
+	public String getUserId() {
+		return userId;
+	}
+
+
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+
+
+	public CommentarticleVO(String commentId, String createdDate, String lastModified, String comment,
+			String login_loginNo, String article_articleId, String userId) {
+		super();
+		this.commentId = commentId;
+		this.createdDate = createdDate;
+		this.lastModified = lastModified;
+		this.comment = comment;
+		this.login_loginNo = login_loginNo;
+		this.article_articleId = article_articleId;
+		this.userId = userId;
+	}
+
+
 
 	public CommentarticleVO(String commentId, String createdDate, String lastModified, String comment,
 			String login_loginNo, String article_articleId) {
@@ -70,12 +99,16 @@ public class CommentarticleVO {
 		this.article_articleId = article_articleId;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "CommentarticleVO [commentId=" + commentId + ", createdDate=" + createdDate + ", lastModified="
 				+ lastModified + ", comment=" + comment + ", login_loginNo=" + login_loginNo + ", article_articleId="
-				+ article_articleId + "]";
+				+ article_articleId + ", userId=" + userId + "]";
 	}
+
+	
 
 	
 }

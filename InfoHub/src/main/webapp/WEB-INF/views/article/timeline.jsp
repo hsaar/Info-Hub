@@ -30,12 +30,53 @@
   font-size: 0.85em;   /* 글자 크기 조절 */
   color: #555;         /* 선택 사항: 약간 회색 */
 }
+
+/* 캘린더 크기 */
+#calendar {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 850px;
+}
+
+/* 시간축 없애기 */
+.fc-timegrid-axis {
+  display: none !important;
+}
+
+.fc-dayGridWeek-view .fc-event {
+    height: 70px !important;       /* 막대 높이 */
+    line-height: 70px !important;  /* 텍스트 세로 중앙 정렬 */
+    font-size: 18px !important;  /* 원하는 글씨 크기 */
+    line-height: normal !important; /* 필요하면 세로 중앙 정렬 */
+}
+
+.fc-dayGridWeek-view {
+    height: 550px !important;
+    max-height: 550px !important;
+}
+
+.fc-listDay-view {
+    height: 550px !important;
+    max-height: 550px !important;
+}
+
+.fc-listDay-view .fc-event {
+	font-size: 18px !important;  /* 원하는 글씨 크기 */
+    line-height: normal !important; /* 필요하면 세로 중앙 정렬 */
+}
+
+/* 월간뷰는 기존 높이 유지 */
+.fc-dayGridMonth-view {
+    height: 850px !important;
+}
+
+
 </style>
 
 </head>
 <body>
   <!-- 상단바 -->
-<jsp:include page="../include/main_header.jsp"/>
+<jsp:include page="../include/header.jsp"/>
 
 <!-- 네비게이션 -->
   	<div class="news-header">
@@ -163,7 +204,6 @@
   </button>
    
    
-
   <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
     © 2025 누림 — Mist Blue Theme
   </footer>
@@ -200,6 +240,7 @@
             content: '${timeline.content}',
             start: '${timeline.startDate}',
             end: '${timeline.endDate}',
+            allDay: true,
             call: '${timeline.call}',
             link: '${timeline.link}',
             backgroundColor: colors[${status.index} % colors.length],
@@ -217,17 +258,27 @@
     document.addEventListener('DOMContentLoaded', function() {
 	    var calendarEl = document.getElementById('calendar');
 	    var calendar = new FullCalendar.Calendar(calendarEl, {
-	      initialView: 'dayGridMonth',  // 월간 달력
+	      initialView: 'dayGridWeek',  
 	      locale: 'ko',                 // 한국어
 	      events: events,               // JSP에서 만든 데이터 주입
-	      selectable: true,             // 드래그 선택 가능
+	      selectable: true,            // 드래그 선택 가능
+	      contentHeight: '800px', // 내용 부분 높이
+	      expandRows: true,  // 화면에 맞게 줄 맞춤
 	      headerToolbar: {
 	        left: 'prev,next today',
 	        center: 'title',
-	        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+	        right: 'dayGridWeek,listDay,dayGridMonth'
 	      },
+	      allDaySlot: true,
+	      slotLabelContent: function() {
+    		return null;  // 시간 라벨 제거
+ 			},
+ 			
+ 			dayHeaderFormat: { weekday: 'short', month: 'numeric', day: 'numeric' },
+	    
 	      eventClick: function(info) {
 	    	  document.getElementById('popupTitle').innerText = info.event.title;
+	    	  document.getElementById('popupTitle').style.fontSize = '25px';
 	    	
 	    	var content = (info.event.extendedProps.content || "-");
 	    	var start = "시작 : " + info.event.start.toLocaleDateString();

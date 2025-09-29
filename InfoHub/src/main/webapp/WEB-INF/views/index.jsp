@@ -2,7 +2,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page session="false"%>
+<%
+	String userId = request.getParameter("userId");
+	String name = request.getParameter("name");
+%>
 <html lang="ko">
 
 <head>
@@ -13,20 +16,20 @@
 <%@ include file="include/plugin.jsp"%>
 
 <!-- 타이틀용 세리프 + 본문 산세리프 -->
-<link href="./index_files/css2" rel="stylesheet">
+<link href="/resources/css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
 	href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
-<%@ include file="include/header.jsp"%>
 
 </head>
 
 <body>
 	<header class="main-header">
-		<%@ include file="include/main_header.jsp"%>
+		  <!-- 상단바 -->
+<jsp:include page="./include/header.jsp"/>
 	</header>
 
 	<!-- 메인 히어로(양분) -->
@@ -47,24 +50,24 @@
 
 				<section class="split">
 					<!-- 좌: 정책 -->
-					<article class="col policy">
+					<article class="col benefit" aria-labelledby="benefit-title">
 						<div class="inner">
-							<span class="eyebrow">POLICY</span>
-							<h2 class="title">정책</h2>
-							<p class="desc">분야/지역/대상 필터와 마감일 알림으로, 필요한 정책만 빠르게 모아보세요.</p>
-							<a class="panel-link" href="policy" aria-label="정책 페이지로 이동"
-								title="정책 페이지로 이동"></a>
+							<span class="eyebrow">Articles</span>
+							<h2 id="article" class="title">정책기사</h2>
+							<p class="desc">장학금·주거·교통·문화·건강 혜택을 프로필 기반으로 추천합니다.</p>
+							<a class="panel-link" href="articleListAll" aria-label="전체기사 페이지로 이동"
+								title="전체기사 페이지로 이동"></a>
 						</div>
 					</article>
 
 					<!-- 우: 혜택(워터릴) -->
-					<article class="col benefit" aria-labelledby="benefit-title">
+					<article class="col policy">
 						<div class="inner">
-							<span class="eyebrow">BENEFITS</span>
-							<h2 id="benefit-title" class="title">혜택</h2>
-							<p class="desc">장학금·주거·교통·문화·건강 혜택을 프로필 기반으로 추천합니다.</p>
-							<a class="panel-link" href="benefits" aria-label="혜택 페이지로 이동"
-								title="혜택 페이지로 이동"></a>
+							<span class="eyebrow">Benefits</span>
+							<h2 class="title">혜택</h2>
+							<p class="desc">분야/지역/대상 필터와 마감일 알림으로, 필요한 정책만 빠르게 모아보세요.</p>
+							<a class="panel-link" href="policy" aria-label="정책 페이지로 이동"
+								title="정책 페이지로 이동"></a>
 						</div>
 					</article>
 					
@@ -83,25 +86,31 @@
 
 						<ul class="quick-links">
 							<li><a href="my_benifit" class="dot-link"> 
-								<span class="icon" style="mask: url('clock.svg')"></span>
+								<span class="icon" style="mask: url('resources/image/clock.svg')"></span>
 								<span>내 혜택 모아보기</span>
 							</a></li>
 					
 							<li><a href="customized_article" class="dot-link"> 
-								<span class="icon" style="mask: url('post.svg')"></span>
+								<span class="icon" style="mask: url('resources/image/post.svg')"></span>
 								<span>맞춤형 기사 추천</span>
 							</a></li>
 							<li><a href="my_benifit" class="dot-link"> 
-								<span class="icon" style="mask: url('mypage.svg')"></span>
+								<span class="icon" style="mask: url('resources/image/mypage.svg')"></span>
 								<span>나의 정책</span>
 							</a></li>
-							<li><a href="mypage_main" class="dot-link"> 
-								<span class="icon" style="mask: url('alarm.svg')"></span>
-								<span>마이페이지</span>
+							<li><a href="timeline" class="dot-link"> 
+								<span class="icon" style="mask: url('resources/image/alarm.svg')"></span>
+								<span>타임라인</span>
 							</a></li>
 						</ul>
 
+						<c:if test="${empty userId}">
 						<a class="login-btn" href="login">로그인</a>
+						</c:if>
+						
+						<c:if test="${not empty userId}">
+						<a class="logout-btn"  href="<c:url value="logout"/>">로그아웃</a>
+						</c:if>
 					</div>
 				</article>
 			</aside>
@@ -142,8 +151,7 @@
 				}
 				var protocol = window.location.protocol === 'http:' ? 'ws://'
 						: 'wss://';
-				var address = protocol + window.location.host
-						+ window.location.pathname + '/ws';
+				var address = var address = window.location.origin + '/ws';
 				var socket = new WebSocket(address);
 				socket.onmessage = function(msg) {
 					if (msg.data == 'reload')

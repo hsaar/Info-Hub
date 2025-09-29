@@ -46,7 +46,7 @@
 
 <body>
   <!-- 상단바 -->
-<jsp:include page="../include/main_header.jsp"/>
+<jsp:include page="../include/header.jsp"/>
 
 <!-- 네비게이션 -->
   	<div class="news-header">
@@ -78,9 +78,9 @@
 		</h1>
 		
 	
-	
-	<div class='box-body'>
-					<select id="searchType" name="searchType">
+	<div class='search-header'>
+	<div class='search-bar'>
+					<select id="searchType" class="tab" name="searchType">
 						<option value="">검색조건</option>
 
 						<option value="t"
@@ -94,11 +94,12 @@
 						<option value="tc"
 							<c:out value ="${cri.searchType eq 'tc'?'selected':'' }"/>>
 							Title or Content</option>
-					</select> <input class="form-control" type="text" id="keyword"
+					</select> <input class="search-input" type="text" id="keyword"
 						name="keyword" value="${pageMaker.cri.keyword}"
 						placeholder="검색어를 입력하세요" />
-					<button id="searchBtn" class="btn btn-primary">Search</button>
-				</div>	
+					<button id="searchBtn" class="tab">Search</button>
+	</div>
+	</div>	
 
 	<table class="news-item">
   
@@ -187,6 +188,7 @@
      
     <!-- 사이드바 -->
     <aside>
+    
       <div class="sidebar-section">
     
         <h2>많이 본 기사</h2>
@@ -375,6 +377,20 @@
 					window.location.href = url;
 				})
 	}
+	
+	$(function() {
+   		$("#keyword").keypress(function(e){
+   			//검색어 입력 후 엔터키 입력하면 조회버튼 클릭
+   			if(e.keyCode && e.keyCode == 13){
+   				$("#searchBtn").trigger("click");
+   				return false;
+   			}
+   			//엔터키 막기
+   			if(e.keyCode && e.keyCode == 13){
+   				  e.preventDefault();	
+   			}
+   		});
+   	});
 </script> 
 </body>
 </html>
