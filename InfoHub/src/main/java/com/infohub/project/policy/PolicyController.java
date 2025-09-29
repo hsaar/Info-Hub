@@ -25,10 +25,10 @@ public class PolicyController {
 
         try {
             if (policyId != null) {  // 상세 조회
-                model.addAttribute("policyDetail", service.getPolicyDetail(policyId));
+                model.addAttribute("policyDetail", service.findPolicyDetail(policyId));
                 return "policyDetail"; // policyDetail.jsp
             }
-            model.addAttribute("policyList", service.getPolicies(regionId, categoryId, orderBy));  // 목록 조회
+            model.addAttribute("policyList", service.findPolicies(regionId, categoryId, orderBy));  // 목록 조회
             return "policyList"; // policyList.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
@@ -46,13 +46,13 @@ public class PolicyController {
 
         try {
             if ("like".equals(action) && policyId != null) {   // 좋아요
-                service.addLike(policyId);
+                service.increaseLikes(policyId);  // 수정됨
                 model.addAttribute("result", "like_success");
                 return "policyResult"; // policyResult.jsp
             }
 
             // 정책 추가
-            service.addPolicy(dto);
+            service.insertPolicy(dto);  // 수정됨
             model.addAttribute("result", "insert_success");
             return "policyResult"; // policyResult.jsp
 

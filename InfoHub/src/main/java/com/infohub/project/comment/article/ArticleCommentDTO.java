@@ -1,55 +1,46 @@
 package com.infohub.project.comment.article;
 
-import java.time.LocalDateTime;
-
 public class ArticleCommentDTO {
+
     private int commentId;
-    private String comment;
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModified;
     private int loginNo;
-    private int articleId;
+    private String content;
+    private String createdAt;
+    private String updatedAt;
 
-    public ArticleCommentDTO() {}
-
-    public ArticleCommentDTO(int commentId, String comment, LocalDateTime createdDate,
-                             LocalDateTime lastModified, int loginNo, int articleId) {
+    // Getter / Setter
+    public int getCommentId() {
+        return commentId;
+    }
+    public void setCommentId(int commentId) {
         this.commentId = commentId;
-        this.comment = comment;
-        this.createdDate = createdDate;
-        this.lastModified = lastModified;
-        this.loginNo = loginNo;
-        this.articleId = articleId;
     }
 
-    // getter / setter
-    public int getCommentId() { return commentId; }
-    public void setCommentId(int commentId) { this.commentId = commentId; }
+    public int getLoginNo() {
+        return loginNo;
+    }
+    public void setLoginNo(int loginNo) {
+        this.loginNo = loginNo;
+    }
 
-    public String getComment() { return comment; }
-    public void setComment(String comment) { this.comment = comment; }
+    public String getContent() {
+        return content;
+    }
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-    public LocalDateTime getCreatedDate() { return createdDate; }
-    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
+    public String getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
-    public LocalDateTime getLastModified() { return lastModified; }
-    public void setLastModified(LocalDateTime lastModified) { this.lastModified = lastModified; }
-
-    public int getLoginNo() { return loginNo; }
-    public void setLoginNo(int loginNo) { this.loginNo = loginNo; }
-
-    public int getArticleId() { return articleId; }
-    public void setArticleId(int articleId) { this.articleId = articleId; }
-
-    @Override
-    public String toString() {
-        return "ArticleCommentDTO{" +
-                "commentId=" + commentId +
-                ", comment='" + comment + '\'' +
-                ", createdDate=" + createdDate +
-                ", lastModified=" + lastModified +
-                ", loginNo=" + loginNo +
-                ", articleId=" + articleId +
-                '}';
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

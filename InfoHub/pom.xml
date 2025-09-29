@@ -5,8 +5,8 @@
 	<groupId>com.infohub</groupId>
 	<artifactId>project</artifactId>
 	<name>InfoHub</name>
-	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<properties>
 		<java-version>1.11</java-version>
 		<org.springframework-version>5.2.6.RELEASE</org.springframework-version>
@@ -158,29 +158,96 @@
 		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
 		    <artifactId>log4jdbc-log4j2-jdbc4</artifactId>
 		    <version>1.16</version>
+		</dependency>  
+		
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-webflux</artifactId>
+		    <version>5.2.6.RELEASE</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
-      	<dependency>
-        	<groupId>com.googlecode.json-simple</groupId>
-          	<artifactId>json-simple</artifactId>
-          	<version>1.1.1</version>
-      	</dependency>
-
-      	<!-- https://mvnrepository.com/artifact/org.lazyluke/log4jdbc-remix -->
-      	<dependency>
-          	<groupId>org.lazyluke</groupId>
-          	<artifactId>log4jdbc-remix</artifactId>
-          	<version>0.2.7</version>
-      	</dependency>
-      	
-      	<!-- gson -->
-      	<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.10.1</version>
-		</dependency>    
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.17.1</version>
+		</dependency>
+		
+		<!-- Reactor Netty -->
+		<dependency>
+		    <groupId>io.projectreactor.netty</groupId>
+		    <artifactId>reactor-netty-http</artifactId>
+		    <version>1.1.27</version>
+		</dependency>
+		
+		<!-- Reactor Core -->
+		<dependency>
+		    <groupId>io.projectreactor</groupId>
+		    <artifactId>reactor-core</artifactId>
+		    <version>3.4.24</version>
+		</dependency>
+		
+		<!-- Apache Commons Text (StringEscapeUtils) -->
+		<dependency>
+		  <groupId>org.apache.commons</groupId>
+		  <artifactId>commons-text</artifactId>
+		  <version>1.10.0</version>
+		</dependency>
+		
+		<!-- Jsoup (HTML 태그 제거) -->
+		<dependency>
+		  <groupId>org.jsoup</groupId>
+		  <artifactId>jsoup</artifactId>
+		  <version>1.16.1</version>
+		</dependency>
+		
+		<!-- JSON 처리 -->
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20240303</version>
+		</dependency>
 		 
+	     <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+	     <dependency>
+	         <groupId>com.googlecode.json-simple</groupId>
+	         <artifactId>json-simple</artifactId>
+	         <version>1.1.1</version>
+	     </dependency>
+	
+	     <!-- https://mvnrepository.com/artifact/org.lazyluke/log4jdbc-remix -->
+	     <dependency>
+	         <groupId>org.lazyluke</groupId>
+	         <artifactId>log4jdbc-remix</artifactId>
+	         <version>0.2.7</version>
+	     </dependency> 
+	     
+	     <dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.6</version>
+		</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.lazyluke/log4jdbc-remix -->
+      <dependency>
+          <groupId>org.lazyluke</groupId>
+          <artifactId>log4jdbc-remix</artifactId>
+          <version>0.2.7</version>
+      </dependency>  
+       
+	  <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+          <version>2.11.2</version>
+      </dependency>
+             <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+          <version>2.11.2</version>
+      </dependency> 
+
+
+      
 	</dependencies>
     <build>
         <plugins>
