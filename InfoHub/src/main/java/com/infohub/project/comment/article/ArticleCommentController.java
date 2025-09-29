@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/comments")
+@RequestMapping("article/comments")
 public class ArticleCommentController {
 
     private final ArticleCommentService service;
