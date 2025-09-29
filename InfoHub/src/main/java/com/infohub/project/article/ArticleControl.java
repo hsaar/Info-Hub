@@ -41,6 +41,9 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
+		List<ArticleVO> keywordArticle = service.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
+		
 		return "article/articleListAll";
 	}
 	
@@ -58,6 +61,9 @@ public class ArticleControl {
 		
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
+		
+		List<ArticleVO> keywordArticle = service.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
 		
 		return "article/articleListAll1";
 	}
@@ -77,6 +83,9 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
+		List<ArticleVO> keywordArticle = service.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
+		
 		return "article/articleListAll2";
 	}
 	
@@ -94,6 +103,9 @@ public class ArticleControl {
 		
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
+		
+		List<ArticleVO> keywordArticle = service.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
 		
 		return "article/articleListAll3";
 	}
@@ -113,6 +125,9 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
+		List<ArticleVO> keywordArticle = service.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
+		
 		return "article/articleListAll4";
 	}
 	
@@ -131,6 +146,9 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
+		List<ArticleVO> keywordArticle = service.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
+		
 		return "article/articleListAll5";
 	}
 	
@@ -143,6 +161,9 @@ public class ArticleControl {
 		
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
+		
+		List<ArticleVO> keywordArticle = service.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
 		
 		return "article/articleContent";
 	}
@@ -181,6 +202,9 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
+		List<ArticleVO> keywordArticle = service.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
+		
 		return "article/noArticleContent";
 	}
 	
@@ -193,4 +217,6 @@ public class ArticleControl {
 		
 		return "article/articleListAll";
 	}
+	
+	
 }

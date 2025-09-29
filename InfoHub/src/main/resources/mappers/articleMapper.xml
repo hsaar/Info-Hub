@@ -119,4 +119,8 @@
 	SELECT * FROM article order by views desc limit 5
 	</select>
 	
+	<select id="keywordArticle" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT * FROM article order by views desc limit 10
+	</select>
+	
 </mapper>

@@ -28,4 +28,9 @@ public interface ArticleDAO {
 	List<ArticleVO> noArticleContent(int articleId) throws Exception;
 	
 	List<ArticleVO> viewsArticle() throws Exception;
+	
+	
+	List<ArticleVO> keywordArticle() throws Exception;
+	
+	
 }

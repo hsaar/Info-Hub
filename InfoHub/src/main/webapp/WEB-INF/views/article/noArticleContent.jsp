@@ -187,7 +187,7 @@
             <div style="font-size: 12;"> ${article.name}</div>
             <h1 style="font-size: 35; font-weight: bold;">${article.title}</h1>
             <p style="font-size: 12;"> 
-            <a href="https://${article.link}">기사원문보기</a> | ${article.source} | ${article.published}</p>
+            <a href="https://${article.link}">기사원문보기</a> | ${article.source} | ${article.published} | ${article.tags}</p>
             views: ${article.views}
             <div id="heartsCount"></div>
             <p><button class="button gray medium" onclick="clip(); return false;">URL주소복사</button></p>
@@ -242,6 +242,21 @@
           </li>
           </c:forEach>
         </ol>
+      </div>
+      
+       <div class="sidebar-section">
+      <h2>키워드</h2>
+      <c:forEach var="article" items="${keywordArticle}">
+      
+       <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;"> ${article.keyword}</a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=${article.articleId}"> ${article.keyword}</a>
+          </c:if>
+       
+      </c:forEach>
       </div>
 
       <div class="sidebar-section">

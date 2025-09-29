@@ -86,5 +86,13 @@ public class ArticleServiceImpl implements ArticleService{
 		return dao.viewsArticle();
 	}
 
+	@Override
+	public List<ArticleVO> keywordArticle() throws Exception {
+		// TODO Auto-generated method stub
+		
+		
+		return dao.keywordArticle();
+	}
+
 
 }

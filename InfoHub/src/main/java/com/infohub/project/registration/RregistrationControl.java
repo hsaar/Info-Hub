@@ -33,6 +33,9 @@ public class RregistrationControl {
 		
 		List<ArticleVO> viewsArticle = as.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
+		
+		List<ArticleVO> keywordArticle = as.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
 
 		return "article/registrationlistAll";
 	}
@@ -46,6 +49,9 @@ public class RregistrationControl {
 		
 		List<ArticleVO> viewsArticle = as.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
+		
+		List<ArticleVO> keywordArticle = as.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
 
 		return "article/timeline";
 	}
