@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 <link rel="stylesheet" href="<c:url value='/resources/css/map.css' />">
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=94d8864bb37a5cec084e603dd70aa0f9&libraries=services"></script>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=94d8864bb37a5cec084e603dd70aa0f9&libraries=services"></script>
 </head>
 <body>
 
@@ -28,6 +28,16 @@
     <h2 class="page-title">지역별 정책 찾기</h2>
     <p class="eyebrow">지도에서 지역을 선택하면 해당 지역의 정책을 확인할 수 있습니다</p>
     
+    <!-- 카테고리 필터 버튼 -->
+  	<div class="filter-buttons">
+    	<button class="filter-btn active" data-filter="all">종합</button>
+    	<button class="filter-btn" data-filter="real-estate">부동산</button>
+    	<button class="filter-btn" data-filter="stock">주식</button>
+    	<button class="filter-btn" data-filter="savings">적금</button>
+    	<button class="filter-btn" data-filter="welfare">복지</button>
+    	<button class="filter-btn" data-filter="startup">창업</button>
+  	</div>
+    
     <!-- 카카오맵 영역 -->
     <div class="map-area">
       <div id="map" style="width:100%; height:500px;"></div>
@@ -39,23 +49,16 @@
   <!-- 오른쪽: 검색 결과 패널 -->
   <div class="map-right-section">
     <div class="search-result-panel">
-      <h3 class="result-title">검색 결과</h3>
+      <h3 class="result-title">전국</h3>
       
       <!-- 결과 목록 헤더 -->
       <div class="result-list-header">
-        <h4>서울특별시 (10건)</h4>
+        <h4>건</h4>
       </div>
       
       <!-- 결과 목록 -->
       <ul class="result-list">
-        <li class="result-item">청년 주거 지원 사업</li>
-        <li class="result-item">창업 지원금 신청</li>
-        <li class="result-item">취업 성공 패키지</li>
-        <li class="result-item">교육비 지원 프로그램</li>
-        <li class="result-item">문화 활동 바우처</li>
-        <li class="result-item">청년 주거 지원 사업</li>
-        <li class="result-item">창업 지원금 신청</li>
-        <li class="result-item">취업 성공 패키지</li>
+		<!-- 비워두기(JS 클릭 시 li 채움) -->
       </ul>
       
       <!-- 페이지네이션 -->
@@ -66,7 +69,7 @@
       <!-- 안내 텍스트 -->
       <p class="result-help-text">
         지도에서 지역을 선택하시거나<br>
-        검색창에 정책명을 입력하세요
+        에에에에에엥에ㅔ에에에에에엥
       </p>
     </div>
   </div>
@@ -101,18 +104,17 @@ function initMap() {
   var mapOption = { 
     center: new kakao.maps.LatLng(36.6358, 127.4911),
     level: 12,
-    draggable: false,
-    scrollwheel: false,
-    disableDoubleClick: true,
+    draggable: true,           // 드래그 가능
+    scrollwheel: true,          // 마우스 휠 확대/축소 가능
     disableDoubleClickZoom: true
   };
   
   try {
     var map = new kakao.maps.Map(mapContainer, mapOption);
-    map.setZoomable(false);
     
     var customOverlay = new kakao.maps.CustomOverlay({});
     var polygons = [];
+    var currentPolygon = null; // 현재 선택된 폴리곤 추적
 
     // GeoJSON 데이터 로드
     $.getJSON('<c:url value="/resources/data/gson.json" />', function(geojson) {
@@ -152,14 +154,17 @@ function initMap() {
       polygons.push(polygon);
       overlaySet(name, points);
 
-      // 마우스 오버 이벤트
+      // 마우스 오버 이벤트 - 즉시 반응
       kakao.maps.event.addListener(polygon, 'mouseover', function(mouseEvent) {
-        polygon.setOptions({
-          fillColor: '#93c5fd'
-        });
+        if (currentPolygon !== polygon) {
+          polygon.setOptions({
+            fillColor: '#93c5fd',
+            fillOpacity: 0.6
+          });
+        }
         
-        var content = '<div style="padding:10px 15px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">';
-        content += '<div style="font-weight:700; color:#0B50D0;">' + name + '</div>';
+        var content = '<div style="padding:8px 12px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); border:2px solid #0B50D0;">';
+        content += '<div style="font-weight:700; color:#0B50D0; font-size:14px;">' + name + '</div>';
         content += '</div>';
         
         customOverlay.setContent(content);
@@ -167,18 +172,42 @@ function initMap() {
         customOverlay.setMap(map);
       });
 
-      // 마우스 아웃 이벤트
+      // 마우스 아웃 이벤트 - 즉시 반응
       kakao.maps.event.addListener(polygon, 'mouseout', function() {
-        polygon.setOptions({
-          fillColor: '#fff'
-        });
+        if (currentPolygon !== polygon) {
+          polygon.setOptions({
+            fillColor: '#fff',
+            fillOpacity: 0.7
+          });
+        }
         customOverlay.setMap(null);
-        overlaySet(name, points);
       });
    
-      // 클릭 이벤트 (확대 기능 제거)
+      // 클릭 이벤트 - 즉시 반응
       kakao.maps.event.addListener(polygon, 'click', function() {
-        // 검색 결과만 업데이트
+        // 이전 선택 초기화
+        if (currentPolygon) {
+          currentPolygon.setOptions({
+            fillColor: '#fff',
+            fillOpacity: 0.7,
+            strokeWeight: 2
+          });
+        }
+        
+        // 현재 폴리곤 강조
+        polygon.setOptions({
+          fillColor: '#60a5fa',
+          fillOpacity: 0.8,
+          strokeWeight: 3
+        });
+        
+        // 현재 선택된 polygon 저장
+        currentPolygon = polygon;
+        
+        // ✅ 클릭 확인 로그
+        console.log("폴리곤 클릭됨:", name);
+
+        // 검색 결과 즉시 업데이트
         updateSearchResults(name);
       });
     }
@@ -191,7 +220,6 @@ function initMap() {
       for (i = 0, len = points.length, j = len - 1; i < len; j = i++) {
         p1 = points[i];
         p2 = points[j];
-   
         f = p1.y * p2.x - p2.y * p1.x;
         x += (p1.x + p2.x) * f;
         y += (p1.y + p2.y) * f;
@@ -205,17 +233,18 @@ function initMap() {
       var content = '<div style="font-weight:600; font-size:12px; color:#667084;">' + name + '</div>';
       var position = centerMap(points);
 
-      customOverlay = new kakao.maps.CustomOverlay({
+      var overlay = new kakao.maps.CustomOverlay({
         position: position,
         content: content,
         xAnchor: 0.5,
         yAnchor: 0.5
       });
 
-      customOverlay.setMap(map);
+      overlay.setMap(map);
     }
-  } catch (e) {
-	  console.error("지도 초기화 실패:", e);
+
+  } catch(error) {
+    console.error('지도 생성 중 에러:', error);
   }
 }
 
@@ -249,8 +278,72 @@ window.addEventListener('load', function() {
     });
   }
 });
+document.addEventListener('DOMContentLoaded', function() {
+	  var currentFilter = 'all';
+	  
+	  document.querySelectorAll('.filter-btn').forEach(btn => {
+	    btn.addEventListener('click', function() {
+	      // 모든 버튼에서 active 제거
+	      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+	      
+	      // 클릭된 버튼에 active 추가
+	      this.classList.add('active');
+	      
+	      // 현재 필터 업데이트
+	      currentFilter = this.getAttribute('data-filter');
+	      
+	      // 검색 결과 헤더 업데이트
+	      updateFilterDisplay(currentFilter);
+	      
+	      console.log('선택된 카테고리:', currentFilter);
+	    });
+	  });
+	  
+	  function updateFilterDisplay(filter) {
+	    var filterNames = {
+	      'all': '종합',
+	      'real-estate': '부동산',
+	      'stock': '주식',
+	      'savings': '적금',
+	      'welfare': '복지',
+	      'startup': '창업'
+	    };
+	    
+	    var header = document.querySelector('.result-list-header h4');
+	    if (header) {
+	      var currentRegion = header.textContent.split(' ')[0];
+	      header.textContent = currentRegion + ' - ' + filterNames[filter] + ' (10건)';
+	      header.style.transition = 'all 0.3s';
+	      header.style.color = '#0B50D0';
+	      setTimeout(function() {
+	        header.style.color = '';
+	      }, 500);
+	    }
+	  }
+	});
 
-//지역 이름 → regionId 매핑
+/// GeoJSON → DB 이름 변환 매핑
+const regionNameNormalizer = {
+  "서울": "서울특별시",
+  "부산": "부산광역시",
+  "인천": "인천광역시",
+  "대구": "대구광역시",
+  "광주": "광주광역시",
+  "대전": "대전광역시",
+  "울산": "울산광역시",
+  "세종": "세종특별자치시",
+  "경기": "경기도",
+  "강원": "강원도",
+  "충북": "충청북도",
+  "충남": "충청남도",
+  "전북": "전라북도",
+  "전남": "전라남도",
+  "경북": "경상북도",
+  "경남": "경상남도",
+  "제주": "제주특별자치도"
+};
+
+// regionId 매핑 (DB 기준)
 const regionIdMap = {
   "서울특별시": 1,
   "인천광역시": 2,
@@ -268,48 +361,79 @@ const regionIdMap = {
   "전라북도": 14,
   "전라남도": 15,
   "제주특별자치도": 16,
-  "전국": 17
+  "세종특별자치시": 17,
+  "전국": 18
 };
 
-// 지역 클릭 시 정책 불러오기
 function updateSearchResults(regionName) {
-  const regionId = regionIdMap[regionName];
-  if (!regionId) {
-    console.warn("지역 매핑 없음:", regionName);
-    return;
-  }
+	  console.log("updateSearchResults 호출됨:", regionName);
 
-  // 서버 요청 (카테고리/정렬은 우선 제외, regionId만 필터링)
-  fetch(`/project/policy?regionId=${regionId}`)
-    .then(res => res.json())
-    .then(data => {
-      const resultList = document.querySelector(".result-list");
-      const resultHeader = document.querySelector(".result-list-header h4");
-      resultList.innerHTML = "";
+	  const normalized = regionNameNormalizer[regionName] || regionName;
+	  const displayName = normalized;
+	  const regionId = regionIdMap[normalized];
 
-      if (!data || data.length === 0) {
-        resultHeader.textContent = `${regionName} (0건)`;
-        resultList.innerHTML = `<li class="result-item">정책이 없습니다.</li>`;
-        return;
-      }
+	  if (!regionId) {
+	    console.warn("지역 매핑 없음:", regionName, "→", normalized);
+	    return;
+	  }
 
-      resultHeader.textContent = `${regionName} (${data.length}건)`;
+	  fetch("/project/api/policy?regionId=" + regionId)
+	    .then(res => res.json())
+	    .then(list => {
+	      console.log("서버 응답:", list);
 
-      data.forEach(p => {
-        const li = document.createElement("li");
-        li.classList.add("result-item");
-        li.innerHTML = `
-          <strong>${p.title}</strong><br>
-          <span>${p.content}</span><br>
-          <small>좋아요: ${p.likes}</small>
-        `;
-        resultList.appendChild(li);
-      });
-    })
-    .catch(err => {
-      console.error("정책 불러오기 실패:", err);
-    });
-}
+	      const resultList = document.querySelector(".result-list");
+	      const resultTitle = document.querySelector(".result-title");
+	      const resultHeader = document.querySelector(".result-list-header h4"); 
+
+	      if (!resultList || !resultTitle || !resultHeader) {
+	        console.error("결과 DOM 요소 없음");
+	        return;
+	      }
+
+	      resultList.innerHTML = "";
+
+	      if (!Array.isArray(list)) {
+	        console.error("서버 응답이 배열이 아님:", list);
+	        return;
+	      }
+
+	      const count = Number(list.length) || 0;
+
+	      resultTitle.textContent = displayName;
+
+	      resultHeader.textContent = count + "건";
+
+	      console.log("count =", count);
+	      console.log("h4 최종 =", resultHeader.textContent);
+
+	      if (count === 0) {
+	        resultList.innerHTML = `<li class="result-item">정책이 없습니다.</li>`;
+	        return;
+	      }
+
+	      list.forEach(p => {
+	        const li = document.createElement("li");
+	        li.classList.add("result-item");
+
+	        const strong = document.createElement("strong");
+	        strong.textContent = p.title || "(제목 없음)";
+
+	        const span = document.createElement("span");
+	        span.textContent = p.content
+	          ? (p.content.length > 30 ? p.content.substring(0, 30) + "..." : p.content)
+	          : "(내용 없음)";
+
+	        li.appendChild(strong);
+	        li.appendChild(document.createElement("br"));
+	        li.appendChild(span);
+
+	        resultList.appendChild(li);
+	      });
+	    })
+	    .catch(err => console.error("정책 불러오기 실패:", err));
+	}
+
 </script>
 
 </body>

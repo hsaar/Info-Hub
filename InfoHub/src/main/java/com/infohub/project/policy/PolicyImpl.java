@@ -15,7 +15,7 @@ public class PolicyImpl implements PolicyService {
     // 목록 조회 → 지역, 카테고리 조건 적용 + 정렬
     @Override
     public List<PolicyDTO> findPolicies(Integer regionId, Integer categoryId, String orderBy) throws SQLException {
-        return dao.findPolicies(regionId, categoryId, orderBy);
+    	return dao.findPolicies(regionId, categoryId, orderBy);
     }
 
     // 상세 조회 → policyId 단일 정책 불러오기
