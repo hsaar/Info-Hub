@@ -1,0 +1,292 @@
+/* ===== 지도 페이지 전용 스타일 ===== */
+
+/* 지도 페이지 2단 레이아웃 */
+.map-main-container {
+  max-width: var(--max);
+  margin: 40px auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 30px;
+  align-items: start;
+}
+
+/* 왼쪽 지도 섹션 */
+.map-left-section {
+  background: #fff;
+  border: 2px solid var(--mist-200);
+  border-radius: 24px;
+  padding: 40px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  font-family: "Gowun Batang", serif;
+  color: var(--ink);
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 24px 0;
+}
+
+/* 필터 버튼 */
+.filter-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.filter-btn {
+  padding: 10px 24px;
+  background: #fff;
+  border: 2px solid var(--mist-200);
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.filter-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* 지도 영역 */
+.map-area {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+#map {
+  border-radius: 16px;
+}
+
+.map-help-text {
+  color: #6b7280;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 24px;
+}
+
+/* 오른쪽 검색 결과 패널 */
+.map-right-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-result-panel {
+  background: #fff;
+  border: 2px solid var(--mist-200);
+  border-radius: 24px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.result-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  text-align: center;
+  color: var(--ink);
+}
+
+/* 검색창 */
+.result-search-box {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.result-search-input {
+  width: 100%;
+  padding: 10px 35px 10px 15px;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.result-search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(11, 80, 208, 0.1);
+}
+
+.search-icon-small {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 16px;
+}
+
+/* 결과 목록 헤더 */
+.result-list-header {
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--mist-200);
+}
+
+.result-list-header h4 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+/* 결과 목록 */
+.result-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.result-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.result-list::-webkit-scrollbar-track {
+  background: var(--mist-100);
+  border-radius: 3px;
+}
+
+.result-list::-webkit-scrollbar-thumb {
+  background: var(--mist-300);
+  border-radius: 3px;
+}
+
+.result-list::-webkit-scrollbar-thumb:hover {
+  background: var(--mist-400);
+}
+
+.result-item {
+  padding: 10px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.result-item:hover {
+  background: #e5e7eb;
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+/* 페이지네이션 */
+.result-pagination {
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 15px;
+  padding: 10px 0;
+  background: var(--mist-50);
+  border-radius: 8px;
+}
+
+/* 안내 텍스트 */
+.result-help-text {
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
+}
+
+/* Top 버튼 */
+.top-button {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 50px;
+  height: 50px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.top-button.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.top-button:hover {
+  background: #2563eb;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.top-button svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+  .map-main-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .search-result-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-left-section {
+    padding: 24px;
+  }
+  
+  .search-result-panel {
+    padding: 20px;
+  }
+  
+  .filter-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .filter-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
