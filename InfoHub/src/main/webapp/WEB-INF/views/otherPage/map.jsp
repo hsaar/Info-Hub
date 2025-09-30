@@ -28,8 +28,6 @@
     <h2 class="page-title">지역별 정책 찾기</h2>
     <p class="eyebrow">지도에서 지역을 선택하면 해당 지역의 정책을 확인할 수 있습니다</p>
     
-   
-    
     <!-- 카카오맵 영역 -->
     <div class="map-area">
       <div id="map" style="width:100%; height:500px;"></div>
@@ -216,6 +214,10 @@ function initMap() {
 
       customOverlay.setMap(map);
     }
+  } catch (e) {
+	  console.error("지도 초기화 실패:", e);
+  }
+}
 
 // 필터 버튼 기능
 document.addEventListener('DOMContentLoaded', function() {
@@ -308,9 +310,6 @@ function updateSearchResults(regionName) {
       console.error("정책 불러오기 실패:", err);
     });
 }
-
-
-
 </script>
 
 </body>
