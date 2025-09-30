@@ -247,6 +247,70 @@ window.addEventListener('load', function() {
     });
   }
 });
+
+//지역 이름 → regionId 매핑
+const regionIdMap = {
+  "서울특별시": 1,
+  "인천광역시": 2,
+  "대전광역시": 3,
+  "광주광역시": 4,
+  "대구광역시": 5,
+  "울산광역시": 6,
+  "부산광역시": 7,
+  "경기도": 8,
+  "강원도": 9,
+  "충청북도": 10,
+  "충청남도": 11,
+  "경상북도": 12,
+  "경상남도": 13,
+  "전라북도": 14,
+  "전라남도": 15,
+  "제주특별자치도": 16,
+  "전국": 17
+};
+
+// 지역 클릭 시 정책 불러오기
+function updateSearchResults(regionName) {
+  const regionId = regionIdMap[regionName];
+  if (!regionId) {
+    console.warn("지역 매핑 없음:", regionName);
+    return;
+  }
+
+  // 서버 요청 (카테고리/정렬은 우선 제외, regionId만 필터링)
+  fetch(`/project/policy?regionId=${regionId}`)
+    .then(res => res.json())
+    .then(data => {
+      const resultList = document.querySelector(".result-list");
+      const resultHeader = document.querySelector(".result-list-header h4");
+      resultList.innerHTML = "";
+
+      if (!data || data.length === 0) {
+        resultHeader.textContent = `${regionName} (0건)`;
+        resultList.innerHTML = `<li class="result-item">정책이 없습니다.</li>`;
+        return;
+      }
+
+      resultHeader.textContent = `${regionName} (${data.length}건)`;
+
+      data.forEach(p => {
+        const li = document.createElement("li");
+        li.classList.add("result-item");
+        li.innerHTML = `
+          <strong>${p.title}</strong><br>
+          <span>${p.content}</span><br>
+          <small>좋아요: ${p.likes}</small>
+        `;
+        resultList.appendChild(li);
+      });
+    })
+    .catch(err => {
+      console.error("정책 불러오기 실패:", err);
+    });
+}
+
+
+
 </script>
 
 </body>
