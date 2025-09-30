@@ -2,10 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%
-	String userId = request.getParameter("userId");
-	String name = request.getParameter("name");
-%>
+<%@ page session="false"%>
 <html lang="ko">
 
 <head>
@@ -14,7 +11,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"
 	charset="UTF-8">
 <%@ include file="include/plugin.jsp"%>
-
+<%
+	String userId = request.getParameter("userId");
+	String name = request.getParameter("name");
+%>
 <!-- 타이틀용 세리프 + 본문 산세리프 -->
 <link href="/resources/css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,8 +27,8 @@
 </head>
 
 <body>
-	<header class="main-header">
-		  <!-- 상단바 -->
+	<header class="header">
+<!-- 상단바 -->
 <jsp:include page="./include/header.jsp"/>
 	</header>
 
@@ -71,7 +71,6 @@
 						</div>
 					</article>
 					
-					
 				</section>
 
 			</section> <!-- ⬅ left-col 닫기 태그 추가 -->
@@ -85,23 +84,36 @@
 						</h3>
 
 						<ul class="quick-links">
-							<li><a href="my_benifit" class="dot-link"> 
+						
+						<c:if test="${empty userId}">
+							<li><a href="login" class="dot-link"> 
 								<span class="icon" style="mask: url('resources/image/clock.svg')"></span>
-								<span>내 혜택 모아보기</span>
+								<span>내 혜택 모음[로그인필요]</span>
 							</a></li>
+						</c:if>
+						
+						<c:if test="${not empty userId}">
+							<li><a href="myBenifit" class="dot-link"> 
+								<span class="icon" style="mask: url('resources/image/clock.svg')"></span>
+								<span>내 혜택 모음</span>
+							</a></li>
+						</c:if>
 					
 							<li><a href="customized_article" class="dot-link"> 
 								<span class="icon" style="mask: url('resources/image/post.svg')"></span>
 								<span>맞춤형 기사 추천</span>
 							</a></li>
-							<li><a href="my_benifit" class="dot-link"> 
+							<li><a href="mypage_main" class="dot-link"> 
 								<span class="icon" style="mask: url('resources/image/mypage.svg')"></span>
-								<span>나의 정책</span>
+								<span>마이페이지</span>
 							</a></li>
 							<li><a href="timeline" class="dot-link"> 
 								<span class="icon" style="mask: url('resources/image/alarm.svg')"></span>
 								<span>타임라인</span>
 							</a></li>
+							
+							
+							 
 						</ul>
 
 						<c:if test="${empty userId}">
@@ -151,7 +163,7 @@
 				}
 				var protocol = window.location.protocol === 'http:' ? 'ws://'
 						: 'wss://';
-				var address = var address = window.location.origin + '/ws';
+				var address = window.location.origin + '/ws';
 				var socket = new WebSocket(address);
 				socket.onmessage = function(msg) {
 					if (msg.data == 'reload')

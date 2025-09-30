@@ -67,9 +67,22 @@
 
 	<div class="policy-list-container">
   <div class="policy-grid">
+  
     <c:forEach var="registrationlistAll" items="${registrationlistAll}">
+      
       <div class="policy-card">
-        <h3 class="policy-card-title">${registrationlistAll.title}</h3>
+        
+        
+        <c:if test="${empty userId}">
+        <h3 class="policy-card-title">
+        <a href="noRegistrationContent?registrationNo=${registrationlistAll.registrationNo}">${registrationlistAll.title}</a></h3>
+        </c:if>
+        
+        <c:if test="${not empty userId}">
+        <h3 class="policy-card-title">
+        <a href="registrationContent?registrationNo=${registrationlistAll.registrationNo}">${registrationlistAll.title}</a></h3>
+        </c:if>
+        
         <p class="policy-description">${registrationlistAll.content}</p>
         <div class="policy-details">
           <p><strong>신청기간</strong> <br>
@@ -78,7 +91,7 @@
           <p><strong>전화문의:</strong> ${registrationlistAll.call}</p>
           <p><strong>지원형태:</strong> ${registrationlistAll.type}</p>
           <p><strong>신청방법:</strong> 
-            <a href="https:/${registrationlistAll.link}" class="btn-text" target="_blank" title="새창열림">타사이트 이동</a>
+            <a href="https://${registrationlistAll.link}" class="btn-text" target="_blank" title="새창열림">타사이트 이동</a>
           </p>
         </div>
       </div>

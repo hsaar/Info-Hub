@@ -151,11 +151,11 @@
 					success: function(heart){
 						if(heart==0){
 							alert("좋아요완료");
-							  var btn = '🎔'
+							  var btn = '🎔';
 								  $("#heartBtn").html(btn);
 						}else if(heart==1){
 							alert("좋아요취소");
-							 var btn = '♡'
+							 var btn = '♡';
 								  $("#heartBtn").html(btn);
 						}
 						location.reload();
@@ -190,12 +190,12 @@
 		            	
 		            	
 		                 if(result.length < 1){
-		                	 var btn = '♡'
+		                	 var btn = '♡';
 		                	$("#heartBtn").html(btn);
 		                 }
 		                 else if(result.length = 1){
 		                    $(result).each(function(){
-		                    	var btn = '🎔'
+		                    	var btn = '🎔';
 		                 		$("#heartBtn").html(btn);
 		                    });  // each End
 		                 }
@@ -322,7 +322,7 @@
             views: ${article.views}
             <div id="heartsCount"></div>
              
-            <p><button class="button gray medium" onclick="clip(); return false;">URL주소복사</button>
+            <p><button class="button gray medium" onclick="clip(); return false;">URL</button>
             <button type="button" class="btn btn-success" id="heartBtn">♡</button></p>
             <div style="flex:0 0 450px;">
             <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 650px; height: 450px;">

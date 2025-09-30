@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>첫 화면 페이지입니다</title>
+	<title>Home</title>
 </head>
 <body>
 <h1>

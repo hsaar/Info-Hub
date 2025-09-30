@@ -1,6 +1,9 @@
-package com.infohub.project.registration; 
+package com.infohub.project.scraps;
 
-public class RegistrationDTO {
+public class ScrapsVO {
+	
+	private int scrapsNo;
+	private String createdDate;
 	private int loginNo;
 	private int registrationNo;
 	private String title;
@@ -12,23 +15,13 @@ public class RegistrationDTO {
 	private String call;
 	private String type;
 	
-	
-	RegistrationDTO(){}
-	
-	
-	public String getEndDate() {
-		return endDate;
-	}
+	public ScrapsVO(){}
 
-	
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
-
-	
-	public RegistrationDTO(int loginNo, int registrationNo, String title, String content, String link,
-			String startDate, String endDate, String trachea, String call, String type) {
+	public ScrapsVO(int scrapsNo, String createdDate, int loginNo, int registrationNo, String title, String content,
+			String link, String startDate, String endDate, String trachea, String call, String type) {
 		super();
+		this.scrapsNo = scrapsNo;
+		this.createdDate = createdDate;
 		this.loginNo = loginNo;
 		this.registrationNo = registrationNo;
 		this.title = title;
@@ -41,102 +34,119 @@ public class RegistrationDTO {
 		this.type = type;
 	}
 
+	public ScrapsVO(int scrapsNo, String createdDate, int loginNo, int registrationNo) {
+		super();
+		this.scrapsNo = scrapsNo;
+		this.createdDate = createdDate;
+		this.loginNo = loginNo;
+		this.registrationNo = registrationNo;
+	}
 	
+	
+
+	public int getScrapsNo() {
+		return scrapsNo;
+	}
+
+	public void setScrapsNo(int scrapsNo) {
+		this.scrapsNo = scrapsNo;
+	}
+
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
+	}
+
 	public int getLoginNo() {
 		return loginNo;
 	}
-
 
 	public void setLoginNo(int loginNo) {
 		this.loginNo = loginNo;
 	}
 
-
 	public int getRegistrationNo() {
 		return registrationNo;
 	}
-
 
 	public void setRegistrationNo(int registrationNo) {
 		this.registrationNo = registrationNo;
 	}
 
-
 	public String getTitle() {
 		return title;
 	}
-
 
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-
 	public String getContent() {
 		return content;
 	}
-
 
 	public void setContent(String content) {
 		this.content = content;
 	}
 
-
 	public String getLink() {
 		return link;
 	}
-
 
 	public void setLink(String link) {
 		this.link = link;
 	}
 
-
 	public String getStartDate() {
 		return startDate;
 	}
-
 
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
 
 	public String getTrachea() {
 		return trachea;
 	}
 
-
 	public void setTrachea(String trachea) {
 		this.trachea = trachea;
 	}
-
 
 	public String getCall() {
 		return call;
 	}
 
-
 	public void setCall(String call) {
 		this.call = call;
 	}
-
 
 	public String getType() {
 		return type;
 	}
 
-
 	public void setType(String type) {
 		this.type = type;
 	}
 
-
 	@Override
 	public String toString() {
-		return "RegistrationDTO [loginNo=" + loginNo + ", registrationNo=" + registrationNo + ", title="
-				+ title + ", content=" + content + ", link=" + link + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", trachea=" + trachea + ", call=" + call + ", type=" + type + "]";
+		return "ScrapsVO [scrapsNo=" + scrapsNo + ", createdDate=" + createdDate + ", loginNo=" + loginNo
+				+ ", registrationNo=" + registrationNo + ", title=" + title + ", content=" + content + ", link=" + link
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", trachea=" + trachea + ", call=" + call
+				+ ", type=" + type + "]";
 	}
 
+	
 }

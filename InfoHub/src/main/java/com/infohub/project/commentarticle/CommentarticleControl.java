@@ -39,8 +39,6 @@ public class CommentarticleControl {
 	private int mCommentServiceInsert(CommentarticleVO commentarticleVO) throws Exception {
 		System.out.println("insert");
 		
-		
-		
 	    return service.commentarticleInsert(commentarticleVO);
 
 	} // mCommentServiceInsert() end

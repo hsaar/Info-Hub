@@ -50,10 +50,7 @@ public class HomeController {
 		return "index";
 	}
 	
-	@GetMapping("my_benifit")
-	public String my_benifit(Model model) {
-		return "/customized/my_benifit";
-	}
+	
 	
 	@GetMapping("customized_article")
 	public String customized_article(Model model) {

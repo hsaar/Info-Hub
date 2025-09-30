@@ -56,4 +56,48 @@ public class RregistrationControl {
 		return "article/timeline";
 	}
 	
+	
+	@RequestMapping("registrationContent")
+	public String registrationContent(Model model, int registrationNo) throws Exception{
+		logger.info("registrationContent..");
+		
+		List<RegistrationDTO> registrationContent = service.registrationContent(registrationNo);
+		model.addAttribute("registrationContent", registrationContent);
+		
+		List<ArticleVO> viewsArticle = as.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
+		
+		List<ArticleVO> keywordArticle = as.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
+		
+		return "article/registrationContent";
+	}
+	
+	@RequestMapping("noRegistrationContent")
+	public String noRegistrationContent(Model model, int registrationNo) throws Exception{
+		logger.info("noRegistrationContent..");
+		
+		List<RegistrationDTO> noRegistrationContent = service.noRegistrationContent(registrationNo);
+		model.addAttribute("noRegistrationContent", noRegistrationContent);
+		
+		List<ArticleVO> viewsArticle = as.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
+		
+		List<ArticleVO> keywordArticle = as.keywordArticle();
+		model.addAttribute("keywordArticle", keywordArticle);
+		
+		return "article/noRegistrationContent";
+	}
+	
+	@RequestMapping("myBenifit")
+	public String myBenifit(Model model) throws Exception{
+		logger.info("myBenifit..");
+		
+		List<RegistrationDTO> myBenifit = service.myBenifit();
+		model.addAttribute("myBenifit", myBenifit);
+		
+		
+		return "customized/myBenifit";
+	}
+	
 }

@@ -5,6 +5,11 @@ import java.util.List;
 public interface RegistrationService {
 	List<RegistrationDTO> registrationlistAll() throws Exception;
 	List<RegistrationDTO> timelineListAll() throws Exception;
+	
+	List<RegistrationDTO> registrationContent(int registrationNo) throws Exception;
+	List<RegistrationDTO> noRegistrationContent(int registrationNo) throws Exception;
+	
+	List<RegistrationDTO> myBenifit() throws Exception;
 }
 
 

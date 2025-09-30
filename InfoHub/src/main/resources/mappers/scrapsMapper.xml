@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.scrapsMapper">
+	
+	<select id="scrapsCount" resultType="int">
+	select count(*) from scraps
+	where registrationNo = #{registrationNo}
+	</select>
+	
+	<select id="scrapsCheck" resultType="int">
+	select count(*) from scraps
+	where registrationNo = #{registrationNo}
+	and loginNo = #{loginNo}
+	</select>
+	
+	<insert id="scrapsInsert">
+	insert into scraps(createdDate, loginNo, registrationNo) values(now(), #{loginNo}, #{registrationNo})
+	</insert>
+	
+	<delete id="scrapsDelete">
+	delete from scraps
+	where registrationNo = #{registrationNo}
+	and loginNo = #{loginNo}
+	</delete>
+	
+	<select id="myscraps" resultType="com.infohub.project.scraps.ScrapsVO">
+	SELECT r.title, r.content, r.link, r.trachea, r.call, r.type, r.startDate, r.endDate, s.createdDate, s.registrationNo, s.loginNo, s.scrapsNo FROM scraps s join registration r on r.registrationNo = s.registrationNo
+	WHERE s.loginNo = #{loginNo}
+	ORDER BY endDate
+	</select>
+	
+</mapper>

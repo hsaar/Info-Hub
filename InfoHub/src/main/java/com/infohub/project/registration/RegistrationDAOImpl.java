@@ -26,4 +26,22 @@ public class RegistrationDAOImpl implements RegistrationDAO{
 		return sqlSession.selectList(nameSpace + ".timelineListAll");
 	}
 
+	@Override
+	public List<RegistrationDTO> registrationContent(int registrationNo) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(nameSpace + ".registrationContent", registrationNo);
+	}
+
+	@Override
+	public List<RegistrationDTO> noRegistrationContent(int registrationNo) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(nameSpace + ".registrationContent", registrationNo);
+	}
+
+	@Override
+	public List<RegistrationDTO> myBenifit() throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectList(nameSpace + ".myBenifit");
+	}
+
 }
