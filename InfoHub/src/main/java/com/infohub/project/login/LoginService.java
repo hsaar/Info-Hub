@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface LoginService {
 	public List<Object> listAll();
-	public LoginDTO getUserById(int userId);
+	public LoginDTO getUserById(String userId);
 	public LoginDTO getUserByname(String name);
 	public boolean checkuserIdDuplicate(String userId);
 	public boolean checkNameDuplicate(String name);
@@ -12,4 +12,7 @@ public interface LoginService {
 	public int updateUser(LoginDTO dto);
 	public int deleteUser(String userId);
 	public LoginDTO login(LoginRequest req);
+	public String findid(String name, String email, String phone);
+	public int findpassword(String userId, String email, String phone);
+	public int updatepassword(String password, int loginNo);
 }

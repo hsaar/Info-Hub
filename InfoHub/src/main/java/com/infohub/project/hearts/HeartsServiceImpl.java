@@ -17,21 +17,21 @@ public class HeartsServiceImpl implements HeartsService {
 	}
 
 	@Override
-	public int heartsCheck(int article_articleId) throws Exception {
+	public int heartsCheck(HeartsVO heartsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.heartsCheck(article_articleId);
+		return dao.heartsCheck(heartsVO);
 	}
 
 	@Override
-	public int heartsInsert(int article_articleId) throws Exception {
+	public int heartsInsert(HeartsVO heartsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.heartsInsert(article_articleId);
+		return dao.heartsInsert(heartsVO);
 	}
 
 	@Override
-	public int heartsDelete(int article_articleId) throws Exception {
+	public int heartsDelete(HeartsVO heartsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.heartsDelete(article_articleId);
+		return dao.heartsDelete(heartsVO);
 	}
 
 	@Override

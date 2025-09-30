@@ -1,6 +1,12 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
+<%@page import="java.util.Random"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 
 <%
 	String userId = request.getParameter("userId");
@@ -61,17 +67,31 @@
 
 	<div class="policy-list-container">
   <div class="policy-grid">
+  
     <c:forEach var="registrationlistAll" items="${registrationlistAll}">
+      
       <div class="policy-card">
-        <h3 class="policy-card-title">${registrationlistAll.title}</h3>
+        
+        
+        <c:if test="${empty userId}">
+        <h3 class="policy-card-title">
+        <a href="noRegistrationContent?registrationNo=${registrationlistAll.registrationNo}">${registrationlistAll.title}</a></h3>
+        </c:if>
+        
+        <c:if test="${not empty userId}">
+        <h3 class="policy-card-title">
+        <a href="registrationContent?registrationNo=${registrationlistAll.registrationNo}">${registrationlistAll.title}</a></h3>
+        </c:if>
+        
         <p class="policy-description">${registrationlistAll.content}</p>
         <div class="policy-details">
-          <p><strong>신청기간:</strong> ${registrationlistAll.period}</p>
+          <p><strong>신청기간</strong> <br>
+          ${registrationlistAll.startDate} ~ ${registrationlistAll.endDate}</p>
           <p><strong>접수기관:</strong> ${registrationlistAll.trachea}</p>
           <p><strong>전화문의:</strong> ${registrationlistAll.call}</p>
           <p><strong>지원형태:</strong> ${registrationlistAll.type}</p>
           <p><strong>신청방법:</strong> 
-            <a href="https:/${registrationlistAll.link}" class="btn-text" target="_blank" title="새창열림">타사이트 이동</a>
+            <a href="https://${registrationlistAll.link}" class="btn-text" target="_blank" title="새창열림">타사이트 이동</a>
           </p>
         </div>
       </div>
@@ -84,34 +104,74 @@
       <div class="sidebar-section">
         <h2>많이 본 기사</h2>
         <ol class="rank-list">
-          <li>
-            <span class="rank-number">1</span>
-            <a href="#">인더스트리뉴스, 제7회 인터넷신문 대상 수상</a>
+        <c:forEach var="article" items="${viewsArticle}" varStatus="status">
+        <li>
+        <span class="rank-number">${status.index + 1}</span>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;">${article.title}</a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=${article.articleId}">${article.title}</a>
+          </c:if>
           </li>
-          <li>
-            <span class="rank-number">2</span>
-            <a href="#">[오늘의 언론동향] 2025년 9월 5일 금요일</a>
-          </li>
-          <li>
-            <span class="rank-number">3</span>
-            <a href="#">투데이신문, 제8회 청년플러스포럼 'NEW Green Generation: ...'</a>
-          </li>
-          <li>
-            <span class="rank-number">4</span>
-            <a href="#">한국인터넷신문협회, 언론 정부직 손배제 강령 추진에 강력 반대</a>
-          </li>
-          <li>
-            <span class="rank-number">5</span>
-            <a href="#">[신연수 칼럼] 누가 누구를 개혁하는가?</a>
-          </li>
+          </c:forEach>
         </ol>
+      </div>
+      
+      <div class="sidebar-section">
+      <h2>키워드</h2>
+      <c:forEach var="article" items="${keywordArticle}">
+      
+       <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;"> ${article.keyword}</a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=${article.articleId}"> ${article.keyword}</a>
+          </c:if>
+       
+      </c:forEach>
       </div>
 
       <div class="sidebar-section">
+      <%
+      Random random = new Random();
+      
+      Set<Integer> set = new HashSet<>();
+     
+      while(set.size()<2){
+    	  Double d = Math.random()*50+1;
+    	  set.add(d.intValue());
+    	}
+     
+      List<Integer> list = new ArrayList<>(set);
+      
+      int number1 = list.get(0);
+      int number2 = list.get(1);
+      %>
+      
         <h2>포토·영상</h2>
         <div class="photo-grid">
-          <div class="photo-item"></div>
-          <div class="photo-item"></div>
+          <div>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+      	  </div>
+      	 
+         <div>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+      	  </div>
         </div>
       </div>
     </aside>

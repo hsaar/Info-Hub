@@ -74,5 +74,25 @@ public class ArticleServiceImpl implements ArticleService{
 		return dao.getTotalCount(cri);
 	}
 
+	@Override
+	public List<ArticleVO> noArticleContent(int articleId) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.articleContent(articleId);
+	}
+
+	@Override
+	public List<ArticleVO> viewsArticle() throws Exception {
+		// TODO Auto-generated method stub
+		return dao.viewsArticle();
+	}
+
+	@Override
+	public List<ArticleVO> keywordArticle() throws Exception {
+		// TODO Auto-generated method stub
+		
+		
+		return dao.keywordArticle();
+	}
+
 
 }

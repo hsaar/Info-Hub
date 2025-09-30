@@ -1,5 +1,7 @@
 package com.infohub.project.scraps;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -23,23 +25,30 @@ public class ScrapsDAOImpl implements ScrapsDAO {
 
 
 	@Override
-	public int scrapsCheck(int article_articleId) throws Exception {
+	public int scrapsCheck(ScrapsVO scrapsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectOne(nameSpace+".scrapsCheck", article_articleId);
+		return session.selectOne(nameSpace+".scrapsCheck", scrapsVO);
 	}
 
 
 	@Override
-	public int scrapsInsert(int article_articleId) throws Exception {
+	public int scrapsInsert(ScrapsVO scrapsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return session.insert(nameSpace+".scrapsInsert", article_articleId);
+		return session.insert(nameSpace+".scrapsInsert", scrapsVO);
 	}
 
 
 	@Override
-	public int scrapsDelete(int article_articleId) throws Exception {
+	public int scrapsDelete(ScrapsVO scrapsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return session.delete(nameSpace+".scrapsDelete", article_articleId);
+		return session.delete(nameSpace+".scrapsDelete", scrapsVO);
+	}
+
+
+	@Override
+	public List<ScrapsVO> myscraps(int loginNo) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace+".myscraps", loginNo);
 	}
 
 }

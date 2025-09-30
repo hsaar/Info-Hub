@@ -7,5 +7,29 @@
 	<select id="registrationlistAll" resultType="com.infohub.project.registration.RegistrationDTO">
 		select * from registration;
 	</select>
+	
+	<select id="timelineListAll" resultType="com.infohub.project.registration.RegistrationDTO">
+		select * from registration;
+	</select>
+	
+	<select id="registrationContent" resultType="com.infohub.project.registration.RegistrationDTO">
+		select * from registration where registrationNo = #{registrationNo}
+	</select>
+	
+	<select id="noRegistrationContent" resultType="com.infohub.project.registration.RegistrationDTO">
+		select * from registration where registrationNo = #{registrationNo}
+	</select>
+	
+	<select id="myBenifit" resultType="com.infohub.project.registration.RegistrationDTO">
+		select * from registration
+	</select>
+	
 </mapper>
 
+
+	<!-- <select id="count" resultType="int">
+		select count(*) from article_categories
+	</select>
+	-->
+	
+	

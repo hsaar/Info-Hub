@@ -1,5 +1,8 @@
 package com.infohub.project.login;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,10 +47,11 @@ public class LoginController {
 		boolean exists = se.checkNameDuplicate(name);
 		return exists ? "EXISTS" : "OK";
 	}
-	@GetMapping("/passwordCheck")
+	@PostMapping("/passwordCheck")
 	@ResponseBody
-	public String passwordCheck(@RequestParam("password")String password,
-								@RequestParam("passwordConfirm")String passwordConfirm) {
+	public String passwordCheck(@RequestBody Map<String, String> data) {
+		String password = data.get("password");
+		String passwordConfirm = data.get("passwordConfirm");
 		return password.equals(passwordConfirm) ? "MATCH" : "MISMATCH";
 	}
 	
@@ -65,8 +70,11 @@ public class LoginController {
 	}
 
 	@GetMapping("myinfo")
-	public String myinfo(@RequestParam("name")String name ,Model model) {
+	public String myinfo(@RequestParam("name")String name ,Model model, HttpServletRequest request) {
 		model.addAttribute("name", name);
+		HttpSession session = request.getSession();
+		String loginNo = (String) session.getAttribute("loginNo");
+		System.out.println(loginNo);
 		return "./login/myinfo";
 	}
 	@PostMapping("myinfo")
@@ -76,9 +84,11 @@ public class LoginController {
 						@RequestParam("password")String password,
 						@RequestParam("email")String email,
 						@RequestParam("name")String name,
-						@RequestParam("phone")String phone) {
+						@RequestParam("phone")String phone,
+						@RequestParam("gender")String gender,
+						@RequestParam("keywords")String keywords) {
 		
-		int i = se.updateUser(new LoginDTO(userId,password,name,email,phone,null,null,1,1,0));
+		int i = se.updateUser(new LoginDTO(0,userId,password,name,email,phone,null,null,1,1,0,gender,keywords));
 		if( i > 0 ) {
 			logger.info("변경성공");
 			request.getSession().invalidate();
@@ -102,7 +112,8 @@ public class LoginController {
 			request.getSession().invalidate(); //기존 세션 파기
 			
 			HttpSession session = request.getSession(true);
-			session.setAttribute("userId", res.getuserId()); //세션이 없으면 새로운 세션에 유저id값 부여
+			session.setAttribute("userId", res.getUserId()); //세션이 없으면 새로운 세션에 유저id값 부여
+			session.setAttribute("loginNo", res.getLoginNo());
 			
 			return "redirect:/";
 		}else {
@@ -111,49 +122,53 @@ public class LoginController {
 		}
 	}
 	
-	@GetMapping("memberjoin")
-	public String movememberjoin(Model model){
-		return "./login/memberjoin";
+	@GetMapping("/memberjoinSuccess")
+	public String memberjoinSuccess(Model model){
+		return "login/memberjoinSuccess";
 	}
+	
 	@ResponseBody
-	@PostMapping("memberjoin")
-	public String memberjoin(Model model, 
+	@PostMapping("/memberjoin")
+	public String memberjoin(Model model, HttpServletRequest request, 
 							@RequestParam("userId")String userId, 
 							@RequestParam("password")String password,
 							@RequestParam("passwordConfirm")String passwordConfirm,
 							@RequestParam("email")String email,
 							@RequestParam("name")String name,
 							@RequestParam("phone")String phone,
-							@RequestParam("birthyear")int birthyear) {
-		int currentYear = java.time.LocalDate.now().getYear();
-		int age = currentYear - birthyear;
-		boolean nameCheck = false;
-		boolean userIdCheck = false;
-		boolean passwordCheck = false;
+							@RequestParam("age")int age,
+							@RequestParam("gender")String gender,
+							@RequestParam("keywords")String keywords) {
+		
+		//Map<String, String> map = new HashMap<String, String>();
+		//map.put("redirect", request.getContextPath() + "/memberjoinSuccess");
 		
 		if(se.checkNameDuplicate(name)) {
 			logger.info("중복이름");
+			return "FAIL";
 		}
 		
 		if(se.checkuserIdDuplicate(userId)) {
 			logger.info("중복아이디");
+			return "FAIL";
 		}
 			
 		if(!password.equals(passwordConfirm)) {
 			logger.info("패스워드 체크 틀림");
+			return "FAIL";
 		}
 		
-		int i = se.insertUser(new LoginDTO(userId,password,name,email,phone,null,null,1,1,age));
+		int i = se.insertUser(new LoginDTO(0, userId,password,name,email,phone,null,null,1,1,age,gender,keywords));
 		if( i > 0 )
-			logger.info("생성성공");
+			return "OK";
 		
-		return "./login/memberjoin";
+		return "FAIL";
 	}
 	
 	@GetMapping("withdrawal")
 	public String withdrawal(Model medel,@RequestParam("name")String name, HttpServletRequest request) {
 		
-		String userId = se.getUserByname(name).getuserId();
+		String userId = se.getUserByname(name).getUserId();
 		
 		int i = se.deleteUser(userId);
 		
@@ -164,4 +179,21 @@ public class LoginController {
 		
 		return "./login/withdrawal";
 	}
+	
+	@PostMapping("/findid")
+	public String findid(Model model,
+						@RequestParam("name")String name,
+						@RequestParam("email")String email,
+						@RequestParam("phone")String phone){
+		
+		model.addAttribute("foundId", se.findid(name, email, phone));
+		model.addAttribute("result", se.findid(name, email, phone));
+		return "login/idfind";
+	}
+	
+	@PostMapping("/findpassword")
+	public String findpassword(Model model) {
+		return "login/idfind";
+	}
+	
 }

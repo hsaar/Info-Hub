@@ -109,4 +109,18 @@
 	order by published desc limit #{pageStart}, #{perPageNum}
 	</select>
 	
+	
+	<select id="noArticleContent" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT a.*, b.name FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo where articleId = #{articleId} order by published desc;
+	</select>
+	
+	
+	<select id="viewsArticle" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT * FROM article order by views desc limit 5
+	</select>
+	
+	<select id="keywordArticle" resultType = "com.infohub.project.article.ArticleVO">
+	SELECT * FROM article order by views desc limit 10
+	</select>
+	
 </mapper>

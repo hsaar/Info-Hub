@@ -2,27 +2,54 @@ package com.infohub.project.scraps;
 
 public class ScrapsVO {
 	
-	private String scapsNo;
+	private int scrapsNo;
 	private String createdDate;
-	private String login_loginNo;
-	private String article_articleId;
+	private int loginNo;
+	private int registrationNo;
+	private String title;
+	private String content;
+	private String link;
+	private String startDate;
+	private String endDate;
+	private String trachea;
+	private String call;
+	private String type;
 	
-	ScrapsVO(){}
+	public ScrapsVO(){}
 
-	public ScrapsVO(String scapsNo, String createdDate, String login_loginNo, String article_articleId) {
+	public ScrapsVO(int scrapsNo, String createdDate, int loginNo, int registrationNo, String title, String content,
+			String link, String startDate, String endDate, String trachea, String call, String type) {
 		super();
-		this.scapsNo = scapsNo;
+		this.scrapsNo = scrapsNo;
 		this.createdDate = createdDate;
-		this.login_loginNo = login_loginNo;
-		this.article_articleId = article_articleId;
+		this.loginNo = loginNo;
+		this.registrationNo = registrationNo;
+		this.title = title;
+		this.content = content;
+		this.link = link;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.trachea = trachea;
+		this.call = call;
+		this.type = type;
 	}
 
-	public String getScapsNo() {
-		return scapsNo;
+	public ScrapsVO(int scrapsNo, String createdDate, int loginNo, int registrationNo) {
+		super();
+		this.scrapsNo = scrapsNo;
+		this.createdDate = createdDate;
+		this.loginNo = loginNo;
+		this.registrationNo = registrationNo;
+	}
+	
+	
+
+	public int getScrapsNo() {
+		return scrapsNo;
 	}
 
-	public void setScapsNo(String scapsNo) {
-		this.scapsNo = scapsNo;
+	public void setScrapsNo(int scrapsNo) {
+		this.scrapsNo = scrapsNo;
 	}
 
 	public String getCreatedDate() {
@@ -33,26 +60,92 @@ public class ScrapsVO {
 		this.createdDate = createdDate;
 	}
 
-	public String getLogin_loginNo() {
-		return login_loginNo;
+	public int getLoginNo() {
+		return loginNo;
 	}
 
-	public void setLogin_loginNo(String login_loginNo) {
-		this.login_loginNo = login_loginNo;
+	public void setLoginNo(int loginNo) {
+		this.loginNo = loginNo;
 	}
 
-	public String getArticle_articleId() {
-		return article_articleId;
+	public int getRegistrationNo() {
+		return registrationNo;
 	}
 
-	public void setArticle_articleId(String article_articleId) {
-		this.article_articleId = article_articleId;
+	public void setRegistrationNo(int registrationNo) {
+		this.registrationNo = registrationNo;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getTrachea() {
+		return trachea;
+	}
+
+	public void setTrachea(String trachea) {
+		this.trachea = trachea;
+	}
+
+	public String getCall() {
+		return call;
+	}
+
+	public void setCall(String call) {
+		this.call = call;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override
 	public String toString() {
-		return "ScrapsVO [scapsNo=" + scapsNo + ", createdDate=" + createdDate + ", login_loginNo=" + login_loginNo
-				+ ", article_articleId=" + article_articleId + "]";
+		return "ScrapsVO [scrapsNo=" + scrapsNo + ", createdDate=" + createdDate + ", loginNo=" + loginNo
+				+ ", registrationNo=" + registrationNo + ", title=" + title + ", content=" + content + ", link=" + link
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", trachea=" + trachea + ", call=" + call
+				+ ", type=" + type + "]";
 	}
 
 	

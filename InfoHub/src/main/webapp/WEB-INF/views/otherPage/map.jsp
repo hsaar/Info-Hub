@@ -1,343 +1,298 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<!doctype html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>지역별 정책/혜택 지도</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Gowun+Batang:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="main.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지역별 정책 찾기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+<link rel="stylesheet" href="<c:url value='/resources/css/map.css' />">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=94d8864bb37a5cec084e603dd70aa0f9&libraries=services"></script>
 </head>
 <body>
-  <!-- 상단바 -->
-		<%@ include file="../include/header.jsp"%>
- 
-<!-- 탭 -->
-<div class="tabs">
-  <button class="tab active">맞춤정책</button>
-    <button class="tab" data-type="benefit"> <a href="registrationlistAll">모아보기</a></button>
-</div>
-  <!-- 지도 컨테이너 -->
-  <section class="map-main-container">
-    <!-- 왼쪽 섹션: 지도 및 필터 -->
-    <div class="map-left-section">
-      <!-- 카테고리 필터 버튼 -->
-      <div class="filter-buttons" id="catGroup" aria-label="카테고리 선택" role="group">
-        <button class="filter-btn" data-cat="finance">금융</button>
-        <button class="filter-btn" data-cat="realestate">부동산</button>
-        <button class="filter-btn" data-cat="job">취업</button>
-        <button class="filter-btn" data-cat="welfare">복지</button>
-        <button class="filter-btn" data-cat="edu">교육</button>
-      </div>
 
-      <div class="map-area" id="mapArea">
-        <!-- SVG 지도가 여기에 동적으로 삽입됩니다 -->
-        <div id="koreaMapMount" class="korea-map" aria-label="대한민국 지도"></div>
+<!-- 여기에 상단바 include -->
+<%@ include file="../include/header.jsp" %> 
 
-        <!-- 지역 정보 표시 패널 -->
-        <div class="region-info" id="regionInfo" style="display: none;">
-          <div class="region-label">
-            <div class="region-dot"></div>
-            <span class="region-name" id="regionName">지역명</span>
-          </div>
-        </div>
-
-        <!-- 전체지역 버튼 -->
-        <button type="button" class="filter-btn" style="position:absolute;left:10px;bottom:10px" id="nationwide">
-          전체지역
-        </button>
-      </div>
-
-      <p class="map-help-text">지역을 클릭하여 선택하고, 카테고리를 선택하여 정책/혜택을 필터링할 수 있습니다. 마우스를 올리면 지역명이 표시됩니다.</p>
-    </div>
-
-    <!-- 오른쪽 섹션: 검색 결과 -->
-    <div class="map-right-section">
-      <div class="search-result-panel">
-        <h3 class="result-title">선택된 지역</h3>
-        
-        <div class="selected-regions" id="selectedRegions">
-          <p class="result-help-text">지역을 선택해주세요</p>
-        </div>
-
-        <div class="result-search-box">
-          <input type="text" class="result-search-input" placeholder="정책/혜택 검색..." id="searchInput">
-          <span class="search-icon-small">🔍</span>
-        </div>
-
-        <div class="result-list-header">
-          <h4>검색 결과</h4>
-        </div>
-
-        <ul class="result-list" id="resultList">
-          <li class="result-item">지역과 카테고리를 선택하면 관련 정책/혜택이 표시됩니다.</li>
-        </ul>
-
-        <div class="result-pagination" id="resultPagination">
-          총 0개 결과
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- regions.js 스크립트 포함 -->
-  <script src="regions.js"></script>
-
-  <script>
-    // ---- 전역 변수 ----
-    let hoveredRegion = null;
-    const selectedRegions = new Set();
-    const selectedCats = new Set();
+<!-- 메인 컨테이너 -->
+<div class="map-main-container">
+  <!-- 왼쪽: 지도 영역 -->
+  <div class="map-left-section">
+    <h2 class="page-title">지역별 정책 찾기</h2>
+    <p class="eyebrow">지도에서 지역을 선택하면 해당 지역의 정책을 확인할 수 있습니다</p>
     
-    // DOM 요소 참조
-    const MOUNT = document.getElementById('koreaMapMount');
-    const regionInfo = document.getElementById('regionInfo');
-    const regionName = document.getElementById('regionName');
-    const selectedRegionsDisplay = document.getElementById('selectedRegions');
-    const resultList = document.getElementById('resultList');
-    const resultPagination = document.getElementById('resultPagination');
+   
+    
+    <!-- 카카오맵 영역 -->
+    <div class="map-area">
+      <div id="map" style="width:100%; height:500px;"></div>
+    </div>
+    
+    <p class="map-help-text">지도를 클릭하여 지역별 정책과 혜택을 확인하세요</p>
+  </div>
 
-    // ---- 1) 카테고리 멀티 선택 ----
-    document.getElementById('catGroup').addEventListener('click', (e) => {
-      const btn = e.target.closest('.filter-btn');
-      if (!btn || !btn.dataset.cat) return;
+  <!-- 오른쪽: 검색 결과 패널 -->
+  <div class="map-right-section">
+    <div class="search-result-panel">
+      <h3 class="result-title">검색 결과</h3>
       
-      const key = btn.dataset.cat;
-      btn.classList.toggle('active');
+      <!-- 검색창 -->
+      <div class="result-search-box">
+        <input type="text" class="result-search-input" placeholder="정책명 검색">
+        <span class="search-icon-small">🔍</span>
+      </div>
       
-      if (btn.classList.contains('active')) {
-        selectedCats.add(key);
-      } else {
-        selectedCats.delete(key);
-      }
+      <!-- 결과 목록 헤더 -->
+      <div class="result-list-header">
+        <h4>서울특별시 (10건)</h4>
+      </div>
       
-      updateResults();
+      <!-- 결과 목록 -->
+      <ul class="result-list">
+        <li class="result-item">청년 주거 지원 사업</li>
+        <li class="result-item">창업 지원금 신청</li>
+        <li class="result-item">취업 성공 패키지</li>
+        <li class="result-item">교육비 지원 프로그램</li>
+        <li class="result-item">문화 활동 바우처</li>
+        <li class="result-item">청년 주거 지원 사업</li>
+        <li class="result-item">창업 지원금 신청</li>
+        <li class="result-item">취업 성공 패키지</li>
+      </ul>
+      
+      <!-- 페이지네이션 -->
+      <div class="result-pagination">
+        1 / 3 페이지
+      </div>
+      
+      <!-- 안내 텍스트 -->
+      <p class="result-help-text">
+        지도에서 지역을 선택하시거나<br>
+        검색창에 정책명을 입력하세요
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Top 버튼 -->
+<button class="top-button" id="topButton" aria-label="맨 위로 이동">
+  <svg viewBox="0 0 24 24">
+    <path d="M12 4l-8 8h6v8h4v-8h6z"/>
+  </svg>
+</button>
+
+<script>
+// 카카오맵 API 로딩 대기
+window.addEventListener('load', function() {
+  if (typeof kakao === 'undefined') {
+    console.error('카카오맵 API 로드 실패');
+    return;
+  }
+  
+  initMap();
+});
+
+function initMap() {
+  var mapContainer = document.getElementById('map');
+  
+  if (!mapContainer) {
+    console.error('map 엘리먼트를 찾을 수 없습니다');
+    return;
+  }
+  
+  var mapOption = { 
+    center: new kakao.maps.LatLng(36.6358, 127.4911),
+    level: 12,
+    draggable: true,           // 드래그 가능
+    scrollwheel: true,          // 마우스 휠 확대/축소 가능
+    disableDoubleClickZoom: true
+  };
+  
+  try {
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    
+    var customOverlay = new kakao.maps.CustomOverlay({});
+    var polygons = [];
+    var currentPolygon = null; // 현재 선택된 폴리곤 추적
+
+    // GeoJSON 데이터 로드
+    $.getJSON('<c:url value="/resources/data/gson.json" />', function(geojson) {
+      var data = geojson.features;
+      
+      $.each(data, function(index, val) {
+        var coordinates = val.geometry.coordinates;
+        var name = val.properties.CTP_KOR_NM;
+        displayMap(coordinates, name);
+      });
     });
 
-    // ---- 2) SVG 지도 로드 및 인터랙션 설정 ----
-    function loadMap() {
-      // 실제 환경에서는 외부 SVG 파일을 로드
-      // fetch('assets/korea-map.svg')
+    // 지도에 폴리곤 표시
+    function displayMap(coordinates, name) {
+      var path = [];            
+      var points = []; 
       
-      // 개발용: 임시 SVG 생성
-      const svgContent = createTempSVG();
-      MOUNT.innerHTML = svgContent;
-      
-      setupMapInteractions();
-    }
-
-    // 임시 SVG 생성 (실제로는 korea-map.svg 파일에서 로드)
-    function createTempSVG() {
-      if (typeof window.regions === 'undefined') {
-        return '<p style="color:#dc2626">regions.js 파일을 로드할 수 없습니다.</p>';
-      }
-      
-      let paths = '';
-      window.regions.forEach(region => {
-        // 실제 path 데이터 대신 임시 직사각형 생성
-        const x = Math.random() * 600 + 50;
-        const y = Math.random() * 400 + 50;
-        paths += `<rect id="${region.id}" x="${x}" y="${y}" width="80" height="60" rx="5" data-region="${region.id}" class="region" />`;
+      $.each(coordinates[0], function(index, coordinate) {        
+        var point = {};
+        point.x = coordinate[1];
+        point.y = coordinate[0];
+        points.push(point);
+        path.push(new kakao.maps.LatLng(coordinate[1], coordinate[0]));
       });
       
-      return `<svg class="korea-map" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
-    }
-
-    // 지도 인터랙션 설정
-    function setupMapInteractions() {
-      const regions = MOUNT.querySelectorAll('[data-region]');
-      
-      regions.forEach(region => {
-        const regionId = region.dataset.region;
-        const regionData = window.getRegionById(regionId);
-        
-        if (!regionData) return;
-        
-        // 접근성 속성 설정
-        region.setAttribute('tabindex', '0');
-        region.setAttribute('role', 'button');
-        region.setAttribute('aria-label', `${regionData.koreanName} 선택`);
-        
-        // 마우스 이벤트
-        region.addEventListener('mouseenter', (e) => handleMouseEnter(e, regionId));
-        region.addEventListener('mouseleave', handleMouseLeave);
-        region.addEventListener('click', () => handleRegionClick(regionId));
-        
-        // 키보드 이벤트
-        region.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleRegionClick(regionId);
-          }
-        });
+      // 다각형 생성
+      var polygon = new kakao.maps.Polygon({
+        map: map,
+        path: path,
+        strokeWeight: 2,
+        strokeColor: '#0B50D0',
+        strokeOpacity: 0.8,
+        fillColor: '#fff',
+        fillOpacity: 0.7
       });
-    }
+      
+      polygons.push(polygon);
+      overlaySet(name, points);
 
-    // ---- 3) 이벤트 핸들러 ----
-    function handleMouseEnter(event, regionId) {
-      hoveredRegion = regionId;
-      const regionData = window.getRegionById(regionId);
-      
-      if (regionData) {
-        // 지역 정보 패널 표시
-        regionName.textContent = regionData.koreanName;
-        regionInfo.style.display = 'flex';
-        
-        // hover 스타일 적용
-        event.target.classList.add('hovered');
-      }
-    }
-
-    function handleMouseLeave(event) {
-      hoveredRegion = null;
-      regionInfo.style.display = 'none';
-      event.target.classList.remove('hovered');
-    }
-
-    function handleRegionClick(regionId) {
-      const regionData = window.getRegionById(regionId);
-      if (!regionData) return;
-      
-      const regionElement = MOUNT.querySelector(`[data-region="${regionId}"]`);
-      if (!regionElement) return;
-      
-      // 선택 상태 토글
-      const isSelected = selectedRegions.has(regionId);
-      
-      if (isSelected) {
-        selectedRegions.delete(regionId);
-        regionElement.classList.remove('selected');
-        regionElement.setAttribute('aria-label', `${regionData.koreanName} 선택`);
-      } else {
-        selectedRegions.add(regionId);
-        regionElement.classList.add('selected');
-        regionElement.setAttribute('aria-label', `${regionData.koreanName} 선택 해제`);
-      }
-      
-      updateSelectedRegionsDisplay();
-      updateResults();
-    }
-
-    // ---- 4) UI 업데이트 함수 ----
-    function updateSelectedRegionsDisplay() {
-      if (selectedRegions.size === 0) {
-        selectedRegionsDisplay.innerHTML = '<p class="result-help-text">지역을 선택해주세요</p>';
-        return;
-      }
-      
-      const regionTags = Array.from(selectedRegions).map(regionId => {
-        const regionData = window.getRegionById(regionId);
-        return regionData ? 
-          `<span class="region-tag">${regionData.koreanName} <button class="region-remove" data-region="${regionId}">×</button></span>` : 
-          '';
-      }).join('');
-      
-      selectedRegionsDisplay.innerHTML = regionTags;
-      
-      // 지역 제거 버튼 이벤트 설정
-      selectedRegionsDisplay.querySelectorAll('.region-remove').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const regionId = btn.dataset.region;
-          handleRegionClick(regionId); // 동일한 로직 재사용
-        });
-      });
-    }
-
-    function updateResults() {
-      const selectedRegionsList = Array.from(selectedRegions);
-      const selectedCatsList = Array.from(selectedCats);
-      
-      // 실제로는 서버에서 데이터를 가져와야 함
-      const mockResults = generateMockResults(selectedRegionsList, selectedCatsList);
-      
-      if (mockResults.length === 0) {
-        resultList.innerHTML = '<li class="result-item">선택한 조건에 맞는 정책/혜택이 없습니다.</li>';
-        resultPagination.textContent = '총 0개 결과';
-      } else {
-        resultList.innerHTML = mockResults.map(result => 
-          `<li class="result-item">${result}</li>`
-        ).join('');
-        resultPagination.textContent = `총 ${mockResults.length}개 결과`;
-      }
-    }
-
-    function generateMockResults(regions, cats) {
-      if (regions.length === 0 && cats.length === 0) {
-        return [];
-      }
-      
-      const results = [];
-      
-      if (regions.length > 0) {
-        regions.forEach(regionId => {
-          const regionData = window.getRegionById(regionId);
-          if (regionData) {
-            results.push(`${regionData.koreanName} 청년 주택 지원`);
-            results.push(`${regionData.koreanName} 창업 지원 프로그램`);
-          }
-        });
-      }
-      
-      if (cats.length > 0) {
-        cats.forEach(cat => {
-          const catNames = {
-            finance: '금융', realestate: '부동산', job: '취업', 
-            welfare: '복지', edu: '교육'
-          };
-          results.push(`${catNames[cat]} 관련 정책 1`);
-          results.push(`${catNames[cat]} 관련 혜택 2`);
-        });
-      }
-      
-      return results.slice(0, 10); // 최대 10개만 표시
-    }
-
-    // ---- 5) 전체지역 해제 ----
-    document.getElementById('nationwide').addEventListener('click', () => {
-      // 모든 선택된 지역 해제
-      MOUNT.querySelectorAll('.region.selected').forEach(el => {
-        el.classList.remove('selected');
-        const regionId = el.dataset.region;
-        const regionData = window.getRegionById(regionId);
-        if (regionData) {
-          el.setAttribute('aria-label', `${regionData.koreanName} 선택`);
+      // 마우스 오버 이벤트 - 즉시 반응
+      kakao.maps.event.addListener(polygon, 'mouseover', function(mouseEvent) {
+        if (currentPolygon !== polygon) {
+          polygon.setOptions({
+            fillColor: '#93c5fd',
+            fillOpacity: 0.6
+          });
         }
+        
+        var content = '<div style="padding:8px 12px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); border:2px solid #0B50D0;">';
+        content += '<div style="font-weight:700; color:#0B50D0; font-size:14px;">' + name + '</div>';
+        content += '</div>';
+        
+        customOverlay.setContent(content);
+        customOverlay.setPosition(mouseEvent.latLng);
+        customOverlay.setMap(map);
       });
-      selectedRegions.clear();
-      updateSelectedRegionsDisplay();
-      updateResults();
-    });
 
-    // ---- 6) 검색 기능 ----
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
-      if (query.length < 2) return;
-      
-      // 실제로는 서버에서 검색을 수행해야 함
-      console.log('검색어:', query);
-      // 검색 로직 구현...
-    });
-
-    // ---- 7) 초기화 ----
-    document.addEventListener('DOMContentLoaded', () => {
-      loadMap();
-    });
-
-    // ---- 8) 파라미터 빌드 함수 (서버 통신용) ----
-    function buildSearchParams() {
-      return {
-        regions: Array.from(selectedRegions),
-        categories: Array.from(selectedCats),
-        query: document.getElementById('searchInput').value.trim()
-      };
+      // 마우스 아웃 이벤트 - 즉시 반응
+      kakao.maps.event.addListener(polygon, 'mouseout', function() {
+        if (currentPolygon !== polygon) {
+          polygon.setOptions({
+            fillColor: '#fff',
+            fillOpacity: 0.7
+          });
+        }
+        customOverlay.setMap(null);
+      });
+   
+      // 클릭 이벤트 - 즉시 반응
+      kakao.maps.event.addListener(polygon, 'click', function() {
+        // 이전 선택 초기화
+        if (currentPolygon) {
+          currentPolygon.setOptions({
+            fillColor: '#fff',
+            fillOpacity: 0.7,
+            strokeWeight: 2
+          });
+        }
+        
+        // 현재 폴리곤 강조
+        polygon.setOptions({
+          fillColor: '#60a5fa',
+          fillOpacity: 0.8,
+          strokeWeight: 3
+        });
+        
+        currentPolygon = polygon;
+        
+        // 검색 결과 즉시 업데이트
+        updateSearchResults(name);
+      });
     }
 
-    // 사용 예시:
-    // fetch('/api/search', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(buildSearchParams())
-    // });
-  </script>
+    // 폴리곤 중심 좌표 계산
+    function centerMap(points) {
+      var i, j, len, p1, p2, f, area, x, y;
+      area = x = y = 0;
+   
+      for (i = 0, len = points.length, j = len - 1; i < len; j = i++) {
+        p1 = points[i];
+        p2 = points[j];
+        f = p1.y * p2.x - p2.y * p1.x;
+        x += (p1.x + p2.x) * f;
+        y += (p1.y + p2.y) * f;
+        area += f * 3;
+      }
+      return new kakao.maps.LatLng(x / area, y / area);
+    }
+
+    // 오버레이 설정
+    function overlaySet(name, points) {
+      var content = '<div style="font-weight:600; font-size:12px; color:#667084;">' + name + '</div>';
+      var position = centerMap(points);
+
+      var overlay = new kakao.maps.CustomOverlay({
+        position: position,
+        content: content,
+        xAnchor: 0.5,
+        yAnchor: 0.5
+      });
+
+      overlay.setMap(map);
+    }
+
+    // 검색 결과 업데이트 함수
+    function updateSearchResults(regionName) {
+      var header = document.querySelector('.result-list-header h4');
+      if (header) {
+        header.textContent = regionName + ' (10건)';
+        header.style.transition = 'color 0.2s';
+        header.style.color = '#0B50D0';
+        setTimeout(function() {
+          header.style.color = '';
+        }, 500);
+      }
+    }
+    
+  } catch(error) {
+    console.error('지도 생성 중 에러:', error);
+  }
+}
+
+// 필터 버튼 기능
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+});
+
+// Top 버튼 기능
+window.addEventListener('load', function() {
+  const topButton = document.getElementById('topButton');
+  if (topButton) {
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 300) {
+        topButton.classList.add('show');
+      } else {
+        topButton.classList.remove('show');
+      }
+    });
+
+    topButton.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
+});
+</script>
+
 </body>
 </html>

@@ -18,7 +18,7 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public LoginDTO getUserById(int userId) {
+	public LoginDTO getUserById(String userId) {
 		// TODO Auto-generated method stub
 		return dao.getUserById(userId);
 	}
@@ -63,6 +63,24 @@ public class LoginServiceImpl implements LoginService{
 	public LoginDTO login(LoginRequest req) {
 		// TODO Auto-generated method stub
 		return dao.login(req);
+	}
+
+	@Override
+	public String findid(String name, String email, String phone) {
+		// TODO Auto-generated method stub
+		return dao.findid(name, email, phone);
+	}
+
+	@Override
+	public int findpassword(String userId, String email, String phone) {
+		// TODO Auto-generated method stub
+		return dao.findpassword(userId, email, phone);
+	}
+
+	@Override
+	public int updatepassword(String password, int loginNo) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

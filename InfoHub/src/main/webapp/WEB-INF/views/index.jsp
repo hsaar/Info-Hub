@@ -2,7 +2,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%
+	String userId = request.getParameter("userId");
+	String name = request.getParameter("name");
+%>
 <html lang="ko">
 
 <head>
@@ -13,7 +16,7 @@
 <%@ include file="include/plugin.jsp"%>
 
 <!-- 타이틀용 세리프 + 본문 산세리프 -->
-<link href="./index_files/css2" rel="stylesheet">
+<link href="/resources/css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
@@ -24,8 +27,9 @@
 </head>
 
 <body>
-	<header class="header">
-		<%@ include file="include/header.jsp"%>
+	<header class="main-header">
+		  <!-- 상단바 -->
+<jsp:include page="./include/header.jsp"/>
 	</header>
 
 	<!-- 메인 히어로(양분) -->
@@ -67,6 +71,7 @@
 						</div>
 					</article>
 					
+					
 				</section>
 
 			</section> <!-- ⬅ left-col 닫기 태그 추가 -->
@@ -78,31 +83,60 @@
 							style="font-size: 24px; text-align: center;">
 							<strong>로그인하고</strong> 여러 서비스를 <br>편리하게 이용하세요.
 						</h3>
-
+						
 						<ul class="quick-links">
-							<li><a href="my_benifit" class="dot-link"> 
-								<span class="icon" style="mask: url('clock.svg')"></span>
+						
+							<!-- 세션 없을때 -->
+							<c:if test="${empty userId}">
+							<li><a href="login" class="dot-link"> 
+								<span class="icon" style="mask: url('resources/image/clock.svg')"></span>
 								<span>내 혜택 모아보기</span>
 							</a></li>
 					
-							<li><a href="customized_article" class="dot-link"> 
-								<span class="icon" style="mask: url('post.svg')"></span>
+							<li><a href="login" class="dot-link"> 
+								<span class="icon" style="mask: url('resources/image/post.svg')"></span>
 								<span>맞춤형 기사 추천</span>
 							</a></li>
-							<li><a href="my_benifit" class="dot-link"> 
-								<span class="icon" style="mask: url('mypage.svg')"></span>
-								<span>나의 정책</span>
+							<li><a href="login" class="dot-link"> 
+								<span class="icon" style="mask: url('resources/image/mypage.svg')"></span>
+								<span>마이페이지</span>
 							</a></li>
 							<li><a href="timeline" class="dot-link"> 
-								<span class="icon" style="mask: url('alarm.svg')"></span>
+								<span class="icon" style="mask: url('resources/image/alarm.svg')"></span>
 								<span>타임라인</span>
 							</a></li>
+							</c:if>
 							
+							<!-- 세션 있을때 -->
+							<c:if test="${not empty userId}">
+							<li><a href="myBenifit" class="dot-link"> 
+								<span class="icon" style="mask: url('resources/image/clock.svg')"></span>
+								<span>내 혜택 모아보기</span>
+							</a></li>
+					
+							<li><a href="myArticle" class="dot-link"> 
+								<span class="icon" style="mask: url('resources/image/post.svg')"></span>
+								<span>맞춤형 기사 추천</span>
+							</a></li>
+							<li><a href="mypage_main" class="dot-link"> 
+								<span class="icon" style="mask: url('resources/image/mypage.svg')"></span>
+								<span>마이페이지</span>
+							</a></li>
+							<li><a href="timeline" class="dot-link"> 
+								<span class="icon" style="mask: url('resources/image/alarm.svg')"></span>
+								<span>타임라인</span>
+							</a></li>
+							</c:if>
 							
-							 
 						</ul>
 
+						<c:if test="${empty userId}">
 						<a class="login-btn" href="login">로그인</a>
+						</c:if>
+						
+						<c:if test="${not empty userId}">
+						<a class="logout-btn"  href="<c:url value="logout"/>">로그아웃</a>
+						</c:if>
 					</div>
 				</article>
 			</aside>
@@ -143,8 +177,7 @@
 				}
 				var protocol = window.location.protocol === 'http:' ? 'ws://'
 						: 'wss://';
-				var address = protocol + window.location.host
-						+ window.location.pathname + '/ws';
+				var address = var address = window.location.origin + '/ws';
 				var socket = new WebSocket(address);
 				socket.onmessage = function(msg) {
 					if (msg.data == 'reload')

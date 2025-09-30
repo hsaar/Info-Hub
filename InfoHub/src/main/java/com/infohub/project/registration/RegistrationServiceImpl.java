@@ -18,5 +18,33 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return dao.registrationlistAll();
 	}
 
+
+	@Override
+	public List<RegistrationDTO> timelineListAll() throws Exception {
+		// TODO Auto-generated method stub
+		return dao.timelineListAll();
+	}
+
+
+	@Override
+	public List<RegistrationDTO> registrationContent(int registrationNo) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.registrationContent(registrationNo);
+	}
+
+
+	@Override
+	public List<RegistrationDTO> noRegistrationContent(int registrationNo) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.registrationContent(registrationNo);
+	}
+
+
+	@Override
+	public List<RegistrationDTO> myBenifit() throws Exception {
+		// TODO Auto-generated method stub
+		return dao.myBenifit();
+	}
+
 }
 

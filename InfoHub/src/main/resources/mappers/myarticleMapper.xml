@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.myarticleMapper">
+	<select id="mylistAll" resultType="com.infohub.project.myarticle.MyarticleDTO">
+		select a.tags, a.image, a.title, a.link, a.source , b.name
+		from article as a
+		join articlecategories as b 
+		on a.articlecategories_categoriesNo = b.categoriesNo
+		where a.tags like concat('%',#{tags},'%')
+	</select>
+	
+	<select id="mycount" resultType="int">
+		select count(*) from article where tags like concat('%',#{tags},'%')
+	</select>
+	
+	
+</mapper>

@@ -43,26 +43,20 @@ public class HomeController {
 		
 		return "index";
 	}
-	
 
-	@GetMapping("timeline")
-	public String timeline(Model model) {
-		return "timeline";
-	}
-
-	@GetMapping("my_benifit")
+	@GetMapping("myBenifit")
 	public String my_benifit(Model model) {
-		return "/customized/my_benifit";
+		return "/customized/myBenifit";
 	}
 	
-	@GetMapping("customized_article")
-	public String customized_article(Model model) {
-		return "/customized/customized_article";
+	@GetMapping("boardlistmain")
+	public String boardlistmain(Model model) {
+		return "/board/boardlistmain";
 	}
 	
-	@GetMapping("board_main")
-	public String board_main(Model model) {
-		return "/board/board_main";
+	@GetMapping("boardlist")
+	public String boardlist(Model model) {
+		return "/board/boardlist";
 	}
 	
 	@GetMapping("policy")

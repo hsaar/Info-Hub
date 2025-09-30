@@ -14,7 +14,7 @@
       <li><a href="articleListAll">정책기사</a></li>
       <li><a href="registrationlistAll">혜택</a></li>
       <li><a href="timeline">타임라인</a></li>
-      <li><a href="board_main">게시판</a></li>
+      <li><a href="boardlistmain">게시판</a></li>
        <c:if test="${empty userId}">
                <li style="padding-top: 7px; color: white">[비회원]</li>
                <li class="nav-item"><a class="nav-link"
@@ -25,7 +25,7 @@
                <li class="nav-item"><a class="nav-link"
                   href="<c:url value="logout"/>">로그아웃 </a></li>
                <li class="nav-item"><a class="nav-link"
-                  href="<c:url value="myinfo?name=${userId}"/>">회원 수정</a></li>
+                  href="<c:url value="mypage_main"/>">마이페이지</a></li>
             </c:if>
          
     </ul>

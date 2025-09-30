@@ -13,7 +13,6 @@ public class ArticleDAOImpl implements ArticleDAO{
 	
 	@Autowired
 	SqlSession session;
-	//private static final String nameSpace = "com.infohub.project.infoHubMapper";
 
 	private final static String nameSpace = "com.infohub.project.articleMapper";
 	
@@ -96,6 +95,24 @@ public class ArticleDAOImpl implements ArticleDAO{
 	public int getTotalCount(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
 		return session.selectOne(nameSpace + ".gettotalcount", cri);
+	}
+
+	@Override
+	public List<ArticleVO> noArticleContent(int articleId) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".articleContent", articleId);
+	}
+
+	@Override
+	public List<ArticleVO> viewsArticle() throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".viewsArticle");
+	}
+
+	@Override
+	public List<ArticleVO> keywordArticle() throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".keywordArticle");
 	}
 
 }

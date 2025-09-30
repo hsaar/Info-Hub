@@ -24,23 +24,23 @@ public class HeartsDAOImpl implements HeartsDAO {
 
 
 	@Override
-	public int heartsCheck(int article_articleId) throws Exception {
+	public int heartsCheck(HeartsVO heartsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectOne(nameSpace+".heartsCheck", article_articleId);
+		return session.selectOne(nameSpace+".heartsCheck", heartsVO);
 	}
 
 
 	@Override
-	public int heartsInsert(int article_articleId) throws Exception {
+	public int heartsInsert(HeartsVO heartsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return session.insert(nameSpace+".heartsInsert", article_articleId);
+		return session.insert(nameSpace+".heartsInsert", heartsVO);
 	}
 
 
 	@Override
-	public int heartsDelete(int article_articleId) throws Exception {
+	public int heartsDelete(HeartsVO heartsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return session.delete(nameSpace+".heartsDelete", article_articleId);
+		return session.delete(nameSpace+".heartsDelete", heartsVO);
 	}
 
 

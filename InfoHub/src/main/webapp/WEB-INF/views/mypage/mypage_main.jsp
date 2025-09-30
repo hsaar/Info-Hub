@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -31,7 +31,7 @@
           <span class="menu-text">나의 정보</span>
         </a>
         <a href="#" class="menu-item" data-page="my-policy">
-          <span class="menu-text">스크랩 정책</span>
+          <span class="menu-text">스크랩 혜택</span>
         </a>
         <a href="#" class="menu-item" data-page="likes">
           <span class="menu-text">스크랩 기사</span>
@@ -42,7 +42,7 @@
         <a href="#" class="menu-item" data-page="board">
           <span class="menu-text">게시판</span>
         </a>
-
+        
       </nav>
 
     
@@ -59,7 +59,7 @@
       <!-- 나의 정책 페이지 -->
       <div id="my-policy-content" class="content-box" style="display: none;">
           <%@ include file="my_scrap.jsp"%>
-        <p>스크랩한 정책 목록이 표시됩니다.</p>
+        <p>스크랩한 혜택 목록이 표시됩니다.</p>
       </div>
 
       <!-- 타임라인 페이지 -->
@@ -84,7 +84,8 @@
           <div class="list-item">내가 작성한 댓글 3</div>
         </div>
       </div>
-
+	
+ 
       <!-- 좋아요 페이지 -->
       <div id="likes-content" class="content-box" style="display: none;">
          <%@ include file="my_scrap.jsp"%>
@@ -94,13 +95,14 @@
       <!-- 알림 관리 페이지 -->
       <div id="alarm-content" class="content-box" style="display: none;">
         <h2 class="content-title">알림 관리</h2>
-        <p>알림 설정한 정책 목록이 표시됩니다.</p>
+        <p>알림 설정한 혜택 목록이 표시됩니다.</p>
       </div>
-
+    
+   
       <!-- 기본 안내 메시지 -->
       <div id="default-content" class="content-box">
         <div class="welcome-message">
-          <h2>마이페이지에 오신 것을 환영합니다</h2>
+          <h2>마이페이지에 오신 것을 <br>환영합니다</h2>
           <p>좌측 메뉴에서 원하는 항목을 선택해 주세요.</p>
         </div>
       </div>

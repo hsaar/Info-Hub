@@ -1,42 +1,54 @@
 package com.infohub.project.registration; 
 
 public class RegistrationDTO {
-	private int login_loginNo;
+	private int loginNo;
 	private int registrationNo;
 	private String title;
 	private String content;
 	private String link;
-	private String period;
+	private String startDate;
+	private String endDate;
 	private String trachea;
 	private String call;
 	private String type;
 	
 	
 	RegistrationDTO(){}
+	
+	
+	public String getEndDate() {
+		return endDate;
+	}
 
+	
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
 
-	public RegistrationDTO(int login_loginNo, int registrationNo, String title, String content, String link,
-			String period, String trachea, String call, String type) {
+	
+	public RegistrationDTO(int loginNo, int registrationNo, String title, String content, String link,
+			String startDate, String endDate, String trachea, String call, String type) {
 		super();
-		this.login_loginNo = login_loginNo;
+		this.loginNo = loginNo;
 		this.registrationNo = registrationNo;
 		this.title = title;
 		this.content = content;
 		this.link = link;
-		this.period = period;
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.trachea = trachea;
 		this.call = call;
 		this.type = type;
 	}
 
-
-	public int getLogin_loginNo() {
-		return login_loginNo;
+	
+	public int getLoginNo() {
+		return loginNo;
 	}
 
 
-	public void setLogin_loginNo(int login_loginNo) {
-		this.login_loginNo = login_loginNo;
+	public void setLoginNo(int loginNo) {
+		this.loginNo = loginNo;
 	}
 
 
@@ -80,13 +92,13 @@ public class RegistrationDTO {
 	}
 
 
-	public String getPeriod() {
-		return period;
+	public String getStartDate() {
+		return startDate;
 	}
 
 
-	public void setPeriod(String period) {
-		this.period = period;
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
 	}
 
 
@@ -122,10 +134,9 @@ public class RegistrationDTO {
 
 	@Override
 	public String toString() {
-		return "RegistrationDTO [login_loginNo=" + login_loginNo + ", registrationNo=" + registrationNo + ", title="
-				+ title + ", content=" + content + ", link=" + link + ", period=" + period + ", trachea=" + trachea
-				+ ", call=" + call + ", type=" + type + "]";
+		return "RegistrationDTO [loginNo=" + loginNo + ", registrationNo=" + registrationNo + ", title="
+				+ title + ", content=" + content + ", link=" + link + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", trachea=" + trachea + ", call=" + call + ", type=" + type + "]";
 	}
 
-	
 }

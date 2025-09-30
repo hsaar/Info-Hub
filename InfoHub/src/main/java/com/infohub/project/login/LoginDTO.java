@@ -12,32 +12,27 @@ public class LoginDTO {
 	private int status; // 0 - 탈퇴 / 1 - 가입
 	private int role; // 0 - 게스트 / 1 - 회원 / 2 - 관리자
 	private int age;
+	private String gender;
+	private String keywords;
 	
 	public LoginDTO() {}
 	
-	public LoginDTO(String userId, String password, String name, String email, String phone, int age) {
+	public LoginDTO(int loginNo, String userId, String password, String name, String email, String phone,
+			String createdDate, String lastLogin, int status, int role, int age, String gender, String keywords) {
 		super();
+		this.loginNo = loginNo;
 		this.userId = userId;
 		this.password = password;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
-		this.age = age;
-	}
-
-	public LoginDTO(String userId, String password, String name, String email, String phone, String created_date,
-			String last_login, int status, int role, int age) {
-		super();
-		this.userId = userId;
-		this.password = password;
-		this.name = name;
-		this.email = email;
-		this.phone = phone;
-		this.createdDate = created_date;
-		this.lastLogin = last_login;
+		this.createdDate = createdDate;
+		this.lastLogin = lastLogin;
 		this.status = status;
 		this.role = role;
 		this.age = age;
+		this.gender = gender;
+		this.keywords = keywords;
 	}
 
 	public int getLoginNo() {
@@ -48,11 +43,11 @@ public class LoginDTO {
 		this.loginNo = loginNo;
 	}
 
-	public String getuserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setuserId(String userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
@@ -100,7 +95,7 @@ public class LoginDTO {
 		return lastLogin;
 	}
 
-	public void setLast_login(String lastLogin) {
+	public void setLastLogin(String lastLogin) {
 		this.lastLogin = lastLogin;
 	}
 
@@ -128,11 +123,28 @@ public class LoginDTO {
 		this.age = age;
 	}
 
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+
 	@Override
 	public String toString() {
-
-		return "LoginDTO [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email
-				+ ", phone=" + phone + ", createdDate=" + createdDate + ", lastLogin=" + lastLogin + ", status="
-				+ status + ", role=" + role + ", age=" + age + "]";
+		return "LoginDTO [loginNo=" + loginNo + ", userId=" + userId + ", password=" + password + ", name=" + name
+				+ ", email=" + email + ", phone=" + phone + ", createdDate=" + createdDate + ", lastLogin=" + lastLogin
+				+ ", status=" + status + ", role=" + role + ", age=" + age + ", gender=" + gender + ", keywords="
+				+ keywords + "]";
 	}
+	
 }

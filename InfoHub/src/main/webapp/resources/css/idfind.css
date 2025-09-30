@@ -1,0 +1,879 @@
+/* 아이디/비밀번호 찾기 페이지 전용 스타일 */
+
+/* 메인 컨테이너 */
+.idfind-container {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  width: 1000px;
+  max-width: 100%;
+  min-height: 600px;
+  border: 1px solid rgba(201, 225, 249, 0.2);
+  display: flex;
+}
+
+/* 폼 컨테이너 */
+.form-container {
+  flex: 1;
+  position: relative;
+  transition: all 0.6s ease-in-out;
+}
+
+.find-id-container {
+  z-index: 2;
+}
+
+.find-password-container {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.idfind-container.show-password .find-password-container {
+  left: 0;
+  z-index: 2;
+}
+
+.idfind-container.show-password .find-id-container {
+  transform: translateX(-100%);
+  z-index: 1;
+}
+
+/* 폼 영역 */
+.idfind-form-section {
+  padding: 40px 60px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
+}
+
+/* 뒤로가기 버튼 */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.back-btn:hover {
+  color: #374151;
+  transform: translateX(-4px);
+}
+
+.back-btn i {
+  font-size: 16px;
+}
+
+/* 제목 */
+.idfind-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 10px;
+  font-family: "Gowun Batang", serif;
+}
+
+.form-subtitle {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* 폼 스타일 */
+.idfind-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+}
+
+.form-label {
+  display: block;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: none;
+  background: linear-gradient(145deg, #f5f5f5 0%, #ffffff 50%, #f8fafc 100%);
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.form-input:focus {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
+  box-shadow: 0 0 0 3px rgba(201, 225, 249, 0.3);
+  border-color: #C9E1F9;
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* 찾기 버튼 */
+.idfind-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #C9E1F9 0%, #A3D1F5 25%, #7CC0F0 50%, #A3D1F5 75%, #C9E1F9 100%);
+  color: #1f2937;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.idfind-btn:hover {
+  background: linear-gradient(135deg, #A3D1F5 0%, #7CC0F0 25%, #5BB5EB 50%, #7CC0F0 75%, #A3D1F5 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 192, 240, 0.3);
+}
+
+.idfind-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 탭 컨테이너 */
+.tab-container {
+  width: 350px;
+  background: linear-gradient(180deg, #C9E1F9 0%, #A3D1F5 50%, #9BCBF0 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-sidebar {
+  padding: 40px 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: #1f2937;
+}
+
+.tab-header {
+  margin-bottom: 40px;
+}
+
+.tab-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  font-family: "Gowun Batang", serif;
+}
+
+.tab-header p {
+  font-size: 14px;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* 탭 버튼들 */
+.tab-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  backdrop-filter: blur(10px);
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+}
+
+.tab-btn.active {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #ffffff;
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+.tab-btn i {
+  font-size: 24px;
+  width: 30px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.tab-btn.active i {
+  opacity: 1;
+  color: #1f2937;
+}
+
+.tab-text {
+  flex: 1;
+}
+
+.tab-text strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #1f2937;
+}
+
+.tab-text span {
+  font-size: 12px;
+  opacity: 0.7;
+  color: #374151;
+}
+
+/* 도움말 섹션 */
+.help-section {
+  margin-top: auto;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.help-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+}
+
+.help-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.help-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+
+.help-list i {
+  width: 16px;
+  text-align: center;
+}
+
+/* 결과 콘텐츠 */
+.result-content {
+  background: #f0f9ff;
+  border: 1px solid #C9E1F9;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.found-id {
+  font-size: 18px;
+  color: #1f2937;
+}
+
+.found-id strong {
+  color: #0369a1;
+  font-size: 20px;
+  font-family: "Courier New", monospace;
+  background: #e0f2fe;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.reset-info {
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.reset-info strong {
+  color: #0369a1;
+}
+
+.small-text {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 8px;
+  display: block;
+}
+
+/* 에러 도움말 */
+.error-help {
+  background: #fef7f0;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.error-help p {
+  margin: 0 0 10px 0;
+  color: #9a3412;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.error-help ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #7c2d12;
+}
+
+.error-help li {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .idfind-container {
+    width: 100%;
+    max-width: 400px;
+    flex-direction: column;
+    min-height: 700px;
+  }
+  
+  .form-container {
+    flex: none;
+    height: 60%;
+  }
+  
+  .find-password-container {
+    position: relative;
+    left: 0;
+    height: 60%;
+  }
+  
+  .idfind-container.show-password .find-id-container {
+    display: none;
+  }
+  
+  .idfind-container.show-password .find-password-container {
+    display: block;
+  }
+  
+  .tab-container {
+    width: 100%;
+    height: 40%;
+  }
+  
+  .tab-buttons {
+    flex-direction: row;
+    gap: 12px;
+  }
+  
+  .tab-btn {
+    flex: 1;
+    padding: 15px;
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .tab-text strong {
+    font-size: 14px;
+  }
+  
+  .tab-text span {
+    font-size: 11px;
+  }
+  
+  .idfind-form-section {
+    padding: 20px;
+  }
+  
+  .tab-sidebar {
+    padding: 20px;
+  }
+  
+  .idfind-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 20px 10px;
+  }
+  
+  .idfind-form {
+    max-width: 100%;
+  }
+  
+  .tab-btn {
+    padding: 12px;
+  }
+  
+  .tab-btn i {
+    font-size: 20px;
+  }
+}/* 아이디/비밀번호 찾기 페이지 전용 스타일 */
+
+/* 메인 컨테이너 */
+.forgot-container {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  width: 1000px;
+  max-width: 100%;
+  min-height: 600px;
+  border: 1px solid rgba(201, 225, 249, 0.2);
+  display: flex;
+}
+
+/* 폼 컨테이너 */
+.form-container {
+  flex: 1;
+  position: relative;
+  transition: all 0.6s ease-in-out;
+}
+
+.find-id-container {
+  z-index: 2;
+}
+
+.find-password-container {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.forgot-container.show-password .find-password-container {
+  left: 0;
+  z-index: 2;
+}
+
+.forgot-container.show-password .find-id-container {
+  transform: translateX(-100%);
+  z-index: 1;
+}
+
+/* 폼 영역 */
+.forgot-form-section {
+  padding: 40px 60px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
+}
+
+/* 뒤로가기 버튼 */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.back-btn:hover {
+  color: #374151;
+  transform: translateX(-4px);
+}
+
+.back-btn i {
+  font-size: 16px;
+}
+
+/* 제목 */
+.forgot-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 10px;
+  font-family: "Gowun Batang", serif;
+}
+
+.form-subtitle {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* 폼 스타일 */
+.forgot-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+}
+
+.form-label {
+  display: block;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: none;
+  background: linear-gradient(145deg, #f5f5f5 0%, #ffffff 50%, #f8fafc 100%);
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.form-input:focus {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
+  box-shadow: 0 0 0 3px rgba(201, 225, 249, 0.3);
+  border-color: #C9E1F9;
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* 찾기 버튼 */
+.forgot-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #C9E1F9 0%, #A3D1F5 25%, #7CC0F0 50%, #A3D1F5 75%, #C9E1F9 100%);
+  color: #1f2937;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.forgot-btn:hover {
+  background: linear-gradient(135deg, #A3D1F5 0%, #7CC0F0 25%, #5BB5EB 50%, #7CC0F0 75%, #A3D1F5 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 192, 240, 0.3);
+}
+
+.forgot-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 탭 컨테이너 */
+.tab-container {
+  width: 350px;
+  background: linear-gradient(180deg, #C9E1F9 0%, #A3D1F5 50%, #9BCBF0 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-sidebar {
+  padding: 40px 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: #1f2937;
+}
+
+.tab-header {
+  margin-bottom: 40px;
+}
+
+.tab-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  font-family: "Gowun Batang", serif;
+}
+
+.tab-header p {
+  font-size: 14px;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* 탭 버튼들 */
+.tab-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  backdrop-filter: blur(10px);
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+}
+
+.tab-btn.active {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #ffffff;
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+.tab-btn i {
+  font-size: 24px;
+  width: 30px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.tab-btn.active i {
+  opacity: 1;
+  color: #1f2937;
+}
+
+.tab-text {
+  flex: 1;
+}
+
+.tab-text strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #1f2937;
+}
+
+.tab-text span {
+  font-size: 12px;
+  opacity: 0.7;
+  color: #374151;
+}
+
+/* 도움말 섹션 */
+.help-section {
+  margin-top: auto;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.help-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+}
+
+.help-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.help-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+
+.help-list i {
+  width: 16px;
+  text-align: center;
+}
+
+/* 결과 콘텐츠 */
+.result-content {
+  background: #f0f9ff;
+  border: 1px solid #C9E1F9;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.found-id {
+  font-size: 18px;
+  color: #1f2937;
+}
+
+.found-id strong {
+  color: #0369a1;
+  font-size: 20px;
+  font-family: "Courier New", monospace;
+  background: #e0f2fe;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.reset-info {
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.reset-info strong {
+  color: #0369a1;
+}
+
+.small-text {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 8px;
+  display: block;
+}
+
+/* 에러 도움말 */
+.error-help {
+  background: #fef7f0;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.error-help p {
+  margin: 0 0 10px 0;
+  color: #9a3412;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.error-help ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #7c2d12;
+}
+
+.error-help li {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .forgot-container {
+    width: 100%;
+    max-width: 400px;
+    flex-direction: column;
+    min-height: 700px;
+  }
+  
+  .form-container {
+    flex: none;
+    height: 60%;
+  }
+  
+  .find-password-container {
+    position: relative;
+    left: 0;
+    height: 60%;
+  }
+  
+  .forgot-container.show-password .find-id-container {
+    display: none;
+  }
+  
+  .forgot-container.show-password .find-password-container {
+    display: block;
+  }
+  
+  .tab-container {
+    width: 100%;
+    height: 40%;
+  }
+  
+  .tab-buttons {
+    flex-direction: row;
+    gap: 12px;
+  }
+  
+  .tab-btn {
+    flex: 1;
+    padding: 15px;
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .tab-text strong {
+    font-size: 14px;
+  }
+  
+  .tab-text span {
+    font-size: 11px;
+  }
+  
+  .forgot-form-section {
+    padding: 20px;
+  }
+  
+  .tab-sidebar {
+    padding: 20px;
+  }
+  
+  .forgot-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 20px 10px;
+  }
+  
+  .forgot-form {
+    max-width: 100%;
+  }
+  
+  .tab-btn {
+    padding: 12px;
+  }
+  
+  .tab-btn i {
+    font-size: 20px;
+  }
+}
