@@ -13,47 +13,49 @@ public class PolicyDAO {
     @Autowired
     private DataSource dataSource;   // root-context.xml
 
-    // 목록 조회 → 지역, 카테고리 조건 적용 + 정렬
-    public List<PolicyDTO> findPolicies(Integer regionId, Integer categoryId, String orderBy) throws SQLException {
-        List<PolicyDTO> results = new ArrayList<>();
-        StringBuilder sql = new StringBuilder(
-            "SELECT policyId, title, content, regionId, categoryId, createdAt, likes " +
-            "FROM policy WHERE 1=1"
-        );
+// 목록 조회 → 지역, 카테고리 조건 적용 + 정렬
+// PolicyDAO.java - findPolicies 부분 수정
+public List<PolicyDTO> findPolicies(Integer regionId, Integer categoryId, String orderBy) throws SQLException {
+     List<PolicyDTO> results = new ArrayList<>();
+     StringBuilder sql = new StringBuilder(
+         "SELECT policyId, title, content, regionId, categoryId, createdAt, likes " +
+         "FROM policy WHERE 1=1"
+     );
 
-        if (regionId != null) sql.append(" AND regionId = ?");
-        if (categoryId != null) sql.append(" AND categoryId = ?");
+     if (regionId != null) sql.append(" AND regionId = ?");
+     if (categoryId != null) sql.append(" AND categoryId = ?");
 
-        // 정렬 조건
-        if ("likes".equalsIgnoreCase(orderBy)) {
-            sql.append(" ORDER BY likes DESC");   // 인기순
-        } else {
-            sql.append(" ORDER BY createdAt DESC"); // 최신순
-        }
+     // 정렬 조건
+     if ("popular".equalsIgnoreCase(orderBy)) {
+         sql.append(" ORDER BY likes DESC");   // 인기순 (좋아요 기준)
+     } else {
+         sql.append(" ORDER BY createdAt DESC"); // 최신순 (기본값)
+     }
 
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+     try (Connection conn = dataSource.getConnection();
+          PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
-            int idx = 1;
-            if (regionId != null) pstmt.setInt(idx++, regionId);
-            if (categoryId != null) pstmt.setInt(idx++, categoryId);
+         int idx = 1;
+         if (regionId != null) pstmt.setInt(idx++, regionId);
+         if (categoryId != null) pstmt.setInt(idx++, categoryId);
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    PolicyDTO dto = new PolicyDTO();
-                    dto.setPolicyId(rs.getInt("policyId"));
-                    dto.setTitle(rs.getString("title"));
-                    dto.setContent(rs.getString("content"));
-                    dto.setRegionId(rs.getInt("regionId"));
-                    dto.setCategoryId(rs.getInt("categoryId"));
-                    dto.setCreatedAt(rs.getString("createdAt"));
-                    dto.setLikes(rs.getInt("likes"));
-                    results.add(dto);
-                }
-            }
-        }
-        return results;
-    }
+         try (ResultSet rs = pstmt.executeQuery()) {
+             while (rs.next()) {
+                 PolicyDTO dto = new PolicyDTO();
+                 dto.setPolicyId(rs.getInt("policyId"));
+                 dto.setTitle(rs.getString("title"));
+                 dto.setContent(rs.getString("content"));
+                 dto.setRegionId(rs.getInt("regionId"));
+                 dto.setCategoryId(rs.getInt("categoryId"));
+                 dto.setCreatedAt(rs.getString("createdAt"));
+                 dto.setLikes(rs.getInt("likes"));
+                 results.add(dto);
+             }
+         }
+     }
+     return results;
+ }
+
 
     // 상세 조회 → policyId 단일 정책 불러오기
     public PolicyDTO findPolicyDetail(int policyId) throws SQLException {

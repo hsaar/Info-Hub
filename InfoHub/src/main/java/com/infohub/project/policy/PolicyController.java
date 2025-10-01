@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 
 @Controller 
-@RequestMapping("/policy")
+@RequestMapping("/policy/view")
 public class PolicyController {
 
     @Autowired

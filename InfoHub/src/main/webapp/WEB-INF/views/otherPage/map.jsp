@@ -42,6 +42,19 @@
     <div class="map-area">
       <div id="map" style="width:100%; height:500px;"></div>
     </div>
+
+    <!-- 전국 버튼 -->
+    <div class="map-controls">
+      <button class="reset-map-btn" id="resetMapBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+          <path d="M21 3v5h-5"/>
+          <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+          <path d="M3 21v-5h5"/>
+        </svg>
+        전국
+      </button>
+    </div>
     
     <p class="map-help-text">지도를 클릭하여 지역별 정책과 혜택을 확인하세요</p>
   </div>
@@ -54,6 +67,20 @@
       <!-- 결과 목록 헤더 -->
       <div class="result-list-header">
         <h4>종합 0건</h4>
+
+        <!-- 정렬 드롭다운 -->
+        <div class="sort-dropdown">
+          <button class="sort-btn" id="sortDropdownBtn">
+            <span id="currentSort">최신순</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="sort-menu" id="sortMenu">
+            <button class="sort-option" data-sort="latest">최신순</button>
+            <button class="sort-option" data-sort="popular">인기순</button>
+          </div>
+        </div>
       </div>
       
       <!-- 결과 목록 -->
@@ -67,8 +94,7 @@
       
       <!-- 안내 텍스트 -->
       <p class="result-help-text">
-        지도에서 지역을 선택하시거나<br>
-        에에에에에엥에ㅔ에에에에에엥
+        지도에서 지역을 선택해주세요.<br>
       </p>
     </div>
   </div>
@@ -80,6 +106,7 @@
     <path d="M12 4l-8 8h6v8h4v-8h6z"/>
   </svg>
 </button>
+
 
 <c:set var="prevIcon" value="${pageContext.request.contextPath}/resources/image/prev.png"/>
 <c:set var="nextIcon" value="${pageContext.request.contextPath}/resources/image/next.png"/>
@@ -377,18 +404,23 @@ const categoryMap = {
 //전역 상태
 let currentRegion = null;
 let currentCategory = categoryMap["all"]; // 기본값 = 종합
+let currentSortType = "latest"; // 기본 정렬 = 최신순
 
-function updateSearchResults(regionName) {
-  console.log("updateSearchResults 호출됨:", regionName);
+function updateSearchResults(regionName, sortType = currentSortType) {
+  console.log("updateSearchResults 호출됨:", regionName, sortType);
 
-  // 지역 갱신
   if (regionName) {
     currentRegion = regionName;
   }
 
   const normalized = currentRegion ? (regionNameNormalizer[currentRegion] || currentRegion) : null;
   const displayName = normalized || "전국";
-  const regionId = normalized ? regionIdMap[normalized] : null;
+
+  // ✅ 전국일 경우 regionId는 null 처리
+  let regionId = null;
+  if (displayName !== "전국") {
+    regionId = normalized ? regionIdMap[normalized] : null;
+  }
 
   // 요청 URL 만들기
   let url = "/project/api/policy?";
@@ -396,53 +428,53 @@ function updateSearchResults(regionName) {
   if (currentCategory && currentCategory.id) {
     url += (regionId ? "&" : "") + "categoryId=" + currentCategory.id;
   }
+  if (sortType) {
+    url += (url.endsWith("?") ? "" : "&") + "orderBy=" + sortType;
+  }
 
   console.log("요청 URL:", url);
 
   fetch(url)
-  .then(res => res.json())
-  .then(list => {
-    const resultList = document.querySelector(".result-list");
-    const resultTitle = document.querySelector(".result-title");
-    const resultHeader = document.querySelector(".result-list-header h4");
+    .then(res => res.json())
+    .then(list => {
+      const resultList = document.querySelector(".result-list");
+      const resultTitle = document.querySelector(".result-title");
+      const resultHeader = document.querySelector(".result-list-header h4");
 
-    if (!resultList || !resultTitle || !resultHeader) {
-      console.error("결과 DOM 요소 없음");
-      return;
-    }
+      if (!resultList || !resultTitle || !resultHeader) {
+        console.error("결과 DOM 요소 없음");
+        return;
+      }
 
-    // resultList.innerHTML = "";
+      if (!Array.isArray(list)) {
+        console.error("서버 응답이 배열이 아님:", list);
+        return;
+      }
 
-    if (!Array.isArray(list)) {
-      console.error("서버 응답이 배열이 아님:", list);
-      return;
-    }
+      const count = list.length;
 
-    const count = list.length;
+      // 지역명
+      resultTitle.textContent = displayName;
 
-    // 지역명
-    resultTitle.textContent = displayName;
+      // 카테고리명 + 건수
+      const categoryName = currentCategory && currentCategory.name ? currentCategory.name : "종합";
+      resultHeader.textContent = categoryName + " " + count + "건";
 
-    // 카테고리명 + 건수
-    const categoryName = currentCategory && currentCategory.name ? currentCategory.name : "종합";
-    resultHeader.textContent = categoryName + " " + count + "건";
+      if (count === 0) {
+        resultList.innerHTML = `<li class="result-item">정책이 없습니다.</li>`;
+        renderPageForCount(0);   // 페이지네이션 비우기
+        return;
+      }
 
-    if (count === 0) {
-      resultList.innerHTML = `<li class="result-item">정책이 없습니다.</li>`;
-      renderPageForCount(0);   // 페이지네이션 비우기
-      return;
-    }
+      // 전체 리스트 저장
+      currentList = list;
+      currentPage = 1; // 새 검색 시 첫 페이지로 초기화
 
-    // 전체 리스트 저장
-    currentList = list;
-    currentPage = 1; // 새 검색 시 첫 페이지로 초기화
+      // 페이지네이션 호출 (목록 출력 포함)
+      renderPageForCount(count);
 
-    // 페이지네이션 호출 (목록 출력 포함)
-    renderPageForCount(count);
-
-  })
-  .catch(err => console.error("정책 불러오기 실패:", err));
-
+    })
+    .catch(err => console.error("정책 불러오기 실패:", err));
 }
 
 // 페이지 로드 시 기본 실행 (종합 선택)
@@ -450,6 +482,15 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelector('.filter-btn[data-filter="all"]').classList.add("active");
   currentCategory = categoryMap["all"];
   updateSearchResults(); // 전국 + 종합 불러오기
+
+  // ✅ 전국 버튼 이벤트 추가
+  const resetBtn = document.getElementById("resetMapBtn");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function() {
+      currentRegion = null; // 지역 초기화
+      updateSearchResults("전국", currentSortType); // 전국 전체 조회
+    });
+  }
 });
 
 // 카테고리 버튼 클릭 처리
@@ -601,6 +642,48 @@ function renderPageForCount(totalCount) {
     if (currentPage < totalPages) {
       currentPage++;
       renderPageForCount(totalCount);
+    }
+  });
+}
+
+// 정렬 드롭다운
+let isMenuOpen = false;
+const sortDropdownBtn = document.getElementById("sortDropdownBtn");
+const sortMenu = document.getElementById("sortMenu");
+const currentSort = document.getElementById("currentSort");
+
+if (sortDropdownBtn && sortMenu && currentSort) {
+  sortDropdownBtn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    isMenuOpen = !isMenuOpen;
+    sortMenu.classList.toggle("show", isMenuOpen);
+    sortDropdownBtn.classList.toggle("active", isMenuOpen);
+  });
+
+  document.querySelectorAll(".sort-option").forEach(option => {
+    option.addEventListener("click", function(e) {
+      e.stopPropagation();
+
+      // 선택된 정렬 기준
+      currentSortType = this.getAttribute("data-sort"); // "latest" or "popular"
+      currentSort.textContent = this.textContent;
+
+      // 닫기 처리
+      sortMenu.classList.remove("show");
+      sortDropdownBtn.classList.remove("active");
+      isMenuOpen = false;
+
+      // 기존 updateSearchResults 호출
+      updateSearchResults(currentRegion, currentSortType);
+    });
+  });
+
+  // 외부 클릭하면 닫기
+  document.addEventListener("click", function() {
+    if (isMenuOpen) {
+      sortMenu.classList.remove("show");
+      sortDropdownBtn.classList.remove("active");
+      isMenuOpen = false;
     }
   });
 }

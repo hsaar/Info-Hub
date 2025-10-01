@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/policy")   // ✅ /api/policy 로 분리
+@RequestMapping("/api/policy")
 public class PolicyRestController {
 
     @Autowired
