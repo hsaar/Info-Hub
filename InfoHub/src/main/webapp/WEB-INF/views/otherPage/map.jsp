@@ -416,7 +416,6 @@ function updateSearchResults(regionName, sortType = currentSortType) {
   const normalized = currentRegion ? (regionNameNormalizer[currentRegion] || currentRegion) : null;
   const displayName = normalized || "전국";
 
-  // ✅ 전국일 경우 regionId는 null 처리
   let regionId = null;
   if (displayName !== "전국") {
     regionId = normalized ? regionIdMap[normalized] : null;
@@ -483,7 +482,7 @@ document.addEventListener("DOMContentLoaded", function() {
   currentCategory = categoryMap["all"];
   updateSearchResults(); // 전국 + 종합 불러오기
 
-  // ✅ 전국 버튼 이벤트 추가
+  // 전국 버튼
   const resetBtn = document.getElementById("resetMapBtn");
   if (resetBtn) {
     resetBtn.addEventListener("click", function() {
@@ -687,11 +686,6 @@ if (sortDropdownBtn && sortMenu && currentSort) {
     }
   });
 }
-
-
-
-
-
 
 </script>
 
