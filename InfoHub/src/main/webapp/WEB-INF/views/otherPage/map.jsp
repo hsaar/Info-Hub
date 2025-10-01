@@ -81,6 +81,9 @@
   </svg>
 </button>
 
+<c:set var="prevIcon" value="${pageContext.request.contextPath}/resources/image/prev.png"/>
+<c:set var="nextIcon" value="${pageContext.request.contextPath}/resources/image/next.png"/>
+
 <script>
 // 카카오맵 API 로딩 대기
 window.addEventListener('load', function() {
@@ -463,6 +466,9 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
+const prevIcon = "${prevIcon}";
+const nextIcon = "${nextIcon}";
+
 // 페이지네이션 상태
 let currentPage = 1;
 const pageSize = 5;
@@ -512,21 +518,77 @@ function renderPageForCount(totalCount) {
   resultList.innerHTML = "";
   resultList.appendChild(fragment);
 
-  // 페이지네이션 UI 조건부
-  let html = "";
-  if (currentPage === 1) {
-	  html = currentPage + " / " + totalPages +
-	         '<button id="nextPage"><img src="' + '<c:url value="/resources/image/next.png"/>' + '" alt="다음"></button>';
-	} else if (currentPage === totalPages) {
-	  html = '<button id="prevPage"><img src="' + '<c:url value="/resources/image/prev.png"/>' + '" alt="이전"></button>' +
-	         currentPage + " / " + totalPages;
-	} else {
-	  html = '<button id="prevPage"><img src="' + '<c:url value="/resources/image/prev.png"/>' + '" alt="이전"></button>' +
-	         currentPage + " / " + totalPages +
-	         '<button id="nextPage"><img src="' + '<c:url value="/resources/image/next.png"/>' + '" alt="다음"></button>';
-	}
+  //페이지네이션 UI
+  let container = document.createElement("div");
+  container.style.display = "flex";
+  container.style.alignItems = "center";   
+  container.style.justifyContent = "center"; 
+  container.style.gap = "40px";
 
-  pagination.innerHTML = html;
+  // 숫자 표시 (항상 중앙)
+  const pageText = document.createElement("span");
+  pageText.textContent = currentPage + " / " + totalPages;
+  pageText.style.fontSize = "14px";
+  pageText.style.fontWeight = "500";
+  pageText.style.lineHeight = "1";
+  pageText.style.minWidth = "50px";
+  pageText.style.textAlign = "center";
+
+  // 왼쪽 버튼 컨테이너
+  const leftBox = document.createElement("div");
+  leftBox.style.width = "20px";
+  leftBox.style.display = "flex";
+  leftBox.style.justifyContent = "center";
+
+  if (currentPage > 1) {
+    const prevBtn = document.createElement("button");
+    prevBtn.id = "prevPage";
+    prevBtn.style.background = "none";
+    prevBtn.style.border = "none";
+    prevBtn.style.padding = "0";
+    prevBtn.style.cursor = "pointer";
+
+    const prevImg = document.createElement("img");
+    prevImg.src = prevIcon;
+    prevImg.alt = "이전";
+    prevImg.style.width = "12px";
+    prevImg.style.height = "12px";
+
+    prevBtn.appendChild(prevImg);
+    leftBox.appendChild(prevBtn);
+  }
+
+  // 오른쪽 버튼 컨테이너
+  const rightBox = document.createElement("div");
+  rightBox.style.width = "20px"; 
+  rightBox.style.display = "flex";
+  rightBox.style.justifyContent = "center";
+
+  if (currentPage < totalPages) {
+    const nextBtn = document.createElement("button");
+    nextBtn.id = "nextPage";
+    nextBtn.style.background = "none";
+    nextBtn.style.border = "none";
+    nextBtn.style.padding = "0";
+    nextBtn.style.cursor = "pointer";
+
+    const nextImg = document.createElement("img");
+    nextImg.src = nextIcon;
+    nextImg.alt = "다음";
+    nextImg.style.width = "12px";
+    nextImg.style.height = "12px";
+
+    nextBtn.appendChild(nextImg);
+    rightBox.appendChild(nextBtn);
+  }
+
+  // 왼쪽 - 숫자 - 오른쪽
+  container.appendChild(leftBox);
+  container.appendChild(pageText);
+  container.appendChild(rightBox);
+
+  pagination.innerHTML = "";
+  pagination.appendChild(container);
 
   // 이벤트 바인딩
   document.getElementById("prevPage")?.addEventListener("click", function() {
