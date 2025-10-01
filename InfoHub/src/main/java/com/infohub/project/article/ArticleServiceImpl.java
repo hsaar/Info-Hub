@@ -20,33 +20,33 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 	
 	@Override
-	public List<ArticleVO> articlListAll1(Criteria cri) throws Exception {
+	public List<ArticleVO> articlListAll1() throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll1(cri);
+		return dao.articlListAll1();
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll2(Criteria cri) throws Exception {
+	public List<ArticleVO> articlListAll2() throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll2(cri);
+		return dao.articlListAll2();
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll3(Criteria cri) throws Exception {
+	public List<ArticleVO> articlListAll3() throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll3(cri);
+		return dao.articlListAll3();
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll4(Criteria cri) throws Exception {
+	public List<ArticleVO> articlListAll4() throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll4(cri);
+		return dao.articlListAll4();
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll5(Criteria cri) throws Exception {
+	public List<ArticleVO> articlListAll5() throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll5(cri);
+		return dao.articlListAll5();
 	}
 
 	@Override

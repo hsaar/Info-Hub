@@ -1,58 +1,16 @@
 package com.infohub.project.map;
 
 import java.sql.SQLException;
-import java.util.List;
-
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.infohub.project.policy.*;
 
-// test
+
 public class ShowMap {
     public static void main(String[] args) {
-        // root-context.xml (DataSource, DAO, Service 빈 등록된 파일) 로드
-        try (ClassPathXmlApplicationContext context =
-                     new ClassPathXmlApplicationContext("classpath:root-context.xml")) {
-
-            // 스프링이 관리하는 Service 빈
-            PolicyService service = context.getBean(PolicyService.class);
-
-            try {
-                System.out.println("=== 전체 정책 목록 ===");
-                List<PolicyDTO> allPolicies = service.findPolicies(null, null, null); // 조건 없음 → 전체 조회
-                for (PolicyDTO p : allPolicies) {
-                    System.out.println(p);
-                }
-
-                System.out.println("\n=== 특정 지역 정책 (regionId=1) ===");
-                List<PolicyDTO> regionPolicies = service.findPolicies(1, null, null); // 지역만 조건
-                for (PolicyDTO p : regionPolicies) {
-                    System.out.println(p);
-                }
-
-                System.out.println("\n=== 특정 카테고리 정책 (categoryId=2) ===");
-                List<PolicyDTO> categoryPolicies = service.findPolicies(null, 2, null); // 카테고리만 조건
-                for (PolicyDTO p : categoryPolicies) {
-                    System.out.println(p);
-                }
-
-                System.out.println("\n=== 특정 지역 + 카테고리 정책 (regionId=1, categoryId=2) ===");
-                List<PolicyDTO> filteredPolicies = service.findPolicies(1, 2, null); // 지역+카테고리 둘 다 조건
-                for (PolicyDTO p : filteredPolicies) {
-                    System.out.println(p);
-                }
-
-                System.out.println("\n=== 상세 조회 (policyId=1) ===");
-                PolicyDTO detail = service.findPolicyDetail(1); // 메소드명 수정됨
-                System.out.println("제목: " + detail.getTitle());
-                System.out.println("내용: " + detail.getContent());
-                System.out.println("좋아요 수: " + detail.getLikes());
-                System.out.println("최소 나이: " + detail.getMinAge());
-                System.out.println("최대 나이: " + detail.getMaxAge()); // 정책 상세 조회
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        PolicyDAO dao = new PolicyDAO();
+        try {
+            dao.findPolicies(1, new int[]{1, 2, 3});
+        } catch (SQLException e) {
+             e.printStackTrace();
         }
     }
 }

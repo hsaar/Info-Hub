@@ -19,11 +19,12 @@ body {
 
 /* 메인 컨테이너 */
 .main-content {
-  flex: 1;
+   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
+  position: relative;
 }
 
 /* 로그인 컨테이너 */
@@ -351,6 +352,43 @@ body {
   color: #7CC0F0;
 }
 
+/* 아이디/비밀번호 찾기 버튼들 */
+.find-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.find-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(201, 225, 249, 0.3) 0%, rgba(163, 209, 245, 0.3) 100%);
+  border: 1px solid rgba(201, 225, 249, 0.5);
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.find-btn:hover {
+  background: linear-gradient(135deg, rgba(201, 225, 249, 0.5) 0%, rgba(163, 209, 245, 0.5) 100%);
+  border-color: #C9E1F9;
+  color: #374151;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(201, 225, 249, 0.3);
+}
+
+.find-btn i {
+  font-size: 14px;
+}
+
 /* 로그인 버튼 */
 .login-btn {
   width: 100%;
@@ -406,6 +444,242 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+/* 키워드 모달 스타일 */
+.keyword-modal {
+  max-width: 700px !important;
+  max-height: 85vh;
+}
+
+.modal-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 8px 0 0 0;
+  font-weight: normal;
+}
+
+.modal-icon.primary {
+  color: #0B50D0;
+}
+
+.keyword-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-height: 450px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.keyword-category {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 15px 0;
+}
+
+.category-title i {
+  color: #0B50D0;
+  font-size: 18px;
+}
+
+.keyword-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.keyword-tag {
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 2px solid #d1d5db;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.keyword-tag:hover {
+  border-color: #C9E1F9;
+  background: #f0f9ff;
+  color: #0369a1;
+  transform: translateY(-2px);
+}
+
+.keyword-tag.selected {
+  background: linear-gradient(135deg, #C9E1F9 0%, #A3D1F5 100%);
+  border-color: #0B50D0;
+  color: #1f2937;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(11, 80, 208, 0.2);
+}
+
+.keyword-tag.selected:hover {
+  background: linear-gradient(135deg, #A3D1F5 0%, #7CC0F0 100%);
+}
+
+.selected-keywords-display {
+  margin-top: 20px;
+  padding: 15px;
+  background: #e0f2fe;
+  border: 1px solid #C9E1F9;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.selected-keywords-display strong {
+  color: #0369a1;
+  margin-right: 8px;
+}
+
+.selected-keywords-display span {
+  color: #1f2937;
+}
+
+/* 키워드 입력 필드 커서 */
+#keywordsInput {
+  cursor: pointer;
+}
+
+#keywordsInput:hover {
+  border-color: #C9E1F9;
+  box-shadow: 0 0 0 1px rgba(201, 225, 249, 0.3);
+}
+
+/* 아이디/비밀번호 찾기 버튼들 */
+.find-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.find-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(201, 225, 249, 0.3) 0%, rgba(163, 209, 245, 0.3) 100%);
+  border: 1px solid rgba(201, 225, 249, 0.5);
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.find-btn:hover {
+  background: linear-gradient(135deg, rgba(201, 225, 249, 0.5) 0%, rgba(163, 209, 245, 0.5) 100%);
+  border-color: #C9E1F9;
+  color: #374151;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(201, 225, 249, 0.3);
+}
+
+.find-btn i {
+  font-size: 14px;
+}
+
+/* 키워드 모달 반응형 */
+@media (max-width: 768px) {
+  .keyword-modal {
+    max-width: 95% !important;
+    max-height: 90vh;
+  }
+  
+  .keyword-categories {
+    max-height: 350px;
+    gap: 16px;
+    padding: 5px;
+  }
+  
+  .keyword-category {
+    padding: 15px;
+  }
+  
+  .category-title {
+    font-size: 14px;
+  }
+  
+  .category-title i {
+    font-size: 16px;
+  }
+  
+  .keyword-tags {
+    gap: 8px;
+  }
+  
+  .keyword-tag {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .selected-keywords-display {
+    padding: 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .keyword-modal {
+    max-width: 100% !important;
+  }
+  
+  .modal-header {
+    padding: 20px 15px 0 15px;
+  }
+  
+  .modal-body {
+    padding: 15px;
+  }
+  
+  .modal-footer {
+    padding: 0 15px 20px 15px;
+  }
+  
+  .keyword-categories {
+    max-height: 300px;
+  }
+  
+  .keyword-category {
+    padding: 12px;
+  }
+  
+  .category-title {
+    font-size: 13px;
+    gap: 8px;
+  }
+  
+  .keyword-tag {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  
+  .find-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .find-btn {
+    width: 100%;
+  }
 }
 
 /* 모달 스타일 */
@@ -652,4 +926,52 @@ body {
   .overlay-panel {
     padding: 15px;
   }
+ 
+}
+/* 메인 컨테이너 */
+.main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+}
+
+/* 뒤로가기 버튼 */
+.back-button {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #C9E1F9;
+  border-radius: 25px;
+  color: #374151;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 10000;
+  backdrop-filter: blur(10px);
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #C9E1F9 0%, #A3D1F5 100%);
+  transform: translateX(-3px);
+  box-shadow: 0 6px 16px rgba(124, 192, 240, 0.3);
+  border-color: #A3D1F5;
+}
+
+.back-button i {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.back-button:hover i {
+  transform: translateX(-2px);
 }

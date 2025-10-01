@@ -1,199 +1,477 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
+<%@page import="java.util.Random"%>
+<%@page import="org.springframework.beans.factory.annotation.Autowired"%>
+<%@page import="com.infohub.project.login.LoginService"%>
+<%@page import="org.springframework.web.context.request.RequestContextHolder"%>
+<%@page import="org.springframework.web.context.request.ServletRequestAttributes"%>
+<%@page import="com.infohub.project.article.ArticleVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+
+<%
+		String userId = (String) session.getAttribute("userId");
+		int loginNo = ((Integer) session.getAttribute("loginNo")).intValue();
+
+%>
+	
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>우편 서비스 상당수 복구⋯편지·소포·국제우편 가능 - 기사 상세</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>articleContent</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
-<link rel="stylesheet" href="<c:url value='/resources/css/articleContent.css' />">
+	
+	
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<!-- 댓글 관련 자바스크립트 -->
+<script type="text/javascript">
+		
+	$(document).ready(function(){
+		
+		articleHearts();
+		heartsCheck();
+		commentList();
+		
+		
+  	  	$("#commentInsertBtn").click(function(){
+	        var article_articleId =$("#article_articleId").val();
+	        var comment = $("#comment").val();
+	        var login_loginNo = ${loginNo};
+	     
+	        
+	        var url = "comment/insert";
+	        var paramData ={
+	        		"article_articleId" : article_articleId,
+	        		"comment" : comment,
+	        		"login_loginNo" : login_loginNo
+	        		
+	        };
+	        
+	        console.log(paramData);
+	        
+	        $.ajax({
+	        	url: url,
+	            type: "post",
+	            data: paramData,
+	            dataType : "json",
+	            success: function(data){
+	               if(data==1){
+	                   commentList(); // 댓글 작성 후 댓글 목록 함수 호출
+	                   $('#comment').val('');
+	               } // if end
+	            },// success end
+	       		error: function(){
+	       			alert("100자 미만으로 작성해주세요.");
+	       		}
+	        }); // ajax() end
+	   	}); // commentInsert() end
+	   	
+	   	
+	   	function commentList(){
+	   		var article_articleId =$("#article_articleId").val();
+	   		
+	   		
+	   		url ="comment/listAll";
+	   		var paramData ={
+	        		"article_articleId" : article_articleId,
+	        };
+	   		
+	   		console.log(paramData);
+	   		
+	   	  	$.ajax({
+	        	url : url,         // 주소 -> controller 매핑주소
+	          	data : paramData,    // 요청데이터
+	          	//dataType : "json",  // 데이터타입
+	          	type : "post",      // 전송방식
+	            success : function(result){
+	            	console.log(result.length);
+	                
+	                var htmls = "";
+	                
+	                 if(result.length < 1){
+	                    htmls = htmls + "<h3>등록된 댓글이 없습니다.</h3>";
+	                 }
+	                 else{
+	                    $(result).each(function(){
+	                      // htmls = htmls + '<div id="commentList' +this.comment_id + '">';
+	                                        //<div id="reno12"> <div id="reno13">
+	                       htmls += '<hr style="width: 600px; float: left;">';
+	                       htmls += '<br>';
+	                       htmls += '<span class="d-block">';
+	                       htmls += '<strong class="text-gray-dark">' + ' ID: ' + this.userId + '</strong>';
+	                       htmls += '</span><br>';
+	                       htmls += '<br>';
+	                       htmls += this.comment;
+	                       htmls += '<br>';
+	                       htmls += '<br>';
+	                       htmls += ' 작성일 : ' + this.createdDate + ' | 수정일 : ' + this.lastModified;
+	                       htmls += '<br>';
+	                       //htmls += '</div>';   
+	                    });  // each End
+	                 }
+	                 $("#commentList").html(htmls);
+	             },
+	             error : function(data){
+	                alert("에러" + data);
+	             }     
+	       });
+	   	}//commentList()
+	
+		   	
+			$("#heartBtn").click(function(heart){
+				
+				var article_articleId =$("#article_articleId").val();
+				var login_loginNo = ${loginNo};
+		   		
+		   		url ="heart";
+		   		var paramData ={
+		        		"article_articleId" : article_articleId,
+		        		"login_loginNo" : login_loginNo
+		        };
+		   		
+		   		console.log(paramData);
+		   		
+				$.ajax({
+					url: url,
+					data: paramData,
+					type: "post",
+					dataType: "json",
+					success: function(heart){
+						if(heart==0){
+							alert("좋아요완료");
+							  var btn = '🎔';
+								  $("#heartBtn").html(btn);
+						}else if(heart==1){
+							alert("좋아요취소");
+							 var btn = '♡';
+								  $("#heartBtn").html(btn);
+						}
+						location.reload();
+					},
+					error : function(){
+		                alert("좋아요 에러");
+		             }     
+				
+				})//ajax
+			});//heartbtn
+			
+			
+			function heartsCheck(){
+		   		var article_articleId =$("#article_articleId").val();
+		   		var login_loginNo = ${loginNo};
+		   		
+		   		url ="heartsCheck";
+		   		var paramData ={
+		        		"article_articleId" : article_articleId,
+		        		"login_loginNo" : login_loginNo
+		        };
+		   		
+		   		console.log(paramData);
+		   		
+		   	  	$.ajax({
+		        	url : url,         // 주소 -> controller 매핑주소
+		          	data : paramData,    // 요청데이터
+		          	dataType : "json",  // 데이터타입
+		          	type : "post",      // 전송방식
+		            success : function(result){
+		            	console.log(result.length);
+		            	
+		            	
+		                 if(result.length < 1){
+		                	 var btn = '♡';
+		                	$("#heartBtn").html(btn);
+		                 }
+		                 else if(result.length = 1){
+		                    $(result).each(function(){
+		                    	var btn = '🎔';
+		                 		$("#heartBtn").html(btn);
+		                    });  // each End
+		                 }
+		             },
+		             error : function(data){
+		                alert("좋아요 에러" + data);
+		             }     
+		       });
+		   	}; //heartsCheck()
+		   	
+		   	function articleHearts(){
+		   		var article_articleId = $("#article_articleId").val();
+		   		
+		   		url ="articleHearts";
+		   		var paramData ={
+		        		"article_articleId" : article_articleId
+		        };
+		   		
+		   		console.log(paramData);
+		   		
+		   	  	$.ajax({
+		        	url : url,         // 주소 -> controller 매핑주소
+		          	data : paramData,    // 요청데이터
+		          	dataType : "json",  // 데이터타입
+		          	type : "post",      // 전송방식
+		            success : function(result){
+		            	console.log(result);
+		            	
+		            	var htmls ="";
+		            	
+		            	
+		                htmls += '♥' + result
+		                
+		                 $("#heartsCount").html(htmls);
+		             },
+		             error : function(data){
+		                alert("좋아요카운트 에러" + data);
+		             }     
+		       });
+		   	}; //articleHearts()
+		   	
+		   	$(function() {
+		   		$("#comment").keypress(function(e){
+		   			//검색어 입력 후 엔터키 입력하면 조회버튼 클릭
+		   			if(e.keyCode && e.keyCode == 13){
+		   				$("#commentInsertBtn").trigger("click");
+		   				return false;
+		   			}
+		   			//엔터키 막기
+		   			if(e.keyCode && e.keyCode == 13){
+		   				  e.preventDefault();	
+		   			}
+		   		});
+		   	});
+
+		});
+	
+	function clip(){
+
+		var url = '';
+		var textarea = document.createElement("textarea");
+		document.body.appendChild(textarea);
+		url = window.document.location.href;
+		textarea.value = url;
+		textarea.select();
+		document.execCommand("copy");
+		document.body.removeChild(textarea);
+		alert("URL이 복사되었습니다.")
+	}
+	
+	
+</script>  
+
 </head>
 <body>
-  <!-- 상단바 -->
-<%@ include file="../include/header.jsp"%>
-<div class="topbar">
-  <div class="nav">
-  </div>
-</div>
 
-<div class="container">
-  <div class="article-layout">
-    <!-- 메인 기사 영역 -->
-    <article class="article-main">
-      <span class="article-badge">IT·과학</span>
-      
-      <h1 class="article-title">우편 서비스 상당수 복구⋯편지·소포·국제우편 가능</h1>
-      
-      <div class="article-meta">
-        <span>입력 2025.09.29 (08:18)</span>
-        <span>수정 2025.09.29 (09:17)</span>
-      </div>
-      
-      <div class="article-actions">
-        <button class="action-btn">
-          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          <span>댓글 0</span>
-        </button>
-        
-        <button class="action-btn">
-          <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-          <span>좋아요 1</span>
-        </button>
-        
-        <button class="action-btn">
-          <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
-          <span>공유</span>
-        </button>
-        
-      </div>
-      
-      <img src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?w=800" alt="우편 서비스" class="article-image">
-      
-      <div class="article-content">
-        <p>국가정보자원관리원 화재로 중단된 우편 서비스 대부분이 우선 복구됩니다.</p>
-        
-        <p>우정사업본부는 국민 안전과 재산, 경제 활동에 영향을 미치는 시스템을 우선 복구하는 원칙에 따라 우편서비스 정상화에 힘쓸 방침이라고 강조했습니다.</p>
-        
-        <p>특히 추석을 앞두고 수요가 늘어난 소포우편을 배송에 차질이 없도록 한 부차적으로 전했습니다.</p>
-        
-        <p>곽병진 우정사업본부장 직무대리는 "이른 시일 안에 우편 서비스가 정상화될 수 있도록 다음 노력하고, 추석 명절을 앞두고 소포와 더불어 모든 우편물이 정상 소통될 수 있도록 최선을 다하겠다"고 말했습니다.</p>
-        
-       
-      
-      <div class="tags">
-        <a href="#" class="tag">#우편 서비스</a>
-        <a href="#" class="tag">#상당수</a>
-        <a href="#" class="tag">#복구</a>
-        <a href="#" class="tag">#편지</a>
-        <a href="#" class="tag">#소포</a>
-        <a href="#" class="tag">#국제우편</a>
-      </div>
-      
-      <div class="author-info">
-        <div class="author-avatar"></div>
-        <div class="author-details">
-          <h4>최대수 기자</h4>
-          <p>freehead@kbs.co.kr</p>
-        </div>
-      </div>
-      
-      <div class="reaction-section">
-        <h3>이 기사가 좋으셨다면</h3>
-        <div class="reaction-buttons">
-          <button class="reaction-btn good">
-            <span class="label">좋아요</span>
-            <span class="count">0</span>
-          </button>
-          
-          <button class="reaction-btn helpful">
-            <span class="label">싫어요</span>
-            <span class="count">0</span>
-          </button>
-         
-        </div>
-      </div>
-    </article>
+  <!-- 상단바 -->
+<jsp:include page="../include/header.jsp"/>
+
+<!-- 네비게이션 -->
+  	<div class="news-header">
+    <nav class="news-nav">
+      <a href="articleListAll">종합</a>
+      <a href="articleListAll1">부동산</a>
+      <a href="articleListAll2">주식</a>
+      <a href="articleListAll3">적금</a>
+      <a href="articleListAll4">복지</a>
+      <a href="articleListAll5">창업</a>
+      <a href="#">기타</a>
+    </nav>
+	</div>
+	
+	<!-- 브레드크럼 -->
+	<div class="breadcrumb">
+    <div class="container">
+      <a href="#">공지사항</a>
+      <span>></span>
+      <span>2025년 3/4분기 입회심사 결과</span>
+    </div>
+	</div>
+
+       <!-- 메인 컨테이너 -->
+	<div class="news-container">
+    <!-- 메인 콘텐츠 -->
+    <main class="news-main">
+    <h1 class="news-title">
+  		 기사 상세조회
+	</h1>
+
+	<div class="container">
+	<div style="padding-top: 1px">
+	
+      <c:forEach var="article" items="${articleContent}"> <!-- JSTL의 반복문 -->
     
-    <!-- 사이드바 -->
-    <aside class="sidebar">
-      <!-- 헤드라인 -->
+      	<div style="display:flex; justify-content:space-between; align-items:flex-start;">
+         	
+      		
+      		<div style="flex:1; margin-right:15px;">
+			
+            <div style="font-size: 12;"> ${article.name}</div>
+            <h1 style="font-size: 35; font-weight: bold;">${article.title}</h1>
+            <p style="font-size: 12;"> 
+            <a href="https://${article.link}">기사원문보기</a> | ${article.source} | ${article.published} | ${article.tags}</p>
+            views: ${article.views}
+            <div id="heartsCount"></div>
+             
+            <p><button class="button gray medium" onclick="clip(); return false;">URL</button>
+            <button type="button" class="btn btn-success" id="heartBtn">♡</button></p>
+            <div style="flex:0 0 450px;">
+            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 650px; height: 450px;">
+            </div>
+      		<br>
+      		<br>
+            <p>${article.content}(기사내용)</p>
+            <br>
+      		<br>
+      		<p></p>
+      		<br>
+      		
+            </div>
+        </div>
+   
+   <!-- 댓글 -->
+	<div class="container">
+    <label for="content">댓글</label>
+   
+    <form name="commentInsertForm" id="commentInsertForm">
+    <div>
+        <input type="hidden" name="article_articleId" id="article_articleId" value="${article.articleId}">
+        
+        <input type="text" onkeyup="enterkey();" name="comment" id="comment" placeholder="내용을 입력하세요">
+        
+        <button type="button" id="commentInsertBtn">등록</button>
+    </div>
+    </form>
+	</div>
+	<div class="container">
+    <div id="commentList"></div><br>
+	</div>
+
+</c:forEach>
+ 	
+</div>
+</div>
+</main>
+<aside>
       <div class="sidebar-section">
-        <h3>헤드라인</h3>
-        <div class="related-item">
-          <div class="related-thumb"></div>
-          <div class="related-info">
-            <h4>우편 서비스 상당수 복구⋯편지·소포·국제우편 가능</h4>
-            <p>2분 전</p>
-          </div>
-        </div>
-        <div class="related-item">
-          <div class="related-thumb"></div>
-          <div class="related-info">
-            <h4>방생 복구⋯모바일 신분증 등 39개 재 가능</h4>
-            <p>15분 전</p>
-          </div>
-        </div>
-        <div class="related-item">
-          <div class="related-thumb"></div>
-          <div class="related-info">
-            <h4>96개 서비스 복구에 현소 2주⋯이 태풍 "재발 방지 대…"</h4>
-            <p>1시간 전</p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- 많이 본 뉴스 -->
-      <div class="sidebar-section">
-        <h3>많이 본 뉴스</h3>
-        <ol class="ranking-list">
-          <li>
-            <span class="rank-num">1</span>
-            <a href="#">북한에 큰 영향 받은 국정원 문건 첫 확인</a>
+        <h2>많이 본 기사</h2>
+        <ol class="rank-list">
+        <c:forEach var="article" items="${viewsArticle}" varStatus="status">
+        <li>
+        <span class="rank-number">${status.index + 1}</span>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;">${article.title}</a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=${article.articleId}">${article.title}</a>
+          </c:if>
           </li>
-          <li>
-            <span class="rank-num">2</span>
-            <a href="#">추석 앞두고 "물가 걱정 마세요"…할인행사 잇달아</a>
-          </li>
-          <li>
-            <span class="rank-num">3</span>
-            <a href="#">북신 역대 나라 확인 최우성…새 시즌 7</a>
-          </li>
-          <li>
-            <span class="rank-num">4</span>
-            <a href="#">블꽃축제 보러 어어도에 100만 명…낮은 차례에 쓰레기만</a>
-          </li>
-          <li>
-            <span class="rank-num">5</span>
-            <a href="#">이번에도 리틀이은 배터리…보호각 1년 지나</a>
-          </li>
-          <li>
-            <span class="rank-num">6</span>
-            <a href="#">조의대 등 주요 법관, 청문회 불출석…여당 "오만방자"</a>
-          </li>
+          </c:forEach>
         </ol>
       </div>
+      
+       <div class="sidebar-section">
+      <h2>키워드</h2>
+      <c:forEach var="article" items="${keywordArticle}">
+      
+       <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;"> ${article.keyword}</a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=${article.articleId}"> ${article.keyword}</a>
+          </c:if>
+       
+      </c:forEach>
+      </div>
+
+      <div class="sidebar-section">
+      <%
+      Random random = new Random();
+      
+      Set<Integer> set = new HashSet<>();
+     
+      while(set.size()<2){
+    	  Double d = Math.random()*50+1;
+    	  set.add(d.intValue());
+    	}
+     
+      List<Integer> list = new ArrayList<>(set);
+      
+      int number1 = list.get(0);
+      int number2 = list.get(1);
+      %>
+      
+        <h2>포토·영상</h2>
+        <div class="photo-grid">
+          <div>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+      	  </div>
+      	 
+         <div>
+          <c:if test="${empty userId}">
+            <a href="noArticleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+          
+          <c:if test="${not empty userId}">
+          <a href="articleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
+          </c:if>
+      	  </div>
+        </div>
+      </div>
     </aside>
-  </div>
-</div>
+   </div>
+ 
 
+
+  <!-- Top 버튼 -->
+  <button class="top-button" id="topButton" aria-label="맨 위로 이동">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 4l-8 8h6v8h4v-8h6z"/>
+    </svg>
+  </button>
+   
+   
+   
+  <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
+    © 2025 누림 — Mist Blue Theme
+  </footer>
 <script>
-// 반응 버튼 클릭 이벤트
-const reactionBtns = document.querySelectorAll('.reaction-btn');
-reactionBtns.forEach(btn => {
-  btn.addEventListener('click', function() {
-    const countEl = this.querySelector('.count');
-    let count = parseInt(countEl.textContent);
-    countEl.textContent = count + 1;
+    // Top 버튼 기능
+    const topButton = document.getElementById('topButton');
     
-    // 애니메이션 효과
-    this.style.transform = 'scale(1.1)';
-    setTimeout(() => {
-      this.style.transform = 'scale(1)';
-    }, 200);
-  });
-});
-
-// 액션 버튼 클릭 이벤트
-const actionBtns = document.querySelectorAll('.action-btn');
-actionBtns.forEach(btn => {
-  btn.addEventListener('click', function() {
-    const text = this.querySelector('span').textContent;
-    if(text.includes('좋아요')) {
-      const match = text.match(/\d+/);
-      if(match) {
-        const count = parseInt(match[0]) + 1;
-        this.querySelector('span').textContent = `좋아요 ${count}`;
+    // 스크롤 시 버튼 표시/숨김
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 300) {
+        topButton.classList.add('show');
+      } else {
+        topButton.classList.remove('show');
       }
-    }
-  });
-});
-</script>
-
+    });
+    
+    // 버튼 클릭 시 맨 위로 스크롤
+    topButton.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>  
 </body>
 </html>

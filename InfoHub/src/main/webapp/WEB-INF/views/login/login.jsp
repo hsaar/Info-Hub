@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인 - 정책 포털</title>
+    <title>로그인 - 누림</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,9 +20,12 @@
     <!-- Main CSS & Login CSS -->
     <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
     <link rel="stylesheet" href="<c:url value='/resources/css/login.css' />">
+    
+    <!-- plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <!-- 기존 헤더 include -->
     
     <!-- 메인 컨테이너 -->
     <div class="main-content">
@@ -31,56 +34,65 @@
             <!-- 회원가입 폼 -->
             <div class="form-container sign-up-container">
                 <div class="login-form-section">
-                    <h1 class="login-title">Create Account</h1>
+                    <h1 class="login-title">회원가입</h1>
                     <p class="form-subtitle">or use your email for registration</p>
                     
                     <!-- 회원가입 폼 -->
-                    <form class="login-form" action="<c:url value='/signup' />" method="post">
+                    <form class="login-form" action="${pageContext.request.contextPath}/memberjoin" method="post">
                         <div class="form-group">
                             <input type="text" 
-                                   name="userId" 
+                                   name="userId"
+                                   id = "userId"
                                    class="form-input" 
-                                   placeholder="ID" 
+                                   placeholder="아이디를 입력하세요"
+                                   autocomplete="off"
+                                   required>
+	                        <span id = "idCheckMsg"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="password" 
+                                   name="password"
+                                   id="password"
+                                   class="form-input" 
+                                   placeholder="비밀번호를 입력하세요" 
                                    required>
                         </div>
                         
                         <div class="form-group">
                             <input type="password" 
-                                   name="password" 
+                                   name="passwordConfirm"
+                                   id="passwordConfirm" 
                                    class="form-input" 
-                                   placeholder="Password" 
+                                   placeholder="비밀번호 확인" 
                                    required>
                         </div>
-                        
-                        <div class="form-group">
-                            <input type="password" 
-                                   name="passwordCheck" 
-                                   class="form-input" 
-                                   placeholder="Password Check" 
-                                   required>
-                        </div>
+                        <span id = "passwordCheckMsg"></span>
                         
                         <div class="form-group">
                             <input type="email" 
                                    name="email" 
                                    class="form-input" 
-                                   placeholder="Email" 
+                                   placeholder="이메일을 입력하세요" 
                                    required>
                         </div>
                         
                         <div class="form-group">
                             <input type="text" 
-                                   name="nickname" 
+                                   name="name" 
+                                   id="name"
                                    class="form-input" 
-                                   placeholder="Nickname" 
+                                   placeholder="닉네임을 입력하세요" 
+                                   autocomplete="off"
                                    required>
                         </div>
+                        <span id = "nameCheckMsg"></span>
                         
                         <div class="form-group">
                             <input type="tel" 
                                    name="phone" 
                                    class="form-input" 
-                                   placeholder="Phone" 
+                                   placeholder="전화번호 '-' 없이 입력하세요" 
                                    required>
                         </div>
                         
@@ -88,7 +100,7 @@
                             <input type="number" 
                                    name="age" 
                                    class="form-input" 
-                                   placeholder="나이" 
+                                   placeholder="나이를 입력하세요" 
                                    min="1" 
                                    max="120" 
                                    required>
@@ -106,10 +118,14 @@
                         <!-- 관심 키워드 -->
                         <div class="form-group">
                             <input type="text" 
+                                   id="keywordsInput"
                                    name="keywords" 
                                    class="form-input" 
-                                   placeholder="관심 키워드 (쉼표로 구분)" 
+                                   placeholder="관심 키워드 선택 (클릭)" 
+                                   readonly
+                                   onclick="openKeywordModal()"
                                    required>
+                            <input type="hidden" id="selectedKeywords" name="selectedKeywords" value="">
                         </div>
                         
                         <!-- 회원가입 버튼 -->
@@ -126,7 +142,7 @@
             <!-- 로그인 폼 -->
             <div class="form-container sign-in-container">
                 <div class="login-form-section">
-                    <h1 class="login-title">Sign in</h1>
+                    <h1 class="login-title">로 그 인</h1>
                     
                     <!-- 소셜 로그인 버튼들 -->
                     <div class="social-login">
@@ -142,15 +158,15 @@
                     </div>
                     
                     <!-- 구분선 -->
-                    <div class="divider">or use your account</div>
+                    <div class="divider">아이디와 패스워드를 입력해주세요</div>
                     
                     <!-- 로그인 폼 -->
-                    <form class="login-form" action="<c:url value='/login' />" method="post">
+                    <form class="login-form" action="login_ok" method="post">
                         <div class="form-group">
-                            <input type="email" 
-                                   name="email" 
+                            <input type="text" 
+                                   name="userId" 
                                    class="form-input" 
-                                   placeholder="Email" 
+                                   placeholder="아이디 입력" 
                                    required>
                         </div>
                         
@@ -158,13 +174,13 @@
                             <input type="password" 
                                    name="password" 
                                    class="form-input" 
-                                   placeholder="Password" 
+                                   placeholder="비밀번호 입력" 
                                    required>
                         </div>
                         
                         <!-- 비밀번호 찾기 링크 -->
                         <div class="forgot-password">
-                            <a href="<c:url value='/forgot-password' />">Forgot your password?</a>
+                            <a href="idfind">Forgot your password?</a>
                         </div>
                         
                         <!-- 로그인 버튼 -->
@@ -177,10 +193,10 @@
                     </form>
                     
                     <!-- 에러 메시지 표시 -->
-                    <c:if test="${not empty error}">
+                    <c:if test="${not empty errorMsg}">
                         <div class="error-message">
                             <i class="fas fa-exclamation-circle"></i>
-                            ${error}
+                            ${errorMsg}
                         </div>
                     </c:if>
                 </div>
@@ -190,44 +206,27 @@
             <div class="overlay-container">
                 <div class="overlay">
                     <div class="overlay-panel overlay-left">
-                        <h2 class="welcome-title">Welcome 누림!</h2>
+                        <h2 class="welcome-title">누림에 오신걸 환영합니다!</h2>
                         <p class="welcome-text">
-                            To keep connected with us please login<br>
-                            with your personal info
+                            저희 서비스를 계속 이용하시려면,<br>
+                            개인 계정으로 로그인해주세요.
                         </p>
-                        <button class="signup-btn" id="signIn">SIGN IN</button>
+                        <button class="signup-btn" id="signIn">로그인</button>
                     </div>
                     <div class="overlay-panel overlay-right">
-                        <h2 class="welcome-title">Hello, Friend!</h2>
+                        <h2 class="welcome-title">누림에 오신걸 환영합니다!</h2>
                         <p class="welcome-text">
-                            Enter your personal details and start<br>
-                            journey with us
+                            정보를 입력하고 <br>
+                            저희와 함께 여정을 시작해보세요!
                         </p>
-                        <button class="signup-btn" id="signUp">SIGN UP</button>
+                        <button class="signup-btn" id="signUp">회원가입</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- 로그인 실패 모달 -->
-    <div id="loginFailModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <i class="fas fa-times-circle modal-icon error"></i>
-                <h3 class="modal-title">로그인 실패</h3>
-            </div>
-            <div class="modal-body">
-                <p id="modalMessage">아이디 또는 비밀번호가 올바르지 않습니다.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-btn primary" onclick="closeModal()">확인</button>
-                <button class="modal-btn secondary" onclick="showForgotPassword()">비밀번호 찾기</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 회원가입 실패 모달 -->
+    
+        <!-- 회원가입 실패 모달 -->
     <div id="signupFailModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -258,7 +257,107 @@
             </div>
             <div class="modal-footer">
                 <button class="modal-btn primary" onclick="goToLoginFromSuccess()">로그인하기</button>
-                <button class="modal-btn secondary" onclick="closeSuccessModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+    
+        <!-- 관심 키워드 선택 모달 -->
+    <div id="keywordModal" class="modal">
+        <div class="modal-content keyword-modal">
+            <div class="modal-header">
+                <i class="fas fa-tags modal-icon primary"></i>
+                <h3 class="modal-title">관심 키워드 선택</h3>
+                <p class="modal-subtitle">관심있는 분야를 선택해주세요 (최대 5개)</p>
+            </div>
+            <div class="modal-body">
+                <div class="keyword-categories">
+                    <!-- 일자리/취업 -->
+                    <div class="keyword-category">
+                        <h4 class="category-title">
+                            <i class="fas fa-briefcase"></i> 일자리/취업
+                        </h4>
+                        <div class="keyword-tags">
+                            <button class="keyword-tag" data-keyword="청년일자리">청년일자리</button>
+                            <button class="keyword-tag" data-keyword="취업지원">취업지원</button>
+                            <button class="keyword-tag" data-keyword="직업훈련">직업훈련</button>
+                            <button class="keyword-tag" data-keyword="창업지원">창업지원</button>
+                        </div>
+                    </div>
+
+                    <!-- 주거/복지 -->
+                    <div class="keyword-category">
+                        <h4 class="category-title">
+                            <i class="fas fa-home"></i> 주거/복지
+                        </h4>
+                        <div class="keyword-tags">
+                            <button class="keyword-tag" data-keyword="주거지원">주거지원</button>
+                            <button class="keyword-tag" data-keyword="생활안정">생활안정</button>
+                            <button class="keyword-tag" data-keyword="복지혜택">복지혜택</button>
+                            <button class="keyword-tag" data-keyword="임대주택">임대주택</button>
+                        </div>
+                    </div>
+
+                    <!-- 교육 -->
+                    <div class="keyword-category">
+                        <h4 class="category-title">
+                            <i class="fas fa-graduation-cap"></i> 교육
+                        </h4>
+                        <div class="keyword-tags">
+                            <button class="keyword-tag" data-keyword="학자금지원">학자금지원</button>
+                            <button class="keyword-tag" data-keyword="교육비지원">교육비지원</button>
+                            <button class="keyword-tag" data-keyword="평생교육">평생교육</button>
+                            <button class="keyword-tag" data-keyword="온라인교육">온라인교육</button>
+                        </div>
+                    </div>
+
+                    <!-- 문화/여가 -->
+                    <div class="keyword-category">
+                        <h4 class="category-title">
+                            <i class="fas fa-palette"></i> 문화/여가
+                        </h4>
+                        <div class="keyword-tags">
+                            <button class="keyword-tag" data-keyword="문화바우처">문화바우처</button>
+                            <button class="keyword-tag" data-keyword="여행지원">여행지원</button>
+                            <button class="keyword-tag" data-keyword="스포츠">스포츠</button>
+                            <button class="keyword-tag" data-keyword="공연할인">공연할인</button>
+                        </div>
+                    </div>
+
+                    <!-- 건강/의료 -->
+                    <div class="keyword-category">
+                        <h4 class="category-title">
+                            <i class="fas fa-heartbeat"></i> 건강/의료
+                        </h4>
+                        <div class="keyword-tags">
+                            <button class="keyword-tag" data-keyword="건강검진">건강검진</button>
+                            <button class="keyword-tag" data-keyword="의료비지원">의료비지원</button>
+                            <button class="keyword-tag" data-keyword="심리상담">심리상담</button>
+                            <button class="keyword-tag" data-keyword="건강관리">건강관리</button>
+                        </div>
+                    </div>
+
+                    <!-- 금융/경제 -->
+                    <div class="keyword-category">
+                        <h4 class="category-title">
+                            <i class="fas fa-won-sign"></i> 금융/경제
+                        </h4>
+                        <div class="keyword-tags">
+                            <button class="keyword-tag" data-keyword="대출지원">대출지원</button>
+                            <button class="keyword-tag" data-keyword="금융교육">금융교육</button>
+                            <button class="keyword-tag" data-keyword="세금감면">세금감면</button>
+                            <button class="keyword-tag" data-keyword="재정지원">재정지원</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="selected-keywords-display">
+                    <strong>선택된 키워드:</strong>
+                    <span id="selectedKeywordsDisplay">없음</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn primary" onclick="confirmKeywords()">확인</button>
+                <button class="modal-btn secondary" onclick="closeKeywordModal()">취소</button>
             </div>
         </div>
     </div>
@@ -284,12 +383,23 @@
             
             if (provider === 'google') {
                 alert('구글 로그인 기능을 구현해주세요.');
-            } else if (provider === 'naver') {
-                alert('네이버 로그인 기능을 구현해주세요.');
-            } else if (provider === 'kakao') {
-                alert('카카오 로그인 기능을 구현해주세요.');
+            } else if (provider === 'facebook') {
+                alert('페이스북 로그인 기능을 구현해주세요.');
+            } else if (provider === 'linkedin') {
+                alert('링크드인 로그인 기능을 구현해주세요.');
             }
         }
+        
+        // 입력 필드 포커스 효과
+        document.querySelectorAll('.form-input, .form-select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
         
         // 폼 제출시 로딩 상태 표시
         document.querySelectorAll('.login-form').forEach(form => {
@@ -298,44 +408,35 @@
                 const isSignUp = submitBtn.textContent === 'SIGN UP';
                 submitBtn.textContent = isSignUp ? '가입 중...' : '로그인 중...';
                 submitBtn.disabled = true;
-                
-                // 실제 서버 응답 처리는 백엔드에서 하지만, 
-                // 테스트용으로 실패 모달 표시 (실제로는 제거)
-                // setTimeout(() => {
-                //     if (isSignUp) {
-                //         showSignupFailModal('이미 존재하는 아이디입니다.');
-                //     } else {
-                //         showLoginFailModal('아이디 또는 비밀번호가 올바르지 않습니다.');
-                //     }
-                //     submitBtn.textContent = isSignUp ? 'SIGN UP' : 'SIGN IN';
-                //     submitBtn.disabled = false;
-                // }, 2000);
+               
+                setTimeout(() => {
+                    //if (isSignUp) {
+                    //     showSignupFailModal('이미 존재하는 아이디입니다.');
+                    //} else {
+                    //     showLoginFailModal('아이디 또는 비밀번호가 올바르지 않습니다.');
+                    //}
+                    submitBtn.textContent = isSignUp ? 'SIGN UP' : 'SIGN IN';
+                    submitBtn.disabled = false;
+                },  2000);
             });
         });
         
-        // 모달 관련 함수들
-        function showLoginFailModal(message) {
-            document.getElementById('modalMessage').textContent = message || '아이디 또는 비밀번호가 올바르지 않습니다.';
-            document.getElementById('loginFailModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
+        // 회원가입 성공 / 실패 모달
         function showSignupFailModal(message) {
             document.getElementById('signupModalMessage').textContent = message || '회원가입 중 오류가 발생했습니다.';
             document.getElementById('signupFailModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
         
-        function showSignupSuccessModal(message) {
-            const defaultMessage = '<strong>누림</strong>에 오신 것을 환영합니다!<br>회원가입이 성공적으로 완료되었습니다.';
-            document.getElementById('successModalMessage').innerHTML = message || defaultMessage;
-            document.getElementById('signupSuccessModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            document.getElementById('loginFailModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        function showSignupSuccessModal() {
+            Swal.fire({
+                icon: 'success',
+                title: '회원가입 성공',
+                text: '정상적으로 회원가입이 완료되었습니다.',
+                confirmButtonText: '확인'
+            }).then(() => {
+                location.reload();   // 🔄 현재 페이지 새로고침
+            });
         }
         
         function closeSignupModal() {
@@ -355,10 +456,113 @@
             container.classList.remove("right-panel-active");
         }
         
+        // 아이디어 / 비밀번호 찾기로 이동
         function showForgotPassword() {
             closeModal();
-            alert('비밀번호 찾기 페이지로 이동합니다.');
-            // 실제로는: window.location.href = '<c:url value="/forgot-password" />';
+            // 비밀번호 찾기로 이동
+            window.location.href = '<c:url value="/idfind" />';
+        }
+        
+        // 아이디/비밀번호 찾기 페이지로 이동
+        function goToIdFind(type) {
+            // URL에 파라미터를 추가하여 해당 탭으로 이동
+            if (type === 'password') {
+                window.location.href = '<c:url value="/idfind?tab=password" />';
+            } else {
+                window.location.href = '<c:url value="/idfind?tab=id" />';
+            }
+        }
+        
+        // 키워드 모달 관련 변수
+        let selectedKeywordsArray = [];
+        const MAX_KEYWORDS = 5;
+        
+        // 키워드 모달 열기
+        function openKeywordModal() {
+            document.getElementById('keywordModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            // 이미 선택된 키워드가 있으면 표시
+            const currentKeywords = document.getElementById('selectedKeywords').value;
+            if (currentKeywords) {
+                selectedKeywordsArray = currentKeywords.split(',');
+                updateKeywordDisplay();
+                highlightSelectedKeywords();
+            }
+        }
+        
+        // 키워드 모달 닫기
+        function closeKeywordModal() {
+            document.getElementById('keywordModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // 키워드 선택 확인
+        function confirmKeywords() {
+            if (selectedKeywordsArray.length === 0) {
+                alert('최소 1개의 키워드를 선택해주세요.');
+                return;
+            }
+            
+            const keywordsString = selectedKeywordsArray.join(', ');
+            document.getElementById('keywordsInput').value = keywordsString;
+            document.getElementById('selectedKeywords').value = selectedKeywordsArray.join(',');
+            
+            closeKeywordModal();
+        }
+        
+        // 키워드 태그 클릭 이벤트
+        document.addEventListener('DOMContentLoaded', function() {
+            const keywordTags = document.querySelectorAll('.keyword-tag');
+            
+            keywordTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const keyword = this.getAttribute('data-keyword');
+                    
+                    if (this.classList.contains('selected')) {
+                        // 이미 선택된 키워드 제거
+                        const index = selectedKeywordsArray.indexOf(keyword);
+                        if (index > -1) {
+                            selectedKeywordsArray.splice(index, 1);
+                        }
+                        this.classList.remove('selected');
+                    } else {
+                        // 새로운 키워드 추가
+                        if (selectedKeywordsArray.length >= MAX_KEYWORDS) {
+                            alert(`최대 ${MAX_KEYWORDS}개까지만 선택할 수 있습니다.`);
+                            return;
+                        }
+                        selectedKeywordsArray.push(keyword);
+                        this.classList.add('selected');
+                    }
+                    
+                    updateKeywordDisplay();
+                });
+            });
+        });
+        
+        // 선택된 키워드 표시 업데이트
+        function updateKeywordDisplay() {
+            const display = document.getElementById('selectedKeywordsDisplay');
+            if (selectedKeywordsArray.length === 0) {
+                display.textContent = '없음';
+                display.style.color = '#9ca3af';
+            } else {
+                display.textContent = selectedKeywordsArray.join(', ');
+                display.style.color = '#1f2937';
+            }
+        }
+        
+        // 이미 선택된 키워드 하이라이트
+        function highlightSelectedKeywords() {
+            document.querySelectorAll('.keyword-tag').forEach(tag => {
+                const keyword = tag.getAttribute('data-keyword');
+                if (selectedKeywordsArray.includes(keyword)) {
+                    tag.classList.add('selected');
+                } else {
+                    tag.classList.remove('selected');
+                }
+            });
         }
         
         // 모달 외부 클릭시 닫기
@@ -398,32 +602,98 @@
             </c:if>
         });
         
-        // 비밀번호 확인 검증
-        const passwordInput = document.querySelector('input[name="password"]');
-        const passwordCheckInput = document.querySelector('input[name="passwordCheck"]');
         
-        if (passwordCheckInput) {
-            passwordCheckInput.addEventListener('blur', function() {
-                if (passwordInput.value !== this.value) {
-                    this.style.borderColor = '#ef4444';
-                    this.style.backgroundColor = '#fef2f2';
-                } else {
-                    this.style.borderColor = '#C9E1F9';
-                    this.style.backgroundColor = '';
-                }
+        
+     </script>
+     
+     <script>
+        // 비밀번호 확인 검증
+        function checkDuplicate(inputId, url, msgId, paramName) {
+			$("#"+inputId).on("input", function() {
+				let value = $(this).val();
+				
+				if(value.length < 3){
+					$("#"+msgId).text("아이디는 3자 이상 입력하세요.").css("color", "red");
+					return;
+				}
+				
+				$.ajax({
+					url : url,
+					type: "GET",
+					data: {[paramName] : value},
+					success: function(response){
+						if(response === "OK"){
+							$("#"+msgId).text("사용 가능합니다.").css("color", "green");
+						}else{
+							$("#"+msgId).text("이미 존재합니다.").css("color", "red");
+						}
+					},
+					error: function(xhr, status, error) {
+						console.log("에이젝스에러",error);
+					}
+				});
+			});
+		}
+        function checkPassword(pwId, pwConfirmId, msgId, url){
+            let timeout;
+            $("#"+pwId + ",#" + pwConfirmId).on("input", function(){
+                clearTimeout(timeout);
+                timeout = setTimeout(function(){
+                    let password = $("#"+pwId).val();
+                    let passwordConfirm = $("#"+pwConfirmId).val();
+
+                    if(password.length < 8){
+                        $("#"+msgId).text("비밀번호는 8자 이상 입력하세요.").css("color", "red");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({password: password, passwordConfirm: passwordConfirm}),
+                        success: function(response){
+                            if(response === "MATCH"){
+                                $("#"+msgId).text("비밀번호가 일치합니다.").css("color","green");
+                            } else {
+                                $("#"+msgId).text("비밀번호가 일치하지 않습니다.").css("color", "red");
+                            }
+                        },
+                        error: function(xhr, status, error){
+                            console.log("비밀번호에러",error);
+                        }
+                    });
+                }, 300); // 0.3초 지연 후 Ajax 호출
             });
         }
+		$(document).ready(function(){
+			checkDuplicate("userId", "${pageContext.request.contextPath}/idCheck", "idCheckMsg", "userId");
+			checkDuplicate("name", "${pageContext.request.contextPath}/nameCheck", "nameCheckMsg", "name");
+			checkPassword("password", "passwordConfirm", "passwordCheckMsg", "${pageContext.request.contextPath}/passwordCheck");
+		});
+		
+		$("form[action$='memberjoin']").on("submit", function(e){
+		    e.preventDefault();
+		    let form = $(this);
+		    $.ajax({
+		        url: form.attr("action"),
+		        type: "POST",
+		        data: form.serialize(),
+		        success: function(response){
+		            if(response === "OK"){
+		                showSignupSuccessModal();
+		            } else {
+		                showSignupFailModal(response.message || "회원가입 실패");
+		            }
+		        },
+		        error: function(){
+		            showSignupFailModal("기입한 정보를 다시 확인해주세요");
+		        }
+		    });
+		});
+
+	
         
-        // 입력 필드 포커스 효과
-        document.querySelectorAll('.form-input, .form-select').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
-            });
-            
-            input.addEventListener('blur', function() {
-                this.parentElement.classList.remove('focused');
-            });
-        });
     </script>
 </body>
 </html>

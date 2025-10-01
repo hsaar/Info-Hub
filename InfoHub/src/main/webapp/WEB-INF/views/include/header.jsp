@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+<%
+	String userId = request.getParameter("userId");
+	String name = request.getParameter("name");
+%>
 <header class="topbar">
   <nav class="nav">
     <a class="logo" href="index">
@@ -12,7 +15,6 @@
       <li><a href="registrationlistAll">혜택</a></li>
       <li><a href="timeline">타임라인</a></li>
       <li><a href="boardlistmain">게시판</a></li>
-      <li><a href="mypage_main">마이페이지</a></li>
        <c:if test="${empty userId}">
                <li style="padding-top: 7px; color: white">[비회원]</li>
                <li class="nav-item"><a class="nav-link"
@@ -23,7 +25,7 @@
                <li class="nav-item"><a class="nav-link"
                   href="<c:url value="logout"/>">로그아웃 </a></li>
                <li class="nav-item"><a class="nav-link"
-                  href="<c:url value="myinfo?name=${userId}"/>">회원 수정</a></li>
+                  href="<c:url value="mypage_main"/>">마이페이지</a></li>
             </c:if>
          
     </ul>

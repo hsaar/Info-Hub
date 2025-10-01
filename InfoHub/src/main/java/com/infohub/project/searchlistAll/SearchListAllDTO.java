@@ -1,7 +1,7 @@
 package com.infohub.project.searchlistAll; 
 
 public class SearchListAllDTO {
-	private int articleId; 
+	private int article_id;
 	private String title;
 	private String content;
 	private String tags;
@@ -10,16 +10,16 @@ public class SearchListAllDTO {
 	private int views;
 	private int hearts;
 	private String image;
-	private int loginLoginId;
-	private int articleCategoriesCategoriesId;
-	private String name;
+	private int login_login_id;
+	private int article_categories_categories_id;
+	
 	
 	SearchListAllDTO(){}
 
-	public SearchListAllDTO(int articleId, String title, String content, String tags, String published, String source,
-			int views, int hearts, String image, int loginLoginId, int articleCategoriesCategoriesId, String name) {
+	public SearchListAllDTO(int article_id, String title, String content, String tags, String published, String source,
+			int views, int hearts, String image, int login_login_id, int article_categories_categories_id) {
 		super();
-		this.articleId = articleId;
+		this.article_id = article_id;
 		this.title = title;
 		this.content = content;
 		this.tags = tags;
@@ -28,17 +28,16 @@ public class SearchListAllDTO {
 		this.views = views;
 		this.hearts = hearts;
 		this.image = image;
-		this.loginLoginId = loginLoginId; 
-		this.articleCategoriesCategoriesId = articleCategoriesCategoriesId;
-		this.name = name;
+		this.login_login_id = login_login_id;
+		this.article_categories_categories_id = article_categories_categories_id;
 	}
 
-	public int getArticleId() {
-		return articleId;
+	public int getArticle_id() {
+		return article_id;
 	}
 
-	public void setArticleId(int articleId) {
-		this.articleId = articleId;
+	public void setArticle_id(int article_id) {
+		this.article_id = article_id;
 	}
 
 	public String getTitle() {
@@ -105,36 +104,28 @@ public class SearchListAllDTO {
 		this.image = image;
 	}
 
-	public int getLoginLoginId() {
-		return loginLoginId;
+	public int getLogin_login_id() {
+		return login_login_id;
 	}
 
-	public void setLoginLoginId(int loginLoginId) {
-		this.loginLoginId = loginLoginId;
+	public void setLogin_login_id(int login_login_id) {
+		this.login_login_id = login_login_id;
 	}
 
-	public int getArticleCategoriesCategoriesId() {
-		return articleCategoriesCategoriesId;
+	public int getArticle_categories_categories_id() {
+		return article_categories_categories_id;
 	}
 
-	public void setArticleCategoriesCategoriesId(int articleCategoriesCategoriesId) {
-		this.articleCategoriesCategoriesId = articleCategoriesCategoriesId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setArticle_categories_categories_id(int article_categories_categories_id) {
+		this.article_categories_categories_id = article_categories_categories_id;
 	}
 
 	@Override
 	public String toString() {
-		return "SearchListAllDTO [articleId=" + articleId + ", title=" + title + ", content=" + content + ", tags="
+		return "searchlistAllDTO [article_id=" + article_id + ", title=" + title + ", content=" + content + ", tags="
 				+ tags + ", published=" + published + ", source=" + source + ", views=" + views + ", hearts=" + hearts
-				+ ", image=" + image + ", loginLoginId=" + loginLoginId + ", articleCategoriesCategoriesId="
-				+ articleCategoriesCategoriesId + ", name=" + name + "]";
+				+ ", image=" + image + ", login_login_id=" + login_login_id + ", article_categories_categories_id="
+				+ article_categories_categories_id + "]";
 	}
 
-}	
+}

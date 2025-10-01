@@ -41,7 +41,7 @@
                     <p class="form-subtitle">가입 시 입력한 정보로 아이디를 찾을 수 있습니다</p>
                     
                     <!-- 아이디 찾기 폼 -->
-                    <form class="idfind-form" action="<c:url value='/find-id' />" method="post">
+                    <form class="idfind-form" action="findid" method="post">
                         <div class="form-group">
                             <label class="form-label">이름</label>
                             <input type="text" 
@@ -92,7 +92,7 @@
                     <p class="form-subtitle">가입 시 입력한 정보로 비밀번호를 재설정할 수 있습니다</p>
                     
                     <!-- 비밀번호 찾기 폼 -->
-                    <form class="idfind-form" action="<c:url value='/find-password' />" method="post">
+                    <form class="idfind-form" action="findpassword" method="post">
                         <div class="form-group">
                             <label class="form-label">아이디</label>
                             <input type="text" 
@@ -160,9 +160,9 @@
                     <div class="help-section">
                         <h3>도움이 필요하신가요?</h3>
                         <ul class="help-list">
-                            <li><i class="fas fa-phone"></i> 고객센터: 1588-1234</li>
-                            <li><i class="fas fa-envelope"></i> 이메일: help@nurim.com</li>
-                            <li><i class="fas fa-clock"></i> 평일 09:00-18:00</li>
+                            <li><i class="fas fa-phone"></i> 고객센터: 1004-7979</li>
+                            <li><i class="fas fa-envelope"></i> 이메일: modaltodal@nurim.com</li>
+                            <li><i class="fas fa-clock"></i> 평일 21:00-06:00</li>
                         </ul>
                     </div>
                 </div>
@@ -284,7 +284,7 @@
         
         function contactSupport() {
             closeErrorModal();
-            alert('고객센터(1588-1234)로 연락주시면 도움을 드리겠습니다.');
+            alert('고객센터(1004-7979)로 연락주시면 도움을 드리겠습니다.');
         }
         
         // 폼 제출시 로딩 상태
@@ -296,11 +296,11 @@
                 submitBtn.disabled = true;
                 
                 // 실제 서버 응답 후에는 제거 (테스트용)
-                setTimeout(() => {
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                    // showResultModal('id', '', 'test***'); // 테스트용
-                }, 2000);
+                //setTimeout(() => {
+                //    submitBtn.textContent = originalText;
+                //    submitBtn.disabled = false;
+                //     showResultModal('id', '', 'test***'); // 테스트용
+                //}, 2000);
             });
         });
         

@@ -42,76 +42,51 @@ public class ArticleControl {
 	}
 	
 	@RequestMapping("articleListAll1")
-	public String articleListAll1(Model model, Criteria cri) throws Exception{
+	public String articleListAll1(Model model) throws Exception{
 		logger.info("articleListAll1..");
 		
-		List<ArticleVO> articleListAll1 = service.articlListAll1(cri);
+		List<ArticleVO> articleListAll1 = service.articlListAll1();
 		model.addAttribute("articleListAll1", articleListAll1);
-		
-		PageMaker pageMaker = new PageMaker(cri);
-		int totalCount = service.getTotalCount(cri);
-		pageMaker.setTotalCount(totalCount);
-		model.addAttribute("pageMaker", pageMaker);
 		
 		return "article/articleListAll1";
 	}
 	
 	@RequestMapping("articleListAll2")
-	public String articleListAll2(Model model, Criteria cri) throws Exception{
+	public String articleListAll2(Model model) throws Exception{
 		logger.info("articleListAll2..");
 		
-		List<ArticleVO> articleListAll2 = service.articlListAll2(cri);
+		List<ArticleVO> articleListAll2 = service.articlListAll2();
 		model.addAttribute("articleListAll2", articleListAll2);
-		
-		PageMaker pageMaker = new PageMaker(cri);
-		int totalCount = service.getTotalCount(cri);
-		pageMaker.setTotalCount(totalCount);
-		model.addAttribute("pageMaker", pageMaker);
 		
 		return "article/articleListAll2";
 	}
 	
 	@RequestMapping("articleListAll3")
-	public String articleListAll3(Model model, Criteria cri) throws Exception{
+	public String articleListAll3(Model model) throws Exception{
 		logger.info("articleListAll3..");
 		
-		List<ArticleVO> articleListAll3 = service.articlListAll3(cri);
+		List<ArticleVO> articleListAll3 = service.articlListAll3();
 		model.addAttribute("articleListAll3", articleListAll3);
-		
-		PageMaker pageMaker = new PageMaker(cri);
-		int totalCount = service.getTotalCount(cri);
-		pageMaker.setTotalCount(totalCount);
-		model.addAttribute("pageMaker", pageMaker);
 		
 		return "article/articleListAll3";
 	}
 	
 	@RequestMapping("articleListAll4")
-	public String articleListAll4(Model model, Criteria cri) throws Exception{
+	public String articleListAll4(Model model) throws Exception{
 		logger.info("articleListAll4..");
 		
-		List<ArticleVO> articleListAll4 = service.articlListAll4(cri);
+		List<ArticleVO> articleListAll4 = service.articlListAll4();
 		model.addAttribute("articleListAll4", articleListAll4);
-		
-		PageMaker pageMaker = new PageMaker(cri);
-		int totalCount = service.getTotalCount(cri);
-		pageMaker.setTotalCount(totalCount);
-		model.addAttribute("pageMaker", pageMaker);
 		
 		return "article/articleListAll4";
 	}
 	
 	@RequestMapping("articleListAll5")
-	public String articleListAll5(Model model, Criteria cri) throws Exception{
+	public String articleListAll5(Model model) throws Exception{
 		logger.info("articleListAll5..");
 		
-		List<ArticleVO> articleListAll5 = service.articlListAll5(cri);
+		List<ArticleVO> articleListAll5 = service.articlListAll5();
 		model.addAttribute("articleListAll5", articleListAll5);
-		
-		PageMaker pageMaker = new PageMaker(cri);
-		int totalCount = service.getTotalCount(cri);
-		pageMaker.setTotalCount(totalCount);
-		model.addAttribute("pageMaker", pageMaker);
 		
 		return "article/articleListAll5";
 	}

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -42,7 +42,7 @@
         <a href="#" class="menu-item" data-page="board">
           <span class="menu-text">게시판</span>
         </a>
-
+        
       </nav>
 
     
@@ -84,7 +84,8 @@
           <div class="list-item">내가 작성한 댓글 3</div>
         </div>
       </div>
-
+	
+ 
       <!-- 좋아요 페이지 -->
       <div id="likes-content" class="content-box" style="display: none;">
          <%@ include file="my_scrap.jsp"%>
@@ -96,11 +97,12 @@
         <h2 class="content-title">알림 관리</h2>
         <p>알림 설정한 혜택 목록이 표시됩니다.</p>
       </div>
-
+    
+   
       <!-- 기본 안내 메시지 -->
       <div id="default-content" class="content-box">
         <div class="welcome-message">
-          <h2>마이페이지에 오신 것을 환영합니다</h2>
+          <h2>마이페이지에 오신 것을 <br>환영합니다</h2>
           <p>좌측 메뉴에서 원하는 항목을 선택해 주세요.</p>
         </div>
       </div>
