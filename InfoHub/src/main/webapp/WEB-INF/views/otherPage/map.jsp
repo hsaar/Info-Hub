@@ -53,7 +53,7 @@
       
       <!-- 결과 목록 헤더 -->
       <div class="result-list-header">
-        <h4>건</h4>
+        <h4>종합 0건</h4>
       </div>
       
       <!-- 결과 목록 -->
@@ -63,7 +63,6 @@
       
       <!-- 페이지네이션 -->
       <div class="result-pagination">
-        1 / 3 페이지
       </div>
       
       <!-- 안내 텍스트 -->
@@ -282,22 +281,19 @@ document.addEventListener('DOMContentLoaded', function() {
 	  var currentFilter = 'all';
 	  
 	  document.querySelectorAll('.filter-btn').forEach(btn => {
-	    btn.addEventListener('click', function() {
-	      // 모든 버튼에서 active 제거
-	      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-	      
-	      // 클릭된 버튼에 active 추가
-	      this.classList.add('active');
-	      
-	      // 현재 필터 업데이트
-	      currentFilter = this.getAttribute('data-filter');
-	      
-	      // 검색 결과 헤더 업데이트
-	      updateFilterDisplay(currentFilter);
-	      
-	      console.log('선택된 카테고리:', currentFilter);
-	    });
-	  });
+		  btn.addEventListener('click', function() {
+		    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+		    this.classList.add('active');
+
+		    const filterKey = this.getAttribute('data-filter');
+		    currentCategory = categoryMap[filterKey] || categoryMap["all"];
+
+		    console.log("선택된 카테고리:", currentCategory);
+
+		    // 다시 조회
+		    updateSearchResults();
+		  });
+		});
 	  
 	  function updateFilterDisplay(filter) {
 	    var filterNames = {
@@ -365,74 +361,192 @@ const regionIdMap = {
   "전국": 18
 };
 
+//카테고리 매핑 (전역)
+const categoryMap = {
+  "all": { id: null, name: "종합" },   // 종합 → categoryId X
+  "real-estate": { id: 1, name: "부동산" },
+  "stock": { id: 2, name: "주식" },
+  "savings": { id: 3, name: "적금" },
+  "welfare": { id: 4, name: "복지" },
+  "startup": { id: 5, name: "창업" }
+};
+
+//전역 상태
+let currentRegion = null;
+let currentCategory = categoryMap["all"]; // 기본값 = 종합
+
 function updateSearchResults(regionName) {
-	  console.log("updateSearchResults 호출됨:", regionName);
+  console.log("updateSearchResults 호출됨:", regionName);
 
-	  const normalized = regionNameNormalizer[regionName] || regionName;
-	  const displayName = normalized;
-	  const regionId = regionIdMap[normalized];
+  // 지역 갱신
+  if (regionName) {
+    currentRegion = regionName;
+  }
 
-	  if (!regionId) {
-	    console.warn("지역 매핑 없음:", regionName, "→", normalized);
-	    return;
-	  }
+  const normalized = currentRegion ? (regionNameNormalizer[currentRegion] || currentRegion) : null;
+  const displayName = normalized || "전국";
+  const regionId = normalized ? regionIdMap[normalized] : null;
 
-	  fetch("/project/api/policy?regionId=" + regionId)
-	    .then(res => res.json())
-	    .then(list => {
-	      console.log("서버 응답:", list);
+  // 요청 URL 만들기
+  let url = "/project/api/policy?";
+  if (regionId) url += "regionId=" + regionId;
+  if (currentCategory && currentCategory.id) {
+    url += (regionId ? "&" : "") + "categoryId=" + currentCategory.id;
+  }
 
-	      const resultList = document.querySelector(".result-list");
-	      const resultTitle = document.querySelector(".result-title");
-	      const resultHeader = document.querySelector(".result-list-header h4"); 
+  console.log("요청 URL:", url);
 
-	      if (!resultList || !resultTitle || !resultHeader) {
-	        console.error("결과 DOM 요소 없음");
-	        return;
-	      }
+  fetch(url)
+  .then(res => res.json())
+  .then(list => {
+    const resultList = document.querySelector(".result-list");
+    const resultTitle = document.querySelector(".result-title");
+    const resultHeader = document.querySelector(".result-list-header h4");
 
-	      resultList.innerHTML = "";
+    if (!resultList || !resultTitle || !resultHeader) {
+      console.error("결과 DOM 요소 없음");
+      return;
+    }
 
-	      if (!Array.isArray(list)) {
-	        console.error("서버 응답이 배열이 아님:", list);
-	        return;
-	      }
+    // resultList.innerHTML = "";
 
-	      const count = Number(list.length) || 0;
+    if (!Array.isArray(list)) {
+      console.error("서버 응답이 배열이 아님:", list);
+      return;
+    }
 
-	      resultTitle.textContent = displayName;
+    const count = list.length;
 
-	      resultHeader.textContent = count + "건";
+    // 지역명
+    resultTitle.textContent = displayName;
 
-	      console.log("count =", count);
-	      console.log("h4 최종 =", resultHeader.textContent);
+    // 카테고리명 + 건수
+    const categoryName = currentCategory && currentCategory.name ? currentCategory.name : "종합";
+    resultHeader.textContent = categoryName + " " + count + "건";
 
-	      if (count === 0) {
-	        resultList.innerHTML = `<li class="result-item">정책이 없습니다.</li>`;
-	        return;
-	      }
+    if (count === 0) {
+      resultList.innerHTML = `<li class="result-item">정책이 없습니다.</li>`;
+      renderPageForCount(0);   // 페이지네이션 비우기
+      return;
+    }
 
-	      list.forEach(p => {
-	        const li = document.createElement("li");
-	        li.classList.add("result-item");
+    // 전체 리스트 저장
+    currentList = list;
+    currentPage = 1; // 새 검색 시 첫 페이지로 초기화
 
-	        const strong = document.createElement("strong");
-	        strong.textContent = p.title || "(제목 없음)";
+    // 페이지네이션 호출 (목록 출력 포함)
+    renderPageForCount(count);
 
-	        const span = document.createElement("span");
-	        span.textContent = p.content
-	          ? (p.content.length > 30 ? p.content.substring(0, 30) + "..." : p.content)
-	          : "(내용 없음)";
+  })
+  .catch(err => console.error("정책 불러오기 실패:", err));
 
-	        li.appendChild(strong);
-	        li.appendChild(document.createElement("br"));
-	        li.appendChild(span);
+}
 
-	        resultList.appendChild(li);
-	      });
-	    })
-	    .catch(err => console.error("정책 불러오기 실패:", err));
+// 페이지 로드 시 기본 실행 (종합 선택)
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelector('.filter-btn[data-filter="all"]').classList.add("active");
+  currentCategory = categoryMap["all"];
+  updateSearchResults(); // 전국 + 종합 불러오기
+});
+
+// 카테고리 버튼 클릭 처리
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+
+    // 매핑 테이블에서 바로 꺼냄
+    currentCategory = categoryMap[this.dataset.filter];
+
+    // 지역 유지하면서 카테고리만 바꿔서 조회
+    updateSearchResults(currentRegion);
+  });
+});
+
+// 페이지네이션 상태
+let currentPage = 1;
+const pageSize = 5;
+let currentList = []; // 전체 리스트 저장 (옵션)
+
+//페이지네이션 표시 전용
+function renderPageForCount(totalCount) {
+  const resultList = document.querySelector(".result-list");
+  const pagination = document.querySelector(".result-pagination");
+  if (!resultList || !pagination) return;
+
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  if (totalCount === 0) {
+    pagination.textContent = "0 / 0";
+    return;
+  }
+
+  // 현재 페이지 아이템만 출력
+  const start = (currentPage - 1) * pageSize;
+  const end = start + pageSize;
+  const pageItems = currentList.slice(start, end);
+
+  // DocumentFragment 활용 (DOM 교체 최소화)
+  const fragment = document.createDocumentFragment();
+
+  pageItems.forEach(p => {
+    const li = document.createElement("li");
+    li.classList.add("result-item");
+
+    const strong = document.createElement("strong");
+    strong.textContent = p.title || "(제목 없음)";
+
+    const span = document.createElement("span");
+    span.textContent = p.content && typeof p.content === "string"
+      ? (p.content.length > 30 ? p.content.substring(0, 30) + "..." : p.content)
+      : "(내용 없음)";
+
+    li.appendChild(strong);
+    li.appendChild(document.createElement("br"));
+    li.appendChild(span);
+
+    fragment.appendChild(li);
+  });
+
+  // 한번에 교체
+  resultList.innerHTML = "";
+  resultList.appendChild(fragment);
+
+  // 페이지네이션 UI 조건부
+  let html = "";
+  if (currentPage === 1) {
+	  html = currentPage + " / " + totalPages +
+	         '<button id="nextPage"><img src="' + '<c:url value="/resources/image/next.png"/>' + '" alt="다음"></button>';
+	} else if (currentPage === totalPages) {
+	  html = '<button id="prevPage"><img src="' + '<c:url value="/resources/image/prev.png"/>' + '" alt="이전"></button>' +
+	         currentPage + " / " + totalPages;
+	} else {
+	  html = '<button id="prevPage"><img src="' + '<c:url value="/resources/image/prev.png"/>' + '" alt="이전"></button>' +
+	         currentPage + " / " + totalPages +
+	         '<button id="nextPage"><img src="' + '<c:url value="/resources/image/next.png"/>' + '" alt="다음"></button>';
 	}
+
+  pagination.innerHTML = html;
+
+  // 이벤트 바인딩
+  document.getElementById("prevPage")?.addEventListener("click", function() {
+    if (currentPage > 1) {
+      currentPage--;
+      renderPageForCount(totalCount);
+    }
+  });
+  document.getElementById("nextPage")?.addEventListener("click", function() {
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderPageForCount(totalCount);
+    }
+  });
+}
+
+
+
+
+
 
 </script>
 
