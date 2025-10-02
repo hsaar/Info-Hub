@@ -71,7 +71,8 @@ public class LoginController {
 			request.getSession().invalidate(); //기존 세션 파기
 			
 			HttpSession session = request.getSession(true);
-			session.setAttribute("userId", res.getuserId()); //세션이 없으면 새로운 세션에 유저id값 부여
+			session.setAttribute("userId", res.getUserId()); //세션이 없으면 새로운 세션에 유저id값 부여
+			session.setAttribute("loginNo", res.getLoginNo());
 			
 			return "redirect:/";
 		}else {

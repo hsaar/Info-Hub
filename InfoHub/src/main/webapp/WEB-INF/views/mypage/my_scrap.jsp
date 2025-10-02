@@ -2,17 +2,26 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>혜택 스트랩</title>
+<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+</head>
+<body>
 <!-- 스크랩한 정책 콘텐츠 -->
 <h2 class="content-title">스크랩한 혜택</h2>
-<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+
 <!-- 필터 -->
 <div class="scrap-filter">
-  <select class="filter-select">
-    <option>전체 (15)</option>
-    <option>일자리</option>
-    <option>주거</option>
-    <option>교육</option>
-    <option>복지</option>
+  <select class="filter-select" id="scrapFilter">
+    <option value="all">전체 (15)</option>
+  	<option value="1">일자리</option>
+  	<option value="2">주거</option>
+  	<option value="3">교육</option>
+  	<option value="4">복지</option>
   </select>
   <div class="sort-buttons">
     <button class="sort-btn active">최신순</button>
@@ -22,140 +31,134 @@
 </div>
 
 <!-- 스크랩 리스트 -->
-<div class="scrap-list">
-  
-  <!-- 스크랩 카드 1 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">일자리</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">국민내일배움카드</h3>
-    <p class="scrap-description">
-      직업훈련을 희망하는 국민에게 직업능력개발훈련 및 컨설팅을 지원
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 상시신청</span>
-      <span class="scrap-date">스크랩: 2025.01.15</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 2 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">주거</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">청년 주거비 지원</h3>
-    <p class="scrap-description">
-      청년들의 주거 안정을 위해 월세 및 보증금 지원
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 2025.01.01 ~ 2025.12.31</span>
-      <span class="scrap-date">스크랩: 2025.01.14</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 3 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">복지</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">근로·자녀장려금</h3>
-    <p class="scrap-description">
-      소득과 재산이 적은 근로소득자에게 근로장려금을, 자녀 양육 시 자녀장려금을 지급
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 2025.05.01 ~ 2025.05.31</span>
-      <span class="scrap-date">스크랩: 2025.01.13</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 4 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">교육</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">국가장학금</h3>
-    <p class="scrap-description">
-      대학생의 등록금 부담 완화를 위한 장학금 지원
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 2025.03.01 ~ 2025.03.31</span>
-      <span class="scrap-date">스크랩: 2025.01.12</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 5 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">일자리</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">국민취업지원제도</h3>
-    <p class="scrap-description">
-      취업지원서비스와 생계지원을 통해 취업 촉진
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 상시신청</span>
-      <span class="scrap-date">스크랩: 2025.01.11</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 6 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">주거</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">청년도약계좌</h3>
-    <p class="scrap-description">
-      청년들의 자산 형성을 위한 정부 지원 적금 상품
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 2025.01.01 ~ 2025.12.31</span>
-      <span class="scrap-date">스크랩: 2025.01.10</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-</div>
+<div class="scrap-list"></div>
+<p class="no-data" style="display:none;">스크랩한 정책이 없습니다.</p>
 
 <!-- 페이지네이션 -->
-<nav class="pagination-nav">
-  <button class="page-arrow">«</button>
-  <button class="page-number active">1</button>
-  <button class="page-number">2</button>
-  <button class="page-number">3</button>
-  <button class="page-arrow">»</button>
+<nav class="pagination-nav" style="display:none;">
+  <button class="page-arrow" id="prevPage">«</button>
+  <span id="pageInfo">0 / 0</span>
+  <button class="page-arrow" id="nextPage">»</button>
 </nav>
 
+
 <script>
-  // 정렬 버튼 처리
-  document.addEventListener('DOMContentLoaded', function() {
-    const sortBtns = document.querySelectorAll('.sort-btn');
-    sortBtns.forEach(btn => {
-      btn.addEventListener('click', function() {
-        sortBtns.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-      });
+var scrapApiUrl = '<c:url value="/scraps/api"/>';
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const scrapList = document.querySelector('.scrap-list');
+    const noData = document.querySelector('.no-data');
+    const filterSelect = document.getElementById("scrapFilter");
+    
+    let currentSort = "latest"; // 기본 최신순
+
+    // ---------------- 데이터 불러오기 ----------------
+    function loadScraps() {
+        fetch(scrapApiUrl, {
+            method: 'GET',
+            credentials: 'same-origin' // 세션 쿠키 포함
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("받은 데이터:", data);
+            
+            if (data && data.length > 0) {
+                console.log("첫 번째 스크랩 policyTitle 값:", data[0].policyTitle);
+                console.log("첫 번째 스크랩 policyTitle 타입:", typeof data[0].policyTitle); // 이것이 'string'이 아닌 'boolean'인지 확인!
+            }
+            renderList(data);
+        })
+        .catch(err => console.error("스크랩 불러오기 실패:", err));
+
+    }
+
+
+    // ---------------- 리스트 렌더링 ----------------
+    function renderList(scraps) {
+        scrapList.innerHTML = "";
+
+        if (!scraps || scraps.length === 0) {
+            noData.style.display = "block";
+            return;
+        }
+        noData.style.display = "none";
+
+        scraps.forEach((scrap, idx) => {
+        	const titleText = (scrap.policyTitle || "").toString();
+            const contentText = (scrap.policyContent || "").toString();
+            
+            const card = document.createElement("article");
+            card.classList.add("scrap-card");
+            card.setAttribute("data-category", scrap.policyCategoryId);
+            card.setAttribute("data-deadline", scrap.policyApplicationEnd || "");
+            card.setAttribute("data-id", idx);
+
+            card.innerHTML = 
+                '<h3 class="scrap-title">' + (titleText || "(제목 없음)") + '</h3>' +
+                '<p class="scrap-description">' + (contentText || "(내용 없음)") + '</p>' + // 👈 false 대신 "(내용 없음)"이 출력됩니다.
+                '<div class="scrap-info">' +
+                '    <span class="scrap-date">스크랩일: ' + scrap.createdAt + '</span>' +
+                '</div>';
+                
+            scrapList.appendChild(card);
+        });
+    }
+
+    // ---------------- 필터 이벤트 ----------------
+    filterSelect.addEventListener("change", function() {
+        const selectedCategoryId = this.value;
+        const cards = document.querySelectorAll(".scrap-card");
+
+        cards.forEach(card => {
+            const cardCategoryId = card.getAttribute("data-category");
+            card.style.display = (selectedCategoryId === "all" || cardCategoryId === String(selectedCategoryId))
+                                 ? "block" : "none";
+        });
     });
 
-    // 스크랩 삭제
-    const deleteButtons = document.querySelectorAll('.scrap-delete-btn');
-    deleteButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        if (confirm('스크랩을 삭제하시겠습니까?')) {
-          this.closest('.scrap-card').remove();
+    // ---------------- 정렬 ----------------
+    function sortData(cards) {
+        const arr = Array.from(cards);
+        if (currentSort === "alpha") {
+            return arr.sort((a, b) =>
+                a.querySelector(".scrap-title").textContent.localeCompare(
+                    b.querySelector(".scrap-title").textContent
+                )
+            );
+        } else if (currentSort === "deadline") {
+            return arr.sort(
+                (a, b) => new Date(a.getAttribute("data-deadline")) - new Date(b.getAttribute("data-deadline"))
+            );
+        } else {
+            return arr.sort((a, b) => {
+                const dateA = new Date(a.querySelector(".scrap-date").textContent.replace("스크랩일:", "").trim());
+                const dateB = new Date(b.querySelector(".scrap-date").textContent.replace("스크랩일:", "").trim());
+                return dateB - dateA;
+            });
         }
-      });
+    }
+
+    document.querySelectorAll(".sort-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+
+            if (this.textContent.includes("가나다")) currentSort = "alpha";
+            else if (this.textContent.includes("마감")) currentSort = "deadline";
+            else currentSort = "latest";
+
+            const cards = document.querySelectorAll(".scrap-card");
+            const sorted = sortData(cards);
+
+            scrapList.innerHTML = "";
+            sorted.forEach(card => scrapList.appendChild(card));
+        });
     });
-  });
+
+    // ---------------- 실행 ----------------
+    loadScraps();
+});
 </script>
+</body>
+</html>

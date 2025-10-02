@@ -11,6 +11,7 @@ public class LoginDTO {
 	private int status; // 0 - 탈퇴 / 1 - 가입
 	private int role; // 0 - 게스트 / 1 - 회원 / 2 - 관리자
 	private int age;
+	private int loginNo;
 	
 	public LoginDTO() {}
 	
@@ -39,11 +40,11 @@ public class LoginDTO {
 		this.age = age;
 	}
 
-	public String getuserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setuserId(String userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
@@ -117,6 +118,14 @@ public class LoginDTO {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+	
+	public int getLoginNo() {
+	    return loginNo;
+	}
+
+	public void setLoginNo(int loginNo) {
+	    this.loginNo = loginNo;
 	}
 
 	@Override

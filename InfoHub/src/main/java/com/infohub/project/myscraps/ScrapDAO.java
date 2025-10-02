@@ -15,7 +15,7 @@ public class ScrapDAO {
 
     // 스크랩 추가 (정책)
     public void addPolicyScrap(int loginNo, int policyId) throws SQLException {
-        String sql = "INSERT INTO scraps (login_loginNo, policy_policyId, createdDate) VALUES (?, ?, NOW())";
+        String sql = "INSERT INTO scraps (loginNo, policyId, createdDate) VALUES (?, ?, NOW())";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -25,12 +25,17 @@ public class ScrapDAO {
         }
     }
 
-    // 스크랩 목록 (정책)
+ // 스크랩 목록 (정책)
     public List<ScrapDTO> getPolicyScrapsByUser(int loginNo) throws SQLException {
         List<ScrapDTO> results = new ArrayList<>();
-        String sql = "SELECT s.scrapsNo, s.createdDate, p.policy_policyId, p.title, p.content " +
-                     "FROM scraps s JOIN policy p ON s.policy_policyId = p.policy_policyId " +
-                     "WHERE s.login_loginNo = ? ORDER BY s.createdDate DESC";
+        String sql = "SELECT s.scrapsNo, s.createdDate, s.policyId, " +
+                     "p.title AS policyTitle, p.content AS policyContent, " +
+                     "p.categoryId AS policyCategoryId, " +
+                     "p.applicationEnd AS policyApplicationEnd " + 
+                     "FROM scraps s " +
+                     "JOIN policy p ON s.policyId = p.policyId " +
+                     "WHERE s.loginNo = ? " +
+                     "ORDER BY s.createdDate DESC";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -39,17 +44,24 @@ public class ScrapDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     ScrapDTO dto = new ScrapDTO();
-                    dto.setScrapId(rs.getInt("scrapsNo"));
+                    dto.setScrapNo(rs.getInt("scrapsNo"));
                     dto.setCreatedAt(rs.getString("createdDate"));
-                    dto.setPolicyId(rs.getInt("policy_policyId"));
-                    dto.setPolicyTitle(rs.getString("title"));
-                    dto.setPolicyContent(rs.getString("content"));
+                    dto.setPolicyId(rs.getInt("policyId"));
+
+                    // 정책 정보
+                    dto.setPolicyTitle(rs.getString("policyTitle"));
+                    dto.setPolicyContent(rs.getString("policyContent"));
+                    dto.setPolicyCategoryId(rs.getInt("policyCategoryId"));
+                    dto.setPolicyApplicationEnd(rs.getString("policyApplicationEnd"));
+
                     results.add(dto);
                 }
             }
         }
         return results;
     }
+
+
 
     // 스크랩 삭제
     public void deleteScrap(int scrapNo) throws SQLException {

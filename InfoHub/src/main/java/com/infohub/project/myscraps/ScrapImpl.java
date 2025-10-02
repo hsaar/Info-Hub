@@ -13,19 +13,19 @@ public class ScrapImpl implements ScrapService {
 
     // 정책 스크랩 추가
     @Override
-    public void addPolicyScrap(int loginId, int policyId) throws SQLException {
-        dao.addPolicyScrap(loginId, policyId);
+    public void addPolicyScrap(int loginNo, int policyId) throws SQLException {
+        dao.addPolicyScrap(loginNo, policyId);
     }
 
     // 내가 스크랩한 정책 목록
     @Override
-    public List<ScrapDTO> getPolicyScrapsByUser(int loginId) throws SQLException {
-        return dao.getPolicyScrapsByUser(loginId);
+    public List<ScrapDTO> getPolicyScrapsByUser(int loginNo) throws SQLException {
+        return dao.getPolicyScrapsByUser(loginNo);
     }
 
     // 스크랩 삭제
     @Override
-    public void deleteScrap(int scrapId) throws SQLException {
-        dao.deleteScrap(scrapId);
+    public void deleteScrap(int scrapNo) throws SQLException {
+        dao.deleteScrap(scrapNo);
     }
 }

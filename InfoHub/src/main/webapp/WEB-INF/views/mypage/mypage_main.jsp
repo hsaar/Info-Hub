@@ -30,7 +30,7 @@
         <a href="#" class="menu-item" data-page="my-info">
           <span class="menu-text">나의 정보</span>
         </a>
-        <a href="#" class="menu-item" data-page="my-policy">
+        <a href="<c:url value='/scraps'/>" class="menu-item" data-page="my-policy">
           <span class="menu-text">스크랩 혜택</span>
         </a>
         <a href="#" class="menu-item" data-page="likes">
@@ -59,7 +59,6 @@
       <!-- 나의 정책 페이지 -->
       <div id="my-policy-content" class="content-box" style="display: none;">
           <%@ include file="my_scrap.jsp"%>
-        <p>스크랩한 혜택 목록이 표시됩니다.</p>
       </div>
 
       <!-- 타임라인 페이지 -->
@@ -88,8 +87,7 @@
  
       <!-- 좋아요 페이지 -->
       <div id="likes-content" class="content-box" style="display: none;">
-         <%@ include file="my_scrap.jsp"%>
-        <p>좋아요 누른 게시글이 표시됩니다.</p>
+         <%@ include file="my_hearts.jsp"%>
       </div>
 
       <!-- 알림 관리 페이지 -->

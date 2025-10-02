@@ -125,10 +125,7 @@ public class HomeController {
 	public String articleContent(Model model) {
 		return "/article/articleContent";
 	}
-	@GetMapping("my_scrap")
-	public String my_scrap(Model model) {
-		return "/mypage/my_scrap";
-	}
+
 	
 	
 	
