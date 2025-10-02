@@ -59,7 +59,7 @@ public class ScrapController {
     }
 
     // 정책 스크랩 삭제
-    @PostMapping("/delete") 
+    @PostMapping("/delete")
     public String deletePolicyScrap(
             @RequestParam("scrapsNo") int scrapId,
             HttpSession session,

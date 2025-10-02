@@ -7,11 +7,11 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-@Repository   // 스프링 빈 등록
+@Repository
 public class HeartDAO {
 
     @Autowired
-    private DataSource dataSource;   // root-context.xml
+    private DataSource dataSource;
 
     // 좋아요 추가
     public void addHeart(int loginNo, int articleId) throws SQLException {
@@ -24,12 +24,17 @@ public class HeartDAO {
         }
     }
 
-    // 내가 누른 기사 좋아요 목록
+    // 내가 누른 기사 좋아요 목록 (인기순, 카테고리 포함)
     public List<HeartDTO> getHeartsByUser(int loginNo) throws SQLException {
         List<HeartDTO> results = new ArrayList<>();
-        String sql = "SELECT h.heartNo, h.createdDate, a.articleId, a.title, a.content, a.image " +
-                     "FROM hearts h JOIN article a ON h.article_articleId = a.articleId " +
-                     "WHERE h.login_loginNo = ? ORDER BY h.createdDate DESC";
+        // article.articlecategories_categoriesNo 사용, 인기순 + 최신순 정렬
+        String sql = "SELECT h.heartNo, h.createdDate, a.articleId, a.title AS articleTitle, a.content AS articleContent, " +
+                     "a.articlecategories_categoriesNo AS categoryNo, " +
+                     "a.hearts AS hearts " +
+                     "FROM hearts h " +
+                     "JOIN article a ON h.article_articleId = a.articleId " +
+                     "WHERE h.login_loginNo = ? " +
+                     "ORDER BY a.hearts DESC, h.createdDate DESC"; // 인기순 + 최신순
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -41,9 +46,9 @@ public class HeartDAO {
                     dto.setHeartNo(rs.getInt("heartNo"));
                     dto.setCreatedDate(rs.getString("createdDate"));
                     dto.setArticleId(rs.getInt("articleId"));
-                    dto.setArticleTitle(rs.getString("title"));
-                    dto.setArticleContent(rs.getString("content"));
-                    dto.setArticleImage(rs.getString("image"));
+                    dto.setArticleTitle(rs.getString("articleTitle"));
+                    dto.setArticleContent(rs.getString("articleContent"));
+                    dto.setCategoryNo(rs.getInt("categoryNo"));
                     dto.setLoginNo(loginNo);
                     results.add(dto);
                 }

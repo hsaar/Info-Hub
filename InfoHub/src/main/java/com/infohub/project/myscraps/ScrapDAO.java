@@ -61,8 +61,6 @@ public class ScrapDAO {
         return results;
     }
 
-
-
     // 스크랩 삭제
     public void deleteScrap(int scrapNo) throws SQLException {
         String sql = "DELETE FROM scraps WHERE scrapsNo = ?";

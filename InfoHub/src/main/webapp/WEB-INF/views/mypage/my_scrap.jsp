@@ -2,22 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>혜택 스트랩</title>
-<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
-</head>
-<body>
 <!-- 스크랩한 정책 콘텐츠 -->
-<h2 class="content-title">스크랩한 혜택</h2>
+<h2 class="content-title">스크랩한 정책</h2>
+<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 
 <!-- 필터 -->
 <div class="scrap-filter">
   <select class="filter-select" id="scrapFilter">
-    <option value="all">전체 (15)</option>
+    <option value="all">전체</option>
   	<option value="1">일자리</option>
   	<option value="2">주거</option>
   	<option value="3">교육</option>
@@ -37,14 +29,14 @@
 <!-- 페이지네이션 -->
 <nav class="pagination-nav" style="display:none;">
   <button class="page-arrow" id="prevPage">«</button>
-  <span id="pageInfo">0 / 0</span>
+  <span id="pageInfo"></span>
   <button class="page-arrow" id="nextPage">»</button>
 </nav>
 
 
 <script>
 var scrapApiUrl = '<c:url value="/scraps/api"/>';
-
+var deleteScrapUrl = '<c:url value="/scraps/delete" />';
 
 document.addEventListener('DOMContentLoaded', function() {
     const scrapList = document.querySelector('.scrap-list');
@@ -52,8 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const filterSelect = document.getElementById("scrapFilter");
     
     let currentSort = "latest"; // 기본 최신순
+    
 
-    // ---------------- 데이터 불러오기 ----------------
+    // 데이터 불러오기
     function loadScraps() {
         fetch(scrapApiUrl, {
             method: 'GET',
@@ -62,11 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(res => res.json())
         .then(data => {
             console.log("받은 데이터:", data);
-            
-            if (data && data.length > 0) {
-                console.log("첫 번째 스크랩 policyTitle 값:", data[0].policyTitle);
-                console.log("첫 번째 스크랩 policyTitle 타입:", typeof data[0].policyTitle); // 이것이 'string'이 아닌 'boolean'인지 확인!
-            }
             renderList(data);
         })
         .catch(err => console.error("스크랩 불러오기 실패:", err));
@@ -74,12 +62,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    // ---------------- 리스트 렌더링 ----------------
+    // 리스트 렌더링
     function renderList(scraps) {
+    	currentList = scraps.map((s, idx) => ({ ...s, id: idx }));
+    	currentPage = 1;
+    	
         scrapList.innerHTML = "";
 
         if (!scraps || scraps.length === 0) {
             noData.style.display = "block";
+            renderPage();
             return;
         }
         noData.style.display = "none";
@@ -96,16 +88,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
             card.innerHTML = 
                 '<h3 class="scrap-title">' + (titleText || "(제목 없음)") + '</h3>' +
-                '<p class="scrap-description">' + (contentText || "(내용 없음)") + '</p>' + // 👈 false 대신 "(내용 없음)"이 출력됩니다.
+                '<p class="scrap-description">' + (contentText || "(내용 없음)") + '</p>' +
                 '<div class="scrap-info">' +
                 '    <span class="scrap-date">스크랩일: ' + scrap.createdAt + '</span>' +
+                '</div>' +
+                '<div class="scrap-actions">' +
+                '    <button class="delete-btn" data-scrapid="' + scrap.scrapNo + '">삭제</button>' +
                 '</div>';
-                
+
             scrapList.appendChild(card);
         });
+        renderPage();
     }
 
-    // ---------------- 필터 이벤트 ----------------
+    // 필터 이벤트
     filterSelect.addEventListener("change", function() {
         const selectedCategoryId = this.value;
         const cards = document.querySelectorAll(".scrap-card");
@@ -117,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ---------------- 정렬 ----------------
+    // 정렬 
     function sortData(cards) {
         const arr = Array.from(cards);
         if (currentSort === "alpha") {
@@ -155,10 +151,112 @@ document.addEventListener('DOMContentLoaded', function() {
             sorted.forEach(card => scrapList.appendChild(card));
         });
     });
+    
+    let currentPage = 1;
+    const pageSize = 6;
+    let currentList = [];
+    
+    const pageNav = document.querySelector('.pagination-nav');
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    const pageInfo = document.getElementById('pageInfo');
 
-    // ---------------- 실행 ----------------
+    // 페이지네이션 전체 스타일
+    pageNav.style.position = 'relative';
+    pageNav.style.width = '200px';
+    pageNav.style.height = '40px';
+    pageNav.style.margin = '20px auto';
+
+    // 페이지 정보(숫자) 스타일 - 항상 중앙 고정
+    pageInfo.style.position = 'absolute';
+    pageInfo.style.left = '50%';
+    pageInfo.style.transform = 'translateX(-50%)';
+    pageInfo.style.minWidth = '100px';
+    pageInfo.style.textAlign = 'center';
+    pageInfo.style.fontWeight = 'normal';
+    pageInfo.style.lineHeight = '35px';
+
+
+    // 버튼 스타일 - nav 양옆
+    [prevBtn, nextBtn].forEach(btn => {
+        btn.style.width = '40px';
+        btn.style.height = '40px';
+        btn.style.borderRadius = '6px';
+        btn.style.cursor = 'pointer';
+        btn.style.display = 'inline-flex';
+        btn.style.justifyContent = 'center';
+        btn.style.alignItems = 'center';
+    });
+    prevBtn.style.position = 'absolute';
+    prevBtn.style.left = '0';
+    nextBtn.style.position = 'absolute';
+    nextBtn.style.right = '0';
+
+	
+    // DOM에서 카드 선택
+    const cards = () => document.querySelectorAll(".scrap-card");
+
+    // 페이지 표시 함수
+    function renderPage() {
+    	const allCards = Array.from(cards());
+    	const totalPages = Math.ceil(currentList.length / pageSize) || 1;
+
+    	allCards.forEach((card, idx) => {
+            card.style.display = (idx >= (currentPage - 1) * pageSize && idx < currentPage * pageSize) ? "block" : "none";
+        });;
+
+    	pageInfo.textContent = currentPage + " / " + totalPages;
+
+    	prevBtn.style.display = currentPage > 1 ? "inline-block" : "none";
+        nextBtn.style.display = currentPage < totalPages ? "inline-block" : "none";
+        pageNav.style.display = totalPages > 1 ? 'flex' : 'none';
+	}
+
+    // 버튼 이벤트
+    document.getElementById("prevPage").addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderPage();
+        }
+    });
+    document.getElementById("nextPage").addEventListener("click", () => {
+        const totalPages = Math.ceil(currentList.length / pageSize) || 1;
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderPage();
+        }
+    });
+    
+ 	// 삭제 버튼 클릭 이벤트
+    scrapList.addEventListener("click", function(e) {
+        if (e.target.classList.contains("delete-btn")) {
+            const scrapCard = e.target.closest(".scrap-card");
+            const scrapId = e.target.getAttribute("data-scrapid");
+            console.log("삭제할 scrapId:", scrapId);
+
+            if (!scrapId) {
+                alert("삭제할 스크랩 정보를 찾을 수 없습니다.");
+                return;
+            }
+
+            if (!confirm("정말 삭제하시겠습니까?")) return;
+
+            fetch(deleteScrapUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'scrapsNo=' + encodeURIComponent(scrapId)
+            })
+
+            .then(res => res.text())
+            .then(() => loadScraps())
+            .catch(err => {
+                console.error("삭제 실패:", err);
+                alert("삭제 중 오류가 발생했습니다.");
+            });
+        }
+    });
+
+    // 실행
     loadScraps();
 });
 </script>
-</body>
-</html>

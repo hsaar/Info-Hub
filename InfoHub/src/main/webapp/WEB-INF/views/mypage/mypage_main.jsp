@@ -31,7 +31,7 @@
           <span class="menu-text">나의 정보</span>
         </a>
         <a href="<c:url value='/scraps'/>" class="menu-item" data-page="my-policy">
-          <span class="menu-text">스크랩 혜택</span>
+          <span class="menu-text">스크랩 정책</span>
         </a>
         <a href="#" class="menu-item" data-page="likes">
           <span class="menu-text">스크랩 기사</span>

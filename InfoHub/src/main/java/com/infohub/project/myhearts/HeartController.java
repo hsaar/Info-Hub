@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,12 +22,23 @@ public class HeartController {
         try {
             List<HeartDTO> hearts = service.getHeartsByUser(loginNo);
             model.addAttribute("hearts", hearts);
-            return "my_hearts";  // heartList.jsp
+            return "mypage/my_hearts";  // heartList.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
             return "error";
         }
     }
+    
+    @GetMapping("/api")
+    @ResponseBody
+    public List<HeartDTO> getHeartsApi(HttpSession session) throws SQLException {
+        Integer loginNo = (Integer) session.getAttribute("loginNo");
+        if (loginNo == null) {
+            return java.util.Collections.emptyList();
+        }
+        return service.getHeartsByUser(loginNo);
+    }
+
 
     // 기사 좋아요 추가
     @PostMapping
@@ -36,7 +48,7 @@ public class HeartController {
         try {
             service.addHeart(loginNo, articleId);
             model.addAttribute("result", "heart_add_success");
-            return "my_hearts"; // heartResult.jsp
+            return "mypage/my_hearts"; // heartResult.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
             return "error";
@@ -49,7 +61,7 @@ public class HeartController {
         try {
             service.deleteHeart(heartNo);
             model.addAttribute("result", "heart_delete_success");
-            return "my_hearts"; // heartResult.jsp
+            return "mypage/my_hearts"; // heartResult.jsp
         } catch (SQLException e) {
             model.addAttribute("error", "DB 오류 발생");
             return "error";
