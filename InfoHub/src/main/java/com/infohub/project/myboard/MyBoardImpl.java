@@ -15,7 +15,7 @@ public class MyBoardImpl implements MyBoardService {
     // 내가 쓴 게시글 목록 조회
     @Override
     public List<MyBoardDTO> getMyBoards(int loginNo) throws SQLException {
-        return dao.findBoardsByUser(loginNo);
+        return dao.findBoardsByUser(loginNo, "regiDate");
     }
 
     // 게시글 상세 조회

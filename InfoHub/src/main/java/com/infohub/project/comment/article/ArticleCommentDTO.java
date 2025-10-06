@@ -7,6 +7,7 @@ public class ArticleCommentDTO {
     private String content;
     private String createdAt;
     private String updatedAt;
+    private int articleId;
 
     // Getter / Setter
     public int getCommentId() {
@@ -43,4 +44,12 @@ public class ArticleCommentDTO {
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
+    
+    public int getArticleId() {
+    	return articleId;
+    }
+    public void setArticleId(int articleId) {
+    	this.articleId = articleId;
+    }
+
 }

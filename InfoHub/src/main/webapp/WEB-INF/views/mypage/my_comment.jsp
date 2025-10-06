@@ -15,27 +15,16 @@
 </head>
 <body>
 
-<!-- 상단바 -->
-<%@ include file="../include/header.jsp"%>
-<!-- 페이지 헤더 -->
-<div class="page-header">
-  <div class="container">
-    <h1 class="page-main-title">내 댓글 확인</h1>
-    <p class="page-subtitle">내가 작성한 댓글 목록입니다</p>
-  </div>
-</div>
-
-<!-- 메인 컨테이너 -->
+<!-- comment.jsp 내부 -->
 <div class="my-comments-container">
-  <div class="container">
     
     <!-- 필터 및 정렬 -->
     <div class="comments-filter">
       <div class="filter-left">
-        <select class="filter-select">
-          <option>전체 댓글 (24)</option>
-          <option>정책 댓글</option>
-          <option>게시판 댓글</option>
+        <select id="commentFilter" class="filter-select">
+          <option value="all">전체 댓글</option>
+          <option value="article">기사 댓글</option>
+          <option value="board">게시판 댓글</option>
         </select>
       </div>
       <div class="filter-right">
@@ -45,155 +34,255 @@
     </div>
 
     <!-- 댓글 리스트 -->
-    <div class="comments-list">
-      
-      <!-- 댓글 아이템 1 -->
-      <article class="comment-item">
-        <div class="comment-header">
-          <div class="comment-post-info">
-            <span class="comment-category">정책</span>
-            <a href="#" class="comment-post-title">국민내일배움카드 신청 방법</a>
-          </div>
-          <span class="comment-date">2025.01.15</span>
-        </div>
-        <div class="comment-content">
-          <p>정말 유용한 정보네요! 저도 신청해보려고 하는데 구비서류는 어떤 것들이 필요한가요?</p>
-        </div>
-        <div class="comment-footer">
-          <button class="comment-btn edit">수정</button>
-          <button class="comment-btn delete">삭제</button>
-          <button class="comment-btn view">원글 보기</button>
-        </div>
-      </article>
-
-      <!-- 댓글 아이템 2 -->
-      <article class="comment-item">
-        <div class="comment-header">
-          <div class="comment-post-info">
-            <span class="comment-category">게시판</span>
-            <a href="#" class="comment-post-title">청년 주거 지원 정책 질문있습니다</a>
-          </div>
-          <span class="comment-date">2025.01.14</span>
-        </div>
-        <div class="comment-content">
-          <p>저도 같은 궁금증이 있었는데 답변 감사합니다. 혹시 신청 기간은 언제까지인가요?</p>
-        </div>
-        <div class="comment-footer">
-          <button class="comment-btn edit">수정</button>
-          <button class="comment-btn delete">삭제</button>
-          <button class="comment-btn view">원글 보기</button>
-        </div>
-      </article>
-
-      <!-- 댓글 아이템 3 -->
-      <article class="comment-item">
-        <div class="comment-header">
-          <div class="comment-post-info">
-            <span class="comment-category">정책</span>
-            <a href="#" class="comment-post-title">근로장려금 신청 가능 여부 확인</a>
-          </div>
-          <span class="comment-date">2025.01.13</span>
-        </div>
-        <div class="comment-content">
-          <p>소득 기준이 궁금했는데 명확하게 설명해주셔서 감사합니다. 도움이 많이 되었어요!</p>
-        </div>
-        <div class="comment-footer">
-          <button class="comment-btn edit">수정</button>
-          <button class="comment-btn delete">삭제</button>
-          <button class="comment-btn view">원글 보기</button>
-        </div>
-      </article>
-
-      <!-- 댓글 아이템 4 -->
-      <article class="comment-item">
-        <div class="comment-header">
-          <div class="comment-post-info">
-            <span class="comment-category">게시판</span>
-            <a href="#" class="comment-post-title">취업 준비생을 위한 정책 추천</a>
-          </div>
-          <span class="comment-date">2025.01.12</span>
-        </div>
-        <div class="comment-content">
-          <p>좋은 정보 공유해주셔서 감사합니다. 국민취업지원제도도 알아보면 좋을 것 같아요!</p>
-        </div>
-        <div class="comment-footer">
-          <button class="comment-btn edit">수정</button>
-          <button class="comment-btn delete">삭제</button>
-          <button class="comment-btn view">원글 보기</button>
-        </div>
-      </article>
-
-      <!-- 댓글 아이템 5 -->
-      <article class="comment-item">
-        <div class="comment-header">
-          <div class="comment-post-info">
-            <span class="comment-category">정책</span>
-            <a href="#" class="comment-post-title">청년도약계좌 가입 조건</a>
-          </div>
-          <span class="comment-date">2025.01.11</span>
-        </div>
-        <div class="comment-content">
-          <p>나이 제한이 있다고 들었는데, 만 34세까지 가능한가요? 자세한 정보 부탁드립니다.</p>
-        </div>
-        <div class="comment-footer">
-          <button class="comment-btn edit">수정</button>
-          <button class="comment-btn delete">삭제</button>
-          <button class="comment-btn view">원글 보기</button>
-        </div>
-      </article>
-
+    <div class="comments-list" id="comments-list">
+      <!-- JS에서 동적 생성 -->
     </div>
 
     <!-- 페이지네이션 -->
-    <nav class="pagination-nav">
-      <button class="page-arrow">«</button>
-      <button class="page-number active">1</button>
-      <button class="page-number">2</button>
-      <button class="page-number">3</button>
-      <button class="page-number">4</button>
-      <button class="page-number">5</button>
-      <button class="page-arrow">»</button>
-    </nav>
+	<nav class="comment-pagination-nav" style="display:none;">
+  		<button class="comment-page-arrow" id="commentPrevPage">«</button>
+  		<span id="commentPageInfo"></span>
+  		<button class="comment-page-arrow" id="commentNextPage">»</button>
+	</nav>
 
-  </div>
 </div>
 
-<!-- Top 버튼 -->
-<button class="top-button" id="topButton" aria-label="맨 위로 이동">
-  <svg viewBox="0 0 24 24">
-    <path d="M12 4l-8 8h6v8h4v-8h6z"/>
-  </svg>
-</button>
+
 
 <script>
-  // Top 버튼
-  const topButton = document.getElementById('topButton');
-  window.addEventListener('scroll', function() {
-    topButton.classList.toggle('show', window.scrollY > 300);
-  });
-  topButton.addEventListener('click', function() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+document.addEventListener('DOMContentLoaded', () => {
+	  const commentsList = document.getElementById('comments-list');
+	  const filterSelect = document.getElementById('commentFilter');
+	  const sortBtns = document.querySelectorAll('.sort-option');
 
-  // 정렬 버튼
-  const sortOptions = document.querySelectorAll('.sort-option');
-  sortOptions.forEach(option => {
-    option.addEventListener('click', function() {
-      sortOptions.forEach(opt => opt.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
+	  // --- 페이지네이션 요소 ---
+	  const pageNav = document.querySelector('.comment-pagination-nav');
+	  const prevBtn = document.getElementById('commentPrevPage');
+	  const nextBtn = document.getElementById('commentNextPage');
+	  const pageInfo = document.getElementById('commentPageInfo');
+	  
+	  const pageSize = 6;
+	  let currentPage = 1;
+	  
+	// 페이지네이션 스타일
+	  pageNav.style.position = 'relative';
+	  pageNav.style.width = '200px';
+	  pageNav.style.height = '40px';
+	  pageNav.style.margin = '20px auto';
 
-  // 댓글 삭제 버튼
-  const deleteButtons = document.querySelectorAll('.comment-btn.delete');
-  deleteButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      if (confirm('댓글을 삭제하시겠습니까?')) {
-        this.closest('.comment-item').remove();
-      }
-    });
-  });
+	  pageInfo.style.position = 'absolute';
+	  pageInfo.style.left = '50%';
+	  pageInfo.style.transform = 'translateX(-50%)';
+	  pageInfo.style.minWidth = '100px';
+	  pageInfo.style.textAlign = 'center';
+	  pageInfo.style.fontWeight = 'normal';
+	  pageInfo.style.lineHeight = '35px';
+
+	  [prevBtn, nextBtn].forEach(btn => {
+	      btn.style.width = '40px';
+	      btn.style.height = '40px';
+	      btn.style.borderRadius = '6px';
+	      btn.style.cursor = 'pointer';
+	      btn.style.display = 'inline-flex';
+	      btn.style.justifyContent = 'center';
+	      btn.style.alignItems = 'center';
+	  });
+
+	  prevBtn.style.position = 'absolute';
+	  prevBtn.style.left = '0';
+	  nextBtn.style.position = 'absolute';
+	  nextBtn.style.right = '0';
+
+
+	  // --- boardComment ---
+	  async function fetchBoardComments() {
+	    try {
+	      const res = await fetch('<c:url value="/board/comments/api"/>');
+	      const data = await res.json();
+	      return data || [];
+	    } catch (err) {
+	      console.error('게시판 댓글 불러오기 실패:', err);
+	      return [];
+	    }
+	  }
+
+	  // --- articleComment ---
+	  async function fetchArticleComments() {
+	    try {
+	      const res = await fetch('<c:url value="/article/comments/api"/>');
+	      const data = await res.json();
+	      return data || [];
+	    } catch (err) {
+	      console.error('기사 댓글 불러오기 실패:', err);
+	      return [];
+	    }
+	  }
+
+	  let currentComments = [];
+
+	  // 댓글 렌더링 + 페이지네이션
+	  function renderComments(comments) {
+	    commentsList.innerHTML = '';
+	    if (!comments || comments.length === 0) {
+	      commentsList.innerHTML = '<p>댓글이 없습니다.</p>';
+	      pageNav.style.display = 'none';
+	      return;
+	    }
+
+	    const totalPages = Math.ceil(comments.length / pageSize) || 1;
+	    const startIdx = (currentPage - 1) * pageSize;
+	    const endIdx = currentPage * pageSize;
+	    const pageComments = comments.slice(startIdx, endIdx);
+
+	    pageComments.forEach(c => {
+	      const contentText = (c.content || "(내용 없음)").toString();
+
+	      const card = document.createElement('div');
+	      card.classList.add('comment-item');
+
+	      card.innerHTML =
+	        '<div class="comment-content">' +
+	        '  <p>' + contentText + '</p>' +
+	        '</div>' +
+	        '<div class="comment-date">' + c.createdAt + '</div>' +
+	        '<div class="comment-footer">' +
+	        '  <button class="comment-btn delete-btn" data-commentid="' + c.commentId + '">삭제</button>' +
+	        '</div>';
+
+	      commentsList.appendChild(card);
+	    });
+
+	    pageInfo.textContent = currentPage + " / " + totalPages;
+	    prevBtn.style.display = currentPage > 1 ? "inline-block" : "none";
+	    nextBtn.style.display = currentPage < totalPages ? "inline-block" : "none";
+	    pageNav.style.display = totalPages > 1 ? "flex" : "none";
+	  }
+
+	  // 페이지 버튼 이벤트
+	  prevBtn.addEventListener('click', () => {
+	    if (currentPage > 1) {
+	      currentPage--;
+	      renderComments(currentComments);
+	    }
+	  });
+	  nextBtn.addEventListener('click', () => {
+	    const totalPages = Math.ceil(currentComments.length / pageSize) || 1;
+	    if (currentPage < totalPages) {
+	      currentPage++;
+	      renderComments(currentComments);
+	    }
+	  });
+
+	  // 정렬 함수
+	  function sortComments(comments, type) {
+	    if (type === 'latest') {
+	      return comments.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+	    } else if (type === 'oldest') {
+	      return comments.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+	    }
+	    return comments;
+	  }
+
+	  // 정렬 버튼 이벤트
+	  sortBtns.forEach(btn => {
+	    btn.addEventListener('click', function() {
+	      sortBtns.forEach(b => b.classList.remove('active'));
+	      this.classList.add('active');
+
+	      const sortType = this.textContent.includes('최신') ? 'latest' : 'oldest';
+	      renderComments(sortComments(currentComments, sortType));
+	    });
+	  });
+
+	  // 드롭다운 필터 이벤트
+	  filterSelect.addEventListener('change', async () => {
+	    currentPage = 1; // 페이지 초기화
+	    let comments = [];
+	    if (filterSelect.value === 'board') {
+	      comments = await fetchBoardComments();
+	    } else if (filterSelect.value === 'article') {
+	      comments = await fetchArticleComments();
+	    } else if (filterSelect.value === 'all') {
+	      const [boardComments, articleComments] = await Promise.all([
+	        fetchBoardComments(),
+	        fetchArticleComments()
+	      ]);
+	      comments = [...boardComments, ...articleComments];
+	    }
+
+	    currentComments = comments;
+
+	    const sortedComments = sortComments(currentComments, 'latest');
+
+	    sortBtns.forEach(b => b.classList.remove('active'));
+	    sortBtns[0].classList.add('active'); 
+
+	    renderComments(sortedComments);
+	  });
+
+	  // 삭제 기능
+	  commentsList.addEventListener('click', async (e) => {
+	    if (!e.target.classList.contains('delete-btn')) return;
+
+	    const commentId = e.target.getAttribute('data-commentid');
+	    if (!commentId) return;
+
+	    if (!confirm("정말 삭제하시겠습니까?")) return;
+
+	    try {
+	      let url = '';
+	      if (filterSelect.value === 'board') {
+	        url = '<c:url value="/board/comments/delete"/>' + '/' + commentId;
+	      } else if (filterSelect.value === 'article') {
+	        url = '<c:url value="/article/comments/delete"/>' + '/' + commentId;
+	      } else if (filterSelect.value === 'all') {
+	        const commentType = currentComments.find(c => c.commentId == commentId)?.type;
+	        if (!commentType) {
+	          console.warn("삭제 대상 댓글 유형을 알 수 없습니다.");
+	          return;
+	        }
+	        url = commentType === 'board'
+	          ? '<c:url value="/board/comments/delete"/>' + '/' + commentId
+	          : '<c:url value="/article/comments/delete"/>' + '/' + commentId;
+	      }
+
+	      await fetch(url, {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	        body: 'loginNo=<%= session.getAttribute("loginNo") %>'
+	      });
+
+	      currentComments = currentComments.filter(c => c.commentId != commentId);
+	      renderComments(currentComments);
+	    } catch (err) {
+	      console.error("댓글 삭제 실패:", err);
+	      alert("삭제 중 오류가 발생했습니다.");
+	    }
+	  });
+
+	  // 초기 실행
+	  (async function init() {
+	    currentPage = 1;
+	    const [boardComments, articleComments] = await Promise.all([
+	      fetchBoardComments(),
+	      fetchArticleComments()
+	    ]);
+	    currentComments = [...boardComments, ...articleComments];
+
+	    // 최신순 정렬
+	    const sortedComments = sortComments(currentComments, 'latest');
+
+	    // 정렬 버튼 초기화
+	    sortBtns.forEach(btn => btn.classList.remove('active'));
+	    sortBtns[0].classList.add('active'); 
+
+	    renderComments(sortedComments);
+	    filterSelect.value = 'all';
+	  })();
+
+	});
+
+
 </script>
-
 </body>
 </html>

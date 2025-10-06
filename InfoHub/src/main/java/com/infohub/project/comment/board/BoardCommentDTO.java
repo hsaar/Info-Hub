@@ -7,6 +7,7 @@ public class BoardCommentDTO {
     private String content;
     private String createdAt;
     private String updatedAt;
+    private int boardNo;
 
     // Getter / Setter
     public int getCommentId() {
@@ -42,5 +43,12 @@ public class BoardCommentDTO {
     }
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    
+    public int getBoardNo() {
+        return boardNo;
+    }
+    public void setBoardNo(int boardNo) {
+        this.boardNo = boardNo;
     }
 }

@@ -6,7 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/board/comments")
@@ -26,6 +29,17 @@ public class BoardCommentController {
         model.addAttribute("comments", comments);
         return "mypage/my_comment"; 
     }
+    
+    @GetMapping("/api")
+    @ResponseBody
+    public List<BoardCommentDTO> getBoardComments(HttpSession session) throws SQLException {
+        Integer loginNo = (Integer) session.getAttribute("loginNo");
+        if (loginNo == null) {
+            return new ArrayList<>();
+        }
+        return service.getMyComments(loginNo);
+    }
+
 
     // 내가 쓴 댓글 상세 조회 → 해당 게시글로 이동
     @GetMapping("/detail/{commentId}")

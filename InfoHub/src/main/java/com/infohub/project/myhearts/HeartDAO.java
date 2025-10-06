@@ -24,7 +24,7 @@ public class HeartDAO {
         }
     }
 
-    // 내가 누른 기사 좋아요 목록 (인기순, 카테고리 포함)
+    // 내가 누른 기사 좋아요 목록 (정렬, 카테고리 포함)
     public List<HeartDTO> getHeartsByUser(int loginNo) throws SQLException {
         List<HeartDTO> results = new ArrayList<>();
         // article.articlecategories_categoriesNo 사용, 인기순 + 최신순 정렬
@@ -50,6 +50,7 @@ public class HeartDAO {
                     dto.setArticleContent(rs.getString("articleContent"));
                     dto.setCategoryNo(rs.getInt("categoryNo"));
                     dto.setLoginNo(loginNo);
+                    dto.setHearts(rs.getInt("hearts"));
                     results.add(dto);
                 }
             }

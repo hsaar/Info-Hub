@@ -34,13 +34,13 @@
           <span class="menu-text">스크랩 정책</span>
         </a>
         <a href="#" class="menu-item" data-page="likes">
-          <span class="menu-text">스크랩 기사</span>
+          <span class="menu-text">좋아요</span>
         </a>
         <a href="#" class="menu-item" data-page="timeline">
           <span class="menu-text">타임라인</span>
         </a>
         <a href="#" class="menu-item" data-page="board">
-          <span class="menu-text">게시판</span>
+          <span class="menu-text">나의 활동</span>
         </a>
         
       </nav>
@@ -66,22 +66,26 @@
         <h2 class="content-title">타임라인</h2>
         <p>타임라인이 표시됩니다.</p>
       </div>
+      
+      
 
       <!-- 게시판 페이지 -->
       <div id="board-content" class="content-box" style="display: none;">
-        <h2 class="content-title">게시판</h2>
+        <h2 class="content-title">나의 활동</h2>
         
         <div class="mypage-tabs">
-          <button class="mypage-tab">게시물</button>
-          <button class="mypage-tab active">댓글</button>
-          <button class="mypage-tab">좋아요</button>
+          <button class="mypage-tab active" data-tab="post">게시물</button>
+          <button class="mypage-tab" data-tab="comment">댓글</button>
         </div>
 
-        <div class="mypage-list">
-          <div class="list-item">내가 작성한 댓글 1</div>
-          <div class="list-item">내가 작성한 댓글 2</div>
-          <div class="list-item">내가 작성한 댓글 3</div>
+        <div id="comment-tab" style="display:none;">
+ 		  <%@ include file="my_comment.jsp" %>
+		</div>
+
+		<div id="board-tab" style="display:none;">
+  		  <%@ include file="my_board.jsp" %>
         </div>
+
       </div>
 	
  
@@ -116,6 +120,12 @@
     <path d="M12 4l-8 8h6v8h4v-8h6z"/>
   </svg>
 </button>
+
+<%-- JSP 상단에서 세션 로그인 번호 가져오기 --%>
+<%
+    Integer loginNo = (Integer) session.getAttribute("loginNo");
+    if (loginNo == null) loginNo = 0; // 로그인 안된 경우 안전장치
+%>
 
 <script>
   // Top 버튼
@@ -152,14 +162,46 @@
     });
   });
 
-  // 탭 전환 (게시판 내부)
-  const tabs = document.querySelectorAll('.mypage-tab');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      tabs.forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
+  document.addEventListener('DOMContentLoaded', () => {
+	    const tabs = document.querySelectorAll('.mypage-tab');
+	    const commentTab = document.getElementById('comment-tab');
+	    const postTab = document.getElementById('board-tab');
+
+	    if (!commentTab || !postTab) return; // 안전장치
+
+	    // 초기 상태
+	    postTab.style.display = 'block';
+	    commentTab.style.display = 'none';
+	    tabs.forEach(t => t.classList.remove('active'));
+	    tabs[0].classList.add('active');
+
+	    // 댓글 데이터를 이미 fetch했는지 체크
+	    let commentsLoaded = false;
+
+	    // 탭 클릭 이벤트
+	    tabs.forEach(tab => {
+	        tab.addEventListener('click', function () {
+	            tabs.forEach(t => t.classList.remove('active'));
+	            this.classList.add('active');
+
+	            if (this.dataset.tab === 'comment') {
+	                commentTab.style.display = 'block';
+	                postTab.style.display = 'none';
+
+	                if (!commentsLoaded && typeof fetchBoardComments === 'function') {
+	                    fetchBoardComments(<%= loginNo %>);
+	                    commentsLoaded = true; // 한 번만 fetch
+	                }
+
+	            } else {
+	                commentTab.style.display = 'none';
+	                postTab.style.display = 'block';
+	            }
+	        });
+	    });
+	});
+
+
 </script>
 
 </body>

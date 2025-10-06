@@ -7,6 +7,7 @@ public class MyBoardDTO {
     private String regiDate; 
     private int readCnt;
     private int loginNo; 
+    private int hearts;
 
     public MyBoardDTO() {}
 
@@ -57,6 +58,14 @@ public class MyBoardDTO {
 
     public void setLoginNo(int loginNo) {
         this.loginNo = loginNo;
+    }
+    
+    public int getHearts(){ 
+    	return hearts; 
+    }
+    
+    public void setHearts(int hearts) { 
+    	this.hearts = hearts;
     }
 
     @Override

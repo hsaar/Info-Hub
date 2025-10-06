@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("article/comments")
 public class ArticleCommentController {
@@ -34,6 +36,18 @@ public class ArticleCommentController {
         model.addAttribute("comment", comment);
         return "mypage/my_comment";
     }
+    
+    @GetMapping("/api")
+    @ResponseBody
+    public List<ArticleCommentDTO> getArticleComments(HttpSession session) throws SQLException {
+        Integer loginNo = (Integer) session.getAttribute("loginNo");
+        if (loginNo == null) {
+            // 로그인 안 된 경우 빈 리스트 반환
+            return List.of();
+        }
+
+        return service.getMyComments(loginNo);
+    }
 
     // 내가 쓴 댓글 수정
     @PostMapping("/update")
@@ -42,10 +56,11 @@ public class ArticleCommentController {
         return "redirect:/comments/my?loginNo=" + dto.getLoginNo();
     }
 
-    // 내가 쓴 댓글 삭제
+ // 내가 쓴 댓글 삭제
     @PostMapping("/delete/{commentId}")
     public String deleteMyComment(@PathVariable int commentId, @RequestParam int loginNo) throws SQLException {
         service.deleteMyComment(commentId, loginNo);
-        return "redirect:/comments/my?loginNo=" + loginNo;
+        return "redirect:/article/comments/my?loginNo=" + loginNo;
     }
+
 }

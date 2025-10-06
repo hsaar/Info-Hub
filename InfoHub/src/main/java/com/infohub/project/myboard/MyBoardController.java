@@ -6,7 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/myboard")
@@ -46,6 +49,16 @@ public class MyBoardController {
             model.addAttribute("error", "DB 오류 발생");
             return "policy/error"; // error.jsp
         }
+    }
+    
+    @GetMapping("/api")
+    @ResponseBody
+    public List<MyBoardDTO> getMyBoardsApi(HttpSession session) throws SQLException {
+        Integer loginNo = (Integer) session.getAttribute("loginNo");
+        if (loginNo == null) {
+            return new ArrayList<>();
+        }
+        return service.getMyBoards(loginNo);
     }
 
     // 게시글 수정
