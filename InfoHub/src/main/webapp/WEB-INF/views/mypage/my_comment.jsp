@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	  const filterSelect = document.getElementById('commentFilter');
 	  const sortBtns = document.querySelectorAll('.sort-option');
 
-	  // --- 페이지네이션 요소 ---
 	  const pageNav = document.querySelector('.comment-pagination-nav');
 	  const prevBtn = document.getElementById('commentPrevPage');
 	  const nextBtn = document.getElementById('commentNextPage');
@@ -64,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	  const pageSize = 6;
 	  let currentPage = 1;
 	  
-	// 페이지네이션 스타일
+	  // 페이지네이션 스타일
 	  pageNav.style.position = 'relative';
 	  pageNav.style.width = '200px';
 	  pageNav.style.height = '40px';

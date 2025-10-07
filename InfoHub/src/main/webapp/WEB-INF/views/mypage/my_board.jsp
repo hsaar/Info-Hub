@@ -50,9 +50,48 @@
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const boardsList = document.getElementById('boards-list');
-    const MAX_CONTENT_LENGTH = 50; // 글자 제한
+    const boardFilter = document.getElementById('boardFilter'); 
+    const MAX_CONTENT_LENGTH = 50;
 
-    // 데이터 fetch
+    let allBoards = [];
+    let currentSort = 'latest';
+    let currentPage = 1;
+    const pageSize = 6;
+
+    const pageNav = document.querySelector('.board-pagination-nav');
+    const prevBtn = document.getElementById('boardPrevPage');
+    const nextBtn = document.getElementById('boardNextPage');
+    const pageInfo = document.getElementById('boardPageInfo');
+
+ 	// 페이지네이션 스타일
+ 	pageNav.style.position = 'relative';
+ 	pageNav.style.width = '200px';
+ 	pageNav.style.height = '40px';
+ 	pageNav.style.margin = '20px auto';
+
+ 	pageInfo.style.position = 'absolute';
+ 	pageInfo.style.left = '50%';
+ 	pageInfo.style.transform = 'translateX(-50%)';
+ 	pageInfo.style.minWidth = '100px';
+ 	pageInfo.style.textAlign = 'center';
+ 	pageInfo.style.fontWeight = 'normal';
+ 	pageInfo.style.lineHeight = '35px';
+
+ 	[prevBtn, nextBtn].forEach(btn => {
+     	btn.style.width = '40px';
+     	btn.style.height = '40px';
+     	btn.style.borderRadius = '6px';
+     	btn.style.cursor = 'pointer';
+     	btn.style.display = 'inline-flex';
+     	btn.style.justifyContent = 'center';
+     	btn.style.alignItems = 'center';
+ 	});
+
+ 	prevBtn.style.position = 'absolute';
+ 	prevBtn.style.left = '0';
+ 	nextBtn.style.position = 'absolute';
+ 	nextBtn.style.right = '0';
+
     async function fetchBoards() {
         try {
             const res = await fetch('<c:url value="/myboard/api?orderBy=regiDate"/>'); 
@@ -64,44 +103,115 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 카드 렌더링
     function renderBoards(boards) {
         boardsList.innerHTML = '';
         if (!boards || boards.length === 0) {
             boardsList.innerHTML = '<p>게시글이 없습니다.</p>';
+            pageNav.style.display = 'none';
             return;
         }
 
-        boards.forEach(b => {
-            // 글자수 제한
+        const selectedCategory = boardFilter.value;
+        let filtered = boards.filter(b => selectedCategory === 'all' || String(b.categoryId) === selectedCategory);
+
+        if (currentSort === 'latest') filtered.sort((a,b) => new Date(b.regiDate) - new Date(a.regiDate));
+        else if (currentSort === 'oldest') filtered.sort((a,b) => new Date(a.regiDate) - new Date(b.regiDate));
+        else if (currentSort === 'hearts') filtered.sort((a,b) => (b.hearts || 0) - (a.hearts || 0));
+
+        const totalPages = Math.ceil(filtered.length / pageSize) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const startIdx = (currentPage - 1) * pageSize;
+        const endIdx = currentPage * pageSize;
+        const pageBoards = filtered.slice(startIdx, endIdx);
+
+        pageBoards.forEach(b => {
             let contentPreview = b.content || '';
-            if (contentPreview.length > MAX_CONTENT_LENGTH) {
-                contentPreview = contentPreview.slice(0, MAX_CONTENT_LENGTH) + '...';
-            }
+            if (contentPreview.length > MAX_CONTENT_LENGTH) contentPreview = contentPreview.slice(0, MAX_CONTENT_LENGTH) + '...';
 
             const card = document.createElement('div');
             card.classList.add('board-item');
-
-            // 댓글 렌더링 방식과 동일하게 innerHTML 구성
             card.innerHTML =
-    			'<h3 class="board-post-title">' + (b.title || "(제목 없음)") + '</h3>' +
-    			'<p class="board-content">' + (b.content || "(내용 없음)") + '</p>' +
-    			'<div class="board-date">' + b.regiDate + '</div>' +
-    			'<div class="board-footer">' +
-    			'    <button class="board-btn board-delete-btn" data-boardno="' + b.boardNo + '">삭제</button>' +
-    			'    <button class="board-btn board-update-btn" data-boardno="' + b.boardNo + '">수정</button>' +
-    			'</div>';
-
+                '<h3 class="board-post-title">' + (b.title || "(제목 없음)") + '</h3>' +
+                '<p class="board-content">' + contentPreview + '</p>' +
+                '<div class="board-date">' + b.regiDate + '</div>' +
+                '<div class="board-footer">' +
+                '    <span class="board-hearts">❤️ ' + (b.hearts || 0) + '</span>' +
+                '    <button class="board-btn board-delete-btn" data-boardno="' + b.boardNo + '">삭제</button>' +
+                '    <button class="board-btn board-update-btn" data-boardno="' + b.boardNo + '">수정</button>' +
+                '</div>';
             boardsList.appendChild(card);
         });
+
+        // 페이지네이션 표시
+        pageInfo.textContent = currentPage + " / " + totalPages;
+        prevBtn.style.display = currentPage > 1 ? 'inline-block' : 'none';
+        nextBtn.style.display = currentPage < totalPages ? 'inline-block' : 'none';
+        pageNav.style.display = totalPages > 1 ? 'flex' : 'none';
     }
 
+    // 삭제
+    boardsList.addEventListener('click', async (e) => {
+        if (!e.target.classList.contains('board-delete-btn')) return;
+        const boardNo = e.target.getAttribute('data-boardno');
+        if (!boardNo) return;
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+
+        try {
+            await fetch('<c:url value="/myboard/delete"/>', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'boardNo=' + encodeURIComponent(boardNo)
+            });
+
+            allBoards = await fetchBoards();
+            renderBoards(allBoards);
+
+        } catch (err) {
+            console.error("삭제 실패:", err);
+            alert("삭제 중 오류가 발생했습니다.");
+        }
+    });
+
+    // 드롭다운 필터
+    boardFilter.addEventListener('change', () => {
+        currentPage = 1; // 필터 변경시 1페이지로 초기화
+        renderBoards(allBoards);
+    });
+
+    // 정렬 버튼
+    const sortBtns = document.querySelectorAll('.board-sort-option');
+    sortBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            sortBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const text = btn.textContent.trim();
+            if (text.includes('최신')) currentSort = 'latest';
+            else if (text.includes('오래된')) currentSort = 'oldest';
+            else if (text.includes('좋아요')) currentSort = 'hearts';
+
+            let sortedBoards = [...allBoards];
+            if (currentSort === 'latest') sortedBoards.sort((a,b) => new Date(b.regiDate) - new Date(a.regiDate));
+            else if (currentSort === 'oldest') sortedBoards.sort((a,b) => new Date(a.regiDate) - new Date(b.regiDate));
+            else if (currentSort === 'hearts') sortedBoards.sort((a,b) => (b.hearts || 0) - (a.hearts || 0));
+
+            currentPage = 1; // 정렬 후 1페이지
+            renderBoards(sortedBoards);
+        });
+    });
+
+    // 페이지네이션 버튼
+    prevBtn.addEventListener('click', () => { if(currentPage > 1){ currentPage--; renderBoards(allBoards); }});
+    nextBtn.addEventListener('click', () => { 
+        const totalPages = Math.ceil(allBoards.filter(b => boardFilter.value === 'all' || String(b.categoryId) === boardFilter.value).length / pageSize) || 1;
+        if(currentPage < totalPages){ currentPage++; renderBoards(allBoards); }
+    });
+
     // 초기 실행
-    const boards = await fetchBoards();
-    renderBoards(boards);
+    allBoards = await fetchBoards();
+    renderBoards(allBoards);
 });
-
-
 </script>
 
 </body>

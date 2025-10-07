@@ -2403,30 +2403,38 @@ body{
   gap: 8px;
 }
 
-.board-sort-option {
-	padding: 8px 16px;
+.board-page-arrow {
     background: #fff;
-    border: 1px solid var(--mist-200);
-    border-radius: 8px;
-    color: #6b7280;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
+    border: none;
 }
 
-.board-sort-option:active {
-	background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
+.board-page-arrow:hover {
+  background: #f3f4f6;
+}
+
+.board-sort-option {
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid var(--mist-200);
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
 }
 
 .board-sort-option:hover {
-	border-color: var(--accent);
-    color: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
+.board-sort-option.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
 .board-filter-select {
     padding: 8px 16px;
     border: 1px solid var(--mist-200);
@@ -2504,6 +2512,14 @@ body{
     gap: 8px;
     justify-content: flex-end;
 }
+
+.board-hearts {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ef4444; /* 빨간색 하트 */
+    margin-right: auto; /* 하트만 왼쪽 끝으로 밀기 */
+}
+
 
 .board-content {
     font-size: 14px;

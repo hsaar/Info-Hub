@@ -7,7 +7,10 @@ public class MyBoardDTO {
     private String regiDate; 
     private int readCnt;
     private int loginNo; 
+    
+    // 정렬
     private int hearts;
+    private int categoryId;
 
     public MyBoardDTO() {}
 
@@ -66,6 +69,14 @@ public class MyBoardDTO {
     
     public void setHearts(int hearts) { 
     	this.hearts = hearts;
+    }
+    
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override

@@ -101,15 +101,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 필터 이벤트 
     filterSelect.addEventListener("change", function() {
-        const selectedCategoryId = this.value;
-        const cards = document.querySelectorAll(".heart-card");
+    	currentPage = 1;
+    	renderPage();
+	});
 
-        cards.forEach(card => {
-            const cardCategoryId = card.getAttribute("data-category");
-            card.style.display = (selectedCategoryId === "all" || cardCategoryId === String(selectedCategoryId))
-                                 ? "block" : "none";
-        });
-    });
 
     // 정렬
     function sortData(cards) {
@@ -190,19 +185,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const cards = () => document.querySelectorAll(".heart-card");
 
+ // 페이지네이션 렌더링
     function renderPage() {
         const allCards = Array.from(cards());
-        const totalPages = Math.ceil(currentList.length / pageSize) || 1;
+        const selectedCategory = filterSelect.value;
 
-        allCards.forEach((card, idx) => {
-            card.style.display = (idx >= (currentPage-1)*pageSize && idx < currentPage*pageSize) ? "block" : "none";
+        const filteredCards = allCards.filter(card => 
+            selectedCategory === "all" || card.getAttribute("data-category") === selectedCategory
+        );
+
+        const totalPages = Math.ceil(filteredCards.length / pageSize) || 1;
+
+        filteredCards.forEach((card, idx) => {
+            card.style.display = (idx >= (currentPage - 1) * pageSize && idx < currentPage * pageSize) 
+                                 ? "block" : "none";
+        });
+
+        allCards.forEach(card => {
+            if (!filteredCards.includes(card)) card.style.display = "none";
         });
 
         heartPageInfo.textContent = currentPage + " / " + totalPages;
         heartPrevBtn.style.display = currentPage > 1 ? "inline-block" : "none";
         heartNextBtn.style.display = currentPage < totalPages ? "inline-block" : "none";
-        heartPageNav.style.display = totalPages > 1 ? 'flex' : 'none';
-
+        heartPageNav.style.display = totalPages > 1 ? "flex" : 'none';
     }
 
     heartPrevBtn.addEventListener("click", () => {

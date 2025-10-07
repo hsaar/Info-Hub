@@ -19,11 +19,12 @@ public class MyBoardDAO {
         List<MyBoardDTO> results = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder(
-            "SELECT b.boardno, b.title, b.content, b.regiDate, b.readcnt, COUNT(h.heartId) AS hearts " +
+            "SELECT b.boardno, b.title, b.content, b.regiDate, b.readcnt, " +
+            "COUNT(h.heartId) AS hearts, b.categoryboard_categoryId AS categoryId " +
             "FROM board b " +
             "LEFT JOIN heartsboard h ON b.boardno = h.boardNo " +
             "WHERE b.login_loginNo = ? " +
-            "GROUP BY b.boardno, b.title, b.content, b.regiDate, b.readcnt "
+            "GROUP BY b.boardno, b.title, b.content, b.regiDate, b.readcnt, b.categoryboard_categoryId "
         );
 
         if ("hearts".equals(orderBy)) {
@@ -47,6 +48,7 @@ public class MyBoardDAO {
                     dto.setReadCnt(rs.getInt("readcnt"));
                     dto.setLoginNo(loginNo);
                     dto.setHearts(rs.getInt("hearts"));
+                    dto.setCategoryId(rs.getInt("categoryId")); // ← 추가
                     results.add(dto);
                 }
             }
@@ -58,7 +60,7 @@ public class MyBoardDAO {
     // 게시글 상세 조회
     public MyBoardDTO findBoardDetail(int boardNo, int loginNo) throws SQLException {
         MyBoardDTO dto = null;
-        String sql = "SELECT boardno, title, content, regiDate, readcnt, login_loginNo " +
+        String sql = "SELECT boardno, title, content, regiDate, readcnt, login_loginNo, categoryboard_categoryId AS categoryId " +
                      "FROM board WHERE boardno = ? AND login_loginNo = ?";
 
         try (Connection conn = dataSource.getConnection();
@@ -76,6 +78,7 @@ public class MyBoardDAO {
                     dto.setRegiDate(rs.getString("regiDate"));
                     dto.setReadCnt(rs.getInt("readcnt"));
                     dto.setLoginNo(rs.getInt("login_loginNo"));
+                    dto.setCategoryId(rs.getInt("categoryId")); // ← 추가
                 }
             }
         }

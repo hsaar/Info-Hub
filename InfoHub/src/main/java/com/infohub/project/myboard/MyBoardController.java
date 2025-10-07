@@ -73,12 +73,18 @@ public class MyBoardController {
             return "policy/error";
         }
     }
-
+    
     // 게시글 삭제
     @PostMapping("/delete")
     public String deleteBoard(@RequestParam("boardNo") int boardNo,
-                              @RequestParam("loginNo") int loginNo,
+                              HttpSession session,
                               Model model) {
+        Integer loginNo = (Integer) session.getAttribute("loginNo");
+        if (loginNo == null) {
+            model.addAttribute("error", "로그인 정보 없음");
+            return "policy/error";
+        }
+
         try {
             service.deleteBoard(boardNo, loginNo);
             model.addAttribute("result", "delete_success");
@@ -88,4 +94,5 @@ public class MyBoardController {
             return "policy/error";
         }
     }
+
 }

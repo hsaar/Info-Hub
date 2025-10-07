@@ -102,16 +102,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 필터 이벤트
-    filterSelect.addEventListener("change", function() {
-        const selectedCategoryId = this.value;
-        const cards = document.querySelectorAll(".scrap-card");
-
-        cards.forEach(card => {
-            const cardCategoryId = card.getAttribute("data-category");
-            card.style.display = (selectedCategoryId === "all" || cardCategoryId === String(selectedCategoryId))
-                                 ? "block" : "none";
-        });
-    });
+	filterSelect.addEventListener("change", function() {
+    	currentPage = 1;
+    	renderPage();
+	});
 
     // 정렬 
     function sortData(cards) {
@@ -198,19 +192,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 페이지 표시 함수
     function renderPage() {
-    	const allCards = Array.from(cards());
-    	const totalPages = Math.ceil(currentList.length / pageSize) || 1;
+    	const allCards = Array.from(document.querySelectorAll(".scrap-card"));
+    	const selectedCategory = filterSelect.value;
+    
+    	let visibleCount = 0;
+    	allCards.forEach((card) => {
+        	const cardCategoryId = card.getAttribute("data-category");
+        	const matchesFilter = selectedCategory === "all" || cardCategoryId === selectedCategory;
+        
+        	if (matchesFilter) visibleCount++; 
+        
+        	const startIdx = (currentPage - 1) * pageSize + 1;
+        	const endIdx = currentPage * pageSize;
+        	const cardIdx = allCards.filter(c => selectedCategory === "all" || c.getAttribute("data-category") === selectedCategory).indexOf(card) + 1;
 
-    	allCards.forEach((card, idx) => {
-            card.style.display = (idx >= (currentPage - 1) * pageSize && idx < currentPage * pageSize) ? "block" : "none";
-        });;
+        	if (matchesFilter && cardIdx >= startIdx && cardIdx <= endIdx) {
+           	 	card.style.display = "block";
+        	} else {
+            	card.style.display = "none";
+        }	
+    });
 
-    	pageInfo.textContent = currentPage + " / " + totalPages;
+    const totalPages = Math.ceil(visibleCount / pageSize) || 1;
+    pageInfo.textContent = currentPage + " / " + totalPages;
 
-    	prevBtn.style.display = currentPage > 1 ? "inline-block" : "none";
-        nextBtn.style.display = currentPage < totalPages ? "inline-block" : "none";
-        pageNav.style.display = totalPages > 1 ? 'flex' : 'none';
-	}
+    prevBtn.style.display = currentPage > 1 ? "inline-block" : "none";
+    nextBtn.style.display = currentPage < totalPages ? "inline-block" : "none";
+    pageNav.style.display = totalPages > 1 ? 'flex' : 'none';
+}
+
+
 
     // 버튼 이벤트
     document.getElementById("prevPage").addEventListener("click", () => {
