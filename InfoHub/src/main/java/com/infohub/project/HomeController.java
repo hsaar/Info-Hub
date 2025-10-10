@@ -69,11 +69,6 @@ public class HomeController {
 		return "/otherPage/benefits";
 	}
 	
-	@GetMapping("mypage_main")
-	public String mypage_main(Model model) {
-		return "/mypage/mypage_main";
-	}
-	
 	@GetMapping("index")
 	public String index(Model model) {
 		return "index";

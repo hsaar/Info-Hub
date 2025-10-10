@@ -70,33 +70,42 @@
     height: 850px !important;
 }
 
-
 </style>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 시계를 갱신하는 함수
+    function updateClock() {
+        const now = new Date();
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        };
+        document.getElementById('realTimeClock').innerText = now.toLocaleString('ko-KR', options);
+    }
+
+    updateClock(); // 초기 실행
+    setInterval(updateClock, 1000); // 1초마다 갱신
+});
+</script>
+
 </head>
+
 <body>
   <!-- 상단바 -->
 <jsp:include page="../include/header.jsp"/>
-
-<!-- 네비게이션 -->
-  	<div class="news-header">
-    <nav class="news-nav">
-      <a href="articleListAll" class="active">종합</a>
-      <a href="articleListAll1">부동산</a>
-      <a href="articleListAll2">주식</a>
-      <a href="articleListAll3">적금</a>
-      <a href="articleListAll4">복지</a>
-      <a href="articleListAll5">창업</a>
-      <a href="#">기타</a>
-    </nav>
-	</div>
 	
 	<!-- 브레드크럼 -->
 	<div class="breadcrumb">
     <div class="container">
-      <a href="#">공지사항</a>
-      <span>></span>
-      <span>2025년 3/4분기 입회심사 결과</span>
+      <span>현재시간 ></span>
+      <span id="realTimeClock"></span>
     </div>
 	</div>
 
@@ -119,6 +128,8 @@
 		text-align: center; padding:20px; border:1px solid #333; border-radius:10px; z-index:1000;">
 		  <h3 id="popupTitle">제목</h3>
 		  <p id="popupBody">내용</p>
+		  
+        
 		  <button onclick="document.getElementById('customPopup').style.display='none'"
 		  style="position: absolute; left: 20px; bottom: 20px; padding:6px 12px; background-color:#4CAF50;
 		  color:white; border:none; border-radius:6px; cursor:pointer;">닫기</button>
@@ -153,60 +164,41 @@
       </div>
       
       <div class="sidebar-section">
-      <h2>키워드</h2>
-      <c:forEach var="article" items="${keywordArticle}">
-      
-       <c:if test="${empty userId}">
-            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;"> ${article.keyword}</a>
-          </c:if>
-          
-          <c:if test="${not empty userId}">
-          <a href="articleContent?articleId=${article.articleId}"> ${article.keyword}</a>
-          </c:if>
-       
-      </c:forEach>
-      </div>
+		<h2>혜택 키워드 Top 7</h2>
+		<ol class="rank-list">
+		<c:forEach var="regkeywordDTO" items="${topKeywords}" varStatus="status">
+			<li><span class="rank-number">${status.index + 1}</span>
+			<a href="#" class="keyword-link"
+			data-keyword="${regkeywordDTO.regkeyword}">
+			${regkeywordDTO.regkeyword}</a></li>
+		</c:forEach>
+		</ol>
+	  </div>
 
       <div class="sidebar-section">
-      <%
-      Random random = new Random();
       
-      Set<Integer> set = new HashSet<>();
-     
-      while(set.size()<2){
-    	  Double d = Math.random()*50+1;
-    	  set.add(d.intValue());
-    	}
-     
-      List<Integer> list = new ArrayList<>(set);
-      
-      int number1 = list.get(0);
-      int number2 = list.get(1);
-      %>
-      
-        <h2>포토·영상</h2>
-        <div class="photo-grid">
-          <div>
-          <c:if test="${empty userId}">
-            <a href="noArticleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-          
-          <c:if test="${not empty userId}">
-          <a href="articleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-      	  </div>
-      	 
-         <div>
-          <c:if test="${empty userId}">
-            <a href="noArticleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-          
-          <c:if test="${not empty userId}">
-          <a href="articleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-      	  </div>
-        </div>
-      </div>
+         <h2>포토·영상</h2>
+	<div class="photo-grid">
+	  <c:forEach var="article" items="${randomArticles}">
+	  
+	   <c:if test="${empty userId}">
+	   <a href="noArticleContent?articleId=${article.articleId}">
+	        <img src="<c:url value='/resources/image/' />${article.image}" 
+	     alt="${article.image}" 
+	     style="width: 270px; height: 190px;">
+	    </a>
+	   </c:if>
+	  
+	  <c:if test="${not empty userId}">
+	    <a href="articleContent?articleId=${article.articleId}">
+	        <img src="<c:url value='/resources/image/' />${article.image}" 
+	     alt="${article.image}" 
+	     style="width: 270px; height: 190px;">
+	    </a>
+	   </c:if>
+	</c:forEach>
+	</div>
+	</div>
     </aside>
    </div>
  
@@ -258,6 +250,7 @@
             allDay: true,
             call: '${timeline.call}',
             link: '${timeline.link}',
+            registrationNo: '${timeline.registrationNo}',
             backgroundColor: colors[${status.index} % colors.length],
             borderColor: colors[${status.index} % colors.length],
             textColor: 'white'
@@ -304,9 +297,23 @@
 	        		? "<a href='https://" + linkUrl + "' target='_blank'>" + linkUrl + "</a>" 
 	                : "-");
 	        
+	        var detailBtn = "";
+	        
+	        <c:if test="${empty userId}">
+	        // 로그인 안 된 경우 → noRegistrationContent
+	        detailBtn = "<br><br><button onclick=\"location.href='noRegistrationContent?registrationNo=" + info.event.extendedProps.registrationNo + "'\" " +
+	                    "style='padding:6px 12px; background-color:#6c757d; color:white; border:none; border-radius:6px; cursor:pointer;'>혜택상세보기</button>";
+	      </c:if>
+
+	      <c:if test="${not empty userId}">
+	        // 로그인 된 경우 → registrationContent
+	        detailBtn = "<br><br><button onclick=\"location.href='registrationContent?registrationNo=" + info.event.extendedProps.registrationNo + "'\" " +
+	                    "style='padding:6px 12px; background-color:#007BFF; color:white; border:none; border-radius:6px; cursor:pointer;'>혜택상세보기</button>";
+	      </c:if>
+	        
 	        document.getElementById('popupBody').innerHTML =
 	            "<p>" + content + "</p>" + "<br>" + "<span class='smallText'>" + start + "</span><br>" + "<span class='smallText'>"
-	            + end + "</span><br>" + "<span class='smallText'>" + call + "</span><br>" + "<span class='smallText'>" + link + "</span>";
+	            + end + "</span><br>" + "<span class='smallText'>" + call + "</span><br>" + "<span class='smallText'>" + link + "</span>" + detailBtn;
 
 	    	document.getElementById('customPopup').style.display = 'block';
 	    	}

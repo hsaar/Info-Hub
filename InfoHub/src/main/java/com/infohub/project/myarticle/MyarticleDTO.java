@@ -1,57 +1,58 @@
 package com.infohub.project.myarticle;
 
 public class MyarticleDTO {
-	private String categorie;
+	private String keyword;
 	private String tags;
 	private String image;
-	private String title;
+	private String content;
 	private String link;
 	private String source;
 	private String name;
 	
 	public MyarticleDTO() {}
-	
-	public MyarticleDTO(String categorie, String tags, String image, String title, String link, String source, String name) {
+
+	public MyarticleDTO(String keyword, String tags, String image, String content, String link, String source,
+			String name) {
 		super();
-		this.categorie = categorie;
+		this.keyword = keyword;
 		this.tags = tags;
 		this.image = image;
-		this.title = title;
+		this.content = content;
 		this.link = link;
 		this.source = source;
 		this.name = name;
 	}
 
-	public String getCategorie() {
-		return categorie;
+	public String getKeyword() {
+		return keyword;
 	}
 
-	public void setCategorie(String categorie) {
-		this.categorie = categorie;
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 
-	public String gettags() {
+	public String getTags() {
 		return tags;
 	}
 
-	public void settags(String tags) {
+	public void setTags(String tags) {
 		this.tags = tags;
 	}
 
-	public String getimage() {
+	public String getImage() {
 		return image;
 	}
 
-	public void setimage(String image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getContent() {
+		return content;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getLink() {
@@ -69,7 +70,7 @@ public class MyarticleDTO {
 	public void setSource(String source) {
 		this.source = source;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -80,8 +81,11 @@ public class MyarticleDTO {
 
 	@Override
 	public String toString() {
-		return "MyarticleDTO [categorie=" + categorie + ", tags=" + tags + ", image=" + image + ", title=" + title
+		return "MyarticleDTO [keyword=" + keyword + ", tags=" + tags + ", image=" + image + ", content=" + content
 				+ ", link=" + link + ", source=" + source + ", name=" + name + "]";
 	}
+
+	
+	
 	
 }

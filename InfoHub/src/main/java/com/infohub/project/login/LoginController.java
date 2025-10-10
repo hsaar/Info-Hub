@@ -1,6 +1,7 @@
-package com.infohub.project.login;
+ package com.infohub.project.login;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -107,8 +108,12 @@ public class LoginController {
 	@PostMapping("login_ok")
 	public String login_ok(Model model, LoginRequest lr, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		LoginDTO res = se.login(lr);
+		int status = 0;
+		if(res != null) {
+			status = se.getUserById(res.getUserId()).getStatus();
+		}
 		
-		if(res!=null) {
+		if(res!=null && status != 0) {
 			request.getSession().invalidate(); //기존 세션 파기
 			
 			HttpSession session = request.getSession(true);
@@ -186,14 +191,123 @@ public class LoginController {
 						@RequestParam("email")String email,
 						@RequestParam("phone")String phone){
 		
-		model.addAttribute("foundId", se.findid(name, email, phone));
-		model.addAttribute("result", se.findid(name, email, phone));
+		phone = se.formatPhoneNumber(phone);
+		
+		String foundId = se.findid(name, email, phone);
+		
+		if(foundId != null) {
+			model.addAttribute("foundId", foundId);	
+		}else {
+			model.addAttribute("error", "아이디를 찾지 못했습니다");
+		}
+		
 		return "login/idfind";
 	}
 	
 	@PostMapping("/findpassword")
-	public String findpassword(Model model) {
+	public String findpassword(Model model,
+							@RequestParam("userId")String userId,
+							@RequestParam("email")String email,
+							@RequestParam("phone")String phone) {
+		phone = se.formatPhoneNumber(phone);
+		int i = se.findpassword(userId, email, phone);
+		if(i>0) {
+			model.addAttribute("resetEmail", userId);
+		}else {
+			model.addAttribute("error", "해당 가입자를 찾지 못했습니다");
+		}
+		
 		return "login/idfind";
 	}
 	
+	@PostMapping("/updatePassword")
+	public String updatePassword(Model model,
+								@RequestParam("newPassword")String newPassword,
+								@RequestParam("userId")String userId){
+		
+		int i = se.updatepassword(newPassword, userId);
+		if(i>0) {
+			model.addAttribute("passwordChanged", true);
+		}else {
+			model.addAttribute("error", "비밀번호 변경에 실패했습니다.");
+		}
+		return "login/idfind";
+	}
+	
+	@GetMapping("mypage_main")
+	public String mypage_main(Model model,
+							HttpServletRequest request) {
+		HttpSession session =request.getSession();
+		String userId = (String) session.getAttribute("userId");
+		model.addAttribute("name", se.getUserById(userId).getName());
+		model.addAttribute("email", se.getUserById(userId).getEmail());
+		model.addAttribute("phone", se.getUserById(userId).getPhone());
+		model.addAttribute("keywords", se.getUserById(userId).getKeywords());
+				
+		
+		return "/mypage/mypage_main";
+	}
+	
+	@PostMapping(value="/api/checkPassword", produces="application/json")
+	@ResponseBody
+	public Map<String, Object> apiCheckPassword(@RequestBody Map<String, String>body,
+												HttpSession session){
+		String password = body.get("password");
+		String userId = (String) session.getAttribute("userId");
+		boolean ok = false;
+		
+		if(password.equals(se.checkPasswordById(userId))) {
+			ok = true;
+		}
+		
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("ok", ok);
+		
+		return res;
+	}
+	
+	@PostMapping(value = "/api/updateprofile", produces="application/json")
+	@ResponseBody
+	public Map<String, Object> updateprofile(@RequestBody ProfileUpdateRequest body,
+											HttpSession session){
+		String userId = (String) session.getAttribute("userId");
+		String name = body.getName();
+		String email = body.getEmail();
+		String phone = body.getPhone();
+		String password = body.getPassword();
+		String keywords = body.getKeywords();
+		
+		int tmp = se.updateUser(new LoginDTO(0, userId, password, name, email, phone, null, null, 0, 0, 0 , null, keywords));
+		boolean ok = false;
+		
+		if(tmp>0) {
+			ok = true;
+			
+		}
+		
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("ok", ok);
+		
+		return res;
+	}
+	
+	@PostMapping("/api/withdrawal")
+	@ResponseBody
+	public Map<String, Object> withdrawal(HttpSession session){
+		String userId = (String) session.getAttribute("userId");
+		boolean ok = false;
+		
+		if(userId != null) {
+			int result = se.deleteUser(userId);
+			if(result > 0) {
+				ok = true;
+				session.invalidate();
+			}
+		}
+		
+		Map<String , Object> res = new HashMap<String, Object>();
+		res.put("ok", ok);
+		
+		return res;
+	}
 }

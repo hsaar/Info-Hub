@@ -91,12 +91,29 @@ public class LoginDAOImpl implements LoginDAO{
 	}
 
 	@Override
-	public int updatepassword(String password, int loginNo) {
+	public int updatepassword(String password, String userId) {
 		// TODO Auto-generated method stub
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		map.put("password", password);
-//		map.put("loginNo", loginNo);
-		return 0;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("password", password);
+		map.put("userId", userId);
+		return sqlsession.update(namespace+".updatepassword", map);
+	}
+
+	@Override
+	public String checkPasswordById(String userId) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne(namespace+".checkPasswordById", userId);
+	}
+
+	@Override
+	public int updateKeywords(String userId, String keywords) {
+		// TODO Auto-generated method stub
+		Map<String , String> map = new HashMap<String, String>();
+		map.put("userId", userId);
+		map.put("keywords", keywords);
+		Integer count = sqlsession.selectOne(namespace+".updateKeywords", map);
+		int total = (count != null) ? count : 0;
+		return total;
 	}
 
 }

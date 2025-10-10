@@ -10,5 +10,6 @@ public interface ScrapsDAO {
 	int scrapsDelete(ScrapsVO scrapsVO) throws Exception;
 	
 	List<ScrapsVO> myscraps(int loginNo) throws Exception;
+	List<ScrapsVO> getMyScraps(int loginNo) throws Exception;
 
 }

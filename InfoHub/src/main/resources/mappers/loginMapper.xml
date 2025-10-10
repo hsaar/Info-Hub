@@ -35,7 +35,7 @@
 	
 	<update id="updateUser">
 		UPDATE infohub.login 
-		SET password = #{password}, name = #{name}, email = #{email}, phone = #{phone}, age = #{age}, gender = #{gender}, keywords = #{keywords}
+		SET name = #{name}, email = #{email}, phone = #{phone}, password = #{password}, keywords = #{keywords}
 		WHERE (userId = #{userId})
 	</update>
 	
@@ -57,8 +57,18 @@
 	<update id="updatepassword">
 		UPDATE infohub.login 
 		SET password = #{password}
-		WHERE loginNo = #{loginNo}
+		WHERE userId = #{userId}
 	</update>
 	
+	<select id="checkPasswordById" resultType="String">
+		select password from infohub.login
+		where userId = #{userId}
+	</select>
+	
+	<update id="updateKeywords">
+		update infohub.login
+		set keywords = #{keywords}
+		where userId = #{userId}
+	</update>
 	
 </mapper>

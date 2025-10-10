@@ -42,4 +42,10 @@ public class ScrapsServiceImpl implements ScrapsService {
 		return dao.myscraps(loginNo);
 	}
 
+	@Override
+	public List<ScrapsVO> getMyScraps(int loginNo) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getMyScraps(loginNo);
+	}
+
 }

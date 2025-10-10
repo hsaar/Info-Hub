@@ -4,9 +4,84 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.infohub.project.boardCommentMapper">
 
-<!-- 게시글 아래 댓글 전체보기 -->
-<!-- 댓글달기 -->
-<!-- 댓글수정 -->
-<!-- 댓글삭제 -->
+	<!-- 게시글 아래 댓글 전체보기 -->
+	<!-- <select id="getCommentsByboardno" resultType="CommentBoardVO"> SELECT 
+		* FROM commentboard WHERE boardno = #{boardno} ORDER BY createdDate ASC </select> -->
+
+	<select id="getCommentsByboardno" resultMap="commentResultMap">
+		SELECT c.*, l.userId
+		AS loginUser
+		FROM commentboard c
+		JOIN login l ON c.loginNo = l.loginNo
+		WHERE c.boardno = #{boardno}
+		ORDER BY c.createdDate ASC
+	</select>
+	<!-- 댓글달기 -->
+	<insert id="insertComment" useGeneratedKeys="true"
+		keyProperty="commentId">
+		INSERT INTO commentboard (boardno, loginNo,
+		parentCommentId, comment, createdDate
+    )
+		VALUES (#{boardno}, #{loginNo},
+		#{parentCommentId}, #{comment},NOW())
+	</insert>
+
+	<!-- 대댓글 조회 -->
+	<select id="getRepliesByCommentId" resultMap="commentResultMap">
+		SELECT c.*,
+		l.userId AS loginUser
+		FROM commentboard c
+		JOIN login l ON c.loginNo =
+		l.loginNo
+		WHERE c.parentCommentId = #{commentId}
+		ORDER BY c.createdDate
+		ASC
+	</select>
+	<!-- 댓글선택 -->
+	<select id="getCommentById" parameterType="int"
+		resultType="com.infohub.project.boardcomment.CommentBoardVO">
+		SELECT commentId, boardno, loginNo, loginUser,
+		parentCommentId, comment, hearts, createdDate, lastModified
+		FROM
+		commentboard
+		WHERE
+		commentId = #{commentId}
+
+	</select>
+	<!-- 댓글수정 -->
+	<update id="updateComment"
+		parameterType="com.infohub.project.boardcomment.CommentBoardVO">
+		 UPDATE commentboard
+    SET 
+        comment = #{comment},
+        lastModified = NOW()
+    WHERE commentId = #{commentId}
+	</update>
+	<!-- 댓글삭제 -->
+	<delete id="deleteComment">
+		DELETE FROM commentboard WHERE commentId =
+		#{commentId}
+	</delete>
+	<!-- 해당 게시글의 댓글 전체 삭제 -->
+	<delete id="deleteAll" parameterType="int">
+		DELETE FROM commentboard
+		WHERE boardno = #{boardno}
+	</delete>
+
+	<!-- ResultMap -->
+	<resultMap id="commentResultMap"
+		type="com.infohub.project.boardcomment.CommentBoardVO">
+		<id property="commentId" column="commentId" />
+		<result property="boardno" column="boardno" />
+		<result property="loginNo" column="loginNo" />
+		<result property="parentCommentId" column="parentCommentId" />
+		<result property="comment" column="comment" />
+		<result property="hearts" column="hearts" />
+		<result property="createdDate" column="createdDate" />
+		<result property="lastModified" column="lastModified" />
+		<collection property="replies" ofType="CommentBoardVO"
+			select="getRepliesByCommentId" column="commentId" />
+	</resultMap>
+
 
 </mapper>

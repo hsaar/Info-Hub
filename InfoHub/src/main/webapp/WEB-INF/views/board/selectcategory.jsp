@@ -23,20 +23,21 @@
     </c:forEach>
 </select>
 
-    <label id="subCategoryLabel" style="display:none;">분류</label>
+ <!-- <label id="subCategoryLabel" style="display:none;">분류</label>
     <select id="subCategory" name="subCategoryId" style="display:none;">
         <option value="">-- 선택 --</option>
         <c:forEach var="s" items="${subCategories}">
             <option value="${s.categoryId}">${s.name}</option>
         </c:forEach>
-    </select>
+    </select> -->   
 </form>
 
 <script>
 const mainCategory = document.getElementById("mainCategory");
-const subCategory = document.getElementById("subCategory");
-const subCategoryLabel = document.getElementById("subCategoryLabel");
+//const subCategory = document.getElementById("subCategory");
+//const subCategoryLabel = document.getElementById("subCategoryLabel");
 
+/*
 function loadSubCategories(parentId) {
     if (parentId) {
         fetch('${pageContext.request.contextPath}/selectcategory/sub?parentId=' + parentId)
@@ -59,18 +60,19 @@ function loadSubCategories(parentId) {
         subCategory.value = '';
     }
 }
-
+*/
 // 대분류 변경 이벤트
 mainCategory.addEventListener("change", function() {
     loadSubCategories(this.value);
 });
 
-// 페이지 로드 시 자동 선택된 값이 있으면 소분류 로드
+/* 페이지 로드 시 자동 선택된 값이 있으면 소분류 로드
 window.addEventListener("DOMContentLoaded", () => {
     if (mainCategory.value) {
         loadSubCategories(mainCategory.value);
     }
 });
+*/
 </script>
 
   <!-- <select name="category">

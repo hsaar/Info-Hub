@@ -78,9 +78,32 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public int updatepassword(String password, int loginNo) {
+	public int updatepassword(String password, String userId) {
 		// TODO Auto-generated method stub
-		return 0;
+		return dao.updatepassword(password, userId);
 	}
 
+	@Override
+	public String checkPasswordById(String userId) {
+		// TODO Auto-generated method stub
+		return dao.checkPasswordById(userId);
+	}
+
+	@Override
+	public int updateKeywords(String userId, String keywords) {
+		// TODO Auto-generated method stub
+		return dao.updateKeywords(userId, keywords);
+	}
+	
+	public String formatPhoneNumber(String phone) {
+		if(phone.contains("-")) {
+			return phone;
+		}
+		if(phone.length() == 11) {
+			return phone.replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
+		}else if(phone.length() == 10) {
+			return phone.replaceAll("(\\d{2})(\\d{4})(\\d{4})", "$1-$2-$3");
+		}
+		return phone;
+	}
 }

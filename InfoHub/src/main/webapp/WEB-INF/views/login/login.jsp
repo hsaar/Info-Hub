@@ -29,8 +29,11 @@
     
     <!-- 메인 컨테이너 -->
     <div class="main-content">
-        <div class="login-container" id="container">
-            
+    <div class="login-container" id="container">
+    <!-- 뒤로가기 버튼 -->
+    <button onclick="history.back()" class = "back-button">
+    	<i class="fas fa-arrow-left"></i>
+	</button>
             <!-- 회원가입 폼 -->
             <div class="form-container sign-up-container">
                 <div class="login-form-section">
@@ -410,11 +413,6 @@
                 submitBtn.disabled = true;
                
                 setTimeout(() => {
-                    //if (isSignUp) {
-                    //     showSignupFailModal('이미 존재하는 아이디입니다.');
-                    //} else {
-                    //     showLoginFailModal('아이디 또는 비밀번호가 올바르지 않습니다.');
-                    //}
                     submitBtn.textContent = isSignUp ? 'SIGN UP' : 'SIGN IN';
                     submitBtn.disabled = false;
                 },  2000);
@@ -529,7 +527,7 @@
                     } else {
                         // 새로운 키워드 추가
                         if (selectedKeywordsArray.length >= MAX_KEYWORDS) {
-                            alert(`최대 ${MAX_KEYWORDS}개까지만 선택할 수 있습니다.`);
+                            alert(`최대 5개까지만 선택할 수 있습니다.`);
                             return;
                         }
                         selectedKeywordsArray.push(keyword);

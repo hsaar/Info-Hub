@@ -1,6 +1,12 @@
 package com.infohub.project.article;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -25,6 +31,9 @@ public class ArticleControl {
 	@Autowired
 	ArticleService service;
 	
+	@Autowired
+	KeywordService keyservice;
+	
 	
 	@RequestMapping("articleListAll")
 	public String articleListAll(Model model, Criteria cri) throws Exception{
@@ -32,6 +41,21 @@ public class ArticleControl {
 		
 		List<ArticleVO> articleListAll = service.articlListAll(cri);
 		model.addAttribute("articleListAll", articleListAll);
+		
+		
+		List<ArticleVO> allArticles = service.findAllArticles();
+		List<ArticleVO> randomTwo = new ArrayList<>();
+		
+
+		if (!allArticles.isEmpty()) {
+		    Collections.shuffle(allArticles);
+		    randomTwo = allArticles.size() >= 2 
+		        ? new ArrayList<>(allArticles.subList(0, 2)) 
+		        : new ArrayList<>(allArticles);
+		}
+		model.addAttribute("randomArticles", randomTwo);
+		System.out.println(randomTwo);
+
 		
 		PageMaker pageMaker = new PageMaker(cri);
 		int totalCount = service.getTotalCount(cri);
@@ -41,8 +65,15 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
-		List<ArticleVO> keywordArticle = service.keywordArticle();
-		model.addAttribute("keywordArticle", keywordArticle);
+		List<KeywordDTO> topKeywords = keyservice.findTop7();
+		model.addAttribute("topKeywords", topKeywords);
+		
+		Date date = new Date();
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		
+		String formattedDate = isoFormat.format(date);
+		
+		model.addAttribute("formattedDate", formattedDate );
 		
 		return "article/articleListAll";
 	}
@@ -54,6 +85,20 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll1 = service.articlListAll1(cri);
 		model.addAttribute("articleListAll1", articleListAll1);
 		
+		
+		List<ArticleVO> allArticles = service.findAllArticles();
+		List<ArticleVO> randomTwo = new ArrayList<>();
+		
+
+		if (!allArticles.isEmpty()) {
+		    Collections.shuffle(allArticles);
+		    randomTwo = allArticles.size() >= 2 
+		        ? new ArrayList<>(allArticles.subList(0, 2)) 
+		        : new ArrayList<>(allArticles);
+		}
+		model.addAttribute("randomArticles", randomTwo);
+
+		
 		PageMaker pageMaker = new PageMaker(cri);
 		int totalCount = service.getTotalCount(cri);
 		pageMaker.setTotalCount(totalCount);
@@ -62,8 +107,15 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
-		List<ArticleVO> keywordArticle = service.keywordArticle();
-		model.addAttribute("keywordArticle", keywordArticle);
+		List<KeywordDTO> topKeywords = keyservice.findTop7();
+		model.addAttribute("topKeywords", topKeywords);
+		
+		Date date = new Date();
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		
+		String formattedDate = isoFormat.format(date);
+		
+		model.addAttribute("formattedDate", formattedDate );
 		
 		return "article/articleListAll1";
 	}
@@ -75,6 +127,20 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll2 = service.articlListAll2(cri);
 		model.addAttribute("articleListAll2", articleListAll2);
 		
+		
+		List<ArticleVO> allArticles = service.findAllArticles();
+		List<ArticleVO> randomTwo = new ArrayList<>();
+		
+
+		if (!allArticles.isEmpty()) {
+		    Collections.shuffle(allArticles);
+		    randomTwo = allArticles.size() >= 2 
+		        ? new ArrayList<>(allArticles.subList(0, 2)) 
+		        : new ArrayList<>(allArticles);
+		}
+		model.addAttribute("randomArticles", randomTwo);
+		
+		
 		PageMaker pageMaker = new PageMaker(cri);
 		int totalCount = service.getTotalCount(cri);
 		pageMaker.setTotalCount(totalCount);
@@ -83,8 +149,15 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
-		List<ArticleVO> keywordArticle = service.keywordArticle();
-		model.addAttribute("keywordArticle", keywordArticle);
+		List<KeywordDTO> topKeywords = keyservice.findTop7();
+		model.addAttribute("topKeywords", topKeywords);
+		
+		Date date = new Date();
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		
+		String formattedDate = isoFormat.format(date);
+		
+		model.addAttribute("formattedDate", formattedDate );
 		
 		return "article/articleListAll2";
 	}
@@ -96,6 +169,20 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll3 = service.articlListAll3(cri);
 		model.addAttribute("articleListAll3", articleListAll3);
 		
+		
+		List<ArticleVO> allArticles = service.findAllArticles();
+		List<ArticleVO> randomTwo = new ArrayList<>();
+		
+
+		if (!allArticles.isEmpty()) {
+		    Collections.shuffle(allArticles);
+		    randomTwo = allArticles.size() >= 2 
+		        ? new ArrayList<>(allArticles.subList(0, 2)) 
+		        : new ArrayList<>(allArticles);
+		}
+		model.addAttribute("randomArticles", randomTwo);
+		
+		
 		PageMaker pageMaker = new PageMaker(cri);
 		int totalCount = service.getTotalCount(cri);
 		pageMaker.setTotalCount(totalCount);
@@ -104,8 +191,15 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
-		List<ArticleVO> keywordArticle = service.keywordArticle();
-		model.addAttribute("keywordArticle", keywordArticle);
+		List<KeywordDTO> topKeywords = keyservice.findTop7();
+		model.addAttribute("topKeywords", topKeywords);
+		
+		Date date = new Date();
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		
+		String formattedDate = isoFormat.format(date);
+		
+		model.addAttribute("formattedDate", formattedDate );
 		
 		return "article/articleListAll3";
 	}
@@ -117,6 +211,20 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll4 = service.articlListAll4(cri);
 		model.addAttribute("articleListAll4", articleListAll4);
 		
+		
+		List<ArticleVO> allArticles = service.findAllArticles();
+		List<ArticleVO> randomTwo = new ArrayList<>();
+		
+
+		if (!allArticles.isEmpty()) {
+		    Collections.shuffle(allArticles);
+		    randomTwo = allArticles.size() >= 2 
+		        ? new ArrayList<>(allArticles.subList(0, 2)) 
+		        : new ArrayList<>(allArticles);
+		}
+		model.addAttribute("randomArticles", randomTwo);
+		
+		
 		PageMaker pageMaker = new PageMaker(cri);
 		int totalCount = service.getTotalCount(cri);
 		pageMaker.setTotalCount(totalCount);
@@ -125,8 +233,15 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
-		List<ArticleVO> keywordArticle = service.keywordArticle();
-		model.addAttribute("keywordArticle", keywordArticle);
+		List<KeywordDTO> topKeywords = keyservice.findTop7();
+		model.addAttribute("topKeywords", topKeywords);
+		
+		Date date = new Date();
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		
+		String formattedDate = isoFormat.format(date);
+		
+		model.addAttribute("formattedDate", formattedDate );
 		
 		return "article/articleListAll4";
 	}
@@ -138,6 +253,20 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll5 = service.articlListAll5(cri);
 		model.addAttribute("articleListAll5", articleListAll5);
 		
+		
+		List<ArticleVO> allArticles = service.findAllArticles();
+		List<ArticleVO> randomTwo = new ArrayList<>();
+		
+
+		if (!allArticles.isEmpty()) {
+		    Collections.shuffle(allArticles);
+		    randomTwo = allArticles.size() >= 2 
+		        ? new ArrayList<>(allArticles.subList(0, 2)) 
+		        : new ArrayList<>(allArticles);
+		}
+		model.addAttribute("randomArticles", randomTwo);
+		
+		
 		PageMaker pageMaker = new PageMaker(cri);
 		int totalCount = service.getTotalCount(cri);
 		pageMaker.setTotalCount(totalCount);
@@ -146,10 +275,59 @@ public class ArticleControl {
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
-		List<ArticleVO> keywordArticle = service.keywordArticle();
-		model.addAttribute("keywordArticle", keywordArticle);
+		List<KeywordDTO> topKeywords = keyservice.findTop7();
+		model.addAttribute("topKeywords", topKeywords);
+		
+		Date date = new Date();
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		
+		String formattedDate = isoFormat.format(date);
+		
+		model.addAttribute("formattedDate", formattedDate );
 		
 		return "article/articleListAll5";
+	}
+	
+	@RequestMapping("articleListAll6")
+	public String articleListAll6(Model model, Criteria cri) throws Exception{
+		logger.info("articleListAll6..");
+		
+		List<ArticleVO> articleListAll6 = service.articlListAll6(cri);
+		model.addAttribute("articleListAll6", articleListAll6);
+		
+		
+		List<ArticleVO> allArticles = service.findAllArticles();
+		List<ArticleVO> randomTwo = new ArrayList<>();
+		
+
+		if (!allArticles.isEmpty()) {
+		    Collections.shuffle(allArticles);
+		    randomTwo = allArticles.size() >= 2 
+		        ? new ArrayList<>(allArticles.subList(0, 2)) 
+		        : new ArrayList<>(allArticles);
+		}
+		model.addAttribute("randomArticles", randomTwo);
+		
+		
+		PageMaker pageMaker = new PageMaker(cri);
+		int totalCount = service.getTotalCount(cri);
+		pageMaker.setTotalCount(totalCount);
+		model.addAttribute("pageMaker", pageMaker);
+		
+		List<ArticleVO> viewsArticle = service.viewsArticle();
+		model.addAttribute("viewsArticle", viewsArticle);
+		
+		List<KeywordDTO> topKeywords = keyservice.findTop7();
+		model.addAttribute("topKeywords", topKeywords);
+		
+		Date date = new Date();
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		
+		String formattedDate = isoFormat.format(date);
+		
+		model.addAttribute("formattedDate", formattedDate );
+		
+		return "article/articleListAll6";
 	}
 	
 	@RequestMapping("articleContent")
@@ -159,11 +337,32 @@ public class ArticleControl {
 		List<ArticleVO> articleContent = service.articleContent(articleId);
 		model.addAttribute("articleContent", articleContent);
 		
+		
+		List<ArticleVO> allArticles = service.findAllArticles();
+		List<ArticleVO> randomTwo = new ArrayList<>();
+		
+
+		if (!allArticles.isEmpty()) {
+		    Collections.shuffle(allArticles);
+		    randomTwo = allArticles.size() >= 2 
+		        ? new ArrayList<>(allArticles.subList(0, 2)) 
+		        : new ArrayList<>(allArticles);
+		}
+		model.addAttribute("randomArticles", randomTwo);
+		
+		
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
-		List<ArticleVO> keywordArticle = service.keywordArticle();
-		model.addAttribute("keywordArticle", keywordArticle);
+		List<KeywordDTO> topKeywords = keyservice.findTop7();
+		model.addAttribute("topKeywords", topKeywords);
+		
+		Date date = new Date();
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		
+		String formattedDate = isoFormat.format(date);
+		
+		model.addAttribute("formattedDate", formattedDate );
 		
 		return "article/articleContent";
 	}
@@ -199,11 +398,32 @@ public class ArticleControl {
 		List<ArticleVO> noArticleContent = service.noArticleContent(articleId);
 		model.addAttribute("noArticleContent", noArticleContent);
 		
+		
+		List<ArticleVO> allArticles = service.findAllArticles();
+		List<ArticleVO> randomTwo = new ArrayList<>();
+		
+
+		if (!allArticles.isEmpty()) {
+		    Collections.shuffle(allArticles);
+		    randomTwo = allArticles.size() >= 2 
+		        ? new ArrayList<>(allArticles.subList(0, 2)) 
+		        : new ArrayList<>(allArticles);
+		}
+		model.addAttribute("randomArticles", randomTwo);
+		
+		
 		List<ArticleVO> viewsArticle = service.viewsArticle();
 		model.addAttribute("viewsArticle", viewsArticle);
 		
-		List<ArticleVO> keywordArticle = service.keywordArticle();
-		model.addAttribute("keywordArticle", keywordArticle);
+		List<KeywordDTO> topKeywords = keyservice.findTop7();
+		model.addAttribute("topKeywords", topKeywords);
+		
+		Date date = new Date();
+		SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		
+		String formattedDate = isoFormat.format(date);
+		
+		model.addAttribute("formattedDate", formattedDate );
 		
 		return "article/noArticleContent";
 	}
@@ -217,6 +437,21 @@ public class ArticleControl {
 		
 		return "article/articleListAll";
 	}
+	
+	@ResponseBody
+	 @PostMapping("logKeyword") // 클라이언트 AJAX 요청 URL
+	 public int logKeyword(@RequestParam("keyword") String skeyword) {
+	     System.out.println("logKeyword AJAX 요청 수신 - 키워드: " + skeyword);
+	     try {
+	         // Service 메소드를 호출하여 키워드 처리 (카운트 증가 or 삽입)
+	         keyservice.logAndCountKeyword(skeyword); 
+	         return 1; // 성공
+	     } catch (Exception e) {
+	         System.err.println("키워드 로깅 중 오류 발생: " + e.getMessage());
+	         e.printStackTrace(); // 디버깅을 위해 스택 트레이스를 출력
+	         return 0; // 실패
+	     }
+	 }	
 	
 	
 }

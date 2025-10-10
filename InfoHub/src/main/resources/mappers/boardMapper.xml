@@ -4,94 +4,202 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.infohub.project.boardMapper">
 
-	<!-- 전체 게시글 목록 -->
-	<select id="selectBoardList" parameterType="map"
+	<!-- 전체 리스트 가져오기 -->
+	<select id="list" resultType="com.infohub.project.board.BoardVO">
+		SELECT boardno, title, content,
+		regiId AS regiId, regiDate, readcnt,
+		loginLoginNo, isNotice AS
+		isNotice,
+		categoryboard_categoryId AS categoryId, subCategoryId
+		FROM
+		board ORDER
+		BY isNotice DESC, regiDate DESC
+	</select>
+
+	<!-- 메인 리스트 페이징 -->
+	<select id="listPage" parameterType="map"
 		resultType="com.infohub.project.board.BoardVO">
-		SELECT b.boardno, b.title, b.login_login_id, b.regi_date,
-		(SELECT COUNT(*) FROM comment_board c WHERE c.board_boardno =
-		b.boardno) AS
-		commentCount,
-		(SELECT COUNT(*) FROM hearts h WHERE
-		h.board_boardno = b.boardno) AS
-		likeCount
-		FROM board b
-		ORDER BY
-		b.regi_date DESC
-		LIMIT #{offset}, #{limit}
+		SELECT
+		b.boardno,
+		b.isNotice,
+		b.title,
+		b.content,
+		b.regiId,
+		b.regiDate,
+		b.readcnt,
+		b.loginLoginNo,
+		b.categoryboard_categoryId AS categoryId,
+		b.subCategoryId,
+		cb.name AS categoryName,
+		COALESCE(COUNT(c.commentId), 0) AS commentCount,
+		COALESCE(COUNT(hb.heartId), 0) AS heartCount
+		FROM
+		board b
+		LEFT JOIN commentboard c ON b.boardno = c.boardno
+		LEFT JOIN categoryboard cb ON b.categoryboard_categoryId = cb.categoryId
+		LEFT JOIN heartsboard hb ON b.boardno = hb.boardno
+		<where>
+			<if test="categoryId != null">
+				AND b.categoryboard_categoryId = #{categoryId}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				AND b.title LIKE CONCAT('%', #{keyword}, '%')
+				OR b.content
+				LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+		GROUP BY b.boardno, b.isNotice, b.title, b.content, b.regiId,
+		b.regiDate,
+		b.readcnt, b.loginLoginNo, b.categoryboard_categoryId,
+		b.subCategoryId
+		ORDER BY b.isNotice DESC,
+		<choose>
+			<when test="sort == 'recent'">
+				b.regiDate DESC
+			</when>
+			<when test="sort == 'hot'">
+				b.readcnt DESC
+			</when>
+			<when test="sort == 'comments'">
+				commentCount DESC
+			</when>
+			<otherwise>
+				b.boardno DESC
+			</otherwise>
+		</choose>
+		LIMIT #{size} OFFSET #{offset}
+	</select>
+
+	<!-- 전체 게시글 수 카운트 -->
+	<select id="count" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM board
+		<where>
+			<if test="categoryId != null">
+				AND categoryboard_categoryId = #{categoryId}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				AND title LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+		</where>
+	</select>
+
+
+	<!-- 카테고리 별 게시글 -->
+	<select id="getListByCategory" parameterType="int"
+		resultType="com.infohub.project.board.BoardVO">
+
+		SELECT
+		boardno, isNotice, title, content, regiId, regiDate,
+		readcnt, loginLoginNo,
+		categoryboard_categoryId, subCategoryId,
+		FROM
+		board
+		WHERE categoryboard_categoryId = #{categoryId}
+
+		ORDER BY isNotice
+		DESC, boardno DESC
 	</select>
 
 	<!-- 단일 게시글 조회 -->
-	<select id="selectBoardById" parameterType="int"
-		resultType="com.infohub.project.board.BoardVO">
-		SELECT b.boardno, b.title, b.content, b.login_login_id,
-		b.age_category_id, b.sub_category_id, b.regi_date,
-		(SELECT COUNT(*) FROM hearts h WHERE h.board_boardno = b.boardno) AS
-		likeCount
-		FROM board b
-		WHERE b.boardno = #{boardNo}
-	</select>
+	<select id="getDetail" parameterType="int" resultType="com.infohub.project.board.BoardVO">
+    SELECT DISTINCT
+        b.boardno,
+        b.title,
+        b.content,
+        b.regiId,
+        b.regiDate,
+        b.readcnt,
+        b.loginLoginNo AS loginLoginNo, 
+        b.categoryboard_categoryId AS categoryId,
+        b.subCategoryId,
+        p.name AS categoryName,
+        c.name AS subCategoryName,
+        COALESCE(hc.heartCount, 0) AS heartCount,
+        l.loginNo AS loginNo -- 🔹 추가
+    FROM board b
+    LEFT JOIN (
+        SELECT boardno, COUNT(*) AS heartCount
+        FROM heartsboard
+        GROUP BY boardno
+    ) hc ON b.boardno = hc.boardno
+    LEFT JOIN categoryboard p ON b.categoryboard_categoryId = p.categoryId
+    LEFT JOIN categoryboard c ON b.subCategoryId = c.categoryId
+    LEFT JOIN login l ON b.loginLoginNo = l.loginNo -- 🔹 추가
+    WHERE b.boardno = #{boardno}
+    LIMIT 1
+</select>
 
 	<!-- 조회수 1 증가하는 SQL "updateReadCnt" -->
 	<update id="updateReadCnt" parameterType="java.lang.Integer">
-		update board
-		set
-		readcnt = readcnt + 1
-		where boardno = #{boardno}
-		</update>
+		UPDATE board
+		SET readcnt
+		= readcnt + 1
+		WHERE boardno = #{boardno}
+	</update>
 
 
-		<!-- 글쓰기 -->
-		<insert id="write" parameterType="com.infohub.project.board.BoardVO"
-			useGeneratedKeys="true" keyProperty="BoardNO">
-			INSERT INTO board (title, content, login_login_id, age_category_id,
-			sub_category_id, regi_date)
-			VALUES (#{title}, #{content},
-			#{loginLoginId}, #{ageCategoryId},
-			#{subCategoryId}, NOW())
-			<selectKey keyProperty="boardno" resultType="int"
-				order="AFTER">
-				select last_insert_ID()
-			</selectKey>
-		</insert>
 
-		<!-- 수정하기 -->
-		<update id="updateBoard"
-			parameterType="com.infohub.project.board.BoardVO">
-			UPDATE board
-			SET title = #{title},
-			content = #{content},
-			sub_category_id
-			= #{subCategoryId},
-			last_modified = NOW()
-			WHERE boardno
-			= #{boardNo}
-			AND
-			login_login_id = #{loginLoginId} <!-- 본인 글만 수정 가능 -->
-		</update>
-
-		<!-- 삭제하기 -->
-		<delete id="deleteBoard" parameterType="int">
-			DELETE FROM board
-			WHERE
-			boardno = #{boardNo}
-		</delete>
+	<!-- 글쓰기 -->
+	<insert id="register"
+		parameterType="com.infohub.project.board.BoardVO"
+		useGeneratedKeys="true" keyProperty="boardno">
+		INSERT INTO board
+		(title, content,
+		regiId, regiDate, loginLoginNo,
+		categoryboard_categoryId,
+		subCategoryId)
+		VALUES
+		(#{title}, #{content}, #{regiId}, NOW(),
+		#{loginLoginNo},
+		#{categoryId}, #{subCategoryId})
+	</insert>
 
 
-		<!-- 연령카테고리별 최신 인기글 (좋아요 3개 이상, 최신순) -->
-		<select id="selectPopularBoardsByCategory" parameterType="map"
-			resultType="com.infohub.project.board.BoardVO">
-			SELECT b.boardno, b.title, b.regi_date,
-			COUNT(h.heart_id)
-			AS likeCount
-			FROM board b
-			LEFT JOIN hearts h ON b.boardno =
-			h.board_boardno
-			WHERE b.age_category_id = #{ageCategoryId}
-			GROUP BY
-			b.boardno, b.title, b.regi_date
-			HAVING likeCount >= 3
-			ORDER BY
-			b.regi_date DESC
-			LIMIT #{limit}
-		</select>
+	<!-- 수정하기 -->
+	<update id="update"
+		parameterType="com.infohub.project.board.BoardVO">
+		UPDATE board
+		SET title = #{title},
+		content = #{content},
+		categoryboard_categoryId = #{categoryId}
+		WHERE boardno = #{boardno}
+		AND
+		loginLoginNo =
+		#{loginLoginNo} <!-- 본인 글만 수정 가능 -->
+	</update>
+
+
+
+	<!-- 게시글 삭제 -->
+	<delete id="delete" parameterType="int">
+		DELETE FROM board
+		WHERE
+		boardno = #{boardno}
+	</delete>
+
+
+	<!-- 전체 최신 인기글 -->
+	<select id="selectPopularBoards"
+		resultType="com.infohub.project.board.BoardVO">
+		SELECT b.boardNo,
+		b.title,
+		b.content,
+		b.regiId,
+		b.regiDate,
+		b.readcnt,
+		b.loginLoginNo AS loginLoginNo,
+		b.categoryboard_categoryId
+		AS categoryId,
+		b.subCategoryId,
+		COALESCE(COUNT(h.heartId), 0) AS
+		heartCount
+		FROM board b
+		LEFT JOIN heartsboard h ON b.boardNo = h.boardNo
+		GROUP BY b.boardNo
+		HAVING heartCount >= 3
+		ORDER BY b.regiDate DESC
+	</select>
+
+
 </mapper>

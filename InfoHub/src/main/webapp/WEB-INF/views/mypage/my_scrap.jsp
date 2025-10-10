@@ -3,16 +3,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!-- 스크랩한 정책 콘텐츠 -->
-<h2 class="content-title">스크랩한 혜택</h2>
+<h2 class="content-title">스크랩한 정책</h2>
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+
 <!-- 필터 -->
 <div class="scrap-filter">
-  <select class="filter-select">
-    <option>전체 (15)</option>
-    <option>일자리</option>
-    <option>주거</option>
-    <option>교육</option>
-    <option>복지</option>
+  <select class="filter-select" id="scrapFilter">
+    <option value="all">전체</option>
+  	<option value="1">일자리</option>
+  	<option value="2">주거</option>
+  	<option value="3">교육</option>
+  	<option value="4">복지</option>
   </select>
   <div class="sort-buttons">
     <button class="sort-btn active">최신순</button>
@@ -22,140 +23,251 @@
 </div>
 
 <!-- 스크랩 리스트 -->
-<div class="scrap-list">
-  
-  <!-- 스크랩 카드 1 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">일자리</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">국민내일배움카드</h3>
-    <p class="scrap-description">
-      직업훈련을 희망하는 국민에게 직업능력개발훈련 및 컨설팅을 지원
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 상시신청</span>
-      <span class="scrap-date">스크랩: 2025.01.15</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 2 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">주거</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">청년 주거비 지원</h3>
-    <p class="scrap-description">
-      청년들의 주거 안정을 위해 월세 및 보증금 지원
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 2025.01.01 ~ 2025.12.31</span>
-      <span class="scrap-date">스크랩: 2025.01.14</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 3 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">복지</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">근로·자녀장려금</h3>
-    <p class="scrap-description">
-      소득과 재산이 적은 근로소득자에게 근로장려금을, 자녀 양육 시 자녀장려금을 지급
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 2025.05.01 ~ 2025.05.31</span>
-      <span class="scrap-date">스크랩: 2025.01.13</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 4 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">교육</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">국가장학금</h3>
-    <p class="scrap-description">
-      대학생의 등록금 부담 완화를 위한 장학금 지원
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 2025.03.01 ~ 2025.03.31</span>
-      <span class="scrap-date">스크랩: 2025.01.12</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 5 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">일자리</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">국민취업지원제도</h3>
-    <p class="scrap-description">
-      취업지원서비스와 생계지원을 통해 취업 촉진
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 상시신청</span>
-      <span class="scrap-date">스크랩: 2025.01.11</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-  <!-- 스크랩 카드 6 -->
-  <article class="scrap-card">
-    <div class="scrap-header">
-      <span class="scrap-badge">주거</span>
-      <button class="scrap-delete-btn">✕</button>
-    </div>
-    <h3 class="scrap-title">청년도약계좌</h3>
-    <p class="scrap-description">
-      청년들의 자산 형성을 위한 정부 지원 적금 상품
-    </p>
-    <div class="scrap-info">
-      <span class="scrap-period">신청기간: 2025.01.01 ~ 2025.12.31</span>
-      <span class="scrap-date">스크랩: 2025.01.10</span>
-    </div>
-    <a href="#" class="scrap-link">자세히 보기 →</a>
-  </article>
-
-</div>
+<div class="scrap-list"></div>
+<p class="no-data" style="display:none;">스크랩한 정책이 없습니다.</p>
 
 <!-- 페이지네이션 -->
-<nav class="pagination-nav">
-  <button class="page-arrow">«</button>
-  <button class="page-number active">1</button>
-  <button class="page-number">2</button>
-  <button class="page-number">3</button>
-  <button class="page-arrow">»</button>
+<nav class="pagination-nav" style="display:none;">
+  <button class="page-arrow" id="prevPage">«</button>
+  <span id="pageInfo"></span>
+  <button class="page-arrow" id="nextPage">»</button>
 </nav>
 
+
 <script>
-  // 정렬 버튼 처리
-  document.addEventListener('DOMContentLoaded', function() {
-    const sortBtns = document.querySelectorAll('.sort-btn');
-    sortBtns.forEach(btn => {
-      btn.addEventListener('click', function() {
-        sortBtns.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-      });
+var scrapApiUrl = '<c:url value="/scraps/api"/>';
+var deleteScrapUrl = '<c:url value="/scraps/delete" />';
+
+document.addEventListener('DOMContentLoaded', function() {
+    const scrapList = document.querySelector('.scrap-list');
+    const noData = document.querySelector('.no-data');
+    const filterSelect = document.getElementById("scrapFilter");
+    
+    let currentSort = "latest"; // 기본 최신순
+    
+
+    // 데이터 불러오기
+    function loadScraps() {
+        fetch(scrapApiUrl, {
+            method: 'GET',
+            credentials: 'same-origin' // 세션 쿠키 포함
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("받은 데이터:", data);
+            renderList(data);
+        })
+        .catch(err => console.error("스크랩 불러오기 실패:", err));
+
+    }
+
+
+    // 리스트 렌더링
+    function renderList(scraps) {
+    	currentList = scraps.map((s, idx) => ({ ...s, id: idx }));
+    	currentPage = 1;
+    	
+        scrapList.innerHTML = "";
+
+        if (!scraps || scraps.length === 0) {
+            noData.style.display = "block";
+            renderPage();
+            return;
+        }
+        noData.style.display = "none";
+
+        scraps.forEach((scrap, idx) => {
+        	const titleText = (scrap.policyTitle || "").toString();
+            const contentText = (scrap.policyContent || "").toString();
+            
+            const card = document.createElement("article");
+            card.classList.add("scrap-card");
+            card.setAttribute("data-category", scrap.policyCategoryId);
+            card.setAttribute("data-deadline", scrap.policyApplicationEnd || "");
+            card.setAttribute("data-id", idx);
+
+            card.innerHTML = 
+                '<h3 class="scrap-title">' + (titleText || "(제목 없음)") + '</h3>' +
+                '<p class="scrap-description">' + (contentText || "(내용 없음)") + '</p>' +
+                '<div class="scrap-info">' +
+                '    <span class="scrap-date">스크랩일: ' + scrap.createdAt + '</span>' +
+                '</div>' +
+                '<div class="scrap-actions">' +
+                '    <button class="delete-btn" data-scrapid="' + scrap.scrapNo + '">삭제</button>' +
+                '</div>';
+
+            scrapList.appendChild(card);
+        });
+        renderPage();
+    }
+
+    // 필터 이벤트
+	filterSelect.addEventListener("change", function() {
+    	currentPage = 1;
+    	renderPage();
+	});
+
+    // 정렬 
+    function sortData(cards) {
+        const arr = Array.from(cards);
+        if (currentSort === "alpha") {
+            return arr.sort((a, b) =>
+                a.querySelector(".scrap-title").textContent.localeCompare(
+                    b.querySelector(".scrap-title").textContent
+                )
+            );
+        } else if (currentSort === "deadline") {
+            return arr.sort(
+                (a, b) => new Date(a.getAttribute("data-deadline")) - new Date(b.getAttribute("data-deadline"))
+            );
+        } else {
+            return arr.sort((a, b) => {
+                const dateA = new Date(a.querySelector(".scrap-date").textContent.replace("스크랩일:", "").trim());
+                const dateB = new Date(b.querySelector(".scrap-date").textContent.replace("스크랩일:", "").trim());
+                return dateB - dateA;
+            });
+        }
+    }
+
+    document.querySelectorAll(".sort-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+
+            if (this.textContent.includes("가나다")) currentSort = "alpha";
+            else if (this.textContent.includes("마감")) currentSort = "deadline";
+            else currentSort = "latest";
+
+            const cards = document.querySelectorAll(".scrap-card");
+            const sorted = sortData(cards);
+
+            scrapList.innerHTML = "";
+            sorted.forEach(card => scrapList.appendChild(card));
+        });
+    });
+    
+    let currentPage = 1;
+    const pageSize = 6;
+    let currentList = [];
+    
+    const pageNav = document.querySelector('.pagination-nav');
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    const pageInfo = document.getElementById('pageInfo');
+
+    // 페이지네이션 전체 스타일
+    pageNav.style.position = 'relative';
+    pageNav.style.width = '200px';
+    pageNav.style.height = '40px';
+    pageNav.style.margin = '20px auto';
+
+    // 페이지 정보(숫자) 스타일 - 항상 중앙 고정
+    pageInfo.style.position = 'absolute';
+    pageInfo.style.left = '50%';
+    pageInfo.style.transform = 'translateX(-50%)';
+    pageInfo.style.minWidth = '100px';
+    pageInfo.style.textAlign = 'center';
+    pageInfo.style.fontWeight = 'normal';
+    pageInfo.style.lineHeight = '35px';
+
+
+    // 버튼 스타일 - nav 양옆
+    [prevBtn, nextBtn].forEach(btn => {
+        btn.style.width = '40px';
+        btn.style.height = '40px';
+        btn.style.borderRadius = '6px';
+        btn.style.cursor = 'pointer';
+        btn.style.display = 'inline-flex';
+        btn.style.justifyContent = 'center';
+        btn.style.alignItems = 'center';
+    });
+    prevBtn.style.position = 'absolute';
+    prevBtn.style.left = '0';
+    nextBtn.style.position = 'absolute';
+    nextBtn.style.right = '0';
+
+	
+    // DOM에서 카드 선택
+    const cards = () => document.querySelectorAll(".scrap-card");
+
+    // 페이지 표시 함수
+    function renderPage() {
+    	const allCards = Array.from(document.querySelectorAll(".scrap-card"));
+    	const selectedCategory = filterSelect.value;
+    
+    	let visibleCount = 0;
+    	allCards.forEach((card) => {
+        	const cardCategoryId = card.getAttribute("data-category");
+        	const matchesFilter = selectedCategory === "all" || cardCategoryId === selectedCategory;
+        
+        	if (matchesFilter) visibleCount++; 
+        
+        	const startIdx = (currentPage - 1) * pageSize + 1;
+        	const endIdx = currentPage * pageSize;
+        	const cardIdx = allCards.filter(c => selectedCategory === "all" || c.getAttribute("data-category") === selectedCategory).indexOf(card) + 1;
+
+        	if (matchesFilter && cardIdx >= startIdx && cardIdx <= endIdx) {
+           	 	card.style.display = "block";
+        	} else {
+            	card.style.display = "none";
+        }	
     });
 
-    // 스크랩 삭제
-    const deleteButtons = document.querySelectorAll('.scrap-delete-btn');
-    deleteButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        if (confirm('스크랩을 삭제하시겠습니까?')) {
-          this.closest('.scrap-card').remove();
+    const totalPages = Math.ceil(visibleCount / pageSize) || 1;
+    pageInfo.textContent = currentPage + " / " + totalPages;
+
+    prevBtn.style.display = currentPage > 1 ? "inline-block" : "none";
+    nextBtn.style.display = currentPage < totalPages ? "inline-block" : "none";
+    pageNav.style.display = totalPages > 1 ? 'flex' : 'none';
+}
+
+
+
+    // 버튼 이벤트
+    document.getElementById("prevPage").addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderPage();
         }
-      });
     });
-  });
+    document.getElementById("nextPage").addEventListener("click", () => {
+        const totalPages = Math.ceil(currentList.length / pageSize) || 1;
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderPage();
+        }
+    });
+    
+ 	// 삭제 버튼 클릭 이벤트
+    scrapList.addEventListener("click", function(e) {
+        if (e.target.classList.contains("delete-btn")) {
+            const scrapCard = e.target.closest(".scrap-card");
+            const scrapId = e.target.getAttribute("data-scrapid");
+            console.log("삭제할 scrapId:", scrapId);
+
+            if (!scrapId) {
+                alert("삭제할 스크랩 정보를 찾을 수 없습니다.");
+                return;
+            }
+
+            if (!confirm("정말 삭제하시겠습니까?")) return;
+
+            fetch(deleteScrapUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'scrapsNo=' + encodeURIComponent(scrapId)
+            })
+
+            .then(res => res.text())
+            .then(() => loadScraps())
+            .catch(err => {
+                console.error("삭제 실패:", err);
+                alert("삭제 중 오류가 발생했습니다.");
+            });
+        }
+    });
+
+    // 실행
+    loadScraps();
+});
 </script>

@@ -12,6 +12,7 @@ public interface ArticleDAO {
 	List<ArticleVO> articlListAll3(Criteria cri) throws Exception;
 	List<ArticleVO> articlListAll4(Criteria cri) throws Exception;
 	List<ArticleVO> articlListAll5(Criteria cri) throws Exception;
+	List<ArticleVO> articlListAll6(Criteria cri) throws Exception;
 	
 	List<ArticleVO> articleContent(int articleId) throws Exception;
 	
@@ -29,8 +30,7 @@ public interface ArticleDAO {
 	
 	List<ArticleVO> viewsArticle() throws Exception;
 	
-	
-	List<ArticleVO> keywordArticle() throws Exception;
+	List<ArticleVO> findAllArticles() throws Exception;
 	
 	
 }

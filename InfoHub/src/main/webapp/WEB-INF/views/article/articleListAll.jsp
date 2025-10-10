@@ -1,3 +1,4 @@
+<%@page import="com.infohub.project.article.ArticleVO"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.ArrayList"%>
@@ -27,20 +28,67 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
+
+.text-center {
+    text-align: left; /* 가운데 -> 왼쪽 정렬 */
+    margin-top: 0; /* 테이블과 페이지네이션 사이 간격 줄임 */
+    padding-left: 30px; /* 페이지 시작 위치 조금 띄우기 */
+    margin-left: 60px;
+}
+
 .pageInfo {
 	list-style: none;
-	display: inline-block;
-	margin: 10px 0 0 100px;
+	margin: 0;
+    padding: 0;
+    white-space: nowrap; /* 한 줄에 유지 */
+    overflow: hidden;    /* 스크롤 없이 보여주기 */
 }
 
 .pageInfo li {
-	float: left;
-	font-size: 20px;
-	margin-left: 18px;
-	padding: 7px;
-	font-weight: 500;
-	}
+	display: inline-block; /* 한 줄로 나열 */
+    margin: 0 5px;         /* 간격 최소화 */
+    font-size: 16px;       /* 글자 크기 줄임 */
+}
+	
+.pageInfo li a {
+    text-decoration: none;
+    color: black;
+    padding: 5px 8px;      /* 버튼/숫자 폭 최소화 */
+}
+
+.pageInfo li.active a {
+    color: blue;      /* 현재 페이지 번호 색 */
+    font-weight: bold; /* 강조 */
+}
+
+.pageInfo li a.btn {
+    font-size: 14px;
+    padding: 4px 6px;
+}
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 시계를 갱신하는 함수
+    function updateClock() {
+        const now = new Date();
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        };
+        document.getElementById('realTimeClock').innerText = now.toLocaleString('ko-KR', options);
+    }
+
+    updateClock(); // 초기 실행
+    setInterval(updateClock, 1000); // 1초마다 갱신
+});
+</script>
 
 </head>
 
@@ -48,25 +96,25 @@
   <!-- 상단바 -->
 <jsp:include page="../include/header.jsp"/>
 
+	<!-- 브레드크럼 -->
+	<div class="breadcrumb">
+    <div class="container">
+      <span>현재시간 ></span>
+      <span id="realTimeClock"></span>
+    </div>
+	</div>
+
 <!-- 네비게이션 -->
   	<div class="news-header">
     <nav class="news-nav">
       <a href="articleListAll" class="active">종합</a>
-      <a href="articleListAll1">부동산</a>
-      <a href="articleListAll2">주식</a>
-      <a href="articleListAll3">적금</a>
-      <a href="articleListAll4">복지</a>
-      <a href="articleListAll5">창업</a>
+      <a href="articleListAll1">일자리취업</a>
+      <a href="articleListAll2">주거/복지</a>
+      <a href="articleListAll3">교육</a>
+      <a href="articleListAll4">문화/여가</a>
+      <a href="articleListAll5">건강/의료</a>
+      <a href="articleListAll6">금융/경제</a>
     </nav>
-	</div>
-	
-	<!-- 브레드크럼 -->
-	<div class="breadcrumb">
-    <div class="container">
-      <a href="#">공지사항</a>
-      <span>></span>
-      <span>2025년 3/4분기 입회심사 결과</span>
-    </div>
 	</div>
 
        <!-- 메인 컨테이너 -->
@@ -102,47 +150,55 @@
 
 	<table class="news-item">
   
-      <tr>
-         <th>  </th>
-         
-      </tr>
       <c:forEach var="article" items="${articleListAll}"> <!-- JSTL의 반복문 -->
          
-         <tr>
+         <tr><td><br>
+      <c:choose>
+         <c:when test="${empty userId}">
+            <a href="noArticleContent?articleId=${article.articleId}" style="text-decoration:none; color:inherit; display:block;">
+                 <div class="news-item">
+                  <div class="news-meta">
+                     <div class="news-summary">
+                        <h1>${article.title}</h1>
+                        <p>${article.content}</p>
+                        ${article.name} | ${article.source}<br>
+                        ${article.published}<br>
+                        ♥${article.hearts}
+                     </div>
+                  </div>
+                  <img src="resources/image/${article.image }" 
+                       alt="${article.image }" 
+                       style="width: 250px; height: 180px; border-radius: 8px;">
+            	</div>
+            </a>
+         </c:when>
          
-            <td><br>
-         	<div class="news-item">
-         	
-      		<div class="news-meta">
-      		<div class="news-summary">
-      		
-         	<c:if test="${empty userId}">
-            <h1><a href="noArticleContent?articleId=${article.articleId}">${article.title}</a></h1>
-            </c:if>
-            
-            <c:if test="${not empty userId}">
-            <h1><a href="articleContent?articleId=${article.articleId}">${article.title}</a></h1>
-            </c:if>
-            
-            <p>${article.content}(기사내용)</p>
-            ${article.name} | ${article.source}<br>
-            ${article.published}<br>
-            ♥${article.hearts}
-            </div>
-            </div>
-            
-            <img src="resources/image/${article.image }" alt="${article.image }" style=" width: 250px; height: 180px; border-radius: 8px;">
-      		
-          	</div>
-          	</td>
-            
-         </tr>
-         
+         <c:otherwise>
+            <a href="articleContent?articleId=${article.articleId}" style="text-decoration:none; color:inherit; display:block;">
+               <div class="news-item">
+                  <div class="news-meta">
+                     <div class="news-summary">
+                        <h1>${article.title}</h1>
+                        <p>${article.content}</p>
+                        ${article.name} | ${article.source}<br>
+                        ${article.published}<br>
+                        ♥${article.hearts}
+                     </div>
+                  </div>
+                  <img src="resources/image/${article.image }" 
+                       alt="${article.image }" 
+                       style="width: 250px; height: 180px; border-radius: 8px;">
+               </div>
+            </a>
+         </c:otherwise>
+      </c:choose>
+   </td>
+</tr>
    </c:forEach>
    </table>
    
        <!-- 페이지네이션 -->
-    <div class="text-cente">
+    <div class="text-center">
 		<ul class="search_info">
 			<form id="jobForm">
 				<input type='hidden' name="page"
@@ -156,28 +212,21 @@
 	<div class="text-center">
 		<ul class="pageInfo">
 			<li id="page-prev"><a
-				href="articleListAll${pageMaker.makeSearch(pageMaker.startPage-1)}" style="text-decoration: none; color: inherit;">&laquo;</a></li>
+				href="articleListAll${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></li>
 
 			<c:forEach begin="${pageMaker.startPage }"
 				end="${pageMaker.endPage }" var="idx">
-				<li
-				<c:out value="${pageMaker.cri.page == idx?'class =active':'' }"/>>
-				<a href="articleListAll?page=${idx }" style="text-decoration: none; color: inherit;">${idx }</a>
+				<li 
+				class="${pageMaker.cri.page == idx ? 'active' : ''}">
+				<a href="articleListAll?page=${idx }" >${idx }</a>
 				</li>
 			</c:forEach>
 
 			<c:if test="${pageMaker.next && pageMaker.endPage > 0 }">
 				<li><a
-				href="articleListAll${pageMaker.makeSearch(pageMaker.endPage +1) }">&raquo;</a></li>
+				href="articleListAll${pageMaker.makeSearch(pageMaker.endPage +1) }" >&raquo;</a></li>
 			</c:if>
-
-			<c:if test="${pageMaker.prev }">
-				<li><a
-				href="articleListAll${pageMaker.makeSearch(pageMaker.startPage -1) }">&laquo;</a></li>
-			</c:if>
-
-				<li id="page-next"><a
-				href="articleListAll${pageMaker.makeSearch(pageMaker.startPage-1)}" style="text-decoration: none; color: inherit;">&raquo;</a></li>
+				
 			<!-- 처음 목록 버튼 추가 -->
 			<li id = "page-fitst">
 			<a href="articleListAll" class="btn btn-warning" style="text-decoration: none; color: inherit;">처음목록</a></li>
@@ -208,64 +257,45 @@
         </ol>
       </div>
       
-      
       <div class="sidebar-section">
-      <h2>키워드</h2>
-      <c:forEach var="article" items="${keywordArticle}">
+      <h2>정책 기사 키워드 Top 7</h2>
       
-       <c:if test="${empty userId}">
-            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;"> ${article.keyword}</a>
-          </c:if>
-          
-          <c:if test="${not empty userId}">
-          <a href="articleContent?articleId=${article.articleId}"> ${article.keyword}</a>
-          </c:if>
-       
+      <ol class="rank-list"> <c:forEach var="keywordDTO" items="${topKeywords}" varStatus="status">
+        <li>
+        <span class="rank-number">${status.index + 1}</span>
+        <a href="#" class="keyword-link" data-keyword="${keywordDTO.skeyword}"> ${keywordDTO.skeyword}</a>
+        </li>
       </c:forEach>
-      </div>
-
+      </ol>
+      
+    </div>
+      
       <div class="sidebar-section">
-      <%
-      Random random = new Random();
-      
-      Set<Integer> set = new HashSet<>();
-     
-      while(set.size()<2){
-    	  Double d = Math.random()*50+1;
-    	  set.add(d.intValue());
-    	}
-     
-      List<Integer> list = new ArrayList<>(set);
-      
-      int number1 = list.get(0);
-      int number2 = list.get(1);
-      %>
-      
-        <h2>포토·영상</h2>
-        <div class="photo-grid">
-          <div>
-          <c:if test="${empty userId}">
-            <a href="noArticleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-          
-          <c:if test="${not empty userId}">
-          <a href="articleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-      	  </div>
-      	 
-         <div>
-          <c:if test="${empty userId}">
-            <a href="noArticleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-          
-          <c:if test="${not empty userId}">
-          <a href="articleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-      	  </div>
-        </div>
-      </div>
-    </aside>
-   </div>
+	 <h2>포토·영상</h2>
+	<div class="photo-grid">
+	  <c:forEach var="article" items="${randomArticles}">
+	  
+	   <c:if test="${empty userId}">
+	   <a href="noArticleContent?articleId=${article.articleId}">
+	        <img src="<c:url value='/resources/image/' />${article.image}" 
+	     alt="${article.image}" 
+	     style="width: 270px; height: 190px;">
+	    </a>
+	   </c:if>
+	  
+	  <c:if test="${not empty userId}">
+	    <a href="articleContent?articleId=${article.articleId}">
+	        <img src="<c:url value='/resources/image/' />${article.image}" 
+	     alt="${article.image}" 
+	     style="width: 270px; height: 190px;">
+	    </a>
+	   </c:if>
+	</c:forEach>
+	</div>
+	</div>
+	
+	
+ </aside>
  
 
   <!-- Top 버튼 -->
@@ -275,8 +305,6 @@
     </svg>
   </button>
    
-   
-   </div>
   <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
     © 2025 누림 — Mist Blue Theme
   </footer>
@@ -301,48 +329,107 @@
       });
     });
     
+    // 검색 버튼 로직과 키워드 링크 로직을 분리하여 이벤트 중첩을 방지
     $(document).ready(
-			function() {
+        function() {
+            
+            // 1. 일반 검색 버튼 클릭 이벤트 (기존 로직)
+            $('#searchBtn').on("click", function(event) {
+                
+                // 1. 기본 페이지 이동 동작을 막습니다. (가장 중요!)
+                event.preventDefault();
 
-			$('#searchBtn').on(
-				"click",
-				function(event) {
+                var searchType = $("select option:selected").val();
+                var keyword = $('#keyword').val();
+                var encodedKeyword = encodeURIComponent(keyword);
+                
+                // 검색 조건/키워드 유효성 검사
+                if (!searchType || searchType == "") {
+                    alert("검색 조건을 선택하세요!");
+                    $("#searchType").focus();
+                    return;
+                } else if (!keyword) {
+                    alert("검색어를 입력하세요!");
+                    $('#keyword').focus();
+                    return;
+                }
 
-				self.location = "articleListAll"
-				+ '${pageMaker.makeQuery(1)}'
-				+ "&searchType="
-				+ $("select option:selected").val()
-				+ "&keyword="
-				+ encodeURIComponent($('#keyword').val());
-					});
-				$('#newBtn').on("click", function(evt) {
+                // 최종 이동할 URL 구성
+                var redirectUrl = "articleListAll"
+                    + '${pageMaker.makeQuery(1)}' // 페이지 정보 포함
+                    + "&searchType=" + searchType
+                    + "&keyword=" + encodedKeyword;
 
-				self.location = "articleListAll";
+                // 2. 키워드 로깅을 위한 AJAX 요청
+                $.ajax({
+                    url: "logKeyword", 
+                    type: "POST",
+                    data: { keyword: keyword },
+                    success: function(response) {
+                        self.location = redirectUrl; // 성공 시 이동
+                    },
+                    error: function(xhr, status, error) {
+                        self.location = redirectUrl; // 실패 시에도 이동
+                    }
+                });
+            });
 
-				});
+            $('#newBtn').on("click", function(evt) {
+                self.location = "articleListAll";
+            });
+            
+            // 2. 인기 검색어 링크 클릭 이벤트
+            $('.keyword-link').on("click", function(event) {
+                event.preventDefault(); // 기본 링크 이동(href="#") 방지
 
-			});
-	//페이지
-	$(function() {
-		//perPageNum select 박스 설정
-		setPerPageNumSelect();
-		//searchType select 박스 설정
-		setSearchTypeSelect();
+                // 1. 클릭된 키워드 텍스트를 가져옵니다.
+                var keyword = $(this).text().trim(); 
+                var searchType = 'tc'; // 키워드 검색은 제목+내용(tc)으로 고정
+                var encodedKeyword = encodeURIComponent(keyword);
 
-		var canPrev = '${pageMaker.prev}';
-		if (canPrev !== 'true') {
-			$('#page-prev').addClass('disabled');
-		}
+                // 2. 키워드 로깅을 위한 AJAX 요청 (검색 카운트 증가)
+                $.ajax({
+                    url: "logKeyword", 
+                    type: "POST",
+                    data: { keyword: keyword },
+                    success: function(response) {
+                        // 3. 로깅 성공/실패와 관계없이 검색 결과 페이지로 이동 (페이지는 1로 초기화)
+                        var redirectUrl = "articleListAll"
+                            + "?page=1&perPageNum=${pageMaker.cri.perPageNum}"
+                            + "&searchType=" + searchType
+                            + "&keyword=" + encodedKeyword;
+                        self.location = redirectUrl;
+                    },
+                    error: function(xhr, status, error) {
+                        // 로깅 실패 시에도 검색 페이지로 이동
+                        var redirectUrl = "articleListAll"
+                            + "?page=1&perPageNum=${pageMaker.cri.perPageNum}"
+                            + "&searchType=" + searchType
+                            + "&keyword=" + encodedKeyword;
+                        self.location = redirectUrl;
+                    }
+                });
+            });
+            
+            // 페이지/검색 관련 함수 호출
+            setPerPageNumSelect();
+            setSearchTypeSelect();
 
-		var canNext = '${pageMaker.next}';
-		if (canNext !== 'true') {
-			$('#page-next').addClass('disabled');
-		}
+            var canPrev = '${pageMaker.prev}';
+            if (canPrev !== 'true') {
+                $('#page-prev').addClass('disabled');
+            }
 
-		var thisPage = '${pageMaker.cri.page}';
+            var canNext = '${pageMaker.next}';
+            if (canNext !== 'true') {
+                $('#page-next').addClass('disabled');
+            }
 
-		$('#page' + thisPage).addClass('active');
-	})
+            var thisPage = '${pageMaker.cri.page}';
+
+            $('#page' + thisPage).addClass('active');
+
+	});
 
 	function setPerPageNumSelect() {
 		var perPageNum = '${pageMaker.cri.perPageNum}';
@@ -356,56 +443,30 @@
 		})
 	}
 	
-	//검색
+	// 검색 (이 함수 내부의 searchBtn 클릭 이벤트는 위에서 처리되므로 제거해야 합니다.)
 	function setSearchTypeSelect() {
 		var searchType = $('#searchType');
 		var keyword = $('#keyword');
-		
-
 		var searchTypeSel = searchType.val(
 				'${pageMaker.cri.searchType}').prop("selected", true);
-		//검색 버튼이 눌리면
-		$('#searchBtn').on(
-				'click',
-				function() {
-
-					var searchTypeVal = searchTypeSel.val();
-					var keywordVal = keyword.val();
-					
-					//검색 조건 입력 안했으면 경고창 
-					if (!searchTypeVal || searchTypeVal == "n") {
-						alert("검색 조건을 선택하세요!");
-						searchTypeSel.focus();
-						return;
-						//검색어 입력 안했으면 검색창
-					} else if (!keywordVal) {
-						alert("검색어를 입력하세요!");
-						keyword.focus();
-						return;
-					}
-					var url = "articleListAll?page=" + thisPage 
-							+ "&perPageNum="
-							+ "${pageMaker.cri.perPageNum}"
-							+ "&searchType=" + searchTypeVal
-							+ "&keyword="
-							+ encodeURIComponent(keywordVal);
-					window.location.href = url;
-				})
+		
+		// ❌ 여기 있던 $('#searchBtn').on('click', ...) 로직은 이미 위에서 처리했으므로 제거합니다.
+		
 	}
 	
 	$(function() {
-   		$("#keyword").keypress(function(e){
-   			//검색어 입력 후 엔터키 입력하면 조회버튼 클릭
-   			if(e.keyCode && e.keyCode == 13){
-   				$("#searchBtn").trigger("click");
-   				return false;
-   			}
-   			//엔터키 막기
-   			if(e.keyCode && e.keyCode == 13){
-   				  e.preventDefault();	
-   			}
-   		});
-   	});
+		$("#keyword").keypress(function(e){
+			//검색어 입력 후 엔터키 입력하면 조회버튼 클릭
+			if(e.keyCode && e.keyCode == 13){
+				$("#searchBtn").trigger("click");
+				return false;
+			}
+			//엔터키 막기
+			if(e.keyCode && e.keyCode == 13){
+				 e.preventDefault();	
+			}
+		});
+	});
 </script> 
 </body>
 </html>

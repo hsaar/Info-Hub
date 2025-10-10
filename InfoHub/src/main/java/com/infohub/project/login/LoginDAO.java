@@ -14,6 +14,7 @@ public interface LoginDAO {
 	public LoginDTO login(LoginRequest req);
 	public String findid(String name, String email, String phone);
 	public int findpassword(String userId, String email, String phone);
-	public int updatepassword(String password, int loginNo);
-	
+	public int updatepassword(String password, String userId);
+	public String checkPasswordById(String userId);
+	public int updateKeywords(String userId,String keywords);
 }

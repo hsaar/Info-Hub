@@ -11,7 +11,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ page session="false" %>
 	
 
 <!DOCTYPE html>
@@ -29,8 +29,135 @@
 	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+<style>
+    body {
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    .benefit-card {
+        border-radius: 1.2rem;
+        background: #ffffffcc; /* 살짝 투명한 흰색 */
+        border: 3px solid #a8e0ff;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .benefit-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+        border-color: #0077ff;
+    }
+    .benefit-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+        transform: rotate(30deg);
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+    .benefit-card:hover::before {
+        opacity: 1;
+    }
+
+    .card-title {
+        font-size: 1.6rem;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+    }
+
+    .card-text {
+        color: #444;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .benefit-card ul li {
+        margin-bottom: 12px;
+        font-size: 1rem;
+        color: #222;
+    }
+
+    .btn-gradient {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--accent-blue) 100%);
+        border: none;
+        color: #fff !important;
+        padding: 8px 18px;
+        border-radius: 25px;
+        transition: 0.3s;
+        text-decoration: none;
+        box-shadow: #78d4ff;
+        position: relative;   /* ✅ 클릭 문제 방지 */
+    	z-index: 10;          /* ✅ 위로 올리기 */
+    }
+    .btn-gradient:hover {
+        opacity: 0.95;
+        transform: scale(1.08);
+        box-shadow: #78d4ff;
+    }
+    
+    .btn-common {
+    display: inline-block;
+    font-size: 0.8rem;        /* 글자 크기 통일 */
+    padding: 8px 18px;      /* 버튼 높이와 너비 통일 */
+    border-radius: 25px;    /* 둥근 모서리 */
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;   /* 클릭 가능하도록 */
+    z-index: 10;          /* 다른 요소 위로 */
+    background-color: #eee; /* 테스트용 배경 */
+	}
+	
+	.btn-common::before {
+	    pointer-events: none; /* 버튼 위 장식 요소 클릭 막지 않음 */
+	}
+	
+</style>
+
+
 <script type="text/javascript">
 
+	function clip(){
+	
+			var url = '';
+			var textarea = document.createElement("textarea");
+			document.body.appendChild(textarea);
+			url = window.document.location.href;
+			textarea.value = url;
+			textarea.select();
+			document.execCommand("copy");
+			document.body.removeChild(textarea);
+			alert("URL이 복사되었습니다.")
+		}
+	
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 시계를 갱신하는 함수
+    function updateClock() {
+        const now = new Date();
+        const options = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        };
+        document.getElementById('realTimeClock').innerText = now.toLocaleString('ko-KR', options);
+    }
+
+    updateClock(); // 초기 실행
+    setInterval(updateClock, 1000); // 1초마다 갱신
+});
 </script>
 
 </head>
@@ -39,54 +166,58 @@
 <!-- 상단바 -->
 <jsp:include page="../include/header.jsp"/>
 
-<!-- 네비게이션 -->
-  	<div class="news-header">
-    <nav class="news-nav">
-      <a href="articleListAll">종합</a>
-      <a href="articleListAll1">부동산</a>
-      <a href="articleListAll2">주식</a>
-      <a href="articleListAll3">적금</a>
-      <a href="articleListAll4">복지</a>
-      <a href="articleListAll5">창업</a>
-      <a href="#">기타</a>
-    </nav>
-	</div>
-
 <!-- 브레드크럼 -->
 	<div class="breadcrumb">
     <div class="container">
-      <a href="#">공지사항</a>
-      <span>></span>
-      <span>2025년 3/4분기 입회심사 결과</span>
+      <span>현재시간 ></span>
+      <span id="realTimeClock"></span>
     </div>
 	</div>
 	
 	<!-- 메인 컨테이너 -->
 	<div class="news-container">
-    <!-- 메인 콘텐츠 -->
     <main class="news-main">
     <h1 class="news-title">
-  		 혜택 상세조회
-	</h1>
-	
-	<div class="container">
-	<div style="padding-top: 1px">
-	
-		<c:forEach var="registration" items="${noRegistrationContent}">
-		<h3>${registration.title}</h3>
-		${registration.content}<br>
-		${registration.startDate} ~ ${registration.endDate}<br>
-		${registration.trachea}<br>
-		call : ${registration.call}<br>
-		link : <a href="https://${registration.link}" class="btn-text" target="_blank" title="새창열림">${registration.link}</a><br>
-		${registration.type}
-		
-		
-		</c:forEach>
-	
-	</div>
-	</div>
-	</main>
+        혜택 상세조회
+    </h1>
+
+    <div class="container">
+        <div class="row justify-content-center">
+    <p><button class="btn-common copy-url-btn" onclick="clip(); return false;">URL</button></p>
+            <c:forEach var="registration" items="${noRegistrationContent}">
+                <div class="col-md-5 mb-4">
+                    <div class="card benefit-card shadow-lg h-100">
+                        <div class="card-body p-4">
+                            <h3 class="card-title mb-3">
+                                 🌟 ${registration.title}
+                            </h3>
+                             
+                            <br>
+                            <p class="card-text mb-3" style="text-align: center;">${registration.content}</p>
+                            <br>
+                            <br>
+                            <hr>
+                            <ul class="list-unstyled mb-4">
+                                <li>📅 <strong>신청기간 :</strong> ${registration.startDate} ~ ${registration.endDate}</li>
+                                <li>🏢 <strong>접수기관 :</strong> ${registration.trachea}</li>
+                                <li>📞 <strong>전화문의 :</strong> ${registration.call}</li>
+                                <li>
+                                    🔗 <strong>신청링크 :</strong> 
+                                    <a href="https://${registration.link}" 
+                                       class="btn btn-gradient btn-sm ms-2" 
+                                       target="_blank" title="새창열림">
+                                        바로가기
+                                    </a>
+                                </li>
+                                <li>💡 <strong>지원형태 :</strong> ${registration.type}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+</main>
 	
 <aside>
       <div class="sidebar-section">
@@ -108,60 +239,41 @@
       </div>
       
        <div class="sidebar-section">
-      <h2>키워드</h2>
-      <c:forEach var="article" items="${keywordArticle}">
-      
-       <c:if test="${empty userId}">
-            <a href="noArticleContent?articleId=${article.articleId}" style="font-size: 25; font-weight: bold;"> ${article.keyword}</a>
-          </c:if>
-          
-          <c:if test="${not empty userId}">
-          <a href="articleContent?articleId=${article.articleId}"> ${article.keyword}</a>
-          </c:if>
-       
-      </c:forEach>
-      </div>
+		<h2>혜택 키워드 Top 7</h2>
+		<ol class="rank-list">
+		<c:forEach var="regkeywordDTO" items="${topKeywords}" varStatus="status">
+			<li><span class="rank-number">${status.index + 1}</span>
+			<a href="#" class="keyword-link"
+			data-keyword="${regkeywordDTO.regkeyword}">
+			${regkeywordDTO.regkeyword}</a></li>
+		</c:forEach>
+		</ol>
+	  </div>
 
       <div class="sidebar-section">
-      <%
-      Random random = new Random();
       
-      Set<Integer> set = new HashSet<>();
-     
-      while(set.size()<2){
-    	  Double d = Math.random()*50+1;
-    	  set.add(d.intValue());
-    	}
-     
-      List<Integer> list = new ArrayList<>(set);
-      
-      int number1 = list.get(0);
-      int number2 = list.get(1);
-      %>
-      
-        <h2>포토·영상</h2>
-        <div class="photo-grid">
-          <div>
-          <c:if test="${empty userId}">
-            <a href="noArticleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-          
-          <c:if test="${not empty userId}">
-          <a href="articleContent?articleId=<%=number1+1%>"><img src="resources/image/image_<%=number1%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-      	  </div>
-      	 
-         <div>
-          <c:if test="${empty userId}">
-            <a href="noArticleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-          
-          <c:if test="${not empty userId}">
-          <a href="articleContent?articleId=<%=number2+1%>"><img src="resources/image/image_<%=number2%>.jpg" style=" width: 270px; height: 180px;"></a>
-          </c:if>
-      	  </div>
-        </div>
-      </div>
+       <h2>포토·영상</h2>
+	<div class="photo-grid">
+	  <c:forEach var="article" items="${randomArticles}">
+	  
+	   <c:if test="${empty userId}">
+	   <a href="noArticleContent?articleId=${article.articleId}">
+	        <img src="<c:url value='/resources/image/' />${article.image}" 
+	     alt="${article.image}" 
+	     style="width: 270px; height: 190px;">
+	    </a>
+	   </c:if>
+	  
+	  <c:if test="${not empty userId}">
+	    <a href="articleContent?articleId=${article.articleId}">
+	        <img src="<c:url value='/resources/image/' />${article.image}" 
+	     alt="${article.image}" 
+	     style="width: 270px; height: 190px;">
+	    </a>
+	   </c:if>
+	</c:forEach>
+	</div>
+	</div>
     </aside>
    </div>
  
@@ -199,6 +311,42 @@
         behavior: 'smooth'
       });
     });
-  </script>  
+    $(document).ready(function() {
+
+    	   // 인기 검색어 링크 클릭 이벤트
+    	    	$('.keyword-link').on("click", function(event) {
+    	    	event.preventDefault(); // 기본 링크 이동(href="#") 방지
+
+    	    	// 1. 클릭된 키워드 텍스트를 가져옴
+    	    	var keyword = $(this).data('keyword').trim(); // data-keyword 속성 사용 권장
+    	    	var searchType = 'tc'; // 키워드 검색은 제목+내용(tc)으로 고정
+    	    	var encodedKeyword = encodeURIComponent(keyword);
+
+    	    	// 2. 키워드 로깅을 위한 AJAX 요청 (검색 카운트 증가)
+    	    	$.ajax({
+    	    	url: "logKeyword", // ArticleControl.java의 @PostMapping("logKeyword") 매핑
+    	    	type: "POST",
+    	    	data: { keyword: keyword },
+    	    	success: function(response) {
+    	    	// 3. 로깅 성공/실패와 관계없이 검색 결과 페이지로 이동 (페이지는 1로 초기화)
+    	    	var redirectUrl = "registrationlistAll"
+    	    	  + "?page=1&perPageNum=10" // perPageNum을 10으로 고정하거나, 직접 값을 넣습니다.
+    	    	  + "&searchType=" + searchType
+    	    	  + "&keyword=" + encodedKeyword;
+    	    	  self.location = redirectUrl;
+    	    	  },
+    	    	  error: function(xhr, status, error) {
+    	    	  console.error("키워드 로깅 실패. 검색은 진행합니다.", error);
+    	    	  // 로깅 실패 시에도 검색 페이지로 이동
+    	    	 var redirectUrl = "registrationlistAll"
+    	    	  + "?page=1&perPageNum=10" // perPageNum을 10으로 고정하거나, 직접 값을 넣습니다.
+    	    	  + "&searchType=" + searchType
+    	    	  + "&keyword=" + encodedKeyword;
+    	    	 self.location = redirectUrl;
+    	    	  }
+    	    	});
+    	   	  });
+    	    });
+</script>  
 </body>
 </html>

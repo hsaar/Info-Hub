@@ -5,7 +5,13 @@
 <mapper namespace="com.infohub.project.registrationMapper"> <!-- 다음에 자바에서 호출해서 사용 -->
 	
 	<select id="registrationlistAll" resultType="com.infohub.project.registration.RegistrationDTO">
-		select * from registration;
+		select * from registration
+		<where>
+		<include refid="searchCondition"></include>
+	</where>
+	ORDER BY registrationNo DESC  
+	LIMIT #{pageStart}, #{perPageNum}
+		
 	</select>
 	
 	<select id="timelineListAll" resultType="com.infohub.project.registration.RegistrationDTO">
@@ -22,6 +28,31 @@
 	
 	<select id="myBenifit" resultType="com.infohub.project.registration.RegistrationDTO">
 		select * from registration
+	</select>
+	
+	<sql id="searchCondition">
+		<if test="searchType != null and keyword != null and keyword != ''">
+			<if test="searchType == 't'.toString()">
+			and title like concat('%', #{keyword}, '%')
+			</if>
+			
+			<if test="searchType == 'c'.toString()">
+			and content like concat('%', #{keyword}, '%')
+			</if>
+						
+			<if test="searchType == 'tc'.toString()">
+			and (title like concat('%', #{keyword}, '%')
+				or content like concat('%', #{keyword}, '%'))
+			</if>
+		</if>
+	</sql>
+	
+	<select id="gettotalcount" resultType="int">
+		select count(registrationNo)
+		from registration
+		<where>
+			<include refid="searchCondition"></include>
+		</where>
 	</select>
 	
 </mapper>

@@ -52,6 +52,12 @@ public class ArticleDAOImpl implements ArticleDAO{
 		// TODO Auto-generated method stub
 		return session.selectList(nameSpace + ".articleListAll5", cri);
 	}
+	
+	@Override
+	public List<ArticleVO> articlListAll6(Criteria cri) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".articleListAll6", cri);
+	}
 
 	@Override
 	public List<ArticleVO> articleContent(int articleId) throws Exception {
@@ -110,9 +116,9 @@ public class ArticleDAOImpl implements ArticleDAO{
 	}
 
 	@Override
-	public List<ArticleVO> keywordArticle() throws Exception {
+	public List<ArticleVO> findAllArticles() throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList(nameSpace + ".keywordArticle");
+		return session.selectList(nameSpace + ".findAllArticles");
 	}
 
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.keywordMapper">
+
+    <!-- 새 키워드 삽입 -->
+      <insert id="insertKeyword" parameterType="com.infohub.project.article.KeywordDTO">
+        INSERT INTO keyword(skeyword, count)
+        VALUES (#{skeyword}, #{count})
+    </insert>
+
+    <!-- 카운트 증가 -->
+    <update id="updateCount" parameterType="string">
+        UPDATE keyword
+        SET count = count + 1
+        WHERE skeyword = #{skeyword}
+    </update>
+
+    <update id="updateCountBySkeyword" parameterType="String">
+        UPDATE keyword
+        SET count = count + 1
+        WHERE skeyword = #{skeyword}
+    </update>
+ 	
+    <!-- Top 7 인기 검색어 -->
+   <select id="findTop7" resultType="com.infohub.project.article.KeywordDTO">
+        SELECT searchId, skeyword, count FROM keyword
+        ORDER BY count DESC
+        LIMIT 7
+    </select>
+</mapper>

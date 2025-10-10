@@ -12,15 +12,15 @@ public class MyarticleServiceImpl implements MyarticleService{
 	MyarticleDAO dao;
 	
 	@Override
-	public List<MyarticleDTO> listAll(String tags) {
+	public List<MyarticleDTO> listAll(String keyword) {
 		// TODO Auto-generated method stub
-		return dao.listAll(tags);
+		return dao.listAll(keyword);
 	}
 
 	@Override
-	public int count(String tags) {
+	public int count(String keyword) {
 		// TODO Auto-generated method stub
-		return dao.count(tags);
+		return dao.count(keyword);
 	}
 
 }

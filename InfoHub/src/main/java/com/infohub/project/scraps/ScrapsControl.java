@@ -2,6 +2,8 @@ package com.infohub.project.scraps;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController
+@Controller
 public class ScrapsControl {
 	
 	@Autowired
@@ -69,5 +71,17 @@ public class ScrapsControl {
 		return service.scrapsDelete(scrapsVO);
 		
 	}
+	
+	@RequestMapping("timelineMyBenifit")
+    public String getMyScraps(Model model, HttpSession session) throws Exception {
+
+		Integer loginNo = (Integer) session.getAttribute("loginNo");
+		System.out.println(loginNo);
+
+        List<ScrapsVO> timelineMyBenifit = service.getMyScraps(loginNo);
+        model.addAttribute("getMyScraps", timelineMyBenifit);
+
+        return "customized/timelineMyBenifit"; // JSP 경로
+    }
 
 }

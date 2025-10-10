@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -30,17 +31,20 @@
         <a href="#" class="menu-item" data-page="my-info">
           <span class="menu-text">나의 정보</span>
         </a>
-        <a href="#" class="menu-item" data-page="my-policy">
-          <span class="menu-text">스크랩 혜택</span>
+        <a href="<c:url value='/scraps'/>" class="menu-item" data-page="my-policy">
+          <span class="menu-text">스크랩 정책</span>
         </a>
         <a href="#" class="menu-item" data-page="likes">
-          <span class="menu-text">스크랩 기사</span>
+          <span class="menu-text">좋아요</span>
         </a>
-        <a href="#" class="menu-item" data-page="timeline">
-          <span class="menu-text">타임라인</span>
+        <a href="#" class="menu-item" data-page="myBenifit">
+          <span class="menu-text">내 혜택 모아보기</span>
+        </a>
+        <a href="#" class="menu-item" data-page="timelineMyBenifit">
+          <span class="menu-text">내 혜택 타임라인</span>
         </a>
         <a href="#" class="menu-item" data-page="board">
-          <span class="menu-text">게시판</span>
+          <span class="menu-text">나의 활동</span>
         </a>
         
       </nav>
@@ -61,35 +65,49 @@
           <%@ include file="my_scrap.jsp"%>
         <p>스크랩한 혜택 목록이 표시됩니다.</p>
       </div>
+      
+       <!-- 내 혜택 모아보기 페이지 -->
+      <div id="myBenifit-content" class="content-box" style="display: none;">
+        <h2 class="content-title">내 혜택 모아보기</h2>
+		<jsp:include page="../customized/myBenifit.jsp"/>
+		</div>
+
 
       <!-- 타임라인 페이지 -->
-      <div id="timeline-content" class="content-box" style="display: none;">
-        <h2 class="content-title">타임라인</h2>
-        <p>타임라인이 표시됩니다.</p>
+      <div id="timelineMyBenifit-content" class="content-box" style="display: none;">
+        <h2 class="content-title">내 혜택 타임라인</h2>
+        <iframe 
+		    id="timelineFrame" 
+		    src= "${pageContext.request.contextPath}/timelineMyBenifit"
+		    width="100%" 
+		    height="800px" 
+		    frameborder="0"
+		    style="border:0; display:block;">
+		</iframe>
       </div>
 
       <!-- 게시판 페이지 -->
       <div id="board-content" class="content-box" style="display: none;">
-        <h2 class="content-title">게시판</h2>
+        <h2 class="content-title">나의 활동</h2>
         
         <div class="mypage-tabs">
-          <button class="mypage-tab">게시물</button>
-          <button class="mypage-tab active">댓글</button>
-          <button class="mypage-tab">좋아요</button>
+          <button class="mypage-tab active" data-tab="post">게시물</button>
+          <button class="mypage-tab" data-tab="comment">댓글</button>
         </div>
 
-        <div class="mypage-list">
-          <div class="list-item">내가 작성한 댓글 1</div>
-          <div class="list-item">내가 작성한 댓글 2</div>
-          <div class="list-item">내가 작성한 댓글 3</div>
+        <div id="comment-tab" style="display:none;">
+ 		  <%@ include file="my_comment.jsp" %>
+		</div>
+
+		<div id="board-tab" style="display:none;">
+  		  <%@ include file="my_board.jsp" %>
         </div>
+
       </div>
-	
- 
+
       <!-- 좋아요 페이지 -->
       <div id="likes-content" class="content-box" style="display: none;">
-         <%@ include file="my_scrap.jsp"%>
-        <p>좋아요 누른 게시글이 표시됩니다.</p>
+         <%@ include file="my_hearts.jsp"%>
       </div>
 
       <!-- 알림 관리 페이지 -->
@@ -118,6 +136,12 @@
     <path d="M12 4l-8 8h6v8h4v-8h6z"/>
   </svg>
 </button>
+
+<%-- JSP 상단에서 세션 로그인 번호 가져오기 --%>
+<%
+    Integer loginNo = (Integer) session.getAttribute("loginNo");
+    if (loginNo == null) loginNo = 0; // 로그인 안된 경우 안전장치
+%>
 
 <script>
   // Top 버튼
@@ -150,6 +174,10 @@
       const targetContent = document.getElementById(pageId + '-content');
       if (targetContent) {
         targetContent.style.display = 'block';
+        
+        if (pageId === 'timelineMyBenifit') {
+            document.getElementById('timelineFrame').src = '${pageContext.request.contextPath}/timelineMyBenifit';
+          }
       }
     });
   });
@@ -162,6 +190,46 @@
       this.classList.add('active');
     });
   });
+  
+  document.addEventListener('DOMContentLoaded', () => {
+	    const tabs = document.querySelectorAll('.mypage-tab');
+	    const commentTab = document.getElementById('comment-tab');
+	    const postTab = document.getElementById('board-tab');
+
+	    if (!commentTab || !postTab) return; // 안전장치
+
+	    // 초기 상태
+	    postTab.style.display = 'block';
+	    commentTab.style.display = 'none';
+	    tabs.forEach(t => t.classList.remove('active'));
+	    tabs[0].classList.add('active');
+
+	    // 댓글 데이터를 이미 fetch했는지 체크
+	    let commentsLoaded = false;
+
+	    // 탭 클릭 이벤트
+	    tabs.forEach(tab => {
+	        tab.addEventListener('click', function () {
+	            tabs.forEach(t => t.classList.remove('active'));
+	            this.classList.add('active');
+
+	            if (this.dataset.tab === 'comment') {
+	                commentTab.style.display = 'block';
+	                postTab.style.display = 'none';
+
+	                if (!commentsLoaded && typeof fetchBoardComments === 'function') {
+	                    fetchBoardComments(<%= loginNo %>);
+	                    commentsLoaded = true; // 한 번만 fetch
+	                }
+
+	            } else {
+	                commentTab.style.display = 'none';
+	                postTab.style.display = 'block';
+	            }
+	        });
+	    });
+	});
+  
 </script>
 
 </body>

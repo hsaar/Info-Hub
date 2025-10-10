@@ -15,15 +15,15 @@ public class MyarticleDAOImpl implements MyarticleDAO{
 	private static final String namespace = "com.infohub.project.myarticleMapper";
 	
 	@Override
-	public List<MyarticleDTO> listAll(String tags) {
+	public List<MyarticleDTO> listAll(String keyword) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectList(namespace+".mylistAll",tags);
+		return sqlsession.selectList(namespace+".mylistAll",keyword);
 	}
 
 	@Override
-	public int count(String tags) {
+	public int count(String keyword) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectOne(namespace+".mycount",tags);
+		return sqlsession.selectOne(namespace+".mycount",keyword);
 	}
 
 }

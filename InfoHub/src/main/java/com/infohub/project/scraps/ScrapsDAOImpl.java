@@ -51,4 +51,11 @@ public class ScrapsDAOImpl implements ScrapsDAO {
 		return session.selectList(nameSpace+".myscraps", loginNo);
 	}
 
+
+	@Override
+	public List<ScrapsVO> getMyScraps(int loginNo) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace+".getMyScraps", loginNo);
+	}
+
 }
