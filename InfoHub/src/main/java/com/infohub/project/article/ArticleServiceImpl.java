@@ -20,33 +20,39 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 	
 	@Override
-	public List<ArticleVO> articlListAll1() throws Exception {
+	public List<ArticleVO> articlListAll1(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll1();
+		return dao.articlListAll1(cri);
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll2() throws Exception {
+	public List<ArticleVO> articlListAll2(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll2();
+		return dao.articlListAll2(cri);
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll3() throws Exception {
+	public List<ArticleVO> articlListAll3(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll3();
+		return dao.articlListAll3(cri);
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll4() throws Exception {
+	public List<ArticleVO> articlListAll4(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll4();
+		return dao.articlListAll4(cri);
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll5() throws Exception {
+	public List<ArticleVO> articlListAll5(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.articlListAll5();
+		return dao.articlListAll5(cri);
+	}
+	
+	@Override
+	public List<ArticleVO> articlListAll6(Criteria cri) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.articlListAll6(cri);
 	}
 
 	@Override
@@ -74,5 +80,23 @@ public class ArticleServiceImpl implements ArticleService{
 		return dao.getTotalCount(cri);
 	}
 
+	@Override
+	public List<ArticleVO> noArticleContent(int articleId) throws Exception {
+		// TODO Auto-generated method stub
+		dao.updateViews(articleId);
+		return dao.articleContent(articleId);
+	}
+
+	@Override
+	public List<ArticleVO> viewsArticle() throws Exception {
+		// TODO Auto-generated method stub
+		return dao.viewsArticle();
+	}
+
+	@Override
+	public List<ArticleVO> findAllArticles() throws Exception {
+		// TODO Auto-generated method stub
+		return dao.findAllArticles();
+	}
 
 }

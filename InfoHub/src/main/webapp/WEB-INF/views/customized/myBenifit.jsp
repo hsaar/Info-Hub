@@ -37,6 +37,14 @@ $(document).ready(function(){
 	
 	scrapsList();
 	
+	$(document).on("click", ".scrap-card", function(e){
+	    // 삭제 버튼 클릭 시에는 이동 막기
+	    if($(e.target).hasClass("deleteBtn")) return;
+
+	    var registrationNo = $(this).find(".deleteBtn").data("no");
+	    window.location.href = "registrationContent?registrationNo=" + registrationNo;
+	});
+	
 	$(document).on("click",".deleteBtn", function(){
 		
 		var registrationNo = $(this).data("no");
@@ -96,8 +104,6 @@ $(document).ready(function(){
                                     //<div id="reno12"> <div id="reno13">
                    htmls += '<article class="scrap-card">';
                    htmls += '<h3 class="scrap-title">';
-                   htmls += '<a href="registrationContent?registrationNo=';
-                   htmls += this.registrationNo +'">';
                    htmls += this.title;
                    htmls += '</a></h3>';
                    htmls += '<p class="scrap-description">' + this.content + '</p>';
@@ -130,25 +136,13 @@ $(document).ready(function(){
 
 <body>
 
-  <!-- 상단바 -->
-<jsp:include page="../include/header.jsp"/>
-
-<!-- 브레드크럼 -->
-	<div class="breadcrumb">
-    <div class="container">
-      <a href="#">공지사항</a>
-      <span>></span>
-      <span>2025년 3/4분기 입회심사 결과</span>
-    </div>
-	</div>
-
 
        <!-- 메인 컨테이너 -->
-  <div class="news-container">
+  <div>
     <!-- 메인 콘텐츠 -->
    <main class="news-main">	
 <!-- 스크랩한 정책 콘텐츠 -->
-<h2 class="content-title">내 혜택모음</h2>
+
 
 
 	<!-- 스크랩 리스트 -->

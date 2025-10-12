@@ -1,46 +1,53 @@
 package com.infohub.project.board;
 
 public class BoardVO {
-	private int boardno;
-	private String category;
+	private Integer boardno;
 	private String title;
 	private String content;
-	private String regi_id;
-	private String regi_date;
-	private int readcnt;
-	private int login_login_id;
+	private String regiId;
+	private String regiDate;
+	private Integer readcnt;
+	private Integer loginLoginNo;
+	private Boolean isNotice;
+
+	private Integer categoryId; // 대분류 카테고리 ID
+	private Integer subCategoryId; // 소분류 카테고리 ID (선택 안 할 경우 null이 될 수 있으므로 Integer 사용)
+
+	private String categoryName; // 대분류 이름
+	private String subCategoryName; // 소분류 이름
+
+	private Integer heartCount; // ✅ 좋아요 수
+	private Integer commentCount;
 
 	BoardVO() {
 	}
 
-	public BoardVO(int boardno, String category, String title, String content, String regi_id, String regi_date,
-			int readcnt, int login_login_id) {
+	public BoardVO(Integer boardno, String title, String content, String regiId, String regiDate, Integer readcnt,
+			Integer loginLoginNo, Boolean isNotice, Integer categoryId, Integer subCategoryId, String categoryName,
+			String subCategoryName, Integer heartCount, Integer commentCount) {
 		super();
 		this.boardno = boardno;
-		this.category = category;
 		this.title = title;
 		this.content = content;
-		this.regi_id = regi_id;
-		this.regi_date = regi_date;
+		this.regiId = regiId;
+		this.regiDate = regiDate;
 		this.readcnt = readcnt;
-		this.login_login_id = login_login_id;
+		this.loginLoginNo = loginLoginNo;
+		this.isNotice = isNotice;
+		this.categoryId = categoryId;
+		this.subCategoryId = subCategoryId;
+		this.categoryName = categoryName;
+		this.subCategoryName = subCategoryName;
+		this.heartCount = heartCount;
+		this.commentCount = commentCount;
 	}
 
-
-	public int getBoardno() {
+	public Integer getBoardno() {
 		return boardno;
 	}
 
-	public void setBoardno(int boardno) {
+	public void setBoardno(Integer boardno) {
 		this.boardno = boardno;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
 	}
 
 	public String getTitle() {
@@ -59,43 +66,101 @@ public class BoardVO {
 		this.content = content;
 	}
 
-	public String getRegi_id() {
-		return regi_id;
+	public String getRegiId() {
+		return regiId;
 	}
 
-	public void setRegi_id(String regi_id) {
-		this.regi_id = regi_id;
+	public void setRegiId(String regiId) {
+		this.regiId = regiId;
 	}
 
-	public String getRegi_date() {
-		return regi_date;
+	public String getRegiDate() {
+		return regiDate;
 	}
 
-	public void setRegi_date(String regi_date) {
-		this.regi_date = regi_date;
+	public void setRegiDate(String regiDate) {
+		this.regiDate = regiDate;
 	}
 
-	public int getReadcnt() {
+	public Integer getReadcnt() {
 		return readcnt;
 	}
 
-	public void setReadcnt(int readcnt) {
+	public void setReadcnt(Integer readcnt) {
 		this.readcnt = readcnt;
 	}
 
-	public int getLogin_login_id() {
-		return login_login_id;
+	public Integer getLoginLoginNo() {
+		return loginLoginNo;
 	}
 
-	public void setLogin_login_id(int login_login_id) {
-		this.login_login_id = login_login_id;
+	public void setLoginLoginNo(Integer loginLoginNo) {
+		this.loginLoginNo = loginLoginNo;
+	}
+
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public Integer getSubCategoryId() {
+		return subCategoryId;
+	}
+
+	public void setSubCategoryId(Integer subCategoryId) {
+		this.subCategoryId = subCategoryId;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public String getSubCategoryName() {
+		return subCategoryName;
+	}
+
+	public void setSubCategoryName(String subCategoryName) {
+		this.subCategoryName = subCategoryName;
+	}
+
+	public Integer getHeartCount() {
+		return heartCount;
+	}
+
+	public void setHeartCount(Integer heartCount) {
+		this.heartCount = heartCount;
+	}
+
+	public Boolean getIsNotice() {
+		return isNotice;
+	}
+
+	public void setIsNotice(Boolean isNotice) {
+		this.isNotice = isNotice;
+	}
+
+	public Integer getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(Integer commentCount) {
+		this.commentCount = commentCount;
 	}
 
 	@Override
 	public String toString() {
-		return "boardVO [boardno=" + boardno + ", category=" + category + ", title=" + title + ", content=" + content
-				+ ", regi_id=" + regi_id + ", regi_date=" + regi_date + ", readcnt=" + readcnt + 
-				 ", login_login_id=" + login_login_id + "]";
+		return "BoardVO [boardno=" + boardno + ", title=" + title + ", content=" + content + ", regiId=" + regiId
+				+ ", regiDate=" + regiDate + ", readcnt=" + readcnt + ", loginLoginNo=" + loginLoginNo + ", isNotice="
+				+ isNotice + ", categoryId=" + categoryId + ", subCategoryId=" + subCategoryId + ", categoryName="
+				+ categoryName + ", subCategoryName=" + subCategoryName + ", heartCount=" + heartCount
+				+ ", commentCount=" + commentCount + "]";
 	}
 
 }

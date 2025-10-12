@@ -29,21 +29,46 @@
 	</select>
 	
 	<insert id="insertUser">
-		INSERT INTO infohub.login (userId, password, name, email, phone, createdDate, status, role, age) 
-		VALUES (#{userId}, #{password}, #{name}, #{email}, #{phone}, now(), 1, 1, #{age});
+		INSERT INTO infohub.login (userId, password, name, email, phone, createdDate, status, role, age, gender, keywords) 
+		VALUES (#{userId}, #{password}, #{name}, #{email}, #{phone}, now(), 1, 1, #{age}, #{gender}, #{keywords})
 	</insert>
 	
 	<update id="updateUser">
 		UPDATE infohub.login 
-		SET password = #{password}, name = #{name}, email = #{email}, phone = #{phone}, age = #{age} 
-		WHERE (userId = #{userId});
+		SET name = #{name}, email = #{email}, phone = #{phone}, password = #{password}, keywords = #{keywords}
+		WHERE (userId = #{userId})
 	</update>
 	
 	<update id="deleteUser">
 		UPDATE infohub.login SET status = 0
-		WHERE (userId = #{userId});
+		WHERE (userId = #{userId})
 	</update>
 	
+	<select id="findid" resultType="String">
+		select userId from infohub.login
+		where name = #{name} and email = #{email} and phone = #{phone}
+	</select>
 	
+	<select id="findpassword" resultType="int">
+		select count(password) from infohub.login
+		where userId = #{userId} and email = #{email} and phone = #{phone}
+	</select>
+	
+	<update id="updatepassword">
+		UPDATE infohub.login 
+		SET password = #{password}
+		WHERE userId = #{userId}
+	</update>
+	
+	<select id="checkPasswordById" resultType="String">
+		select password from infohub.login
+		where userId = #{userId}
+	</select>
+	
+	<update id="updateKeywords">
+		update infohub.login
+		set keywords = #{keywords}
+		where userId = #{userId}
+	</update>
 	
 </mapper>

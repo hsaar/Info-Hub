@@ -1,5 +1,7 @@
 package com.infohub.project.scraps;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,21 +19,33 @@ public class ScrapsServiceImpl implements ScrapsService {
 	}
 
 	@Override
-	public int scrapsCheck(int article_articleId) throws Exception {
+	public int scrapsCheck(ScrapsVO scrapsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.scrapsCheck(article_articleId);
+		return dao.scrapsCheck(scrapsVO);
 	}
 
 	@Override
-	public int scrapsInsert(int article_articleId) throws Exception {
+	public int scrapsInsert(ScrapsVO scrapsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.scrapsInsert(article_articleId);
+		return dao.scrapsInsert(scrapsVO);
 	}
 
 	@Override
-	public int scrapsDelete(int article_articleId) throws Exception {
+	public int scrapsDelete(ScrapsVO scrapsVO) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.scrapsDelete(article_articleId);
+		return dao.scrapsDelete(scrapsVO);
+	}
+
+	@Override
+	public List<ScrapsVO> myscraps(int loginNo) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.myscraps(loginNo);
+	}
+
+	@Override
+	public List<ScrapsVO> getMyScraps(int loginNo) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getMyScraps(loginNo);
 	}
 
 }

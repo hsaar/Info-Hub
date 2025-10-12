@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.regkeywordMapper">
+
+	<!-- 새 키워드 삽입 -->
+	<insert id="insertKeyword"
+		parameterType="com.infohub.project.registration.RegKeywordDTO">
+		INSERT INTO regkeyword(regkeyword, regcount)
+		VALUES (#{regkeyword}, #{regcount})
+	</insert>
+
+
+	<!-- 카운트 증가 -->
+	<update id="updateCount" parameterType="string">
+		UPDATE regkeyword
+		SET regcount = regcount + 1
+		WHERE regkeyword = #{regkeyword}
+	</update>
+
+	<update id="updateCountBySkeyword" parameterType="String">
+		UPDATE regkeyword
+		SET regcount = regcount + 1
+		WHERE regkeyword = #{regkeyword}
+	</update>
+
+	<!-- Top 7 인기 검색어 -->
+	<select id="findTop7"
+		resultType="com.infohub.project.registration.RegKeywordDTO">
+		SELECT regsearchId, regkeyword, regcount FROM regkeyword
+		ORDER BY regcount DESC
+		LIMIT 7
+	</select>
+</mapper>

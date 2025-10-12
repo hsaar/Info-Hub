@@ -31,21 +31,40 @@
 
     <!-- 필터 버튼 -->
     <div class="filter-section">
-      <!-- 연령 필터 -->
-      <div class="age-filter">
-        <button class="filter-btn" data-age="10">10대</button>
-        <button class="filter-btn active" data-age="20">20대</button>
-        <button class="filter-btn" data-age="30">30대</button>
-        <button class="filter-btn" data-age="30">40대</button>
-        <button class="filter-btn" data-age="30">50대</button>
-      </div>
-      
       <!-- 분야 필터 -->
       <div class="category-filter">
-        <button class="filter-btn primary" data-category="estate">부동산</button>
-        <button class="filter-btn" data-category="stock">주식</button>
-        <button class="filter-btn" data-category="health">복지</button>
-        <button class="filter-btn" data-category="culture">창업</button>
+        <c:if test="${not empty keyword0}">
+        <button class="filter-btn primary" data-category="estate">${keyword0}</button>
+        </c:if>
+        <c:if test="${not empty keyword1}">
+        <button class="filter-btn primary" data-category="estate">${keyword1}</button>
+        </c:if>
+        <c:if test="${not empty keyword2}">
+        <button class="filter-btn primary" data-category="estate">${keyword2}</button>
+        </c:if>
+        <c:if test="${not empty keyword3}">
+        <button class="filter-btn primary" data-category="estate">${keyword3}</button>
+        </c:if>
+        <c:if test="${not empty keyword4}">
+        <button class="filter-btn primary" data-category="estate">${keyword4}</button>
+        </c:if>
+        
+        <c:if test="${empty keyword0}">
+        <button class="filter-btn" data-category="stock">취업지원</button>
+        </c:if>
+        <c:if test="${empty keyword1}">
+        <button class="filter-btn" data-category="stock">문화바우처</button>
+        </c:if>
+        <c:if test="${empty keyword2}">
+        <button class="filter-btn" data-category="stock">의료비지원</button>
+        </c:if>
+        <c:if test="${empty keyword3}">
+        <button class="filter-btn" data-category="stock">심리상담</button>
+        </c:if>
+        <c:if test="${empty keyword4}">
+        <button class="filter-btn" data-category="stock">생활안정</button>
+        </c:if>
+        
         <button class="add-filter-btn">+</button>
       </div>
     </div>
@@ -53,184 +72,314 @@
     <!-- 기사 그리드 -->
     <div class="news-grid">
       
-      <!-- 정치 카테고리 -->
+      <!-- USER KEYWORD 카테고리 -->
+      <c:if test="${not empty keyword0}">
       <div class="news-category-card">
-        <h2 class="category-title">${name}</h2>
+        <h2 class="category-title">${keyword0}</h2>
         <div class="news-list">
-		  <c:forEach var = "list" items = "${list}">
-          <a href = "https:/${list.link}"><div class="news-item">
+		  <c:forEach var = "list0" items = "${list0}">
+          <a href = "https:/${list0.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
+              <p class="news-text">${list0.content}</p>
+              <span class="news-source">${list0.source}</span>
             </div>
             <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${image}">
+              <img src="resources/image/${list0.image}" alt="${list0.image}">
             </div>
           </div></a>
           </c:forEach>
         </div>
       </div>
-
-      <!-- 경제 카테고리 -->
+      </c:if>
+      
+      <!-- USER KEYWORD 카테고리 -->
+      <c:if test="${not empty keyword1}">
       <div class="news-category-card">
-        <h2 class="category-title">경제</h2>
+        <h2 class="category-title">${keyword1}</h2>
         <div class="news-list">
-          <div class="news-item">
+		  <c:forEach var = "list" items = "${list1}">
+          <a href = "https:/${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">"최장 10년에서 980만원" 재그명 여 헌실 사라, 감사가 불르다</p>
-              <span class="news-source">한국경제</span>
+              <p class="news-text">${list.content}</p>
+              <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=100&h=100&fit=crop" alt="뉴스 이미지">
+              <img src="resources/image/${list.image}" alt="${list.image}">
             </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">"10억 탕크딥연 통 건다던다"… 10월 10일 '탕시맛장전' 포쇄…</p>
-              <span class="news-source">매일경제</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">[단독] 결버사업 벤치도 오싱이 재용수 "수록", 도판드 알드다</p>
-              <span class="news-source">서울경제</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">"마국멸법 여 가고 연다"… 한국경 벌크빠다니다 LT로 텀시에 …</p>
-              <span class="news-source">이데일리</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
+          </div></a>
+          </c:forEach>
         </div>
       </div>
-
-      <!-- 사회 카테고리 -->
+      </c:if>
+      
+      <!-- USER KEYWORD 카테고리 -->
+      <c:if test="${not empty keyword2}">
       <div class="news-category-card">
-        <h2 class="category-title">사회</h2>
+        <h2 class="category-title">${keyword2}</h2>
         <div class="news-list">
-          <div class="news-item">
+		  <c:forEach var = "list" items = "${list2}">
+          <a href = "https:/${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">무슨은 '한국 거너는 여묻 든 펴 라크리안' 금행명대</p>
-              <span class="news-source">동아일보</span>
+              <p class="news-text">${list.content}</p>
+              <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=100&h=100&fit=crop" alt="뉴스 이미지">
+              <img src="resources/image/${list.image}" alt="${list.image}">
             </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">"은보운 드큰 벌법 립"··· 해석든 나기면 아범법 '토비산' 경강…</p>
-              <span class="news-source">SBS</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">박앙수 "볼 수으밥억 마련" 빼악 에· "연에마이 텔 결고" 두픔…</p>
-              <span class="news-source">JTBC</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1593642532400-2682810df593?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">"오리스의 페르에 세 여러떤 날 려더 어새르은"··· 치난도 확르다</p>
-              <span class="news-source">YTN</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">여술석 "넣 소비수을 밤으멜 드··· 설법핀 밸댜 "식샤 버쉬"</p>
-              <span class="news-source">뉴스1</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
+          </div></a>
+          </c:forEach>
         </div>
       </div>
-
-      <!-- IT/과학 카테고리 -->
+      </c:if>
+      
+      <!-- USER KEYWORD 카테고리 -->
+      <c:if test="${not empty keyword3}">
       <div class="news-category-card">
-        <h2 class="category-title">IT/과학</h2>
+        <h2 class="category-title">${keyword3}</h2>
         <div class="news-list">
-          <div class="news-item">
+		  <c:forEach var = "list" items = "${list3}">
+          <a href = "https:/${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">"굴석엥에픔드 이뢩방선다니" 곱 를 츄아에, 조 엥매…</p>
-              <span class="news-source">전자신문</span>
+              <p class="news-text">${list.content}</p>
+              <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=100&h=100&fit=crop" alt="뉴스 이미지">
+              <img src="resources/image/${list.image}" alt="${list.image}">
             </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">집목, '메스트릭에 존뵨' 나쓰명 지달민수 밸국 정완시년수…</p>
-              <span class="news-source">ZDNet Korea</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">특균, '생복 고숑곱도 총현 밤영 막능' 코븐드 거거자 뷸 텐…</p>
-              <span class="news-source">디지털타임스</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">[교스닐] '뎌색딥 혜밥 수드, 학 삼 여나'··· 오관 콯으며 목드…</p>
-              <span class="news-source">IT조선</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
-
-          <div class="news-item">
-            <div class="news-content">
-              <p class="news-text">메술경 "드렁 벗명선법츠, 주두 풀급닙 판드혀 줄" 것</p>
-              <span class="news-source">테크M</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=100&h=100&fit=crop" alt="뉴스 이미지">
-            </div>
-          </div>
+          </div></a>
+          </c:forEach>
         </div>
       </div>
+      </c:if>
+      
+      <!-- USER KEYWORD 카테고리 -->
+      <c:if test="${not empty keyword4}">
+      <div class="news-category-card">
+        <h2 class="category-title">${keyword4}</h2>
+        <div class="news-list">
+		  <c:forEach var = "list" items = "${list4}">
+          <a href = "https:/${list.link}"><div class="news-item">
+            <div class="news-content">
+              <p class="news-text">${list.content}</p>
+              <span class="news-source">${list.source}</span>
+            </div>
+            <div class="news-thumbnail">
+              <img src="resources/image/${list.image}" alt="${list.image}">
+            </div>
+          </div></a>
+          </c:forEach>
+        </div>
+      </div>
+      </c:if>
+	  
+	  <!-- 취업지원 카테고리 -->
+      <c:if test="${empty keyword0}">
+      <div class="news-category-card">
+        <h2 class="category-title">${keyword5}</h2>
+        <div class="news-list">
+		  <c:forEach var = "list" items = "${list5}">
+          <a href = "https:/${list.link}"><div class="news-item">
+            <div class="news-content">
+              <p class="news-text">${list.content}</p>
+              <span class="news-source">${list.source}</span>
+            </div>
+            <div class="news-thumbnail">
+              <img src="resources/image/${list.image}" alt="${list.image}">
+            </div>
+          </div></a>
+          </c:forEach>
+        </div>
+      </div>
+      </c:if>
+      
+      <!-- 문화바우처 카테고리 -->
+      <c:if test="${empty keyword1}">
+      <div class="news-category-card">
+        <h2 class="category-title">${keyword6}</h2>
+        <div class="news-list">
+		  <c:forEach var = "list" items = "${list6}">
+          <a href = "https:/${list.link}"><div class="news-item">
+            <div class="news-content">
+              <p class="news-text">${list.content}</p>
+              <span class="news-source">${list.source}</span>
+            </div>
+            <div class="news-thumbnail">
+              <img src="resources/image/${list.image}" alt="${list.image}">
+            </div>
+          </div></a>
+          </c:forEach>
+        </div>
+      </div>
+      </c:if>
+	  
+      <!-- 의료비지원 카테고리 -->
+      <c:if test="${empty keyword2}">
+      <div class="news-category-card">
+        <h2 class="category-title">${keyword7}</h2>
+        <div class="news-list">
+		  <c:forEach var = "list" items = "${list7}">
+          <a href = "https:/${list.link}"><div class="news-item">
+            <div class="news-content">
+              <p class="news-text">${list.content}</p>
+              <span class="news-source">${list.source}</span>
+            </div>
+            <div class="news-thumbnail">
+              <img src="resources/image/${list.image}" alt="${list.image}">
+            </div>
+          </div></a>
+          </c:forEach>
+        </div>
+      </div>
+      </c:if>
 
+      <!-- 심리상담 카테고리 -->
+      <c:if test="${empty keyword3}">
+      <div class="news-category-card">
+        <h2 class="category-title">${keyword8}</h2>
+        <div class="news-list">
+		  <c:forEach var = "list" items = "${list8}">
+          <a href = "https:/${list.link}"><div class="news-item">
+            <div class="news-content">
+              <p class="news-text">${list.content}</p>
+              <span class="news-source">${list.source}</span>
+            </div>
+            <div class="news-thumbnail">
+              <img src="resources/image/${list.image}" alt="${list.image}">
+            </div>
+          </div></a>
+          </c:forEach>
+        </div>
+      </div>
+      </c:if>
+
+      <!-- 생활안정 카테고리 -->
+      <c:if test="${empty keyword4}">
+      <div class="news-category-card">
+        <h2 class="category-title">${keyword9}</h2>
+        <div class="news-list">
+		  <c:forEach var = "list" items = "${list9}">
+          <a href = "https:/${list.link}"><div class="news-item">
+            <div class="news-content">
+              <p class="news-text">${list.content}</p>
+              <span class="news-source">${list.source}</span>
+            </div>
+            <div class="news-thumbnail">
+              <img src="resources/image/${list.image}" alt="${list.image}">
+            </div>
+          </div></a>
+          </c:forEach>
+        </div>
+      </div>
+      </c:if>
     </div>
 
+  </div>
+</div>
+
+<!-- 키워드 선택 모달 -->
+<div id="profileKeywordModal" class="modal">
+  <div class="modal-content keyword-modal">
+    <div class="modal-header">
+      <i class="fas fa-tags modal-icon primary"></i>
+      <h3 class="modal-title">관심 키워드 선택</h3>
+      <p class="modal-subtitle">관심있는 분야를 선택해주세요 (최대 5개)</p>
+    </div>
+    <div class="modal-body">
+      <div class="keyword-categories">
+        <!-- 일자리/취업 -->
+        <div class="keyword-category">
+          <h4 class="category-title">
+            <i class="fas fa-briefcase"></i> 일자리/취업
+          </h4>
+          <div class="keyword-tags">
+            <button class="keyword-tag" data-keyword="청년일자리">청년일자리</button>
+            <button class="keyword-tag" data-keyword="취업지원">취업지원</button>
+            <button class="keyword-tag" data-keyword="직업훈련">직업훈련</button>
+            <button class="keyword-tag" data-keyword="창업지원">창업지원</button>
+          </div>
+        </div>
+
+        <!-- 주거/복지 -->
+        <div class="keyword-category">
+          <h4 class="category-title">
+            <i class="fas fa-home"></i> 주거/복지
+          </h4>
+          <div class="keyword-tags">
+            <button class="keyword-tag" data-keyword="주거지원">주거지원</button>
+            <button class="keyword-tag" data-keyword="생활안정">생활안정</button>
+            <button class="keyword-tag" data-keyword="복지혜택">복지혜택</button>
+            <button class="keyword-tag" data-keyword="임대주택">임대주택</button>
+          </div>
+        </div>
+
+        <!-- 교육 -->
+        <div class="keyword-category">
+          <h4 class="category-title">
+            <i class="fas fa-graduation-cap"></i> 교육
+          </h4>
+          <div class="keyword-tags">
+            <button class="keyword-tag" data-keyword="학자금지원">학자금지원</button>
+            <button class="keyword-tag" data-keyword="교육비지원">교육비지원</button>
+            <button class="keyword-tag" data-keyword="평생교육">평생교육</button>
+            <button class="keyword-tag" data-keyword="온라인교육">온라인교육</button>
+          </div>
+        </div>
+
+        <!-- 문화/여가 -->
+        <div class="keyword-category">
+          <h4 class="category-title">
+            <i class="fas fa-palette"></i> 문화/여가
+          </h4>
+          <div class="keyword-tags">
+            <button class="keyword-tag" data-keyword="문화바우처">문화바우처</button>
+            <button class="keyword-tag" data-keyword="여행지원">여행지원</button>
+            <button class="keyword-tag" data-keyword="스포츠">스포츠</button>
+            <button class="keyword-tag" data-keyword="공연할인">공연할인</button>
+          </div>
+        </div>
+
+        <!-- 건강/의료 -->
+        <div class="keyword-category">
+          <h4 class="category-title">
+            <i class="fas fa-heartbeat"></i> 건강/의료
+          </h4>
+          <div class="keyword-tags">
+            <button class="keyword-tag" data-keyword="건강검진">건강검진</button>
+            <button class="keyword-tag" data-keyword="의료비지원">의료비지원</button>
+            <button class="keyword-tag" data-keyword="심리상담">심리상담</button>
+            <button class="keyword-tag" data-keyword="건강관리">건강관리</button>
+          </div>
+        </div>
+
+        <!-- 금융/경제 -->
+        <div class="keyword-category">
+          <h4 class="category-title">
+            <i class="fas fa-won-sign"></i> 금융/경제
+          </h4>
+          <div class="keyword-tags">
+            <button class="keyword-tag" data-keyword="대출지원">대출지원</button>
+            <button class="keyword-tag" data-keyword="금융교육">금융교육</button>
+            <button class="keyword-tag" data-keyword="세금감면">세금감면</button>
+            <button class="keyword-tag" data-keyword="재정지원">재정지원</button>
+          </div>
+        </div>
+      </div>
+      
+	<form id="profileKeywordForm" action="${pageContext.request.contextPath}/updateKeywords" method="post">
+	  <input type="hidden" id="profileSelectedKeywords" name="profileSelectedKeywords" value="">
+	  <input type="hidden" id="profileKeywordsInput" name="profileKeywordsInput" value="">
+	</form>
+	 
+      <div class="selected-keywords-display">
+        <strong>선택된 키워드:</strong>
+        <span id="profileSelectedKeywordsDisplay">없음</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn primary" onclick="confirmProfileKeywords()">확인</button>
+      <button class="modal-btn secondary" onclick="closeProfileKeywordModal()">취소</button>
+    </div>
+    
   </div>
 </div>
 
@@ -251,40 +400,6 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // 필터 버튼 클릭
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      const parentFilter = this.closest('.age-filter, .category-filter');
-      
-      // 같은 그룹 내의 버튼들만 처리
-      if (parentFilter) {
-        const groupBtns = parentFilter.querySelectorAll('.filter-btn');
-        
-        // primary 클래스가 있는 버튼은 토글
-        if (this.classList.contains('primary')) {
-          this.classList.toggle('active');
-        } else {
-          // 같은 그룹 내에서 하나만 활성화
-          groupBtns.forEach(b => {
-            if (!b.classList.contains('primary')) {
-              b.classList.remove('active');
-            }
-          });
-          this.classList.add('active');
-        }
-      }
-      
-      // 선택된 필터 정보
-      const ageFilter = document.querySelector('.age-filter .filter-btn.active')?.getAttribute('data-age');
-      const categoryFilters = Array.from(document.querySelectorAll('.category-filter .filter-btn.active'))
-        .map(btn => btn.getAttribute('data-category'));
-      
-      console.log('연령 필터:', ageFilter);
-      console.log('분야 필터:', categoryFilters);
-      // 여기에 필터링 로직 추가
-    });
-  });
 
   // 기사 아이템 클릭
   const newsItems = document.querySelectorAll('.news-item');
@@ -298,9 +413,89 @@
 
   // 필터 추가 버튼
   const addFilterBtn = document.querySelector('.add-filter-btn');
+  
+  // ===== 키워드 선택 기능 =====
+  let profileSelectedKeywordsArray = [];
+  const PROFILE_MAX_KEYWORDS = 5;
+
+  function openProfileKeywordModal() {
+    document.getElementById('profileKeywordModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    
+    const currentKeywords = document.getElementById('profileSelectedKeywords').value;
+    if (currentKeywords) {
+      profileSelectedKeywordsArray = currentKeywords.split(',').filter(k => k.trim());
+      updateProfileKeywordDisplay();
+      highlightProfileSelectedKeywords();
+    }
+  }
+
+  function closeProfileKeywordModal() {
+    document.getElementById('profileKeywordModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  function confirmProfileKeywords() {
+    if (profileSelectedKeywordsArray.length === 0) {
+      alert('최소 1개의 키워드를 선택해주세요.');
+      return; 
+    }
+    
+    const keywordsString = profileSelectedKeywordsArray.join(', ');
+    document.getElementById('profileKeywordsInput').value = keywordsString;
+    document.getElementById('profileSelectedKeywords').value = profileSelectedKeywordsArray.join(',');
+    
+    // 서버로 폼 제출
+    document.getElementById('profileKeywordForm').submit();
+  }
+
+  function updateProfileKeywordDisplay() {
+    const display = document.getElementById('profileSelectedKeywordsDisplay');
+    if (profileSelectedKeywordsArray.length === 0) {
+      display.textContent = '없음';
+      display.style.color = '#9ca3af';
+    } else {
+      display.textContent = profileSelectedKeywordsArray.join(', ');
+      display.style.color = '#1f2937';
+    }
+  }
+
+  function highlightProfileSelectedKeywords() {
+    document.querySelectorAll('#profileKeywordModal .keyword-tag').forEach(tag => {
+      const keyword = tag.getAttribute('data-keyword');
+      if (profileSelectedKeywordsArray.includes(keyword)) {
+        tag.classList.add('selected');
+      } else {
+        tag.classList.remove('selected');
+      }
+    });
+  }
+  
   addFilterBtn.addEventListener('click', function() {
-    alert('새로운 관심사 추가 기능');
-    // 모달 열기 등의 기능 추가
+	  openProfileKeywordModal();
+  });
+  
+  document.querySelectorAll('#profileKeywordModal .keyword-tag').forEach(tag => {
+	  tag.addEventListener('click', function() {
+	      const keyword = this.getAttribute('data-keyword');
+	      
+	      if (this.classList.contains('selected')) {
+	        const index = profileSelectedKeywordsArray.indexOf(keyword);
+	        if (index > -1) {
+	          profileSelectedKeywordsArray.splice(index, 1);
+	        }
+	        this.classList.remove('selected');
+	      } else {
+	        if (profileSelectedKeywordsArray.length >= PROFILE_MAX_KEYWORDS) {
+	          alert(`최대 5개까지만 선택할 수 있습니다.`);
+	          return;
+	        }
+	        profileSelectedKeywordsArray.push(keyword);
+	        this.classList.add('selected');
+	      }
+	      
+	      updateProfileKeywordDisplay();
+	    });
   });
 </script>
 

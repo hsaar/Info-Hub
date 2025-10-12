@@ -1,7 +1,25 @@
+<%@page import="org.springframework.beans.factory.annotation.Autowired"%>
+<%@page import="com.infohub.project.login.LoginServiceImpl"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+<style>
+.error-message {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+  margin-top: 16px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}	
+</style>
 <!-- 비밀번호 확인 섹션 -->
 <div id="password-verify-section">
   <div class="verify-box">
@@ -15,25 +33,27 @@
       현재 비밀번호를 입력해주세요
     </p>
     
-    <form class="verify-form" id="verifyForm" onsubmit="return verifyPasswordForProfile(event)">
+    <form class="verify-form" id="verifyForm">
       <div class="form-group">
-        <label class="form-label" for="password">비밀번호</label>
+        <label class="form-label" for="password"></label>
         <div class="password-input-wrapper">
           <input 
             type="password" 
             id="password" 
-            class="form-input" 
+            class="form-input"
+            name = "password"
             placeholder="비밀번호를 입력하세요"
             autocomplete="current-password"
             required>
-          <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
+          <!--  <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
             <i class="fas fa-eye" id="toggleIcon"></i>
-          </button>
+          </button>-->
         </div>
-        <div class="error-message" id="errorMessage">
-          <i class="fas fa-exclamation-circle"></i>
-          <span>비밀번호가 일치하지 않습니다. 다시 시도해주세요.</span>
-        </div>
+        
+        <div class="error-message" id="errorMessage" style="display:none;">
+		  <i class="fas fa-exclamation-circle"></i>
+		  <span id="errorMessageText"></span>
+		</div>
       </div>
       
       <div class="button-group">
@@ -53,17 +73,17 @@
     <!-- 기본 정보 -->
     <div class="form-section">
       <label class="form-label">이름</label>
-      <input type="text" class="form-input" value="홍길동" placeholder="이름을 입력하세요">
+      <input type="text" id = "name" class="form-input" value="${name}" placeholder="이름을 입력하세요">
     </div>
 
     <div class="form-section">
       <label class="form-label">이메일</label>
-      <input type="email" class="form-input" value="hong@example.com" placeholder="이메일을 입력하세요">
+      <input type="email" id = "email" class="form-input" value="${email}" placeholder="이메일을 입력하세요">
     </div>
 
     <div class="form-section">
       <label class="form-label">전화번호</label>
-      <input type="tel" class="form-input" value="010-1234-5678" placeholder="전화번호를 입력하세요">
+      <input type="tel" id = "phone" class="form-input" value="${phone}" placeholder="전화번호를 입력하세요">
     </div>
 
     <!-- 비밀번호 변경 섹션 -->
@@ -93,9 +113,9 @@
              placeholder="관심 키워드 선택 (클릭)" 
              readonly
              onclick="openProfileKeywordModal()"
-             value="청년일자리, 주거지원"
+             value="${keywords}"
              style="cursor: pointer;">
-      <input type="hidden" id="profileSelectedKeywords" value="청년일자리,주거지원">
+      <input type="hidden" id="profileSelectedKeywords" value="${keywords}">
       <small style="color: #6b7280; font-size: 13px; margin-top: 4px;">최대 5개까지 선택 가능</small>
     </div>
 
@@ -104,9 +124,27 @@
       <button type="submit" class="btn-primary">저장하기</button>
       <button type="button" class="btn-secondary">취소</button>
     </div>
+    
+    <!-- 수정 완료 모달 -->
+	<div class="modal" id="updateCompleteModal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">회원정보 수정</h5>
+	      </div>
+	      <div class="modal-body">
+	        <p>회원정보가 정상적으로 수정되었습니다.</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="modalConfirmBtn">확인</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
     <!-- 회원 탈퇴 섹션 -->
-  <div id="withdrawal-section" style="margin-top: 48px; padding-top: 32px; border-top: 1px solid #e5e7eb; text-align: right;">
-    <button type="button" 
+    <div id="withdrawal-section" style="margin-top: 48px; padding-top: 32px; border-top: 1px solid #e5e7eb; text-align: right;">
+    	<button type="button" 
             onclick="openWithdrawalModal()" 
             style="padding: 8px 16px; 
                    font-size: 13px; 
@@ -120,9 +158,28 @@
                    font-family: inherit;"
             onmouseover="this.style.background='#fef2f2'; this.style.borderColor='#dc2626';"
             onmouseout="this.style.background='transparent'; this.style.borderColor='#fca5a5';">
-      회원 탈퇴
-    </button>
-  </div>
+      	회원 탈퇴
+    	</button>
+  	</div>
+  	
+  	<!-- 회원 탈퇴 확인 모달 -->
+	<div class="modal" id="withdrawalModal" tabindex="-1" role="dialog">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">회원 탈퇴</h5>
+	      </div>
+	      <div class="modal-body">
+	        <p>정말로 회원 탈퇴를 진행하시겠습니까? <br>탈퇴 시 모든 정보가 삭제됩니다.</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" onclick="closeWithdrawalModal()">취소</button>
+	        <button type="button" class="btn btn-danger" id="confirmWithdrawalBtn">탈퇴</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
   </form>
 </div>
 
@@ -230,8 +287,39 @@
 
 <script>
   // ===== 비밀번호 확인 기능 =====
-  const CORRECT_PASSWORD = "1234"; // 테스트용
 
+  $(function(){
+	  $("#verifyForm").on("submit",function(e){
+		 e.preventDefault();
+		 var pw = $("#password").val();
+		 //var csrfHeader = "${_csrf.headerName}";
+	     //var csrfToken  = "${_csrf.token}";
+	     
+	     $.ajax({
+	    	url : "${pageContext.request.contextPath}/api/checkPassword",
+	    	method : "POST",
+	    	contentType : "application/json",
+	    	data: JSON.stringify({ password: pw }),
+            //beforeSend: function(xhr){
+            //    xhr.setRequestHeader(csrfHeader, csrfToken);
+            //},
+            success : function(res){
+            	console.log(res);
+            	if(res.ok){
+      	    		document.getElementById('password-verify-section').style.display = 'none';
+    	    		document.getElementById('my-box-section').style.display = 'block';
+            	}else{
+            		errorMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> 비밀번호가 일치하지 않습니다';
+                    errorMessage.style.display = "block";
+            	}
+            },
+            error : function(){
+            	alert("에러");
+            }
+	     });
+	  });
+  });
+  
   function togglePasswordVisibility() {
     const passwordInput = document.getElementById('password');
     const toggleIcon = document.getElementById('toggleIcon');
@@ -245,33 +333,6 @@
       toggleIcon.classList.remove('fa-eye-slash');
       toggleIcon.classList.add('fa-eye');
     }
-  }
-
-  function verifyPasswordForProfile(event) {
-    event.preventDefault();
-    
-    const passwordInput = document.getElementById('password');
-    const errorMessage = document.getElementById('errorMessage');
-    const inputValue = passwordInput.value;
-    
-    if (inputValue === CORRECT_PASSWORD) {
-      // 인증 성공
-      document.getElementById('password-verify-section').style.display = 'none';
-      document.getElementById('my-box-section').style.display = 'block';
-    } else {
-      // 인증 실패
-      passwordInput.classList.add('error');
-      errorMessage.classList.add('show');
-      passwordInput.value = '';
-      passwordInput.focus();
-      
-      setTimeout(() => {
-        passwordInput.classList.remove('error');
-        errorMessage.classList.remove('show');
-      }, 2000);
-    }
-    
-    return false;
   }
 
   // ===== 프로필 정보 수정 기능 =====
@@ -381,6 +442,33 @@
       }
     });
   }
+  
+  	//회원탈퇴 모달 작동
+  	function openWithdrawalModal() {
+    	$('#withdrawalModal').modal('show'); // Bootstrap 모달
+	}
+	
+	function closeWithdrawalModal() {
+	    $('#withdrawalModal').modal('hide');
+	}
+	
+	$('#confirmWithdrawalBtn').on('click', function() {
+	    $.ajax({
+	        url: "${pageContext.request.contextPath}/api/withdrawal",
+	        method: "POST",
+	        success: function(res) {
+	            if(res.ok){
+	                alert("회원 탈퇴가 완료되었습니다.");
+	                window.location.href = "${pageContext.request.contextPath}/"; // 홈으로 이동
+	            } else {
+	                alert("탈퇴 실패. 관리자에게 문의하세요.");
+	            }
+	        },
+	        error: function() {
+	            alert("서버 오류가 발생했습니다.");
+	        }
+	    });
+	});
 
   // 프로필 키워드 태그 클릭 이벤트
   document.addEventListener('DOMContentLoaded', function() {
@@ -398,7 +486,7 @@
           this.classList.remove('selected');
         } else {
           if (profileSelectedKeywordsArray.length >= PROFILE_MAX_KEYWORDS) {
-            alert(`최대 ${PROFILE_MAX_KEYWORDS}개까지만 선택할 수 있습니다.`);
+            alert(`최대 5개까지만 선택할 수 있습니다.`);
             return;
           }
           profileSelectedKeywordsArray.push(keyword);
@@ -451,7 +539,41 @@
           return;
         }
         
-        alert('프로필이 저장되었습니다.');
+        var name = $("#name").val();
+        var email = $("#email").val();
+        var phone = $("#phone").val();
+        var keywords = $("#profileSelectedKeywords").val();
+        console.log(Array.isArray(profileSelectedKeywords)); 
+        
+        $.ajax({
+	    	url : "${pageContext.request.contextPath}/api/updateprofile",
+	    	method : "POST",
+	    	contentType : "application/json",
+	    	data: JSON.stringify({
+	    		name:name ,
+	    		email:email ,
+	    		phone:phone ,
+	    		password:newPassword ,
+	    		keywords:keywords
+	    		}),
+            success : function(res){
+            	console.log(res);
+            	if(res.ok){
+            		 // 모달 띄우기
+                    $('#updateCompleteModal').modal('show');
+
+                    // 확인 버튼 클릭 시 mypage_main으로 이동
+                    $('#modalConfirmBtn').on('click', function() {
+                        window.location.href = "${pageContext.request.contextPath}/mypage_main";
+                    });
+            	}else{
+            		$('#errorMessage').text("회원정보 수정에 실패했습니다.").show();
+            	}
+            },
+            error : function(){
+            	$('#errorMessage').text("서버 오류가 발생했습니다.").show();
+            }
+	     });
         
         if (currentPassword || newPassword) {
           document.getElementById('currentPassword').value = '';

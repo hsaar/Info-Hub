@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.boardCategoryMapper">
+
+
+    <!-- 1. 대분류만 조회 -->
+    <select id="selectMainCategories" resultType="com.infohub.project.boardcategory.CategoryVO">
+         SELECT categoryId AS categoryId,
+               name,
+               parentId AS parentId
+        FROM categoryboard
+        WHERE parentId IS NULL
+        ORDER BY categoryId
+    </select>
+    
+     <!-- 2. 대분류id>name --> 
+    <select id="selectMainCategoryById" parameterType="int" resultType="com.infohub.project.boardcategory.CategoryVO">
+    SELECT categoryId AS id,
+           name AS name
+    FROM categoryboard
+    WHERE categoryId = #{categoryId}
+</select>
+
+     <!-- 3. 소분류 카테고리 조회 -->
+    <select id="selectSubCategories" resultType="com.infohub.project.boardcategory.CategoryVO">
+      SELECT categoryId AS categoryId,
+           name,
+           parentId AS parentId
+    FROM categoryboard
+    WHERE parentId = #{parentId}
+    ORDER BY categoryId
+    </select>
+
+
+
+</mapper>

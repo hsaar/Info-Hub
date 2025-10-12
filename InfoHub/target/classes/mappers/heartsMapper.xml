@@ -8,6 +8,7 @@
 	<select id="heartsCount" resultType="int">
 	select a.hearts from hearts h join article a on articleId = article_articleId
 	where article_articleId = #{article_articleId}
+	and login_loginNo = #{login_loginNo}
 	</select>
 	
 	<select id="articleHearts" resultType="int">
@@ -18,17 +19,18 @@
 	<select id="heartsCheck" resultType="int">
 	select count(*) from hearts
 	where article_articleId = #{article_articleId}
-	and login_loginNo = 2
+	and login_loginNo = #{login_loginNo}
 	</select>
 	
 	<insert id="heartsInsert">
-	insert into hearts(login_loginNo, article_articleId, createdDate) values(2, #{article_articleId}, now())
+	insert into hearts(login_loginNo, article_articleId, createdDate)
+	values(#{login_loginNo}, #{article_articleId}, now())
 	</insert>
 	
 	<delete id="heartsDelete">
 	delete from hearts
 	where article_articleId = #{article_articleId}
-	and login_loginNo = 2
+	and login_loginNo = #{login_loginNo}
 	</delete>
 	
 </mapper>

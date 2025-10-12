@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -71,11 +71,6 @@
                         
                         <!-- 아이디 찾기 버튼 -->
                         <button type="submit" class="idfind-btn">아이디 찾기</button>
-                        
-                        <!-- CSRF 토큰 -->
-                        <c:if test="${not empty _csrf}">
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                        </c:if>
                     </form>
                 </div>
             </div>
@@ -121,12 +116,8 @@
                         </div>
                         
                         <!-- 비밀번호 찾기 버튼 -->
-                        <button type="submit" class="idfind-btn">비밀번호 재설정 링크 전송</button>
-                        
-                        <!-- CSRF 토큰 -->
-                        <c:if test="${not empty _csrf}">
-                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                        </c:if>
+                        <button type="submit" class="idfind-btn">비밀번호 재설정 하기</button>
+                       
                     </form>
                 </div>
             </div>
@@ -187,6 +178,50 @@
             </div>
         </div>
     </div>
+    
+    <!-- 비밀번호 결과 모달 -->
+    <div id="resultPasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i id="modalIcon" class="fas fa-check-circle modal-icon success"></i>
+                <h3 id="modalTitle" class="modal-title">비밀번호 변경 완료</h3>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">비밀번호 변경이 완료되었습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn primary" onclick="goToLogin()">로그인하러 가기</button>
+                <button class="modal-btn secondary" onclick="closePasswordResultModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 비밀번호 변경 모달 -->
+	<div id="passwordModal" class="modal">
+	    <div class="modal-content">
+	        <div class="modal-header">
+	            <h3>비밀번호 변경</h3>
+	        </div>
+	        <div class="modal-body">
+	            <form id="passwordForm" method="post" action="<c:url value='/updatePassword' />">
+	                <div class="form-group">
+	                	<input type="hidden" name = "userId" value = "${resetEmail}">
+	                    <label>새 비밀번호</label>
+	                    <input type="password" name="newPassword" id="newPasswordInput" required>
+	                    <small id="passwordHint" style="color:#f59e0b; display:block; margin-top:4px;">
+	                        8자 이상, 문자/숫자/특수문자 포함
+	                    </small>
+	                </div>
+	                <div class="form-group">
+	                    <label>비밀번호 확인</label>
+	                    <input type="password" name="confirmPassword" id="confirmPasswordInput" required>
+	                    <small id="confirmHint" style="color:red; display:none;">비밀번호가 일치하지 않습니다.</small>
+	                </div>
+	                <button type="submit" class="idfind-btn">변경하기</button>
+	            </form>
+	        </div>
+	    </div>
+	</div>
 
     <!-- 에러 모달 -->
     <div id="errorModal" class="modal">
@@ -212,8 +247,21 @@
             </div>
         </div>
     </div>
+    
+    <c:if test="${passwordChanged != null && passwordChanged}">
+	    <script>
+	        window.addEventListener('DOMContentLoaded', function() {
+	            showPasswordResultModal();
+	        });
+	    </script>
+	</c:if>
 
     <script>
+	    const newPasswordInput = document.getElementById('newPasswordInput');
+	    const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+	    const passwordHint = document.getElementById('passwordHint');
+	    const confirmHint = document.getElementById('confirmHint');
+	    
         // 탭 전환 함수
         function switchTab(type) {
             const container = document.getElementById('idfindContainer');
@@ -242,6 +290,54 @@
             window.location.href = '<c:url value="/login" />';
         }
         
+        //비밀번호 체크
+        if (newPasswordInput) {
+		  newPasswordInput.addEventListener('input', function() {
+		    const password = this.value;
+		    const hasMinLength = password.length >= 8;
+		    const hasLetter = /[a-zA-Z]/.test(password);
+		    const hasNumber = /\d/.test(password);
+		    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+		
+		    if (!hasMinLength || !hasLetter || !hasNumber || !hasSpecial) {
+		      this.style.borderColor = '#f59e0b';
+		      passwordHint.style.color = '#f59e0b';
+		    } else {
+		      this.style.borderColor = '#10b981';
+		      passwordHint.style.color = '#10b981';
+		    }
+		
+		    // 확인 비밀번호 초기화
+		    if (confirmPasswordInput) {
+		      confirmPasswordInput.value = '';
+		      confirmHint.style.display = 'none';
+		    }
+		  });
+		}
+        
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+        	  const password = newPasswordInput.value;
+        	  const confirm = confirmPasswordInput.value;
+        	  
+        	  // 강도 체크
+        	  const hasMinLength = password.length >= 8;
+        	  const hasLetter = /[a-zA-Z]/.test(password);
+        	  const hasNumber = /\d/.test(password);
+        	  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+        	  if (!hasMinLength || !hasLetter || !hasNumber || !hasSpecial) {
+        	    e.preventDefault();
+        	    passwordHint.style.color = 'red';
+        	    passwordHint.textContent = '비밀번호는 8자 이상, 문자/숫자/특수문자를 포함해야 합니다.';
+        	    return;
+        	  }
+
+        	  if(password !== confirm) {
+        	    e.preventDefault();
+        	    confirmHint.style.display = 'block';
+        	    }
+        });
+        
         // 결과 모달 관련 함수들
         function showResultModal(type, message, result) {
             const modal = document.getElementById('resultModal');
@@ -254,13 +350,23 @@
                 icon.className = 'fas fa-user modal-icon success';
                 title.textContent = '아이디 찾기 완료';
                 messageEl.textContent = '회원님의 아이디를 찾았습니다.';
-                content.innerHTML = `<div class="found-id">아이디: <strong>${result}</strong></div>`;
-            } else {
-                icon.className = 'fas fa-envelope modal-icon success';
-                title.textContent = '비밀번호 재설정 링크 전송';
-                messageEl.textContent = '비밀번호 재설정 링크를 이메일로 전송했습니다.';
-                content.innerHTML = `<div class="reset-info">이메일: <strong>${result}</strong><br><span class="small-text">이메일을 확인하여 비밀번호를 재설정해주세요.</span></div>`;
+                content.innerHTML = `<div class="found-id">아이디: <strong>${foundId}</strong></div>`;
             }
+            
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function showPasswordResultModal() {
+            const modal = document.getElementById('resultPasswordModal');
+            const icon = document.getElementById('modalIcon');
+            const title = document.getElementById('modalTitle');
+            const messageEl = document.getElementById('modalMessage');
+            const content = document.getElementById('resultContent');
+            
+            icon.className = 'fas fa-user modal-icon success';
+            title.textContent = '비밀번호 변경 완료';
+            messageEl.textContent = '비밀번호 변경이 완료되었습니다.';
             
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -282,9 +388,24 @@
             document.body.style.overflow = 'auto';
         }
         
+        function closePasswordResultModal() {
+            document.getElementById('resultPasswordModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
         function contactSupport() {
             closeErrorModal();
             alert('고객센터(1004-7979)로 연락주시면 도움을 드리겠습니다.');
+        }
+        
+        function openPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
         
         // 폼 제출시 로딩 상태
@@ -295,12 +416,6 @@
                 submitBtn.textContent = '처리 중...';
                 submitBtn.disabled = true;
                 
-                // 실제 서버 응답 후에는 제거 (테스트용)
-                //setTimeout(() => {
-                //    submitBtn.textContent = originalText;
-                //    submitBtn.disabled = false;
-                //     showResultModal('id', '', 'test***'); // 테스트용
-                //}, 2000);
             });
         });
         
@@ -308,12 +423,16 @@
         window.addEventListener('click', function(event) {
             const resultModal = document.getElementById('resultModal');
             const errorModal = document.getElementById('errorModal');
+            const modal = document.getElementById('passwordModal');
             
             if (event.target === resultModal) {
                 closeResultModal();
             }
             if (event.target === errorModal) {
                 closeErrorModal();
+            }
+            if(event.target === modal){
+            	closePasswordModal();
             }
         });
         
@@ -322,22 +441,25 @@
             if (event.key === 'Escape') {
                 closeResultModal();
                 closeErrorModal();
+                closePasswordModal();
             }
         });
         
+        const foundId = "${foundId != null ? foundId : ''}";
+        const resetEmail = "${resetEmail != null ? resetEmail : ''}";
+        const error = "${error != null ? error : ''}";
+        
         // 서버에서 전달된 결과 처리
         window.addEventListener('DOMContentLoaded', function() {
-            <c:if test="${not empty foundId}">
-                showResultModal('id', '', '${foundId}');
-            </c:if>
-            
-            <c:if test="${not empty resetEmail}">
-                showResultModal('password', '', '${resetEmail}');
-            </c:if>
-            
-            <c:if test="${not empty error}">
-                showErrorModal('${error}');
-            </c:if>
+            if(foundId) {
+                showResultModal('id', '', foundId);
+            }
+            if(resetEmail) {
+            	openPasswordModal('password', '', resetEmail);
+            }
+            if(error) {
+                showErrorModal(error);
+            }
         });
     </script>
 </body>

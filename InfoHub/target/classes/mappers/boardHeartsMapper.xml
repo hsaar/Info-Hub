@@ -5,32 +5,45 @@
 <mapper namespace="com.infohub.project.boardHeartsMapper">
 
 	<!-- 좋아요 추가 -->
-	<insert id="insertHeart" parameterType="com.infohub.project.board_hearts.HeartsVO">
-		INSERT INTO hearts (login_login_id, article_article_id, board_boardno, comment_board_comment_id)
-		VALUES (#{loginLoginId}, #{articleArticleId}, #{boardBoardno},#{commentBoardCommentId})
+	<insert id="insertHeart"
+		parameterType="com.infohub.project.boardhearts.HeartsBoardVO">
+		INSERT INTO heartsboard (loginNo, boardno, regiDate)
+		VALUES (#{loginNo}, #{boardno}, NOW())
 	</insert>
 
 	<!-- 좋아요 취소 -->
-	<delete id="deleteHeart" parameterType="com.infohub.project.board_hearts.HeartsVO">
-		DELETE FROM hearts
-		WHERE login_login_id = #{loginLoginId}
-		<if test="boardBoardno != null">
-			AND board_boardno = #{boardBoardno}
-		</if>
-		<if test="articleArticleId != null">
-			AND article_article_id = #{articleArticleId}
+	<delete id="deleteHeart"
+		parameterType="com.infohub.project.boardhearts.HeartsBoardVO">
+		DELETE FROM heartsboard
+		WHERE loginNo = #{loginNo}
+		AND boardno = #{boardno}
+		<if test="commentId != 0">
+			AND commentId = #{commentId}
 		</if>
 	</delete>
+
 	<!-- 특정 게시글 좋아요 수 -->
-	<select id="countHearts" resultType="int" parameterType="com.infohub.project.board_hearts.HeartsVO">
-		SELECT COUNT(*)
-		FROM hearts
-		WHERE
-		<choose>
-			<when test="boardBoardno != null">board_boardno = #{boardBoardno}</when>
-			<when test="articleArticleId != null">article_article_id = #{articleArticleId}</when>
-		</choose>
+	<select id="countHeartsByBoard" parameterType="int"
+		resultType="int">
+		SELECT COUNT(*) FROM heartsboard WHERE boardno = #{boardno}
 	</select>
 
+	<!-- 특정 유저가 이미 좋아요 눌렀는지 확인 -->
+	<select id="checkHeart"
+		parameterType="com.infohub.project.boardhearts.HeartsBoardVO"
+		resultType="int">
+		SELECT COUNT(*) FROM heartsboard
+		WHERE loginNo = #{loginNo}
+		AND boardno = #{boardno}
+		<if test="commentId != 0">
+			AND commentId = #{commentId}
+		</if>
+	</select>
+
+	<!-- 특정 게시글의 모든 좋아요 삭제 -->
+	<delete id="deleteAllHeartsByBoardno" parameterType ="int">
+		DELETE FROM heartsboard
+		WHERE boardno = #{boardno}
+	</delete>
 
 </mapper>

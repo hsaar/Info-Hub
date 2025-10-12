@@ -7,23 +7,38 @@
 	
 	<select id="scrapsCount" resultType="int">
 	select count(*) from scraps
-	where article_articleId = #{article_articleId}
+	where registrationNo = #{registrationNo}
 	</select>
 	
 	<select id="scrapsCheck" resultType="int">
 	select count(*) from scraps
-	where article_articleId = #{article_articleId}
-	and login_loginNo = 2
+	where registrationNo = #{registrationNo}
+	and loginNo = #{loginNo}
 	</select>
 	
 	<insert id="scrapsInsert">
-	insert into scraps(createdDate, login_loginNo, article_articleId) values(now(), 2, #{article_articleId})
+	insert into scraps(createdDate, loginNo, registrationNo) values(now(), #{loginNo}, #{registrationNo})
 	</insert>
 	
 	<delete id="scrapsDelete">
 	delete from scraps
-	where article_articleId = #{article_articleId}
-	and login_loginNo = 2
+	where registrationNo = #{registrationNo}
+	and loginNo = #{loginNo}
 	</delete>
+	
+	<select id="myscraps" resultType="com.infohub.project.scraps.ScrapsVO">
+	SELECT r.title, r.content, r.link, r.trachea, r.call, r.type, r.startDate, r.endDate, s.createdDate, s.registrationNo, s.loginNo, s.scrapsNo FROM scraps s join registration r on r.registrationNo = s.registrationNo
+	WHERE s.loginNo = #{loginNo}
+	ORDER BY endDate
+	</select>
+	
+	<select id="getMyScraps" parameterType="int" resultType="com.infohub.project.scraps.ScrapsVO">
+    SELECT r.title, r.content, r.link, r.trachea, r.call, r.type, r.startDate, r.endDate,
+           s.createdDate, s.registrationNo, s.loginNo, s.scrapsNo
+      FROM scraps s
+           JOIN registration r ON r.registrationNo = s.registrationNo
+     WHERE s.loginNo = #{loginNo}
+     ORDER BY endDate
+	</select>
 	
 </mapper>

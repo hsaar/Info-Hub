@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -30,14 +31,14 @@
         <a href="#" class="menu-item" data-page="my-info">
           <span class="menu-text">나의 정보</span>
         </a>
-        <a href="<c:url value='/scraps'/>" class="menu-item" data-page="my-policy">
-          <span class="menu-text">스크랩 정책</span>
-        </a>
         <a href="#" class="menu-item" data-page="likes">
           <span class="menu-text">좋아요</span>
         </a>
-        <a href="#" class="menu-item" data-page="timeline">
-          <span class="menu-text">타임라인</span>
+        <a href="#" class="menu-item" data-page="myBenifit">
+          <span class="menu-text">내 혜택 모아보기</span>
+        </a>
+        <a href="#" class="menu-item" data-page="timelineMyBenifit">
+          <span class="menu-text">내 혜택 타임라인</span>
         </a>
         <a href="#" class="menu-item" data-page="board">
           <span class="menu-text">나의 활동</span>
@@ -56,18 +57,25 @@
         <%@ include file="my_box.jsp"%>
       </div>
 
-      <!-- 나의 정책 페이지 -->
-      <div id="my-policy-content" class="content-box" style="display: none;">
-          <%@ include file="my_scrap.jsp"%>
-      </div>
+       <!-- 내 혜택 모아보기 페이지 -->
+      <div id="myBenifit-content" class="content-box" style="display: none;">
+        <h2 class="content-title">내 혜택 모아보기</h2>
+		<jsp:include page="../customized/myBenifit.jsp"/>
+		</div>
+
 
       <!-- 타임라인 페이지 -->
-      <div id="timeline-content" class="content-box" style="display: none;">
-        <h2 class="content-title">타임라인</h2>
-        <p>타임라인이 표시됩니다.</p>
+      <div id="timelineMyBenifit-content" class="content-box" style="display: none;">
+        <h2 class="content-title">내 혜택 타임라인</h2>
+        <iframe 
+		    id="timelineFrame" 
+		    src= "${pageContext.request.contextPath}/timelineMyBenifit"
+		    width="100%" 
+		    height="800px" 
+		    frameborder="0"
+		    style="border:0; display:block;">
+		</iframe>
       </div>
-      
-      
 
       <!-- 게시판 페이지 -->
       <div id="board-content" class="content-box" style="display: none;">
@@ -87,8 +95,7 @@
         </div>
 
       </div>
-	
- 
+
       <!-- 좋아요 페이지 -->
       <div id="likes-content" class="content-box" style="display: none;">
          <%@ include file="my_hearts.jsp"%>
@@ -158,10 +165,23 @@
       const targetContent = document.getElementById(pageId + '-content');
       if (targetContent) {
         targetContent.style.display = 'block';
+        
+        if (pageId === 'timelineMyBenifit') {
+            document.getElementById('timelineFrame').src = '${pageContext.request.contextPath}/timelineMyBenifit';
+          }
       }
     });
   });
 
+  // 탭 전환 (게시판 내부)
+  const tabs = document.querySelectorAll('.mypage-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      tabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+  
   document.addEventListener('DOMContentLoaded', () => {
 	    const tabs = document.querySelectorAll('.mypage-tab');
 	    const commentTab = document.getElementById('comment-tab');
@@ -200,8 +220,7 @@
 	        });
 	    });
 	});
-
-
+  
 </script>
 
 </body>

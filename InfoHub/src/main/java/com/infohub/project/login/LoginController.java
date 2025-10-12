@@ -1,4 +1,8 @@
-package com.infohub.project.login;
+ package com.infohub.project.login;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,7 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -23,7 +30,30 @@ public class LoginController {
 	@GetMapping("login")
 	public String login(Model model) {
 		model.addAttribute("listAll", se.listAll());
-		return "./login/login";
+
+		return "/login/login";
+	}
+	
+	@GetMapping("/idCheck")
+	@ResponseBody
+	public String idCheck(@RequestParam("userId")String userId) {
+		
+		boolean exists = se.checkuserIdDuplicate(userId);
+		return exists ? "EXISTS" : "OK";
+	}
+	@GetMapping("/nameCheck")
+	@ResponseBody
+	public String nameCheck(@RequestParam("name")String name) {
+		
+		boolean exists = se.checkNameDuplicate(name);
+		return exists ? "EXISTS" : "OK";
+	}
+	@PostMapping("/passwordCheck")
+	@ResponseBody
+	public String passwordCheck(@RequestBody Map<String, String> data) {
+		String password = data.get("password");
+		String passwordConfirm = data.get("passwordConfirm");
+		return password.equals(passwordConfirm) ? "MATCH" : "MISMATCH";
 	}
 	
 	@GetMapping("idfind")
@@ -41,33 +71,49 @@ public class LoginController {
 	}
 
 	@GetMapping("myinfo")
-	public String myinfo(@RequestParam("name")String name ,Model model) {
+	public String myinfo(@RequestParam("name")String name ,Model model, HttpServletRequest request) {
 		model.addAttribute("name", name);
+		HttpSession session = request.getSession();
+		String loginNo = (String) session.getAttribute("loginNo");
+		System.out.println(loginNo);
 		return "./login/myinfo";
 	}
 	@PostMapping("myinfo")
 	public String myinfo(Model model, 
+						HttpServletRequest request,
 						@RequestParam("userId")String userId,
 						@RequestParam("password")String password,
 						@RequestParam("email")String email,
 						@RequestParam("name")String name,
-						@RequestParam("phone")String phone) {
+						@RequestParam("phone")String phone,
+						@RequestParam("gender")String gender,
+						@RequestParam("keywords")String keywords) {
 		
-		int i = se.updateUser(new LoginDTO(userId,password,name,email,phone,null,null,1,1,0));
-		if( i > 0 )
+		int i = se.updateUser(new LoginDTO(0,userId,password,name,email,phone,null,null,1,1,0,gender,keywords));
+		if( i > 0 ) {
 			logger.info("변경성공");
+			request.getSession().invalidate();
+			HttpSession session = request.getSession(true);
+			session.setAttribute("userId", userId);
+		}
 		
 		return "redirect:/";
 	}
+	
 	@GetMapping("passwordfind")
 	public String passwordfind(Model model) {
 		return "./login/passwordfind";
 	}
+	
 	@PostMapping("login_ok")
 	public String login_ok(Model model, LoginRequest lr, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		LoginDTO res = se.login(lr);
+		int status = 0;
+		if(res != null) {
+			status = se.getUserById(res.getUserId()).getStatus();
+		}
 		
-		if(res!=null) {
+		if(res!=null && status != 0) {
 			request.getSession().invalidate(); //기존 세션 파기
 			
 			HttpSession session = request.getSession(true);
@@ -80,40 +126,188 @@ public class LoginController {
 			return "redirect:/login";
 		}
 	}
-	@GetMapping("memberjoin")
-	public String movememberjoin(Model model){
-		return "./login/memberjoin";
+	
+	@GetMapping("/memberjoinSuccess")
+	public String memberjoinSuccess(Model model){
+		return "login/memberjoinSuccess";
 	}
-	@PostMapping("memberjoin")
-	public String memberjoin(Model model, 
+	
+	@ResponseBody
+	@PostMapping("/memberjoin")
+	public String memberjoin(Model model, HttpServletRequest request, 
 							@RequestParam("userId")String userId, 
 							@RequestParam("password")String password,
-							@RequestParam("passwordcheak")String passwordcheak,
+							@RequestParam("passwordConfirm")String passwordConfirm,
 							@RequestParam("email")String email,
 							@RequestParam("name")String name,
 							@RequestParam("phone")String phone,
-							@RequestParam("birthyear")int birthyear) {
-		int currentYear = java.time.LocalDate.now().getYear();
-		int age = currentYear - birthyear;
+							@RequestParam("age")int age,
+							@RequestParam("gender")String gender,
+							@RequestParam("keywords")String keywords) {
 		
-		if(se.checkNameDuplicate(name)==1) {
+		//Map<String, String> map = new HashMap<String, String>();
+		//map.put("redirect", request.getContextPath() + "/memberjoinSuccess");
+		
+		if(se.checkNameDuplicate(name)) {
 			logger.info("중복이름");
+			return "FAIL";
 		}
 		
-		if(se.checkuserIdDuplicate(userId)==1) {
+		if(se.checkuserIdDuplicate(userId)) {
 			logger.info("중복아이디");
+			return "FAIL";
 		}
 			
-		if(!password.equals(passwordcheak)) {
+		if(!password.equals(passwordConfirm)) {
 			logger.info("패스워드 체크 틀림");
+			return "FAIL";
 		}
 		
-		int i = se.insertUser(new LoginDTO(userId,password,name,email,phone,null,null,1,1,age));
+		int i = se.insertUser(new LoginDTO(0, userId,password,name,email,phone,null,null,1,1,age,gender,keywords));
 		if( i > 0 )
-			logger.info("생성성공");
+			return "OK";
 		
-		return "./login/memberjoin";
+		return "FAIL";
 	}
 	
-
+	@GetMapping("withdrawal")
+	public String withdrawal(Model medel,@RequestParam("name")String name, HttpServletRequest request) {
+		
+		String userId = se.getUserByname(name).getUserId();
+		
+		int i = se.deleteUser(userId);
+		
+		if(i>0) {
+			request.getSession().invalidate();
+			logger.info("삭제성공");
+		}
+		
+		return "./login/withdrawal";
+	}
+	
+	@PostMapping("/findid")
+	public String findid(Model model,
+						@RequestParam("name")String name,
+						@RequestParam("email")String email,
+						@RequestParam("phone")String phone){
+		
+		phone = se.formatPhoneNumber(phone);
+		
+		String foundId = se.findid(name, email, phone);
+		
+		if(foundId != null) {
+			model.addAttribute("foundId", foundId);	
+		}else {
+			model.addAttribute("error", "아이디를 찾지 못했습니다");
+		}
+		
+		return "login/idfind";
+	}
+	
+	@PostMapping("/findpassword")
+	public String findpassword(Model model,
+							@RequestParam("userId")String userId,
+							@RequestParam("email")String email,
+							@RequestParam("phone")String phone) {
+		phone = se.formatPhoneNumber(phone);
+		int i = se.findpassword(userId, email, phone);
+		if(i>0) {
+			model.addAttribute("resetEmail", userId);
+		}else {
+			model.addAttribute("error", "해당 가입자를 찾지 못했습니다");
+		}
+		
+		return "login/idfind";
+	}
+	
+	@PostMapping("/updatePassword")
+	public String updatePassword(Model model,
+								@RequestParam("newPassword")String newPassword,
+								@RequestParam("userId")String userId){
+		
+		int i = se.updatepassword(newPassword, userId);
+		if(i>0) {
+			model.addAttribute("passwordChanged", true);
+		}else {
+			model.addAttribute("error", "비밀번호 변경에 실패했습니다.");
+		}
+		return "login/idfind";
+	}
+	
+	@GetMapping("mypage_main")
+	public String mypage_main(Model model,
+							HttpServletRequest request) {
+		HttpSession session =request.getSession();
+		String userId = (String) session.getAttribute("userId");
+		model.addAttribute("name", se.getUserById(userId).getName());
+		model.addAttribute("email", se.getUserById(userId).getEmail());
+		model.addAttribute("phone", se.getUserById(userId).getPhone());
+		model.addAttribute("keywords", se.getUserById(userId).getKeywords());
+				
+		
+		return "/mypage/mypage_main";
+	}
+	
+	@PostMapping(value="/api/checkPassword", produces="application/json")
+	@ResponseBody
+	public Map<String, Object> apiCheckPassword(@RequestBody Map<String, String>body,
+												HttpSession session){
+		String password = body.get("password");
+		String userId = (String) session.getAttribute("userId");
+		boolean ok = false;
+		
+		if(password.equals(se.checkPasswordById(userId))) {
+			ok = true;
+		}
+		
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("ok", ok);
+		
+		return res;
+	}
+	
+	@PostMapping(value = "/api/updateprofile", produces="application/json")
+	@ResponseBody
+	public Map<String, Object> updateprofile(@RequestBody ProfileUpdateRequest body,
+											HttpSession session){
+		String userId = (String) session.getAttribute("userId");
+		String name = body.getName();
+		String email = body.getEmail();
+		String phone = body.getPhone();
+		String password = body.getPassword();
+		String keywords = body.getKeywords();
+		
+		int tmp = se.updateUser(new LoginDTO(0, userId, password, name, email, phone, null, null, 0, 0, 0 , null, keywords));
+		boolean ok = false;
+		
+		if(tmp>0) {
+			ok = true;
+			
+		}
+		
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("ok", ok);
+		
+		return res;
+	}
+	
+	@PostMapping("/api/withdrawal")
+	@ResponseBody
+	public Map<String, Object> withdrawal(HttpSession session){
+		String userId = (String) session.getAttribute("userId");
+		boolean ok = false;
+		
+		if(userId != null) {
+			int result = se.deleteUser(userId);
+			if(result > 0) {
+				ok = true;
+				session.invalidate();
+			}
+		}
+		
+		Map<String , Object> res = new HashMap<String, Object>();
+		res.put("ok", ok);
+		
+		return res;
+	}
 }

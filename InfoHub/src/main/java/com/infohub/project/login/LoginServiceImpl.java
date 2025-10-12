@@ -18,7 +18,7 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public LoginDTO getUserById(int userId) {
+	public LoginDTO getUserById(String userId) {
 		// TODO Auto-generated method stub
 		return dao.getUserById(userId);
 	}
@@ -30,15 +30,15 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public int checkuserIdDuplicate(String userId) {
+	public boolean checkuserIdDuplicate(String userId) {
 		// TODO Auto-generated method stub
-		return dao.checkuserIdDuplicate(userId);
+		return dao.checkuserIdDuplicate(userId) > 0;
 	}
 
 	@Override
-	public int checkNameDuplicate(String name) {
+	public boolean checkNameDuplicate(String name) {
 		// TODO Auto-generated method stub
-		return dao.checkNameDuplicate(name);
+		return dao.checkNameDuplicate(name) > 0;
 	}
 
 	@Override
@@ -65,4 +65,45 @@ public class LoginServiceImpl implements LoginService{
 		return dao.login(req);
 	}
 
+	@Override
+	public String findid(String name, String email, String phone) {
+		// TODO Auto-generated method stub
+		return dao.findid(name, email, phone);
+	}
+
+	@Override
+	public int findpassword(String userId, String email, String phone) {
+		// TODO Auto-generated method stub
+		return dao.findpassword(userId, email, phone);
+	}
+
+	@Override
+	public int updatepassword(String password, String userId) {
+		// TODO Auto-generated method stub
+		return dao.updatepassword(password, userId);
+	}
+
+	@Override
+	public String checkPasswordById(String userId) {
+		// TODO Auto-generated method stub
+		return dao.checkPasswordById(userId);
+	}
+
+	@Override
+	public int updateKeywords(String userId, String keywords) {
+		// TODO Auto-generated method stub
+		return dao.updateKeywords(userId, keywords);
+	}
+	
+	public String formatPhoneNumber(String phone) {
+		if(phone.contains("-")) {
+			return phone;
+		}
+		if(phone.length() == 11) {
+			return phone.replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
+		}else if(phone.length() == 10) {
+			return phone.replaceAll("(\\d{2})(\\d{4})(\\d{4})", "$1-$2-$3");
+		}
+		return phone;
+	}
 }

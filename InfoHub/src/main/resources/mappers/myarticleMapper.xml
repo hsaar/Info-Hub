@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infohub.project.myarticleMapper">
+	<select id="mylistAll" resultType="com.infohub.project.myarticle.MyarticleDTO">
+		select image, content, link, source
+		from article
+		where keyword like concat('%',#{keyword},'%')
+	</select>
+	
+	<select id="mycount" resultType="int">
+		select count(*) from article where keyword like concat('%',#{keyword},'%')
+	</select>
+	
+	
+</mapper>

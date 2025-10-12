@@ -13,7 +13,6 @@ public class ArticleDAOImpl implements ArticleDAO{
 	
 	@Autowired
 	SqlSession session;
-	//private static final String nameSpace = "com.infohub.project.infoHubMapper";
 
 	private final static String nameSpace = "com.infohub.project.articleMapper";
 	
@@ -25,33 +24,39 @@ public class ArticleDAOImpl implements ArticleDAO{
 	}
 	
 	@Override
-	public List<ArticleVO> articlListAll1() throws Exception {
+	public List<ArticleVO> articlListAll1(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList(nameSpace + ".articleListAll1");
+		return session.selectList(nameSpace + ".articleListAll1", cri);
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll2() throws Exception {
+	public List<ArticleVO> articlListAll2(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList(nameSpace + ".articleListAll2");
+		return session.selectList(nameSpace + ".articleListAll2", cri);
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll3() throws Exception {
+	public List<ArticleVO> articlListAll3(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList(nameSpace + ".articleListAll3");
+		return session.selectList(nameSpace + ".articleListAll3", cri);
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll4() throws Exception {
+	public List<ArticleVO> articlListAll4(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList(nameSpace + ".articleListAll4");
+		return session.selectList(nameSpace + ".articleListAll4", cri);
 	}
 
 	@Override
-	public List<ArticleVO> articlListAll5() throws Exception {
+	public List<ArticleVO> articlListAll5(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
-		return session.selectList(nameSpace + ".articleListAll5");
+		return session.selectList(nameSpace + ".articleListAll5", cri);
+	}
+	
+	@Override
+	public List<ArticleVO> articlListAll6(Criteria cri) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".articleListAll6", cri);
 	}
 
 	@Override
@@ -96,6 +101,24 @@ public class ArticleDAOImpl implements ArticleDAO{
 	public int getTotalCount(Criteria cri) throws Exception {
 		// TODO Auto-generated method stub
 		return session.selectOne(nameSpace + ".gettotalcount", cri);
+	}
+
+	@Override
+	public List<ArticleVO> noArticleContent(int articleId) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".articleContent", articleId);
+	}
+
+	@Override
+	public List<ArticleVO> viewsArticle() throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".viewsArticle");
+	}
+
+	@Override
+	public List<ArticleVO> findAllArticles() throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".findAllArticles");
 	}
 
 }

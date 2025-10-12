@@ -5,6 +5,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>게시판 - 정책 소통 플랫폼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+<link rel="stylesheet" href="<c:url value='/resources/css/board.css' />">
+<meta charset="UTF-8">
 <title>게시글 수정</title>
 <script>
 function validateForm() {
@@ -49,13 +57,13 @@ function validateForm() {
 </script>
 </head>
 <body>
-</h1>
-<a href="${pageContext.request.contextPath}/boardlistmain">
-    <h5 class="box-title">커뮤니티 메인</h5>
+<header class="header">
+    <%@ include file="../include/header.jsp"%>
+</header>
 	<center>
 		<h1>게시글 수정하기</h1>
 		<form method="post"
-			action="${pageContext.request.contextPath}/board/update" onsubmit="return validateForm()"
+			action="${pageContext.request.contextPath}/update" onsubmit="return validateForm()"
 			name="write_frm">
 			<table>
 				<tr height="30">
@@ -64,6 +72,7 @@ function validateForm() {
 						size="10" maxlength="20" /></td>
 
 					<td><%@ include file="selectcategory.jsp"%>
+					<input type="hidden" name="boardno" value="${board.boardno}" />
 					</td>
 				</tr>
 				<tr>
@@ -76,15 +85,14 @@ function validateForm() {
 							name="content" maxlength="3000">${board.content}</textarea></td>
 				</tr>
 				<tr height="50">
-					<td colspan="4" align="center">
+					<td colspan="4F" align="center">
 						<!-- 글쓰기 완료: submit으로 변경 -->
 						 <input type="submit" value="수정하기" />
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						
-						
 						 <!-- 글목록: 목록 페이지로 이동 -->
 						<input type="button" value="이전으로"
-						onclick="location.href='${pageContext.request.contextPath}/board/listcategory?category=${categoryId}'" />
+						onclick="location.href='${pageContext.request.contextPath}/detail?boardno=${board.boardno}'" />
 					</td>
 				</tr>
 			</table>

@@ -3,58 +3,27 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
-<head>
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>게시판 - 정책 소통 플랫폼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+<link rel="stylesheet" href="<c:url value='/resources/css/board.css' />">
 <meta charset="UTF-8">
 <title>새 글쓰기</title>
-<script>
-function validateForm() {
-    // 1. 요소 가져오기
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value.trim();
-    const mainCategory = document.getElementById('mainCategory').value;
-    const subCategory = document.getElementById('subCategory').value;
 
-    // 2. 유효성 검사 (content, mainCategory, subCategory 중 하나라도 비어있는지 확인)
-    if (title === "") {
-        alert("제목을 작성해주세요.");
-        // 해당 필드에 포커스 이동 (선택적)
-        document.getElementById('title').focus(); 
-        return false; // 제출 방지
-    }
-    
-    if (content === "") {
-        alert("내용을 작성해주세요.");
-        // 해당 필드에 포커스 이동 (선택적)
-        document.getElementById('content').focus(); 
-        return false; // 제출 방지
-    }
-
-    // mainCategory가 빈 문자열이거나 (선택 옵션의 value="") null인 경우
-    if (mainCategory === "" || mainCategory === null) {
-        alert("카테고리를 선택해주세요.");
-        document.getElementById('mainCategory').focus();
-        return false; // 제출 방지
-    }
-
-    // subCategory가 빈 문자열이거나 null인 경우
-    if (subCategory === "" || subCategory === null) {
-        alert("카테고리를 선택해주세요.");
-        document.getElementById('subCategory').focus();
-        return false; // 제출 방지
-    }
-
-    // 3. 모든 검사를 통과한 경우
-    return true; // 폼 제출 허용
-}
-</script>
 </head>
 <body>
-<a href="${pageContext.request.contextPath}/boardlistmain">
-    <h5 class="box-title">커뮤니티 메인</h5></a>
+<header class="header">
+    <%@ include file="../include/header.jsp"%>
+</header>
+
 	<center>
 		<h1>글쓰기</h1>
 		<form method="post"
-			action="${pageContext.request.contextPath}/board/register" onsubmit="return validateForm()"
+			action="${pageContext.request.contextPath}/register" onsubmit="return validateForm()"
 			name="write_frm">
 			<table>
 				<tr height="30">
@@ -83,11 +52,54 @@ function validateForm() {
 						
 						 <!-- 글목록: 목록 페이지로 이동 -->
 						<input type="button" value="이전으로"
-						onclick="location.href='${pageContext.request.contextPath}/board/listcategory?category=${categoryId}'" />
+						onclick="location.href='${pageContext.request.contextPath}/listcategory?category=${categoryId}&sort=${sort}'" />
 					</td>
 				</tr>
 			</table>
 		</form>
 	</center>
+	<script>
+
+function validateForm() {
+    console.log("validateForm 실행됨");
+    // 1. 요소 가져오기
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value.trim();
+    const mainCategory = document.getElementById('mainCategory').value;
+   //  const subCategory = document.getElementById('subCategory').value;
+
+    // 2. 유효성 검사 (content, mainCategory, subCategory 중 하나라도 비어있는지 확인)
+    if (title === "") {
+        alert("제목을 작성해주세요.");
+        // 해당 필드에 포커스 이동 (선택적)
+        document.getElementById('title').focus(); 
+        return false; // 제출 방지
+    }
+    
+    if (content === "") {
+        alert("내용을 작성해주세요.");
+        // 해당 필드에 포커스 이동 (선택적)
+        document.getElementById('content').focus(); 
+        return false; // 제출 방지
+    }
+
+    // mainCategory가 빈 문자열이거나 (선택 옵션의 value="") null인 경우
+    if (mainCategory === "" || mainCategory === null) {
+        alert("카테고리를 선택해주세요.");
+        document.getElementById('mainCategory').focus();
+        return false; // 제출 방지
+    }
+
+    /* subCategory가 빈 문자열이거나 null인 경우
+    if (subCategory === "" || subCategory === null) {
+        alert("카테고리를 선택해주세요.");
+        document.getElementById('subCategory').focus();
+        return false; // 제출 방지
+    }
+*/
+    // 3. 모든 검사를 통과한 경우
+    return true; // 폼 제출 허용
+}
+</script>
 </body>
 </html>

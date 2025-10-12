@@ -1,381 +1,497 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>게시판 - 정책 소통 플랫폼</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap"
+	rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 <link rel="stylesheet" href="<c:url value='/resources/css/board.css' />">
+<link rel="stylesheet" href="<c:url value='/resources/css/error.css' />">
+<link rel="stylesheet"
+	href="<c:url value='/resources/css/idfind.css' />">
+
 </head>
 <body>
 
-<header class="header">
+	<header class="header">
 		<%@ include file="../include/header.jsp"%>
 	</header>
-<!-- 페이지 헤더 -->
-<div class="page-header">
-  <div class="container">
-    <h1 class="page-main-title">게시판</h1>
-    <div class="social-share">
-      <button class="share-btn" onclick="shareKakao()" title="카카오톡 공유">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 0 1-1.727-.11l-4.408 2.883c-.501.265-.678.236-.472-.413l.892-3.678c-2.88-1.46-4.785-3.99-4.785-6.866C1.5 6.665 6.201 3 12 3z"/>
+
+	<!-- 페이지 헤더 -->
+	<div class="page-header">
+		<div class="container">
+			<h1 class="page-main-title">게시판</h1>
+			<div class="social-share">
+				<button class="share-btn" onclick="shareKakao()" title="카카오톡 공유">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path
+							d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 0 1-1.727-.11l-4.408 2.883c-.501.265-.678.236-.472-.413l.892-3.678c-2.88-1.46-4.785-3.99-4.785-6.866C1.5 6.665 6.201 3 12 3z" />
+        </svg>
+				</button>
+				<button class="share-btn" onclick="shareFacebook()" title="페이스북 공유">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path
+							d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        </svg>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- 카테고리 필터 섹션 -->
+	<section class="category-filter-section">
+		<div class="container">
+			<div class="category-filter-buttons">
+				<!-- JSTL을 사용하여 URL 파라미터 (param.categoryId) 값에 따라 active 클래스를 설정합니다. -->
+				<button
+					class="category-filter-btn ${empty param.categoryId ? 'active' : ''}"
+					onclick="filterByCategory('')">전체</button>
+				<button
+					class="category-filter-btn ${param.categoryId == 1 ? 'active' : ''}"
+					onclick="filterByCategory('1')">창업지원</button>
+				<button
+					class="category-filter-btn ${param.categoryId == 2 ? 'active' : ''}"
+					onclick="filterByCategory('2')">직업훈련</button>
+				<button
+					class="category-filter-btn ${param.categoryId == 3 ? 'active' : ''}"
+					onclick="filterByCategory('3')">취업지원</button>
+				<button
+					class="category-filter-btn ${param.categoryId == 4 ? 'active' : ''}"
+					onclick="filterByCategory('4')">청년일자리</button>
+				<button
+					class="category-filter-btn ${param.categoryId == 5 ? 'active' : ''}"
+					onclick="filterByCategory('5')">추가지원</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- 검색 섹션 -->
+	<section class="search-section">
+		<div class="container">
+			<form action="<c:url value='/board/search' />" method="get"
+				class="search-box-large">
+				<input type="text" name="keyword" class="search-input-large"
+					placeholder="게시글을 검색해보세요" value="${param.keyword}">
+				<button type="submit" class="search-btn-large">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path
+							d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
         </svg>
-      </button>
-      <button class="share-btn" onclick="shareFacebook()" title="페이스북 공유">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-</div>
+				</button>
+			</form>
+		</div>
+	</section>
 
-<!-- 검색 섹션 -->
-<section class="search-section">
-  <div class="container">
-    <form action="<c:url value='/board/search' />" method="get" class="search-box-large">
-      <input type="text" name="keyword" class="search-input-large" 
-             placeholder="게시글을 검색해보세요" 
-             value="${param.keyword}">
-      <button type="submit" class="search-btn-large">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-        </svg>
-      </button>
-    </form>
-    <button class="advanced-search-btn" onclick="toggleAdvancedSearch()">고급 검색</button>
-  </div>
-</section>
 
-<!-- 필터 섹션 -->
-<div class="filter-section">
-  <div class="container">
-    <div class="filter-group">
-      <form action="<c:url value='/board' />" method="get" style="display: flex; gap: 12px;">
-        <select name="category" class="filter-select" onchange="this.form.submit()">
-          <option value="">전체 카테고리</option>
-          <option value="policy" ${param.category == 'policy' ? 'selected' : ''}>정책 토론</option>
-          <option value="benefit" ${param.category == 'benefit' ? 'selected' : ''}>혜택 정보</option>
-          <option value="qna" ${param.category == 'qna' ? 'selected' : ''}>질문/답변</option>
-          <option value="free" ${param.category == 'free' ? 'selected' : ''}>자유게시판</option>
-        </select>
-        <input type="hidden" name="sort" value="${param.sort}">
-      </form>
-    </div>
-    <div class="view-options">
-      <a href="<c:url value='/board?sort=latest&category=${param.category}' />" 
-         class="sort-option-btn ${empty param.sort or param.sort == 'latest' ? 'active' : ''}">최신순</a>
-      <a href="<c:url value='/board?sort=popular&category=${param.category}' />" 
-         class="sort-option-btn ${param.sort == 'popular' ? 'active' : ''}">인기순</a>
-      <a href="<c:url value='/board?sort=comments&category=${param.category}' />" 
-         class="sort-option-btn ${param.sort == 'comments' ? 'active' : ''}">댓글순</a>
-    </div>
-  </div>
-</div>
+	<!-- 필터 섹션 -->
+	<div class="filter-section">
+		<div class="container">
+			<!-- 정렬 옵션: AJAX로 변경 -->
+			<div class="view-options">
+				<!-- JSTL을 사용하여 URL 파라미터 (param.sort) 값에 따라 active 클래스를 설정합니다. -->
+				<a href="javascript:void(0)" onclick="sortBy('recent')"
+					class="sort-option-btn ${empty param.sort || param.sort == 'recent' ? 'active' : ''}">최신순</a>
+				<a href="javascript:void(0)" onclick="sortBy('hot')"
+					class="sort-option-btn ${param.sort == 'hot' ? 'active' : ''}">인기순</a>
+				<a href="javascript:void(0)" onclick="sortBy('comments')"
+					class="sort-option-btn ${param.sort == 'comments' ? 'active' : ''}">댓글순</a>
+			</div>
+		</div>
+	</div>
 
-<!-- 게시글 목록 -->
-<div class="board-container">
-  <div class="container">
-    <c:choose>
-      <c:when test="${not empty boardList}">
-        <div class="board-list">
-          <!-- 게시판 헤더 -->
-          <div class="board-header">
-            <div>번호</div>
-            <div>제목</div>
-            <div class="board-author">작성자</div>
-            <div class="board-date">작성일</div>
-            <div>조회</div>
-          </div>
-          
-          <!-- 게시글 목록 -->
-          <c:forEach var="board" items="${boardList}" varStatus="status">
-            <div class="board-item ${board.isNotice ? 'notice-item' : ''}">
-              <div class="board-number">
-                <c:choose>
-                  <c:when test="${board.isNotice}">공지</c:when>
-                  <c:otherwise>${board.boardNo}</c:otherwise>
-                </c:choose>
-              </div>
-              <div class="board-title">
-                <c:if test="${board.isNotice}">
-                  <span class="notice-badge">공지</span>
-                </c:if>
-                <c:if test="${not empty board.category and not board.isNotice}">
-                  <span class="category-badge">${board.categoryName}</span>
-                </c:if>
-                <a href="<c:url value='/board/view/${board.boardNo}' />">
-                  <c:choose>
-                    <c:when test="${not empty param.keyword}">
-                      ${board.title.replaceAll(param.keyword, '<span class="search-highlight">' + param.keyword + '</span>')}
-                    </c:when>
-                    <c:otherwise>
-                      ${board.title}
-                    </c:otherwise>
-                  </c:choose>
-                  <c:if test="${board.commentCount > 0}">
-                    <span class="comment-count">[${board.commentCount}]</span>
-                  </c:if>
-                  <c:if test="${board.isNew}">
-                    <span class="new-badge"></span>
-                  </c:if>
-                  <c:if test="${board.isHot}">
-                    <span class="hot-badge">HOT</span>
-                  </c:if>
-                </a>
-              </div>
-              <div class="board-author">${board.authorName}</div>
-              <div class="board-date">${board.createDate}</div>
-              <div class="board-views">${board.viewCount}</div>
-            </div>
-          </c:forEach>
-        </div>
-        
-        <!-- 페이지네이션 -->
-        <c:if test="${totalPages > 1}">
-          <nav class="pagination-nav">
-            <c:if test="${currentPage > 1}">
-              <a href="<c:url value='/board?page=${currentPage - 1}&category=${param.category}&sort=${param.sort}&keyword=${param.keyword}' />" 
-                 class="page-arrow">‹</a>
-            </c:if>
-            
-            <c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
-              <a href="<c:url value='/board?page=${pageNum}&category=${param.category}&sort=${param.sort}&keyword=${param.keyword}' />" 
-                 class="page-number ${currentPage == pageNum ? 'active' : ''}">${pageNum}</a>
-            </c:forEach>
-            
-            <c:if test="${currentPage < totalPages}">
-              <a href="<c:url value='/board?page=${currentPage + 1}&category=${param.category}&sort=${param.sort}&keyword=${param.keyword}' />" 
-                 class="page-arrow">›</a>
-            </c:if>
-          </nav>
-        </c:if>
-      </c:when>
-      <c:otherwise>
-        <!-- 빈 상태 -->
-        <div class="empty-state">
-          <h3>
-            <c:choose>
-              <c:when test="${not empty param.keyword}">
-                "${param.keyword}"에 대한 검색 결과가 없습니다
-              </c:when>
-              <c:when test="${not empty param.category}">
-                해당 카테고리에 게시글이 없습니다
-              </c:when>
-              <c:otherwise>
-                게시글이 없습니다
-              </c:otherwise>
-            </c:choose>
-          </h3>
-          <p>
-            <c:choose>
-              <c:when test="${not empty param.keyword}">
-                다른 검색어를 시도해보세요.
-              </c:when>
-              <c:otherwise>
-                첫 번째 게시글을 작성해보세요!
-              </c:otherwise>
-            </c:choose>
-          </p>
-        </div>
-      </c:otherwise>
-    </c:choose>
-  </div>
-</div>
 
-<!-- 글쓰기 버튼 -->
-<c:if test="${not empty sessionScope.user}">
-  <a href="<c:url value='/board/write' />" class="write-btn" title="글쓰기">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-    </svg>
-  </a>
-</c:if>
 
-<!-- Top 버튼 -->
-<button class="top-button" id="topButton" aria-label="맨 위로 이동">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 4l-8 8h6v8h4v-8h6z"/>
-  </svg>
-</button>
+	<!-- 게시글 목록 -->
+	<div class="board-container">
+		<div class="container">
+			<div id="boardListContainer">
+				<c:if test="${not empty list}">
+					<!-- list 변수는 첫 페이지 로드 시 Controller가 보낸 데이터입니다. -->
+					<jsp:include page="/WEB-INF/views/board/boardlistFragment.jsp" />
+				</c:if>
+				<c:if test="${empty list}">
+					<div class="empty-state">
+						<h3>게시글이 없습니다</h3>
+						<p>첫 번째 게시글을 작성해보세요!</p>
+					</div>
+				</c:if>
+			</div>
+		</div>
+	</div>
 
-<script>
-// Top 버튼 기능
-const topButton = document.getElementById('topButton');
 
-window.addEventListener('scroll', function() {
-  if (window.scrollY > 300) {
-    topButton.classList.add('show');
-  } else {
-    topButton.classList.remove('show');
-  }
+
+
+
+
+	<!-- 플로팅 글쓰기 버튼 -->
+	<!-- 이 버튼의 URL은 JS에서 업데이트됩니다. -->
+	<a id="writeButton" class="write-btn" title="글쓰기" aria-label="새 게시글 작성">
+		<svg viewBox="0 0 24 24">
+    <path
+				d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+  </svg>
+	</a>
+
+	<!-- Top 버튼 -->
+	<button class="top-button" id="topButton" aria-label="맨 위로 이동">
+		<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 4l-8 8h6v8h4v-8h6z" />
+  </svg>
+	</button>
+
+
+	<script>
+
+// =================================================================
+// 1. 상태 변수 초기화 (URL 파라미터 기반)
+// =================================================================
+const CONTEXT_PATH = "${pageContext.request.contextPath}";
+
+// JSP에서 전달된 값 (없을 수도 있음)
+const jspCategoryId = "${param.categoryId}";
+const jspSort = "${param.sort}";
+const jspPage = "${param.page}";
+const jspKeyword = "${param.keyword}";
+
+//전역 선언 (let 으로 해야 window에 바인딩됨)
+let currentCategoryIdJS = "${param.categoryId}" && "${param.categoryId}" !== "null" ? "${param.categoryId}" : "";
+let currentSortJS = "${param.sort}" && "${param.sort}" !== "null" ? "${param.sort}" : "recent";
+let currentKeywordJS = "${param.keyword}" && "${param.keyword}" !== "null" ? "${param.keyword}" : "";
+let currentPageJS = parseInt("${param.page}") || 1;
+
+console.log("초기 상태:", {
+  currentCategoryIdJS,
+  currentSortJS,
+  currentPageJS,
+  currentKeywordJS
 });
 
-topButton.addEventListener('click', function() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-});
 
-// 검색 기능 개선
-const searchInput = document.querySelector('.search-input-large');
-if (searchInput) {
-  searchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      this.closest('form').submit();
-    }
-  });
+// DOM 요소
+const boardListContainer = $('#boardListContainer');
+
+
+// =================================================================
+// 2. 유틸리티 함수
+// =================================================================
+function getUrlParam(name, defaultValue) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name) || defaultValue;
 }
 
-// 고급 검색 토글
-function toggleAdvancedSearch() {
-  // 고급 검색 모달이나 패널을 여는 기능
-  alert('고급 검색 기능을 구현해주세요.');
-}
-
-// 소셜 공유 기능
-function shareKakao() {
-  const url = window.location.href;
-  const title = document.title;
-  
-  if (typeof Kakao !== 'undefined') {
-    Kakao.Link.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: title,
-        description: '정책 소통 플랫폼 게시판',
-        imageUrl: window.location.origin + '/resources/images/logo.png',
-        link: {
-          mobileWebUrl: url,
-          webUrl: url,
-        },
-      },
+function updateUrlParams(params) {
+    const url = new URL(window.location);
+    Object.keys(params).forEach(key => {
+        if (params[key] === '' || params[key] === null || params[key] === undefined) {
+            url.searchParams.delete(key);
+        } else {
+            url.searchParams.set(key, params[key]);
+        }
     });
-  } else {
-    alert('카카오톡 공유를 위해 카카오 SDK를 로드해주세요.');
-  }
+    history.pushState(null, '', url.toString());
+}
+
+function shareKakao() {
+    const url = window.location.href;
+    const title = document.title;
+    if (typeof Kakao !== 'undefined') {
+        Kakao.Link.sendDefault({
+            objectType: 'feed',
+            content: {
+                title: title,
+                description: '정책 소통 플랫폼 게시판',
+                imageUrl: window.location.origin + '/resources/images/logo.png',
+                link: { mobileWebUrl: url, webUrl: url },
+            },
+        });
+    } else {
+        console.error('카카오톡 공유를 위해 카카오 SDK를 로드해주세요.');
+    }
 }
 
 function shareFacebook() {
-  const url = encodeURIComponent(window.location.href);
-  const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-  window.open(shareUrl, '_blank', 'width=600,height=400');
+    const url = encodeURIComponent(window.location.href);
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+    window.open(shareUrl, '_blank', 'width=600,height=400');
 }
 
-// 게시글 목록 새로고침 (AJAX)
-function refreshBoardList() {
-  const currentUrl = new URL(window.location);
-  fetch(currentUrl.toString(), {
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-  })
-  .then(response => response.text())
-  .then(html => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const newBoardList = doc.querySelector('.board-list');
-    const currentBoardList = document.querySelector('.board-list');
+
+//글쓰기
+function updateWriteButtonUrl() {
+    const writeButton = $('#writeButton');
+    if (writeButton.length === 0) return;
+
+    // 'register' Controller가 'category' 대신 'categoryId'를 받도록 수정 가정
+    const categoryParam = currentCategoryIdJS ? `categoryId=${currentCategoryIdJS}` : ''; 
+    const sortParam = currentSortJS && currentSortJS !== 'recent' ? `sort=${currentSortJS}` : '';
     
-    if (newBoardList && currentBoardList) {
-      currentBoardList.innerHTML = newBoardList.innerHTML;
+    let url = `${CONTEXT_PATH}register`; 
+    const params = [categoryParam, sortParam].filter(p => p !== '').join('&');
+
+    if (params) {
+        url += `?${params}`;
     }
-  })
-  .catch(error => {
-    console.error('게시글 목록 새로고침 실패:', error);
-  });
+    writeButton.attr('href', url);
+    console.log("글쓰기 버튼 URL 업데이트 완료:", url);
+    
+    // 로그인 체크 추가
+    const loginNo = "${sessionScope.loginNo}";
+    writeButton.off("click").on("click", function(e){
+        if(!loginNo || loginNo === "null" || loginNo === ""){
+            e.preventDefault(); // 링크 이동 막기
+            alert("로그인 후 글쓰기가 가능합니다.");
+            location.href = "${pageContext.request.contextPath}/login";
 }
-
-// 키보드 네비게이션
-document.addEventListener('keydown', function(e) {
-  if (e.ctrlKey && e.key === '/') {
-    e.preventDefault();
-    if (searchInput) {
-      searchInput.focus();
-    }
-  }
-});
-
-// 무한 스크롤 (옵션)
-let isLoading = false;
-let currentPage = parseInt('${currentPage}') || 1;
-const totalPages = parseInt('${totalPages}') || 1;
-
-window.addEventListener('scroll', function() {
-  if (isLoading || currentPage >= totalPages) return;
-  
-  const scrollTop = window.pageYOffset;
-  const windowHeight = window.innerHeight;
-  const documentHeight = document.documentElement.scrollHeight;
-  
-  if (scrollTop + windowHeight >= documentHeight - 1000) {
-    loadMorePosts();
-  }
-});
-
-function loadMorePosts() {
-  if (isLoading) return;
-  
-  isLoading = true;
-  const nextPage = currentPage + 1;
-  
-  const url = new URL(window.location);
-  url.searchParams.set('page', nextPage);
-  
-  fetch(url.toString(), {
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-  })
-  .then(response => response.text())
-  .then(html => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const newItems = doc.querySelectorAll('.board-item');
-    const boardList = document.querySelector('.board-list');
-    
-    newItems.forEach(item => {
-      boardList.appendChild(item);
     });
-    
-    currentPage = nextPage;
-    isLoading = false;
-  })
-  .catch(error => {
-    console.error('더 많은 게시글 로드 실패:', error);
-    isLoading = false;
-  });
 }
 
-// 페이지 로드 시 실행
-document.addEventListener('DOMContentLoaded', function() {
-  // 검색어 하이라이트 기능이 서버에서 처리되지 않은 경우 클라이언트에서 처리
-  const keyword = '${param.keyword}';
-  if (keyword && keyword.trim()) {
-    const boardTitles = document.querySelectorAll('.board-title a');
-    boardTitles.forEach(title => {
-      const originalText = title.textContent;
-      const highlightedText = originalText.replace(
-        new RegExp(keyword, 'gi'), 
-        '<span class="search-highlight">$&</span>'
-      );
-      if (originalText !== highlightedText) {
-        title.innerHTML = highlightedText;
+
+// =================================================================
+// 3. AJAX 핵심 기능 (목록 로드)
+// =================================================================
+window.fetchBoardList = function() {
+    let finalCategoryId = null;
+
+    if (currentCategoryIdJS !== '' && currentCategoryIdJS !== null) {
+        if (!isNaN(parseInt(currentCategoryIdJS))) {
+             finalCategoryId = currentCategoryIdJS; // 유효한 숫자 형태의 문자열만 사용
+        } else {
+             console.warn("WARN: Invalid category ID detected. Ignoring category filter for this request:", currentCategoryIdJS);
+        }
+    }
+
+    const params = {
+        page: currentPageJS, 
+        size: 10,
+        sort: currentSortJS,
+        keyword: currentKeywordJS,
+    };
+    
+    // 유효한 categoryId가 있을 때만 파라미터에 추가
+    if (finalCategoryId !== null) { 
+        params.categoryId = finalCategoryId; 
+    } 
+
+    console.log("fetchBoardList 실행됨. 요청 파라미터:", params);
+    
+    // 로딩 상태 표시
+    boardListContainer.html('<div style="text-align:center; padding: 50px; color: #555;">게시글을 불러오는 중입니다...</div>');
+
+    $.ajax({
+        url: CONTEXT_PATH + '/ajaxList', 
+        type: 'GET',
+        data: params, 
+        success: function(fragment) {
+            const $fragment = $(fragment);
+            const $boardListWrapper = $fragment.filter('.board-list-fragment-wrapper'); 
+
+            if ($boardListWrapper.length > 0) {
+                boardListContainer.html(fragment);
+                attachBoardItemClickHandlers()
+                attachPaginationHandlers();
+            } else {
+                boardListContainer.html(`
+                    <div class="empty-state">
+                        <h3>해당 조건에 맞는 게시글이 없습니다</h3>
+                        <p>필터/정렬 옵션을 변경하거나 첫 번째 게시글을 작성해보세요!</p>
+                    </div>
+                `);
+            }
+            
+            // AJAX 성공 후 URL 상태 동기화 및 글쓰기 버튼 업데이트
+            const paramsToUpdate = {
+                page: currentPageJS > 1 ? currentPageJS : null, 
+                categoryId: finalCategoryId || null, // 수정된 finalCategoryId 사용
+                sort: currentSortJS !== 'recent' ? currentSortJS : null, 
+                keyword: currentKeywordJS || null
+            };
+            updateUrlParams(paramsToUpdate);
+            updateWriteButtonUrl(); 
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX 요청 실패:', error);
+            boardListContainer.html(`
+                <div class="empty-state" style="color: red;">
+                    <h3>게시글을 불러오는데 실패했습니다. (오류: ${xhr.status} ${status})</h3>
+                    <p>잠시 후 다시 시도해 주세요. 계속되면 관리자에게 문의 바랍니다.</p>
+                </div>
+            `);
+        }
+    });
+};
+
+// =================================================================
+// 4. 필터 및 정렬 함수
+// =================================================================
+// 카테고리 필터 함수
+window.filterByCategory = function(categoryId) {
+	currentPageJS = 1; 
+	currentCategoryIdJS = categoryId; 
+ 
+	// 버튼 active 스타일 변경 
+	document.querySelectorAll('.category-filter-btn')
+		.forEach(btn => btn.classList.remove('active'));
+	const clickedBtn = document.querySelector(`.category-filter-btn[onclick="filterByCategory('${categoryId}')"]`);
+	if (clickedBtn) clickedBtn.classList.add('active');
+ 
+	window.fetchBoardList(); 
+};
+
+
+// 정렬 기준 변경 함수
+window.sortBy = function(sortType) {
+	currentPageJS = 1; 
+	currentSortJS = sortType; 
+
+	// 버튼 active 스타일 변경 
+	document.querySelectorAll('.view-options .sort-option-btn')
+		.forEach(btn => btn.classList.remove('active'));
+	const clickedBtn = document.querySelector(`.view-options a[onclick="sortBy('${sortType}')"]`);
+	if (clickedBtn) clickedBtn.classList.add('active');
+    
+	window.fetchBoardList();
+};
+
+
+//=================================================================
+//5. 게시글 행 클릭 이벤트 핸들러 (새로 추가)
+//=================================================================
+window.attachBoardItemClickHandlers = function() {
+  // 네임스페이스를 붙여서 off 처리를 안전하게 함
+  $(document).off('click.boardItem', '.board-item.clickable')
+    .on('click.boardItem', '.board-item.clickable', function(e) {
+      // 다른 핸들러/버블링을 완전히 차단
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      // 여러 방식으로 boardno 확인
+      const attrBoardno = $(this).attr('data-boardno');
+      const dataBoardno = $(this).data('boardno');
+      let boardno = dataBoardno !== undefined ? dataBoardno : attrBoardno;
+
+      // 디버그 로그: 원시값/타입 확인
+      console.log('[DEBUG] attrBoardno:', attrBoardno, ' dataBoardno:', dataBoardno, ' resolved boardno:', boardno, ' typeof:', typeof boardno);
+
+      boardno = String(boardno).trim();
+
+      if (!boardno || isNaN(Number(boardno)) || Number(boardno) <= 0) {
+        console.warn('[WARN] invalid boardno:', boardno);
+        return;
       }
+
+      // categoryId 가져오기 (없으면 null)
+      const currentCategoryId = (new URLSearchParams(window.location.search)).get('categoryId');
+
+      // CONTEXT_PATH가 /project 또는 빈값일 수 있으니 안전하게 조합
+      const base = typeof CONTEXT_PATH === 'string' ? CONTEXT_PATH : '';
+      const sep = base && base.endsWith('/') ? '' : '/';
+      const targetUrl = base + sep + 'detail?boardno=' + encodeURIComponent(boardno) + (currentCategoryId ? '&categoryId=' + encodeURIComponent(currentCategoryId) : '');
+
+      console.log('[DEBUG] final targetUrl ->', targetUrl);
+
+      // 최종 이동
+      window.location.href = targetUrl;
     });
-  }
+};
+
+
+//페이지네이션
+window.attachPaginationHandlers=function(){
+    // 페이지 번호 클릭
+    $('#boardListContainer .pagination-nav a.page-number').off('click').on('click', function(e){
+        e.preventDefault();
+        const href = $(this).attr('href');
+        const params = new URLSearchParams(href.split('?')[1]);
+        currentPageJS = parseInt(params.get('page')) || 1;
+        currentCategoryIdJS = params.get('category') || '';
+        currentSortJS = params.get('sort') || 'recent';
+
+        window.fetchBoardList(); // AJAX로 다시 불러오기
+    });
+
+    // 이전/다음 화살표 클릭
+    $('#boardListContainer .pagination-nav a.page-arrow').off('click').on('click', function(e){
+        e.preventDefault();
+        const href = $(this).attr('href');
+        const params = new URLSearchParams(href.split('?')[1]);
+        currentPageJS = parseInt(params.get('page')) || 1;
+        currentCategoryIdJS = params.get('category') || '';
+        currentSortJS = params.get('sort') || 'recent';
+
+        window.fetchBoardList();
+    });
+}
+
+
+
+// =================================================================
+// 5. DOMContentLoaded
+// =================================================================
+document.addEventListener("DOMContentLoaded", function() {
+	// Top 버튼 기능
+	const topButton = document.getElementById('topButton');
+	
+	 const searchInput = document.querySelector(".search-input-large");
+	  const searchButton = document.querySelector(".search-btn-large");
+
+	  if (searchInput && searchButton) {
+		    searchButton.addEventListener("click", function(e) {
+		      e.preventDefault(); // form submit 방지
+		      const keyword = searchInput.value.trim();
+		      currentKeywordJS = keyword;
+		      currentPageJS = 1;
+		      fetchBoardList();
+		    });
+
+		    searchInput.addEventListener("keypress", function(e) {
+		      if (e.key === "Enter") {
+		        e.preventDefault(); // form submit 방지
+		        searchButton.click();
+		      }
+		    });
+		  }
+	  
+	if (topButton) { 
+		window.addEventListener('scroll', function() {
+			if (window.scrollY > 300) {
+				topButton.classList.add('show');
+			} else {
+				topButton.classList.remove('show');
+			}
+		});
+
+		topButton.addEventListener('click', function() {
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			});
+		});
+	} 
+	updateWriteButtonUrl();
+	
+	// JSP에서 목록이 로드되지 않았거나, URL에 상태가 저장된 경우 AJAX로 로드
+	const initialListPresent = boardListContainer.find('.board-list-fragment-wrapper').length > 0;
+	
+	if (!initialListPresent || currentCategoryIdJS !== '' || currentSortJS !== 'recent' || currentPageJS > 1 || currentKeywordJS !== '') {
+		window.fetchBoardList();
+	} else {
+        attachBoardItemClickHandlers();
+    }
 });
+ 
 </script>
+
 
 </body>
 </html>
