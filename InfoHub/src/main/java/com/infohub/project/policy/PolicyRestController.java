@@ -25,14 +25,14 @@ public class PolicyRestController {
 
     // 정책 상세 조회
     @GetMapping("/{id}")
-    public PolicyDTO getPolicyDetail(@PathVariable("id") int policyId) throws SQLException {
-        return service.findPolicyDetail(policyId);
+    public PolicyDTO getPolicyDetail(@PathVariable("id") int registrationNo) throws SQLException {
+        return service.findPolicyDetail(registrationNo);
     }
 
     // 좋아요 증가
     @PostMapping("/{id}/like")
-    public String likePolicy(@PathVariable("id") int policyId) throws SQLException {
-        service.increaseLikes(policyId);
+    public String likePolicy(@PathVariable("id") int registrationNo) throws SQLException {
+        service.increaseLikes(registrationNo);
         return "like_success";
     }
 }
