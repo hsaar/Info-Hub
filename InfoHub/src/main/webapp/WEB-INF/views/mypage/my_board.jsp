@@ -22,9 +22,11 @@
  	  <div class="board-filter-left">
         <select id="boardFilter" class="board-filter-select">
           <option value="all">전체</option>
-    	  <option value="1">후기</option>
-    	  <option value="2">소식</option>
-    	  <option value="3">일상/기타</option>
+    	  <option value="1">창업지원</option>
+    	  <option value="2">직업훈련</option>
+    	  <option value="3">취업지원</option>
+    	  <option value="4">청년일자리</option>
+    	  <option value="5">추가지원</option>
         </select>
       </div>
  	  <div class="board-filter-right">
