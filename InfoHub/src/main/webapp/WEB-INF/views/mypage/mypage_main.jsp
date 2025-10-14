@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -31,9 +30,6 @@
         <a href="#" class="menu-item" data-page="my-info">
           <span class="menu-text">나의 정보</span>
         </a>
-        <a href="<c:url value='/scraps'/>" class="menu-item" data-page="my-policy">
-          <span class="menu-text">스크랩 정책</span>
-        </a>
         <a href="#" class="menu-item" data-page="likes">
           <span class="menu-text">좋아요</span>
         </a>
@@ -58,12 +54,6 @@
       <!-- 나의 정보 페이지 (mypage_box.jsp 포함) -->
       <div id="my-info-content" class="content-box" style="display: none;">
         <%@ include file="my_box.jsp"%>
-      </div>
-
-      <!-- 나의 정책 페이지 -->
-      <div id="my-policy-content" class="content-box" style="display: none;">
-          <%@ include file="my_scrap.jsp"%>
-        <p>스크랩한 혜택 목록이 표시됩니다.</p>
       </div>
       
        <!-- 내 혜택 모아보기 페이지 -->
@@ -231,6 +221,6 @@
 	});
   
 </script>
-
+ <jsp:include page="../include/footer.jsp"/>
 </body>
 </html>

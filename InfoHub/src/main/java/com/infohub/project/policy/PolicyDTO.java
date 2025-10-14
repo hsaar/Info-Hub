@@ -6,15 +6,15 @@ public class PolicyDTO {
     private String content;
 
     // 상세
-    private String applicationLink;
-    private String applicationStart;
-    private String applicationEnd;
+    private String link;
+    private String startDate;
+    private String endDate;
     private int likes;
     private int minAge;
     private int maxAge;
 
     // 필터링
-    private int policyId;
+    private int registrationNo;
     private int regionId;
     private int categoryId;
     
@@ -24,8 +24,8 @@ public class PolicyDTO {
     public PolicyDTO() {}
 
     // getter & setter
-    public int getPolicyId() { return policyId; }
-    public void setPolicyId(int policyId) { this.policyId = policyId; }
+    public int getRegistrationNo() { return registrationNo; }
+    public void setRegistrationNo(int registrationNo) { this.registrationNo = registrationNo; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -33,14 +33,14 @@ public class PolicyDTO {
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
 
-    public String getApplicationLink() { return applicationLink; }
-    public void setApplicationLink(String applicationLink) { this.applicationLink = applicationLink; }
+    public String getLink() { return link; }
+    public void setLink(String link) { this.link = link; }
 
-    public String getApplicationStart() { return applicationStart; }
-    public void setApplicationStart(String applicationStart) { this.applicationStart = applicationStart; }
+    public String getStartDate() { return startDate; }
+    public void setStartDate(String startDate) { this.startDate = startDate; }
     
-    public String getApplicationEnd() { return applicationEnd; }
-    public void setApplicationEnd(String applicationEnd) { this.applicationEnd = applicationEnd; }
+    public String getEndDate() { return endDate; }
+    public void setEndDate(String endDate) { this.endDate = endDate; }
 
     public int getLikes() { return likes; }
     public void setLikes(int likes) { this.likes = likes; }
@@ -63,7 +63,7 @@ public class PolicyDTO {
     @Override
     public String toString() {
         return "PolicyDTO{" +
-                "id=" + policyId +
+                "No=" + registrationNo +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", regionId=" + regionId +

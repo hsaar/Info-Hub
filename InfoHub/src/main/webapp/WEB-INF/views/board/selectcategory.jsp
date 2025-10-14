@@ -12,7 +12,7 @@
 </head>
 <body>
 	<form action="/board/save" method="post">
-    <label>게시판 선택</label>
+    <label></label>
     <select id="mainCategory" name="categoryId" required>
     <option value="">-- 선택 --</option>
     <c:forEach var="m" items="${mainCategories}">

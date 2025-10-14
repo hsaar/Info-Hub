@@ -31,46 +31,29 @@
 	<div class="page-header">
 		<div class="container">
 			<h1 class="page-main-title">게시판</h1>
-			<div class="social-share">
-				<button class="share-btn" onclick="shareKakao()" title="카카오톡 공유">
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path
-							d="M12 3c5.799 0 10.5 3.664 10.5 8.185 0 4.52-4.701 8.184-10.5 8.184a13.5 13.5 0 0 1-1.727-.11l-4.408 2.883c-.501.265-.678.236-.472-.413l.892-3.678c-2.88-1.46-4.785-3.99-4.785-6.866C1.5 6.665 6.201 3 12 3z" />
-        </svg>
-				</button>
-				<button class="share-btn" onclick="shareFacebook()" title="페이스북 공유">
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path
-							d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-        </svg>
-				</button>
-			</div>
+			
 		</div>
 	</div>
 
 	<!-- 카테고리 필터 섹션 -->
-	<section class="category-filter-section">
-		<div class="container">
-			<div class="category-filter-buttons">
-				<!-- JSTL을 사용하여 URL 파라미터 (param.categoryId) 값에 따라 active 클래스를 설정합니다. -->
-				<button
-					class="category-filter-btn ${empty param.categoryId ? 'active' : ''}"
-					onclick="filterByCategory('')">전체</button>
-				<button
-					class="category-filter-btn ${param.categoryId == 1 ? 'active' : ''}"
-					onclick="filterByCategory('1')">창업지원</button>
-				<button
-					class="category-filter-btn ${param.categoryId == 2 ? 'active' : ''}"
-					onclick="filterByCategory('2')">직업훈련</button>
-				<button
-					class="category-filter-btn ${param.categoryId == 3 ? 'active' : ''}"
-					onclick="filterByCategory('3')">취업지원</button>
-				<button
-					class="category-filter-btn ${param.categoryId == 4 ? 'active' : ''}"
-					onclick="filterByCategory('4')">청년일자리</button>
-				<button
-					class="category-filter-btn ${param.categoryId == 5 ? 'active' : ''}"
-					onclick="filterByCategory('5')">추가지원</button>
+	
+<!-- 카테고리 필터 섹션 -->
+<section class="filter-section">
+  <div class="container">
+    <div class="category-filter-buttons">
+      <button class="filter-btn ${empty param.categoryNo ? 'active' : ''}" 
+              onclick="filterByCategory('')">전체</button>
+      <button class="filter-btn ${param.categoryNo == '1' ? 'active' : ''}" 
+              onclick="filterByCategory('1')">창업지원</button>
+      <button class="filter-btn ${param.categoryNo == '2' ? 'active' : ''}" 
+              onclick="filterByCategory('2')">직업훈련</button>
+      <button class="filter-btn ${param.categoryNo == '3' ? 'active' : ''}" 
+              onclick="filterByCategory('3')">취업지원</button>
+      <button class="filter-btn ${param.categoryNo == '4' ? 'active' : ''}" 
+              onclick="filterByCategory('4')">청년일자리</button>
+      <button class="filter-btn ${param.categoryNo == '5' ? 'active' : ''}" 
+              onclick="filterByCategory('5')">추가지원</button>
+     
 			</div>
 		</div>
 	</section>

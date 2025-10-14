@@ -23,7 +23,7 @@ public class MyBoardDAO {
             "COUNT(h.heartId) AS hearts, b.categoryboard_categoryId AS categoryId " +
             "FROM board b " +
             "LEFT JOIN heartsboard h ON b.boardno = h.boardNo " +
-            "WHERE b.login_loginNo = ? " +
+            "WHERE b.loginLoginNo = ? " +
             "GROUP BY b.boardno, b.title, b.content, b.regiDate, b.readcnt, b.categoryboard_categoryId "
         );
 
@@ -60,8 +60,8 @@ public class MyBoardDAO {
     // 게시글 상세 조회
     public MyBoardDTO findBoardDetail(int boardNo, int loginNo) throws SQLException {
         MyBoardDTO dto = null;
-        String sql = "SELECT boardno, title, content, regiDate, readcnt, login_loginNo, categoryboard_categoryId AS categoryId " +
-                     "FROM board WHERE boardno = ? AND login_loginNo = ?";
+        String sql = "SELECT boardno, title, content, regiDate, readcnt, loginLoginNo, categoryboard_categoryId AS categoryId " +
+                     "FROM board WHERE boardno = ? AND loginLoginNo = ?";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -77,7 +77,7 @@ public class MyBoardDAO {
                     dto.setContent(rs.getString("content"));
                     dto.setRegiDate(rs.getString("regiDate"));
                     dto.setReadCnt(rs.getInt("readcnt"));
-                    dto.setLoginNo(rs.getInt("login_loginNo"));
+                    dto.setLoginNo(rs.getInt("loginLoginNo"));
                     dto.setCategoryId(rs.getInt("categoryId")); // ← 추가
                 }
             }
@@ -87,7 +87,7 @@ public class MyBoardDAO {
 
     // 게시글 수정
     public void updateBoard(MyBoardDTO dto) throws SQLException {
-        String sql = "UPDATE board SET title=?, content=? WHERE boardno=? AND login_loginNo=?";
+        String sql = "UPDATE board SET title=?, content=? WHERE boardno=? AND loginLoginNo=?";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -101,17 +101,31 @@ public class MyBoardDAO {
         }
     }
 
-    // 게시글 삭제
+   // 게시글 삭제
     public void deleteBoard(int boardNo, int loginNo) throws SQLException {
-        String sql = "DELETE FROM board WHERE boardno=? AND login_loginNo=?";
+        try (Connection conn = dataSource.getConnection()) {
+            conn.setAutoCommit(false);
 
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // 해당 게시글의 댓글 삭제
+            String deleteCommentsSql = "DELETE FROM commentboard WHERE boardno = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(deleteCommentsSql)) {
+                pstmt.setInt(1, boardNo);
+                pstmt.executeUpdate();
+            }
 
-            pstmt.setInt(1, boardNo);
-            pstmt.setInt(2, loginNo);
+            // 게시글 삭제
+            String deleteBoardSql = "DELETE FROM board WHERE boardno=? AND loginLoginNo=?";
+            try (PreparedStatement pstmt = conn.prepareStatement(deleteBoardSql)) {
+                pstmt.setInt(1, boardNo);
+                pstmt.setInt(2, loginNo);
+                pstmt.executeUpdate();
+            }
 
-            pstmt.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
         }
     }
+
 }

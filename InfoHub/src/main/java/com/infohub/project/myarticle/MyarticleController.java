@@ -119,9 +119,6 @@ public class MyarticleController {
 		return "redirect:/myArticle";
 	}
 	
-//	@GetMapping("/myArticle")
-//	public String backMyAricle() {
-//		return "/myArticle";
-//	}
+
 	
 }

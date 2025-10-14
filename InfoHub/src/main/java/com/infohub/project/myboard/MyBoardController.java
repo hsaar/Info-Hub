@@ -33,14 +33,16 @@ public class MyBoardController {
 
     // 내가 쓴 게시글 상세 조회
     @GetMapping("/detail")
-    public String boardDetail(@RequestParam("boardNo") int boardNo,
-                              @RequestParam("loginNo") int loginNo,
+    public String boardDetail(@RequestParam("boardno") int boardno,
+    						  HttpSession session,
                               Model model) {
+    	Integer loginNo = (Integer)session.getAttribute("loginNo");
+    	
         try {
-            MyBoardDTO board = service.getBoardDetail(boardNo, loginNo);
+            MyBoardDTO board = service.getBoardDetail(boardno, loginNo);
             if (board != null) {
                 model.addAttribute("board", board);
-                return "mypage/my_board"; 
+                return "board/boarddetail"; 
             } else {
                 model.addAttribute("error", "본인 게시글만 조회할 수 있습니다.");
                 return "policy/error"; // error.jsp

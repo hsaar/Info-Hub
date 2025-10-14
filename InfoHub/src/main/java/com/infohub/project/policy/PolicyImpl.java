@@ -20,8 +20,8 @@ public class PolicyImpl implements PolicyService {
 
     // 상세 조회 → policyId 단일 정책 불러오기
     @Override
-    public PolicyDTO findPolicyDetail(int policyId) throws SQLException {
-        return dao.findPolicyDetail(policyId);
+    public PolicyDTO findPolicyDetail(int registrationNo) throws SQLException {
+        return dao.findPolicyDetail(registrationNo);
     }
 
     // 정책 추가 (관리자용)
@@ -38,13 +38,13 @@ public class PolicyImpl implements PolicyService {
 
     // 정책 삭제 (관리자용)
     @Override
-    public void deletePolicy(int policyId) throws SQLException {
-        dao.deletePolicy(policyId);
+    public void deletePolicy(int registrationNo) throws SQLException {
+        dao.deletePolicy(registrationNo);
     }
 
     // 좋아요 증가
     @Override
-    public void increaseLikes(int policyId) throws SQLException {
-        dao.increaseLikes(policyId);
+    public void increaseLikes(int registrationNo) throws SQLException {
+        dao.increaseLikes(registrationNo);
     }
 }

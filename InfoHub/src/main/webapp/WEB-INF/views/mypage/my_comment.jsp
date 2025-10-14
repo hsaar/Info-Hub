@@ -147,6 +147,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	        '<div class="comment-footer">' +
 	        '  <button class="comment-btn delete-btn" data-commentid="' + c.commentId + '">삭제</button>' +
 	        '</div>';
+	        
+	     //상세페이지 이동 기능 추가
+	        card.addEventListener('click', (e) => {
+	          // 삭제 버튼 클릭은 예외 처리
+	          if (e.target.classList.contains('delete-btn')) return;
+
+	          if (c.type === 'board' && c.boardNo) {
+	            window.location.href = '<c:url value="/detail"/>' + '?boardno=' + c.boardNo;
+	          } else if (c.type === 'article' && c.articleId) {
+	            window.location.href = "/project/articleContent?articleId=" + c.articleId;
+	          } else {
+	            alert("상세페이지로 이동할 수 없습니다");
+	            console.log(c);
+	          }
+	        });
 
 	      commentsList.appendChild(card);
 	    });
@@ -197,16 +212,22 @@ document.addEventListener('DOMContentLoaded', () => {
 	  filterSelect.addEventListener('change', async () => {
 	    currentPage = 1; // 페이지 초기화
 	    let comments = [];
+	    
 	    if (filterSelect.value === 'board') {
-	      comments = await fetchBoardComments();
+	        comments = await fetchBoardComments();
+	        comments = comments.map(c => ({ ...c, type: 'board' }));
 	    } else if (filterSelect.value === 'article') {
-	      comments = await fetchArticleComments();
+	        comments = await fetchArticleComments();
+	        comments = comments.map(c => ({ ...c, type: 'article' }));
 	    } else if (filterSelect.value === 'all') {
-	      const [boardComments, articleComments] = await Promise.all([
-	        fetchBoardComments(),
-	        fetchArticleComments()
-	      ]);
-	      comments = [...boardComments, ...articleComments];
+	        const [boardComments, articleComments] = await Promise.all([
+	            fetchBoardComments(),
+	            fetchArticleComments()
+	        ]);
+	        comments = [
+	            ...boardComments.map(c => ({ ...c, type: 'board' })),
+	            ...articleComments.map(c => ({ ...c, type: 'article' }))
+	        ];
 	    }
 
 	    currentComments = comments;
@@ -219,65 +240,75 @@ document.addEventListener('DOMContentLoaded', () => {
 	    renderComments(sortedComments);
 	  });
 
-	  // 삭제 기능
+	  // 삭제
 	  commentsList.addEventListener('click', async (e) => {
-	    if (!e.target.classList.contains('delete-btn')) return;
+	      if (!e.target.classList.contains('delete-btn')) return;
 
-	    const commentId = e.target.getAttribute('data-commentid');
-	    if (!commentId) return;
+	      const commentId = e.target.getAttribute('data-commentid');
+	      if (!commentId) return;
 
-	    if (!confirm("정말 삭제하시겠습니까?")) return;
+	      if (!confirm("정말 삭제하시겠습니까?")) return;
 
-	    try {
-	      let url = '';
-	      if (filterSelect.value === 'board') {
-	        url = '<c:url value="/board/comments/delete"/>' + '/' + commentId;
-	      } else if (filterSelect.value === 'article') {
-	        url = '<c:url value="/article/comments/delete"/>' + '/' + commentId;
-	      } else if (filterSelect.value === 'all') {
-	        const commentType = currentComments.find(c => c.commentId == commentId)?.type;
-	        if (!commentType) {
-	          console.warn("삭제 대상 댓글 유형을 알 수 없습니다.");
-	          return;
-	        }
-	        url = commentType === 'board'
-	          ? '<c:url value="/board/comments/delete"/>' + '/' + commentId
-	          : '<c:url value="/article/comments/delete"/>' + '/' + commentId;
+	      try {
+	          let url = '';
+
+	          if (filterSelect.value === 'board') {
+	              url = '<c:url value="/board/comments/delete"/>' + '/' + commentId;
+	          } else if (filterSelect.value === 'article') {
+	              url = '<c:url value="/article/comments/delete"/>' + '/' + commentId;
+	          } else if (filterSelect.value === 'all') {
+	              let commentObj = currentComments.find(c => c.commentId == commentId);
+
+	              if (!commentObj.type) {
+	                  commentObj.type = commentObj.boardno ? 'board' : 'article';
+	              }
+
+	              url = commentObj.type === 'board'
+	                  ? '<c:url value="/board/comments/delete"/>' + '/' + commentId
+	                  : '<c:url value="/article/comments/delete"/>' + '/' + commentId;
+	          }
+
+	          await fetch(url, {
+	              method: 'POST',
+	              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	              body: 'loginNo=<%= session.getAttribute("loginNo") %>'
+	          });
+
+	          currentComments = currentComments.filter(c => c.commentId != commentId);
+	          renderComments(currentComments);
+
+	      } catch (err) {
+	          console.error("댓글 삭제 실패:", err);
+	          alert("삭제 중 오류가 발생했습니다.");
 	      }
-
-	      await fetch(url, {
-	        method: 'POST',
-	        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-	        body: 'loginNo=<%= session.getAttribute("loginNo") %>'
-	      });
-
-	      currentComments = currentComments.filter(c => c.commentId != commentId);
-	      renderComments(currentComments);
-	    } catch (err) {
-	      console.error("댓글 삭제 실패:", err);
-	      alert("삭제 중 오류가 발생했습니다.");
-	    }
 	  });
 
-	  // 초기 실행
+
+	   // 초기 실행
 	  (async function init() {
-	    currentPage = 1;
-	    const [boardComments, articleComments] = await Promise.all([
-	      fetchBoardComments(),
-	      fetchArticleComments()
-	    ]);
-	    currentComments = [...boardComments, ...articleComments];
+	      currentPage = 1;
+	      const [boardComments, articleComments] = await Promise.all([
+	          fetchBoardComments(),
+	          fetchArticleComments()
+	      ]);
 
-	    // 최신순 정렬
-	    const sortedComments = sortComments(currentComments, 'latest');
+	      // 각 댓글 type 필드 추가
+	      const boardCommentsWithType = boardComments.map(c => ({ ...c, type: 'board' }));
+	      const articleCommentsWithType = articleComments.map(c => ({ ...c, type: 'article' }));
 
-	    // 정렬 버튼 초기화
-	    sortBtns.forEach(btn => btn.classList.remove('active'));
-	    sortBtns[0].classList.add('active'); 
+	      currentComments = [...boardCommentsWithType, ...articleCommentsWithType];
 
-	    renderComments(sortedComments);
-	    filterSelect.value = 'all';
+	      // 최신순 정렬
+	      const sortedComments = sortComments(currentComments, 'latest');
+
+	      // 정렬 버튼 초기화
+	      sortBtns.forEach(btn => btn.classList.remove('active'));
+	      sortBtns[0].classList.add('active');
+
+	      renderComments(sortedComments);
+	      filterSelect.value = 'all';
 	  })();
+
 
 	});
 

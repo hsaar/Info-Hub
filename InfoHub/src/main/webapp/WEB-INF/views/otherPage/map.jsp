@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -31,11 +31,11 @@
     <!-- 카테고리 필터 버튼 -->
   	<div class="filter-buttons">
     	<button class="filter-btn active" data-filter="all">종합</button>
-    	<button class="filter-btn" data-filter="real-estate">부동산</button>
-    	<button class="filter-btn" data-filter="stock">주식</button>
-    	<button class="filter-btn" data-filter="savings">적금</button>
-    	<button class="filter-btn" data-filter="welfare">복지</button>
-    	<button class="filter-btn" data-filter="startup">창업</button>
+    	<button class="filter-btn" data-filter="real-estate">일자리취업</button>
+    	<button class="filter-btn" data-filter="stock">주거/복지</button>
+    	<button class="filter-btn" data-filter="savings">교육</button>
+    	<button class="filter-btn" data-filter="welfare">문화/여가</button>
+    	<button class="filter-btn" data-filter="startup">금융/경제</button>
   	</div>
     
     <!-- 카카오맵 영역 -->
@@ -182,35 +182,6 @@ function initMap() {
       
       polygons.push(polygon);
       overlaySet(name, points);
-
-      // 마우스 오버 이벤트 - 즉시 반응
-      kakao.maps.event.addListener(polygon, 'mouseover', function(mouseEvent) {
-        if (currentPolygon !== polygon) {
-          polygon.setOptions({
-            fillColor: '#93c5fd',
-            fillOpacity: 0.6
-          });
-        }
-        
-        var content = '<div style="padding:8px 12px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); border:2px solid #0B50D0;">';
-        content += '<div style="font-weight:700; color:#0B50D0; font-size:14px;">' + name + '</div>';
-        content += '</div>';
-        
-        customOverlay.setContent(content);
-        customOverlay.setPosition(mouseEvent.latLng);
-        customOverlay.setMap(map);
-      });
-
-      // 마우스 아웃 이벤트 - 즉시 반응
-      kakao.maps.event.addListener(polygon, 'mouseout', function() {
-        if (currentPolygon !== polygon) {
-          polygon.setOptions({
-            fillColor: '#fff',
-            fillOpacity: 0.7
-          });
-        }
-        customOverlay.setMap(null);
-      });
    
       // 클릭 이벤트 - 즉시 반응
       kakao.maps.event.addListener(polygon, 'click', function() {
@@ -550,6 +521,16 @@ function renderPageForCount(totalCount) {
     li.appendChild(strong);
     li.appendChild(document.createElement("br"));
     li.appendChild(span);
+    
+    //상세페이지 이동
+    li.style.cursor = "pointer";
+    li.addEventListener("click", function() {
+      if (p.registrationNo) {
+        window.location.href = "/project/registrationContent?registrationNo=" + p.registrationNo;
+      } else {
+        alert("정책 ID가 없습니다.");
+      }
+    });
 
     fragment.appendChild(li);
   });

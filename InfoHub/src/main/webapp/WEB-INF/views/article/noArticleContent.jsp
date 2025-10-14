@@ -21,37 +21,262 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>articleContent</title>
+<title>noArticleContent</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
 	href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+<link rel="stylesheet" href="<c:url value='/resources/css/articleContent.css' />">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
 
 
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.js"></script>
+
 
 <style>
 
-    .btn-common {
-    display: inline-block;
-    font-size: 0.8rem;        /* 글자 크기 통일 */
-    padding: 8px 18px;      /* 버튼 높이와 너비 통일 */
-    border-radius: 25px;    /* 둥근 모서리 */
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-    position: relative;   /* 클릭 가능하도록 */
-    z-index: 10;          /* 다른 요소 위로 */
-    background-color: #eee; /* 테스트용 배경 */
+.btn-common {
+   display: inline-block;
+   font-size: 0.8rem;        /* 글자 크기 통일 */
+   padding: 8px 18px;      /* 버튼 높이와 너비 통일 */
+   border-radius: 25px;    /* 둥근 모서리 */
+   border: none;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   text-align: center;
+   position: relative;   /* 클릭 가능하도록 */
+   z-index: 10;          /* 다른 요소 위로 */
+   background-color: #eee; /* 테스트용 배경 */
 }
 
 .btn-common::before {
     pointer-events: none; /* 버튼 위 장식 요소 클릭 막지 않음 */
+}
+
+#keywordWordCloud {
+  display: block;
+  width: 100%;
+  height: 230px;
+  
+}
+
+/* 댓글 영역 전체 */
+.comment-section {
+    background-color: #fefefe;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: 30px;
+}
+
+/* 댓글 제목 */
+.comment-section h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 8px;
+}
+
+/* 댓글 입력창과 버튼 한 줄 */
+.comment-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+/* 입력창 */
+.comment-input-group input[type="text"] {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.comment-input-group input[type="text"]:focus {
+    outline: none;
+    border-color: #4A90E2;
+    box-shadow: 0 0 6px rgba(74,144,226,0.3);
+}
+
+/* 아이콘 + userId + 날짜를 한 줄로 정렬 */
+.comment-item-header {
+    display: flex;           /* 가로 정렬 */
+    align-items: center;     /* 수직 가운데 정렬 */
+    margin-bottom: 5px;      /* 댓글 내용과 간격 */
+}
+
+/* userId 스타일 */
+.comment-userId {
+    font-weight: bold;
+    margin-right: 10px;     /* 아이콘과 간격 */
+}
+
+/* 날짜 스타일 */
+.comment-date {
+    font-size: 12px;
+    color: #888;
+    border-bottom: none !important;
+}
+
+
+/* 등록 버튼 */
+.comment-input-group button {
+    padding: 12px 25px;
+    background-color: #007BFF;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.comment-input-group button:hover {
+    background-color: #357ABD;
+}
+
+/* 댓글 목록 */
+#commentList .comment-item {
+    background-color: #f9f9f9;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+}
+
+#commentList .comment-item:hover {
+    background-color: #f0f8ff;
+}
+
+/* 작성자 및 날짜 */
+.comment-item strong {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+.comment-item .comment-date {
+    font-size: 12px;
+    color: #888;
+}
+
+.comment-item {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+}
+
+.comment-item:hover {
+    background-color: #f0f8ff;
+}
+
+/* 프로필 아이콘 */
+.comment-profile {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%; /* 원형 */
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.comment-profile-icon {
+    display: inline-flex !important; /* 👈 flex로 중앙 정렬 강제 */
+    justify-content: center !important;
+    align-items: center !important;
+    width: 32px !important;
+    height: 32px !important;
+    background-color: #4A90E2 !important;
+    color: #fff !important;
+    border-radius: 50% !important;
+    margin-right: 10px !important;
+    font-size: 16px !important;
+    line-height: 1 !important; /* 👈 아이콘 위로 뜨는 원인 제거 */
+    vertical-align: middle !important; /* inline 요소 기준 정렬 보정 */
+}
+
+
+/* 작성자, 날짜 flex 정렬 */
+.comment-userId,
+.comment-date {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.comment-userId {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.comment-date {
+    font-size: 12px;
+    color: #888;
+}
+
+
+/* 댓글 내용 */
+.comment-item p {
+    margin: 8px 0 0 0;
+    line-height: 1.5;
+    color: #000 !important;
+}
+
+#commentInsertBtn i {
+    margin-left: 6px; /* 글씨와 간격 */
+    font-size: 16px;   /* 아이콘 크기 */
+    vertical-align: middle; /* 글씨와 수직 정렬 */
+}
+
+.comment-section h3 i {
+	margin-left: 15px; /* 앞쪽 여백 */
+    color: #007BFF; /* 원하는 아이콘 색상 */
+    font-size: 25px; /* 아이콘 크기 */
+    vertical-align: middle; /* 글씨와 수직 정렬 */
+}
+
+.comment-count {
+    display: inline-flex;           /* inline-block → inline-flex */
+    justify-content: center;        /* 수평 가운데 */
+    align-items: center;            /* 수직 가운데 */
+    background-color: #007BFF;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    text-align: center;
+    margin-left: 5px;
+    line-height: normal;            /* flex 사용 시 제거 */
+}
+
+.heart-icon {
+  font-size: 24px; /* 크기 조절 */
+  color: #ff4b5c; /* 색상 */
+  
+  vertical-align: middle;
+}
+
+.no-comment {
+    border-bottom: none;
+}
+
+.comment-section h3.no-comment {
+    border-bottom: none !important;
 }
 
 </style>
@@ -111,35 +336,27 @@ document.addEventListener('DOMContentLoaded', function() {
 											var htmls = "";
 
 											if (result.length < 1) {
-												htmls = htmls
-														+ "<h3>등록된 댓글이 없습니다.</h3>";
+												htmls = htmls + '<h3 class="no-comment">등록된 댓글이 없습니다.</h3>';
 											} else {
-												$(result)
-														.each(
-																function() {
-																	// htmls = htmls + '<div id="commentList' +this.comment_id + '">';
-																	//<div id="reno12"> <div id="reno13">
-																	htmls += '<hr style="width: 600px; float: left;">';
-																	htmls += '<br>';
-																	htmls += '<span class="d-block">';
-																	htmls += '<strong class="text-gray-dark">'
-																			+ ' ID: '
-																			+ this.userId
-																			+ '</strong>';
-																	htmls += '</span><br>';
-																	htmls += '<br>';
-																	htmls += this.comment;
-																	htmls += '<br>';
-																	htmls += '<br>';
-																	htmls += ' 작성일 : '
-																			+ this.createdDate
-																			+ ' | 수정일 : '
-																			+ this.lastModified;
-																	htmls += '<br>';
-																	//htmls += '</div>';   
-																}); // each End
+												$(result).each(function() {
+													// htmls = htmls + '<div id="commentList' +this.comment_id + '">';
+													//<div id="reno12"> <div id="reno13">
+													htmls += '<div class="comment-item">';
+									                htmls += '<div class="comment-item-header">';
+									                htmls += ' <i class="fa-regular fa-user comment-profile-icon"></i>';
+													htmls += '<strong>' + this.userId + '</strong>';
+													htmls += '</div>';
+													htmls += '<p>' + this.comment + '</p>';
+													htmls += '<br>';
+													htmls += '<span class="comment-date">작성일: ' + this.createdDate + ' | 수정일: ' + this.lastModified + '</span>';
+													htmls += '</div>';
+													//htmls += '</div>';   
+												}); // each End
 											}
 											$("#commentList").html(htmls);
+											
+											// 댓글 수 표시
+							                 $("#commentCount").text(result.length);
 										},
 										error : function(data) {
 											alert("에러" + data);
@@ -168,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 									var htmls = "";
 
-									htmls += '♥' + result
+									htmls += '♥ ' + result
 
 									$("#heartsCount").html(htmls);
 								},
@@ -223,72 +440,99 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	<!-- 메인 컨테이너 -->
 	<div class="news-container">
-		<!-- 메인 콘텐츠 -->
-		<main class="news-main">
-			<h1 class="news-title">기사 상세조회</h1>
+	<!-- 메인 콘텐츠 -->
+	<main class="news-main">
+		<h1 class="news-title">기사 상세조회</h1>
 
-			<div class="container">
-				<div style="padding-top: 1px">
+	<div class="container">
+		
+      <c:forEach var="article" items="${noArticleContent}">
+    
+      	<article class="article-main">
+      		<!-- 카테고리 배지 -->
+      		<span class="article-badge">${article.name}</span>
+      		
+      		<!-- 기사 제목 -->
+            <h1 class="article-title">${article.title}</h1>
+            
+            <!-- 기사 메타 정보 -->
+            <div class="article-meta">
+            	<c:if test="${not empty article.link}">
+                	<a href="${article.link}" target="_blank" class="article-meta-link">
+                		<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                			<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/>
+                		</svg>
+                		기사원문보기
+                	</a>
+                	<span class="meta-divider">|</span>
+                </c:if>
+                <span class="article-meta-item">
+                	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                		<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                	</svg>
+                	${article.source}
+                </span>
+                <span class="meta-divider">|</span>
+                <span class="article-meta-item">
+                	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                		<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                		<line x1="16" y1="2" x2="16" y2="6"/>
+                		<line x1="8" y1="2" x2="8" y2="6"/>
+                		<line x1="3" y1="10" x2="21" y2="10"/>
+                	</svg>
+                	${article.published}
+                </span>
+                <span class="meta-divider">|</span>
+                <span class="article-meta-item">
+                	<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                		<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                		<circle cx="12" cy="12" r="3"/>
+                	</svg>
+                	${article.views}
+                </span>
+                <span class="meta-divider">|</span><span id="heartsCount"></span>
+            </div>
+            
+            <!-- 액션 버튼 -->
+            <div class="article-actions">
+            	<button class="action-btn" onclick="clip(); return false;">
+            		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            			<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            			<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            		</svg>
+            		URL 복사
+            	</button>
+            	
+            </div>
+            
+            <!-- 기사 이미지 -->
+            <img src="resources/image/${article.image}" alt="${article.title}" class="article-image">
+            
+            <!-- 기사 본문 -->
+            <div class="article-content">
+            	<p>${article.content}</p>
+            </div>
+            
+      	</article>
 
-					<c:forEach var="article" items="${noArticleContent}">
-						<!-- JSTL의 반복문 -->
+		<!-- 댓글 -->
+		<div class="comment-section">
+		<h3><i class="fa-regular fa-comment" style="margin-right: 8px;"></i> 댓글
+		<span id="commentCount" class="comment-count">0</span></h3>
+						    
+		<!-- 댓글 입력창 -->
+		<div class="comment-input-group">
+		<input type="hidden" name="article_articleId" id="article_articleId" value="${article.articleId}">
+		</div>
+		
+		<div id="commentList"></div><br>
+		</div>
+						
+	</c:forEach>
 
-						<div
-							style="display: flex; justify-content: space-between; align-items: flex-start;">
-
-
-							<div style="flex: 1; margin-right: 15px;">
-
-								<div style="font-size: 12;">${article.name}</div>
-								<h1 style="font-size: 35; font-weight: bold;">${article.title}</h1>
-								<p style="font-size: 12;">
-									<c:if test="${not empty article.link}">
-                        <a href="${article.link}" target="_blank">기사원문보기</a> |
-                        </c:if> |
-									${article.source} | ${article.published}
-								</p>
-								views: ${article.views}
-								<div id="heartsCount"></div>
-								<p>
-									<button class="btn-common copy-url-btn"
-										onclick="clip(); return false;">URL</button>
-								</p>
-
-								<div style="flex: 0 0 450px;">
-									<img src="resources/image/${article.image }"
-										alt="${article.image }" style="width: 650px; height: 450px;">
-								</div>
-								<br> <br>
-								<p>${article.content}</p>
-								<br> <br>
-							</div>
-						</div>
-
-						<!-- 댓글 -->
-						<div class="container">
-							<label for="content">댓글</label>
-
-							<form name="commentInsertForm" id="commentInsertForm">
-								<div>
-									<input type="hidden" name="article_articleId"
-										id="article_articleId" value="${article.articleId}">
-
-
-								</div>
-							</form>
-						</div>
-						<div class="container">
-							<div id="commentList"></div>
-							<br>
-						</div>
-
-
-					</c:forEach>
-
-				</div>
-			</div>
-		</main>
-		<aside>
+	</div>
+	</main>
+	<aside>
 			<div class="sidebar-section">
 				<h2>많이 본 기사</h2>
 				<ol class="rank-list">
@@ -305,18 +549,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			</div>
 
 			<div class="sidebar-section">
-				<h2>정책 기사 키워드 Top 7</h2>
-
-				<ol class="rank-list">
-					<c:forEach var="keywordDTO" items="${topKeywords}"
-						varStatus="status">
-						<li><span class="rank-number">${status.index + 1}</span> <a
-							href="#" class="keyword-link"
-							data-keyword="${keywordDTO.skeyword}"> ${keywordDTO.skeyword}</a>
-						</li>
-					</c:forEach>
-				</ol>
-			</div>
+      <h2>정책 기사 키워드 Top 7</h2>
+      
+       <!-- 워드클라우드가 표시될 영역 -->
+  	<canvas id="keywordWordCloud" width="450" height="400"></canvas>
+	</div>
 
 	<div class="sidebar-section">
 
@@ -356,9 +593,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-	<footer class="container"
-		style="text-align: center; padding: 40px 0; color: #6b7280;">
-		© 2025 누림 — Mist Blue Theme </footer>
+ <jsp:include page="../include/footer.jsp"/>
 	<script>
 		// Top 버튼 기능
 		const topButton = document.getElementById('topButton');
@@ -418,6 +653,57 @@ document.addEventListener('DOMContentLoaded', function() {
 			        });
 			      }
 			    );
-</script>  
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // topKeywords에서 단어와 count 가져오기
+    const list = [
+        <c:forEach var="keywordDTO" items="${topKeywords}" varStatus="status">
+            ["${keywordDTO.skeyword}", ${keywordDTO.count}]<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+    ];
+
+    if (list.length === 0) return;
+
+    WordCloud(document.getElementById('keywordWordCloud'), {
+        list: list,
+        gridSize: 18,
+        weightFactor: function(count) {
+            // 글자 크기 비율 설정
+            const min = 30, max = 65;
+            const counts = list.map(item => item[1]);
+            const maxCount = Math.max(...counts);
+            const minCount = Math.min(...counts);
+            return min + (count - minCount) / (maxCount - minCount) * (max - min);
+        },
+        fontFamily: 'Gowun Dodum, sans-serif',
+        color: () => {
+            const colors = ['#2563eb','#dc2626','#16a34a','#9333ea','#f59e0b','#0ea5e9','#ef4444'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        },
+        rotateRatio: 1, // 회전 없이 단어만 표시
+        backgroundColor: '#fff',
+
+        // 클릭 이벤트
+        click: function(item) {
+            const keyword = item[0]; // 클릭한 단어만 가져오기
+            const searchType = 'tc'; // 제목+내용 검색
+            const encodedKeyword = encodeURIComponent(keyword);
+
+            // 검색 로그 저장 후 검색 페이지 이동
+            $.ajax({
+                url: "logKeyword",
+                type: "POST",
+                data: { keyword: keyword },
+                complete: function() {
+                    window.location.href = "articleListAll?page=1&perPageNum=10&searchType=" + searchType + "&keyword=" + encodedKeyword;
+                }
+            });
+        }
+    });
+});
+</script>
+ 
 </body>
 </html>

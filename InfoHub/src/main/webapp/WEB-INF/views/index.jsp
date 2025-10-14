@@ -88,9 +88,9 @@
 						
 							<!-- 세션 없을때 -->
 							<c:if test="${empty userId}">
-							<li><a href="login" class="dot-link"> 
+							<li><a href="boardlistmain" class="dot-link"> 
 								<span class="icon" style="mask: url('resources/image/clock.svg')"></span>
-								<span>내 혜택 모아보기</span>
+								<span>게시판</span>
 							</a></li>
 					
 							<li><a href="login" class="dot-link"> 
@@ -109,12 +109,12 @@
 							
 							<!-- 세션 있을때 -->
 							<c:if test="${not empty userId}">
-							<li><a href="myBenifit" class="dot-link"> 
+							<li><a href="boardlistmain" class="dot-link"> 
 								<span class="icon" style="mask: url('resources/image/clock.svg')"></span>
-								<span>내 혜택 모아보기</span>
+								<span>게시판</span>
 							</a></li>
 					
-							<li><a href="myArticle" class="dot-link"> 
+							<li><a href="myArticle" class="dot-link">
 								<span class="icon" style="mask: url('resources/image/post.svg')"></span>
 								<span>맞춤형 기사 추천</span>
 							</a></li>

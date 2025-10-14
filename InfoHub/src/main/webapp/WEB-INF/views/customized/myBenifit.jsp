@@ -164,9 +164,7 @@ $(document).ready(function(){
    
    
    
-  <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
-    © 2025 누림 — Mist Blue Theme
-  </footer>
+  <jsp:include page="../include/footer.jsp"/>
   
   
 <script>

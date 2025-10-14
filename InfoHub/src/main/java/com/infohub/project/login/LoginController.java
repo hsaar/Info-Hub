@@ -145,9 +145,6 @@ public class LoginController {
 							@RequestParam("gender")String gender,
 							@RequestParam("keywords")String keywords) {
 		
-		//Map<String, String> map = new HashMap<String, String>();
-		//map.put("redirect", request.getContextPath() + "/memberjoinSuccess");
-		
 		if(se.checkNameDuplicate(name)) {
 			logger.info("중복이름");
 			return "FAIL";
@@ -162,6 +159,8 @@ public class LoginController {
 			logger.info("패스워드 체크 틀림");
 			return "FAIL";
 		}
+		
+		phone = se.formatPhoneNumber(phone);
 		
 		int i = se.insertUser(new LoginDTO(0, userId,password,name,email,phone,null,null,1,1,age,gender,keywords));
 		if( i > 0 )
@@ -239,6 +238,10 @@ public class LoginController {
 							HttpServletRequest request) {
 		HttpSession session =request.getSession();
 		String userId = (String) session.getAttribute("userId");
+		
+		if(userId == null) {
+			return "index";
+		}
 		model.addAttribute("name", se.getUserById(userId).getName());
 		model.addAttribute("email", se.getUserById(userId).getEmail());
 		model.addAttribute("phone", se.getUserById(userId).getPhone());

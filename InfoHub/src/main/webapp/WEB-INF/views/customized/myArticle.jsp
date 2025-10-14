@@ -13,6 +13,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 <link rel="stylesheet" href="<c:url value='/resources/css/customized_news.css' />">
+<style>
+a {
+  text-decoration: none;
+}
+</style>
 </head>
 <body>
 
@@ -77,14 +82,14 @@
       <div class="news-category-card">
         <h2 class="category-title">${keyword0}</h2>
         <div class="news-list">
-		  <c:forEach var = "list0" items = "${list0}">
-          <a href = "https:/${list0.link}"><div class="news-item">
+		  <c:forEach var = "list" items = "${list0}">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list0.content}</p>
-              <span class="news-source">${list0.source}</span>
+              <p class="news-text">${list.title}</p>
+              <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
-              <img src="resources/image/${list0.image}" alt="${list0.image}">
+              <img src="resources/image/${list.image}" alt="${list.image}">
             </div>
           </div></a>
           </c:forEach>
@@ -98,9 +103,9 @@
         <h2 class="category-title">${keyword1}</h2>
         <div class="news-list">
 		  <c:forEach var = "list" items = "${list1}">
-          <a href = "https:/${list.link}"><div class="news-item">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.content}</p>
+              <p class="news-text">${list.title}</p>
               <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
@@ -118,9 +123,9 @@
         <h2 class="category-title">${keyword2}</h2>
         <div class="news-list">
 		  <c:forEach var = "list" items = "${list2}">
-          <a href = "https:/${list.link}"><div class="news-item">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.content}</p>
+              <p class="news-text">${list.title}</p>
               <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
@@ -138,9 +143,9 @@
         <h2 class="category-title">${keyword3}</h2>
         <div class="news-list">
 		  <c:forEach var = "list" items = "${list3}">
-          <a href = "https:/${list.link}"><div class="news-item">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.content}</p>
+              <p class="news-text">${list.title}</p>
               <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
@@ -158,9 +163,9 @@
         <h2 class="category-title">${keyword4}</h2>
         <div class="news-list">
 		  <c:forEach var = "list" items = "${list4}">
-          <a href = "https:/${list.link}"><div class="news-item">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.content}</p>
+              <p class="news-text">${list.title}</p>
               <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
@@ -178,9 +183,9 @@
         <h2 class="category-title">${keyword5}</h2>
         <div class="news-list">
 		  <c:forEach var = "list" items = "${list5}">
-          <a href = "https:/${list.link}"><div class="news-item">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.content}</p>
+              <p class="news-text">${list.title}</p>
               <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
@@ -198,9 +203,9 @@
         <h2 class="category-title">${keyword6}</h2>
         <div class="news-list">
 		  <c:forEach var = "list" items = "${list6}">
-          <a href = "https:/${list.link}"><div class="news-item">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.content}</p>
+              <p class="news-text">${list.title}</p>
               <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
@@ -218,9 +223,9 @@
         <h2 class="category-title">${keyword7}</h2>
         <div class="news-list">
 		  <c:forEach var = "list" items = "${list7}">
-          <a href = "https:/${list.link}"><div class="news-item">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.content}</p>
+              <p class="news-text">${list.title}</p>
               <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
@@ -238,9 +243,9 @@
         <h2 class="category-title">${keyword8}</h2>
         <div class="news-list">
 		  <c:forEach var = "list" items = "${list8}">
-          <a href = "https:/${list.link}"><div class="news-item">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.content}</p>
+              <p class="news-text">${list.title}</p>
               <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
@@ -258,9 +263,9 @@
         <h2 class="category-title">${keyword9}</h2>
         <div class="news-list">
 		  <c:forEach var = "list" items = "${list9}">
-          <a href = "https:/${list.link}"><div class="news-item">
+          <a href = "${list.link}"><div class="news-item">
             <div class="news-content">
-              <p class="news-text">${list.content}</p>
+              <p class="news-text">${list.title}</p>
               <span class="news-source">${list.source}</span>
             </div>
             <div class="news-thumbnail">
@@ -389,6 +394,7 @@
     <path d="M12 4l-8 8h6v8h4v-8h6z"/>
   </svg>
 </button>
+ <jsp:include page="../include/footer.jsp"/>
 
 <script>
   // Top 버튼

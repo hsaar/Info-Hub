@@ -1,6 +1,7 @@
 package com.infohub.project.myarticle;
 
 public class MyarticleDTO {
+	private String title;
 	private String keyword;
 	private String tags;
 	private String image;
@@ -11,9 +12,10 @@ public class MyarticleDTO {
 	
 	public MyarticleDTO() {}
 
-	public MyarticleDTO(String keyword, String tags, String image, String content, String link, String source,
-			String name) {
+	public MyarticleDTO(String title, String keyword, String tags, String image, String content, String link,
+			String source, String name) {
 		super();
+		this.title = title;
 		this.keyword = keyword;
 		this.tags = tags;
 		this.image = image;
@@ -21,6 +23,14 @@ public class MyarticleDTO {
 		this.link = link;
 		this.source = source;
 		this.name = name;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getKeyword() {
@@ -81,11 +91,8 @@ public class MyarticleDTO {
 
 	@Override
 	public String toString() {
-		return "MyarticleDTO [keyword=" + keyword + ", tags=" + tags + ", image=" + image + ", content=" + content
-				+ ", link=" + link + ", source=" + source + ", name=" + name + "]";
+		return "MyarticleDTO [title=" + title + ", keyword=" + keyword + ", tags=" + tags + ", image=" + image
+				+ ", content=" + content + ", link=" + link + ", source=" + source + ", name=" + name + "]";
 	}
-
-	
-	
 	
 }
