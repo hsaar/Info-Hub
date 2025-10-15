@@ -77,7 +77,7 @@ public class MyBoardDAO {
                     dto.setContent(rs.getString("content"));
                     dto.setRegiDate(rs.getString("regiDate"));
                     dto.setReadCnt(rs.getInt("readcnt"));
-                    dto.setLoginNo(rs.getInt("login_loginNo"));
+                    dto.setLoginNo(rs.getInt("loginLoginNo"));
                     dto.setCategoryId(rs.getInt("categoryId")); // ← 추가
                 }
             }

@@ -24,6 +24,10 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
 <style>
 #customPopup .smallText {
@@ -33,9 +37,9 @@
 
 /* 캘린더 크기 */
 #calendar {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
-  height: 850px;
+  height: 900px;
 }
 
 /* 시간축 없애기 */
@@ -51,13 +55,13 @@
 }
 
 .fc-dayGridWeek-view {
-    height: 550px !important;
-    max-height: 550px !important;
+    height: 800px !important;
+    max-height: 800px !important;
 }
 
 .fc-listDay-view {
-    height: 550px !important;
-    max-height: 550px !important;
+    height: 800px !important;
+    max-height: 800px !important;
 }
 
 .fc-listDay-view .fc-event {
@@ -67,7 +71,14 @@
 
 /* 월간뷰는 기존 높이 유지 */
 .fc-dayGridMonth-view {
-    height: 850px !important;
+    height: 900px !important;
+}
+
+#keywordWordCloud {
+  display: block;
+  width: 100%;
+  height: 230px;
+  
 }
 
 </style>
@@ -164,16 +175,11 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       
       <div class="sidebar-section">
-		<h2>혜택 키워드 Top 7</h2>
-		<ol class="rank-list">
-		<c:forEach var="regkeywordDTO" items="${topKeywords}" varStatus="status">
-			<li><span class="rank-number">${status.index + 1}</span>
-			<a href="#" class="keyword-link"
-			data-keyword="${regkeywordDTO.regkeyword}">
-			${regkeywordDTO.regkeyword}</a></li>
-		</c:forEach>
-		</ol>
-	  </div>
+      <h2>혜택 키워드 Top 7</h2>
+      
+       <!-- 워드클라우드가 표시될 영역 -->
+  	<canvas id="keywordWordCloud" width="450" height="400"></canvas>
+	</div>
 
       <div class="sidebar-section">
       
@@ -211,9 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
   </button>
    
    
-  <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
-    © 2025 누림 — Mist Blue Theme
-  </footer>
+ <jsp:include page="../include/footer.jsp"/>
 <script>
     // Top 버튼 기능
     const topButton = document.getElementById('topButton');
@@ -248,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
             start: '${timeline.startDate}',
             end: '${timeline.endDate}',
             allDay: true,
-            call: '${timeline.call}',
+            regCall: '${timeline.regCall}',
             link: '${timeline.link}',
             registrationNo: '${timeline.registrationNo}',
             backgroundColor: colors[${status.index} % colors.length],
@@ -270,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	      locale: 'ko',                 // 한국어
 	      events: events,               // JSP에서 만든 데이터 주입
 	      selectable: true,            // 드래그 선택 가능
-	      contentHeight: '800px', // 내용 부분 높이
+	      contentHeight: '900px', // 내용 부분 높이
 	      expandRows: true,  // 화면에 맞게 줄 맞춤
 	      headerToolbar: {
 	        left: 'prev,next today',
@@ -291,10 +295,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	    	var content = (info.event.extendedProps.content || "-");
 	    	var start = "시작 : " + info.event.start.toLocaleDateString();
 	    	var end = "종료 : " + (info.event.end ? info.event.end.toLocaleDateString() : "-");
-	    	var call = "call : " + (info.event.extendedProps.call || "-");
+	    	var regCall = "Call : " + (info.event.extendedProps.regCall || "-");
 	    	var linkUrl = info.event.extendedProps.link;
 	        var link = "link : " + (linkUrl
-	        		? "<a href='https://" + linkUrl + "' target='_blank'>" + linkUrl + "</a>" 
+	        		? "<a href='" + linkUrl + "' target='_blank'>" + linkUrl + "</a>" 
 	                : "-");
 	        
 	        var detailBtn = "";
@@ -313,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	        
 	        document.getElementById('popupBody').innerHTML =
 	            "<p>" + content + "</p>" + "<br>" + "<span class='smallText'>" + start + "</span><br>" + "<span class='smallText'>"
-	            + end + "</span><br>" + "<span class='smallText'>" + call + "</span><br>" + "<span class='smallText'>" + link + "</span>" + detailBtn;
+	            + end + "</span><br>" + "<span class='smallText'>" + regCall + "</span><br>" + "<span class='smallText'>" + link + "</span>" + detailBtn;
 
 	    	document.getElementById('customPopup').style.display = 'block';
 	    	}
@@ -321,6 +325,56 @@ document.addEventListener('DOMContentLoaded', function() {
 	    calendar.render();
 	  });
 	
-</script> 
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // topKeywords에서 단어와 count 가져오기
+    const list = [
+        <c:forEach var="RegKeywordDTO" items="${topKeywords}" varStatus="status">
+            ["${RegKeywordDTO.regkeyword}", ${RegKeywordDTO.regcount}]<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+    ];
+
+    if (list.length === 0) return;
+
+    WordCloud(document.getElementById('keywordWordCloud'), {
+        list: list,
+        gridSize: 18,
+        weightFactor: function(count) {
+            const min = 30, max = 65;
+            const counts = list.map(item => item[1]);
+            const maxCount = Math.max(...counts);
+            const minCount = Math.min(...counts);
+            return min + (count - minCount) / (maxCount - minCount) * (max - min);
+        },
+        fontFamily: 'Gowun Dodum, sans-serif',
+        color: () => {
+            const colors = ['#2563eb','#dc2626','#16a34a','#9333ea','#f59e0b','#0ea5e9','#ef4444'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        },
+        rotateRatio: 1, // 자유로운 회전 배치
+        backgroundColor: '#fff',
+
+        // 클릭 이벤트
+        click: function(item) {
+            const keyword = item[0]; // 클릭한 단어만 가져오기
+            const searchType = 'tc'; // 제목+내용 검색
+            const encodedKeyword = encodeURIComponent(keyword);
+
+            // 검색 로그 저장 후 검색 페이지 이동
+            $.ajax({
+                url: "logKeyword",
+                type: "POST",
+                data: { keyword: keyword },
+                complete: function() {
+                    window.location.href = "registrationlistAll?page=1&perPageNum=10&searchType=" + searchType + "&keyword=" + encodedKeyword;
+                }
+            });
+        }
+    });
+});
+</script>
+
 </body>
 </html>

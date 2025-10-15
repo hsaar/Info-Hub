@@ -108,13 +108,13 @@ $(document).ready(function(){
                    htmls += '</a></h3>';
                    htmls += '<p class="scrap-description">' + this.content + '</p>';
                    htmls += '<p><span class="scrap-period">신청기간: ';
-                   htmls += this.startDate + ' ~ ' + this.endDate + '</span><br>';
+                   htmls += this.startDate + ' - ' + this.endDate + '</span><br>';
                    htmls += '<span class="scrap-date">스크랩: ';
                    htmls += this.createdDate + '</span></p>';
-                   htmls += '<div class="scrap-info">자세히보기 → <a href="https://';
+                   htmls += '<div class="scrap-info">자세히보기 → <a href="';
                    htmls += this.link + '" class="scrap-link">';
                    htmls += this.link + '</a></div>';
-                   htmls += '<button type="button" class="btn btn-success deleteBtn" data-no="' + this.registrationNo + '">DELETE</button>'
+                   htmls += '<button type="button" class="deleteBtn btn-common" data-no="' + this.registrationNo + '">DELETE</button>'
                    htmls += '</article>';
                    //htmls += '</div>';   
                 });
@@ -131,6 +131,45 @@ $(document).ready(function(){
 
 </script>
 
+<style>
+.btn-gradient {
+	background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--accent-blue) 100%);
+    border: none;
+    color: #fff !important;
+    padding: 8px 18px;
+    border-radius: 25px;
+    transition: 0.3s;
+    text-decoration: none;
+    box-shadow: #78d4ff;
+    position: relative;   /* ✅ 클릭 문제 방지 */
+    z-index: 10;          /* ✅ 위로 올리기 */
+}
+
+.btn-gradient:hover {
+    opacity: 0.95;
+    transform: scale(1.08);
+    box-shadow: #78d4ff;
+}
+    
+.btn-common {
+    display: inline-block;
+    font-size: 0.8rem;        /* 글자 크기 통일 */
+    padding: 6px 10px;      /* 버튼 높이와 너비 통일 */
+    border-radius: 25px;    /* 둥근 모서리 */
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;   /* 클릭 가능하도록 */
+    z-index: 10;          /* 다른 요소 위로 */
+    background-color: #eee; /* 테스트용 배경 */
+}
+	
+.btn-common::before {
+	pointer-events: none; /* 버튼 위 장식 요소 클릭 막지 않음 */
+}
+
+</style>
 
 </head>
 
@@ -162,12 +201,6 @@ $(document).ready(function(){
     </svg>
   </button>
    
-   
-   
-  <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
-    © 2025 누림 — Mist Blue Theme
-  </footer>
-  
   
 <script>
   // 정렬 버튼 처리

@@ -12,6 +12,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+<style type="text/css">
+.board-item {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.board-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+</style>
 </head>
 <body>
 
@@ -49,6 +59,7 @@
 	</nav>
 	
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const boardsList = document.getElementById('boards-list');
@@ -140,8 +151,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 '<div class="board-footer">' +
                 '    <span class="board-hearts">❤️ ' + (b.hearts || 0) + '</span>' +
                 '    <button class="board-btn board-delete-btn" data-boardno="' + b.boardNo + '">삭제</button>' +
-                '    <button class="board-btn board-update-btn" data-boardno="' + b.boardNo + '">수정</button>' +
                 '</div>';
+                
+             // 카드 클릭 이벤트
+             card.addEventListener('click', (e) => {
+                 // 삭제 버튼 클릭 시는 이동 막기
+                 if (e.target.classList.contains('board-delete-btn')) return;
+                 window.location.href = '<c:url value="/detail"/>' + '?boardno=' + b.boardNo;
+             });
+             
             boardsList.appendChild(card);
         });
 
@@ -215,6 +233,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderBoards(allBoards);
 });
 </script>
-
+ 
 </body>
 </html>

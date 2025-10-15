@@ -5,63 +5,82 @@
 <mapper namespace="com.infohub.project.boardCommentMapper">
 
 	<!-- 게시글 아래 댓글 전체보기 -->
-	<!-- <select id="getCommentsByboardno" resultType="CommentBoardVO"> SELECT 
-		* FROM commentboard WHERE boardno = #{boardno} ORDER BY createdDate ASC </select> -->
-
 	<select id="getCommentsByboardno" resultMap="commentResultMap">
-		SELECT c.*, l.userId
-		AS loginUser
-		FROM commentboard c
-		JOIN login l ON c.loginNo = l.loginNo
-		WHERE c.boardno = #{boardno}
-		ORDER BY c.createdDate ASC
+		SELECT
+        c.commentId,
+        c.comment,
+        c.createdDate,
+        c.parentCommentId,
+        c.boardno,
+        c.loginNo,
+        l.name AS loginUser
+    FROM commentboard c
+    JOIN login l ON c.loginNo = l.loginNo
+    WHERE c.boardno = #{boardno}
+    AND c.parentCommentId IS NULL  -- 또는 AND (c.parentCommentId IS NULL OR c.parentCommentId = 0)
+    ORDER BY c.commentId ASC
 	</select>
-	<!-- 댓글달기 -->
+
+	<!-- 댓글/대댓글 작성 -->
 	<insert id="insertComment" useGeneratedKeys="true"
 		keyProperty="commentId">
-		INSERT INTO commentboard (boardno, loginNo,
-		parentCommentId, comment, createdDate
-    )
-		VALUES (#{boardno}, #{loginNo},
-		#{parentCommentId}, #{comment},NOW())
+		INSERT INTO commentboard (boardno, loginNo, loginUser, parentCommentId,
+		comment, createdDate)
+		VALUES (#{boardno}, #{loginNo}, #{loginUser}, #{parentCommentId},
+		#{comment}, NOW())
 	</insert>
+
 
 	<!-- 대댓글 조회 -->
 	<select id="getRepliesByCommentId" resultMap="commentResultMap">
-		SELECT c.*,
-		l.userId AS loginUser
-		FROM commentboard c
-		JOIN login l ON c.loginNo =
-		l.loginNo
-		WHERE c.parentCommentId = #{commentId}
-		ORDER BY c.createdDate
-		ASC
+		 SELECT
+        c.commentId,
+        c.comment,
+        c.createdDate,
+        c.lastModified,
+        c.parentCommentId,
+        c.boardno,
+        c.loginNo,
+        l.name AS loginUser  FROM commentboard c
+    JOIN login l ON c.loginNo = l.loginNo
+    WHERE c.parentCommentId = #{commentId}
+    ORDER BY c.createdDate ASC
 	</select>
-	<!-- 댓글선택 -->
+
+	<!-- 댓글 선택 -->
 	<select id="getCommentById" parameterType="int"
 		resultType="com.infohub.project.boardcomment.CommentBoardVO">
-		SELECT commentId, boardno, loginNo, loginUser,
-		parentCommentId, comment, hearts, createdDate, lastModified
-		FROM
-		commentboard
-		WHERE
-		commentId = #{commentId}
-
+		 SELECT 
+        c.commentId, 
+        c.boardno, 
+        c.loginNo, 
+        l.name AS loginUser, c.parentCommentId, 
+        c.comment,
+        c.hearts, 
+        c.createdDate, 
+        c.lastModified
+    FROM commentboard c
+    JOIN login l ON c.loginNo = l.loginNo
+    WHERE c.commentId = #{commentId}
 	</select>
-	<!-- 댓글수정 -->
+
+	<!-- 댓글 수정 -->
 	<update id="updateComment"
 		parameterType="com.infohub.project.boardcomment.CommentBoardVO">
-		 UPDATE commentboard
-    SET 
-        comment = #{comment},
-        lastModified = NOW()
-    WHERE commentId = #{commentId}
+		UPDATE commentboard
+		SET comment = #{comment},
+		lastModified = NOW()
+		WHERE commentId = #{commentId} AND loginNo =
+		#{loginNo}
 	</update>
-	<!-- 댓글삭제 -->
+
+	<!-- 댓글 삭제 -->
 	<delete id="deleteComment">
 		DELETE FROM commentboard WHERE commentId =
-		#{commentId}
+		#{commentId} AND loginNo =
+		#{loginNo}
 	</delete>
+
 	<!-- 해당 게시글의 댓글 전체 삭제 -->
 	<delete id="deleteAll" parameterType="int">
 		DELETE FROM commentboard
@@ -74,6 +93,7 @@
 		<id property="commentId" column="commentId" />
 		<result property="boardno" column="boardno" />
 		<result property="loginNo" column="loginNo" />
+		<result property="loginUser" column="loginUser" />
 		<result property="parentCommentId" column="parentCommentId" />
 		<result property="comment" column="comment" />
 		<result property="hearts" column="hearts" />
@@ -82,6 +102,5 @@
 		<collection property="replies" ofType="CommentBoardVO"
 			select="getRepliesByCommentId" column="commentId" />
 	</resultMap>
-
 
 </mapper>

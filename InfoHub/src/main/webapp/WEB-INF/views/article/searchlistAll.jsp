@@ -57,5 +57,6 @@
 			<th>[태그 :${searchlistAll.tags}]</th><br>
 		</c:forEach>
 	</tr>
+	 <jsp:include page="../include/footer.jsp"/>
 </body>
 </html>

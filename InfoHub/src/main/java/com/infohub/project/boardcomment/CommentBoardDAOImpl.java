@@ -1,6 +1,7 @@
 package com.infohub.project.boardcomment;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -17,7 +18,6 @@ public class CommentBoardDAOImpl implements CommentBoardDAO {
 	@Override
 	public List<CommentBoardVO> getCommentsByboardno(int boardno) {
 		// TODO Auto-generated method stub
-		System.out.println("3");
 		return sqlsession.selectList(nameSpace + ".getCommentsByboardno", boardno);
 	}
 
@@ -40,9 +40,9 @@ public class CommentBoardDAOImpl implements CommentBoardDAO {
 	}
 
 	@Override
-	public void deleteComment(int commentId) {
+	public int deleteComment(Map<String, Object> params) {
 		// TODO Auto-generated method stub
-		sqlsession.delete(nameSpace + ".deleteComment", commentId);
+		return sqlsession.delete(nameSpace + ".deleteComment", params);
 	}
 
 	@Override

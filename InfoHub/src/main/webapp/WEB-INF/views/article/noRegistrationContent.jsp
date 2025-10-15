@@ -28,6 +28,7 @@
 	
 	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.js"></script>
 
 <style>
     body {
@@ -117,6 +118,13 @@
 	    pointer-events: none; /* 버튼 위 장식 요소 클릭 막지 않음 */
 	}
 	
+	#keywordWordCloud {
+	  display: block;
+	  width: 100%;
+	  height: 230px;
+  
+	}
+	
 </style>
 
 
@@ -198,18 +206,18 @@ document.addEventListener('DOMContentLoaded', function() {
                             <br>
                             <hr>
                             <ul class="list-unstyled mb-4">
-                                <li>📅 <strong>신청기간 :</strong> ${registration.startDate} ~ ${registration.endDate}</li>
+                                <li>📅 <strong>신청기간 :</strong> ${registration.startDate} - ${registration.endDate}</li>
                                 <li>🏢 <strong>접수기관 :</strong> ${registration.trachea}</li>
-                                <li>📞 <strong>전화문의 :</strong> ${registration.call}</li>
+                                <li>📞 <strong>전화문의 :</strong> ${registration.regCall}</li>
                                 <li>
                                     🔗 <strong>신청링크 :</strong> 
-                                    <a href="https://${registration.link}" 
+                                    <a href="${registration.link}" 
                                        class="btn btn-gradient btn-sm ms-2" 
                                        target="_blank" title="새창열림">
                                         바로가기
                                     </a>
                                 </li>
-                                <li>💡 <strong>지원형태 :</strong> ${registration.type}</li>
+                                <li>💡 <strong>지원형태 :</strong> ${registration.regType}</li>
                             </ul>
                         </div>
                     </div>
@@ -239,16 +247,11 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       
        <div class="sidebar-section">
-		<h2>혜택 키워드 Top 7</h2>
-		<ol class="rank-list">
-		<c:forEach var="regkeywordDTO" items="${topKeywords}" varStatus="status">
-			<li><span class="rank-number">${status.index + 1}</span>
-			<a href="#" class="keyword-link"
-			data-keyword="${regkeywordDTO.regkeyword}">
-			${regkeywordDTO.regkeyword}</a></li>
-		</c:forEach>
-		</ol>
-	  </div>
+      <h2>혜택 키워드 Top 7</h2>
+      
+       <!-- 워드클라우드가 표시될 영역 -->
+  	<canvas id="keywordWordCloud" width="450" height="400"></canvas>
+	</div>
 
       <div class="sidebar-section">
       
@@ -288,9 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
    
    
    
-  <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
-    © 2025 누림 — Mist Blue Theme
-  </footer>
+  <jsp:include page="../include/footer.jsp"/>
 <script>
     // Top 버튼 기능
     const topButton = document.getElementById('topButton');
@@ -347,6 +348,56 @@ document.addEventListener('DOMContentLoaded', function() {
     	    	});
     	   	  });
     	    });
-</script>  
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // topKeywords에서 단어와 count 가져오기
+    const list = [
+    	<c:forEach var="RegKeywordDTO" items="${topKeywords}" varStatus="status">
+            ["${RegKeywordDTO.regkeyword}", ${RegKeywordDTO.regcount}]<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+    ];
+
+    if (list.length === 0) return;
+
+    WordCloud(document.getElementById('keywordWordCloud'), {
+        list: list,
+        gridSize: 18,
+        weightFactor: function(count) {
+            // 글자 크기 비율 설정
+            const min = 30, max = 65;
+            const counts = list.map(item => item[1]);
+            const maxCount = Math.max(...counts);
+            const minCount = Math.min(...counts);
+            return min + (count - minCount) / (maxCount - minCount) * (max - min);
+        },
+        fontFamily: 'Gowun Dodum, sans-serif',
+        color: () => {
+            const colors = ['#2563eb','#dc2626','#16a34a','#9333ea','#f59e0b','#0ea5e9','#ef4444'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        },
+        rotateRatio: 1, // 회전 없이 단어만 표시
+        backgroundColor: '#fff',
+
+        // 클릭 이벤트
+        click: function(item) {
+            const keyword = item[0]; // 클릭한 단어만 가져오기
+            const searchType = 'tc'; // 제목+내용 검색
+            const encodedKeyword = encodeURIComponent(keyword);
+
+            // 검색 로그 저장 후 검색 페이지 이동
+            $.ajax({
+                url: "logKeyword",
+                type: "POST",
+                data: { keyword: keyword },
+                complete: function() {
+                    window.location.href = "registrationlistAll?page=1&perPageNum=10&searchType=" + searchType + "&keyword=" + encodedKeyword;
+                }
+            });
+        }
+    });
+});
+</script>
 </body>
 </html>

@@ -31,13 +31,18 @@
 		b.categoryboard_categoryId AS categoryId,
 		b.subCategoryId,
 		cb.name AS categoryName,
-		COALESCE(COUNT(c.commentId), 0) AS commentCount,
-		COALESCE(COUNT(hb.heartId), 0) AS heartCount
+		COALESCE(COUNT(DISTINCT c.commentId), 0) AS commentCount,
+		COALESCE(COUNT(DISTINCT hb.heartId), 0) AS heartCount
 		FROM
 		board b
-		LEFT JOIN commentboard c ON b.boardno = c.boardno
-		LEFT JOIN categoryboard cb ON b.categoryboard_categoryId = cb.categoryId
-		LEFT JOIN heartsboard hb ON b.boardno = hb.boardno
+		LEFT JOIN commentboard c ON
+		b.boardno = c.boardno
+		LEFT JOIN
+		categoryboard cb ON
+		b.categoryboard_categoryId = cb.categoryId
+		LEFT
+		JOIN heartsboard hb ON
+		b.boardno = hb.boardno
 		<where>
 			<if test="categoryId != null">
 				AND b.categoryboard_categoryId = #{categoryId}
@@ -102,33 +107,41 @@
 	</select>
 
 	<!-- 단일 게시글 조회 -->
-	<select id="getDetail" parameterType="int" resultType="com.infohub.project.board.BoardVO">
-    SELECT DISTINCT
-        b.boardno,
-        b.title,
-        b.content,
-        b.regiId,
-        b.regiDate,
-        b.readcnt,
-        b.loginLoginNo AS loginLoginNo, 
-        b.categoryboard_categoryId AS categoryId,
-        b.subCategoryId,
-        p.name AS categoryName,
-        c.name AS subCategoryName,
-        COALESCE(hc.heartCount, 0) AS heartCount,
-        l.loginNo AS loginNo -- 🔹 추가
-    FROM board b
-    LEFT JOIN (
-        SELECT boardno, COUNT(*) AS heartCount
-        FROM heartsboard
-        GROUP BY boardno
-    ) hc ON b.boardno = hc.boardno
-    LEFT JOIN categoryboard p ON b.categoryboard_categoryId = p.categoryId
-    LEFT JOIN categoryboard c ON b.subCategoryId = c.categoryId
-    LEFT JOIN login l ON b.loginLoginNo = l.loginNo -- 🔹 추가
-    WHERE b.boardno = #{boardno}
-    LIMIT 1
-</select>
+	<select id="getDetail" parameterType="int"
+		resultType="com.infohub.project.board.BoardVO">
+		SELECT DISTINCT
+		b.boardno,
+		b.title,
+		b.content,
+		b.regiId,
+		b.regiDate,
+		b.readcnt,
+		b.loginLoginNo AS loginLoginNo,
+		b.categoryboard_categoryId AS categoryId,
+		b.subCategoryId,
+		p.name AS
+		categoryName,
+		c.name AS subCategoryName,
+		COALESCE(hc.heartCount, 0) AS
+		heartCount,
+		l.loginNo AS loginNo -- 🔹 추가
+		FROM board b
+		LEFT JOIN (
+		SELECT
+		boardno, COUNT(*) AS heartCount
+		FROM heartsboard
+		GROUP BY boardno
+		) hc ON
+		b.boardno = hc.boardno
+		LEFT JOIN categoryboard p ON
+		b.categoryboard_categoryId = p.categoryId
+		LEFT JOIN categoryboard c ON
+		b.subCategoryId = c.categoryId
+		LEFT JOIN login l ON b.loginLoginNo =
+		l.loginNo -- 🔹 추가
+		WHERE b.boardno = #{boardno}
+		LIMIT 1
+	</select>
 
 	<!-- 조회수 1 증가하는 SQL "updateReadCnt" -->
 	<update id="updateReadCnt" parameterType="java.lang.Integer">
@@ -144,15 +157,26 @@
 	<insert id="register"
 		parameterType="com.infohub.project.board.BoardVO"
 		useGeneratedKeys="true" keyProperty="boardno">
-		INSERT INTO board
-		(title, content,
-		regiId, regiDate, loginLoginNo,
+		INSERT INTO board (
+		title,
+		content,
+		regiId,
+		regiDate,
+		loginLoginNo,
 		categoryboard_categoryId,
-		subCategoryId)
-		VALUES
-		(#{title}, #{content}, #{regiId}, NOW(),
-		#{loginLoginNo},
-		#{categoryId}, #{subCategoryId})
+		subCategoryId
+		)
+		SELECT
+		#{title},
+		#{content},
+		l.name AS regiId,
+		NOW(),
+		l.loginNo,
+		#{categoryId},
+		#{subCategoryId}
+		FROM login l
+		WHERE l.loginNo =
+		#{loginLoginNo};
 	</insert>
 
 
@@ -175,7 +199,8 @@
 	<delete id="delete" parameterType="int">
 		DELETE FROM board
 		WHERE
-		boardno = #{boardno}
+		boardno
+		= #{boardno}
 	</delete>
 
 
@@ -190,13 +215,15 @@
 		b.readcnt,
 		b.loginLoginNo AS loginLoginNo,
 		b.categoryboard_categoryId
-		AS categoryId,
+		AS
+		categoryId,
 		b.subCategoryId,
 		COALESCE(COUNT(h.heartId), 0) AS
 		heartCount
 		FROM board b
 		LEFT JOIN heartsboard h ON b.boardNo = h.boardNo
-		GROUP BY b.boardNo
+		GROUP BY
+		b.boardNo
 		HAVING heartCount >= 3
 		ORDER BY b.regiDate DESC
 	</select>

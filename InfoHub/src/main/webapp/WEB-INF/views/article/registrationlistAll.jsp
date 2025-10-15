@@ -24,47 +24,81 @@
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.js"></script>
 
 
 	<title>혜택바로가기</title>
 	
 <style>
-.text-center {
-    text-align: left; /* 가운데 -> 왼쪽 정렬 */
-    margin-top: 0; /* 테이블과 페이지네이션 사이 간격 줄임 */
-    padding-left: 30px; /* 페이지 시작 위치 조금 띄우기 */
-    margin-left: 250px;
+
+#keywordWordCloud {
+  display: block;
+  width: 100%;
+  height: 230px;
+  
+}
+.pagination-nav {
+  display: flex;
+  justify-content: center; /* 전체 페이지네이션을 중앙 정렬 */
+  align-items: center;
+  gap: 8px; /* 버튼 사이 간격 */
+  margin-top: 40px;
+  padding: 20px 0;
 }
 
-.pageInfo {
-	list-style: none;
-	margin: 0;
-    padding: 0;
-    white-space: nowrap; /* 한 줄에 유지 */
-    overflow: hidden;    /* 스크롤 없이 보여주기 */
+.page-number,
+.page-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  background: #fff;
+  border: 2px solid var(--mist-200);
+  border-radius: 10px; /* 둥근 모서리 */
+  color: #6b7280;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Gowun Dodum', sans-serif;
 }
 
-.pageInfo li {
-	display: inline-block; /* 한 줄로 나열 */
-    margin: 0 5px;         /* 간격 최소화 */
-    font-size: 16px;       /* 글자 크기 줄임 */
-}
-	
-.pageInfo li a {
-    text-decoration: none;
-    color: black;
-    padding: 5px 8px;      /* 버튼/숫자 폭 최소화 */
+.page-number:hover,
+.page-arrow:hover {
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(11, 80, 208, 0.15);
 }
 
-.pageInfo li.active a {
-    color: blue;      /* 현재 페이지 번호 색 */
-    font-weight: bold; /* 강조 */
+/* 활성화된 페이지 (파란색 배경) */
+.page-number.active {
+  background: linear-gradient(135deg, var(--accent) 0%, #3b82f6 100%);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(11, 80, 208, 0.3);
 }
 
-.pageInfo li a.btn {
-    font-size: 14px;
-    padding: 4px 6px;
+.page-number.active:hover {
+  background: linear-gradient(135deg, #0a3fa0 0%, #2563eb 100%);
+  box-shadow: 0 8px 20px rgba(11, 80, 208, 0.4);
 }
+
+.page-arrow {
+  font-size: 18px;
+}
+
+.page-arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 </style>
 
 <script>
@@ -157,45 +191,53 @@ $(document).on("click", ".policy-card", function(e){
         <p class="policy-description">${registrationlistAll.content}</p>
         <div class="policy-details">
           <p><strong>신청기간</strong> <br>
-          ${registrationlistAll.startDate} ~ ${registrationlistAll.endDate}</p>
+          ${registrationlistAll.startDate} - ${registrationlistAll.endDate}</p>
           <p><strong>접수기관:</strong> ${registrationlistAll.trachea}</p>
-          <p><strong>전화문의:</strong> ${registrationlistAll.call}</p>
-          <p><strong>지원형태:</strong> ${registrationlistAll.type}</p>
+          <p><strong>전화문의:</strong> ${registrationlistAll.regCall}</p>
+          <p><strong>지원형태:</strong> ${registrationlistAll.regType}</p>
           <p><strong>신청방법:</strong> 
-            <a href="https://${registrationlistAll.link}" class="btn-text" target="_blank" title="새창열림">타사이트 이동</a>
+            <a href="${registrationlistAll.link}" class="btn-text" target="_blank" title="새창열림">타사이트 이동</a>
           </p>
         </div>
       </div>
 		</c:forEach>
 	</div>
 	</div>
-	
-	<!-- 페이지네이션 -->
-<div class="text-center">
-    <ul class="pageInfo">
+    <!-- 페이지네이션 -->
+    <div class="text-center">
+		<ul class="search_info">
+			<form id="jobForm">
+				<input type='hidden' name="page"
+				value=${pageMaker.cri.perPageNum }></input> <input type='hidden'
+				name="perPageNum" value=${pageMaker.cri.perPageNum }></input>
+			</form>
+		</ul>
+	</div>
+
+
+	<div class="text-center">
+    <c:if test="${pageMaker.totalCount > 0}">
+        <nav class="pagination-nav">
         
-        <li id="page-prev">
-            <a href="registrationlistAll${pageMaker.makeSearch(pageMaker.startPage - 1)}" >&laquo;</a>
-        </li>
 
-        <c:forEach begin="${pageMaker.startPage }"
-            end="${pageMaker.endPage }" var="idx">
-            <li <c:out value="${pageMaker.cri.page == idx?'class =active':'' }"/>>
-                <a href="registrationlistAll${pageMaker.makeSearch(idx)}" >${idx }</a>
-            </li>
-        </c:forEach>
-
-        <li id="page-next">
-            <a href="registrationlistAll${pageMaker.makeSearch(pageMaker.endPage + 1)}" >&raquo;</a>
-        </li>
+         <a href="registrationlistAll" class="page-number" style="min-width: 80px; font-weight: 700; background: var(--mist-100); border-color: var(--mist-300);"> 처음목록 </a>
             
-        <li id = "page-fitst">
-        <a href="registrationlistAll${pageMaker.makeSearch(1)}" 
-           class="btn btn-warning">처음목록</a></li>
-    </ul>
-</div>
-		</main>
-	
+            <c:if test="${pageMaker.prev}">
+                <a href="registrationlistAll${pageMaker.makeSearch(pageMaker.startPage-1)}"  class="page-arrow" aria-label="Previous">&lt;</a>
+            </c:if>
+
+            <c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="idx">
+                <a href="registrationlistAll?page=${idx }" class="page-number ${pageMaker.cri.page == idx ? 'active' : ''}">${idx }</a>
+            </c:forEach>
+
+            <c:if test="${pageMaker.next && pageMaker.endPage > 0 }">
+                <a href="registrationlistAll${pageMaker.makeSearch(pageMaker.endPage +1) }" class="page-arrow" aria-label="Next">&gt;</a>
+            </c:if>
+            </nav>
+    </c:if>
+	</div>
+    </main>
+    	
 	<!-- 사이드바 -->
     <aside>
       <div class="sidebar-section">
@@ -216,18 +258,15 @@ $(document).on("click", ".policy-card", function(e){
         </ol>
       </div>
       
-       <div class="sidebar-section">
-		<h2>혜택 키워드 Top 7</h2>
-		<ol class="rank-list">
-		<c:forEach var="regkeywordDTO" items="${topKeywords}" varStatus="status">
-			<li><span class="rank-number">${status.index + 1}</span>
-			<a href="#" class="keyword-link"
-			data-keyword="${regkeywordDTO.regkeyword}">
-			${regkeywordDTO.regkeyword}</a></li>
-		</c:forEach>
-		</ol>
-	  </div>
-
+      
+      <div class="sidebar-section">
+      <h2>혜택 키워드 Top 7</h2>
+      
+       <!-- 워드클라우드가 표시될 영역 -->
+  	<canvas id="keywordWordCloud" width="450" height="400"></canvas>
+	</div>
+       
+       
       <div class="sidebar-section">
       
        <h2>포토·영상</h2>
@@ -264,9 +303,7 @@ $(document).on("click", ".policy-card", function(e){
     </svg>
   </button>
    
-  <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
-    © 2025 누림 — Mist Blue Theme
-  </footer>
+<jsp:include page="../include/footer.jsp"/>
 <script>
     // Top 버튼 기능
     const topButton = document.getElementById('topButton');
@@ -288,73 +325,192 @@ $(document).on("click", ".policy-card", function(e){
       });
     });
     
-    $(document).ready(function() {
+    // 검색 버튼 로직과 키워드 링크 로직을 분리하여 이벤트 중첩을 방지
+    $(document).ready(
+        function() {
+            
+            // 1. 일반 검색 버튼 클릭 이벤트 (기존 로직)
+            $('#searchBtn').on("click", function(event) {
+                
+                // 1. 기본 페이지 이동 동작을 막습니다. (가장 중요!)
+                event.preventDefault();
 
-        // 검색 버튼 클릭
-        $('#searchBtn').click(function(e){
-            e.preventDefault();
+                var searchType = $("select option:selected").val();
+                var keyword = $('#keyword').val();
+                var encodedKeyword = encodeURIComponent(keyword);
+                
+                // 검색 조건/키워드 유효성 검사
+                if (!searchType || searchType == "") {
+                    alert("검색 조건을 선택하세요!");
+                    $("#searchType").focus();
+                    return;
+                } else if (!keyword) {
+                    alert("검색어를 입력하세요!");
+                    $('#keyword').focus();
+                    return;
+                }
 
-            var searchType = $('#searchType').val();
-            var keyword = $('#keyword').val().trim();
-            var perPageNum = '${pageMaker.cri.perPageNum}';
+                // 최종 이동할 URL 구성
+                var redirectUrl = "articleListAll"
+                    + '${pageMaker.makeQuery(1)}' // 페이지 정보 포함
+                    + "&searchType=" + searchType
+                    + "&keyword=" + encodedKeyword;
 
-            if (!searchType) {
-                alert("검색 조건을 선택하세요!");
-                $("#searchType").focus();
-                return;
+                // 2. 키워드 로깅을 위한 AJAX 요청
+                $.ajax({
+                    url: "logKeyword", 
+                    type: "POST",
+                    data: { keyword: keyword },
+                    success: function(response) {
+                        self.location = redirectUrl; // 성공 시 이동
+                    },
+                    error: function(xhr, status, error) {
+                        self.location = redirectUrl; // 실패 시에도 이동
+                    }
+                });
+            });
+
+            $('#newBtn').on("click", function(evt) {
+                self.location = "articleListAll";
+            });
+            
+            // 2. 인기 검색어 링크 클릭 이벤트
+            $('.keyword-link').on("click", function(event) {
+                event.preventDefault(); // 기본 링크 이동(href="#") 방지
+
+                // 1. 클릭된 키워드 텍스트를 가져옵니다.
+                var keyword = $(this).text().trim(); 
+                var searchType = 'tc'; // 키워드 검색은 제목+내용(tc)으로 고정
+                var encodedKeyword = encodeURIComponent(keyword);
+
+                // 2. 키워드 로깅을 위한 AJAX 요청 (검색 카운트 증가)
+                $.ajax({
+                    url: "logKeyword", 
+                    type: "POST",
+                    data: { keyword: keyword },
+                    success: function(response) {
+                        // 3. 로깅 성공/실패와 관계없이 검색 결과 페이지로 이동 (페이지는 1로 초기화)
+                        var redirectUrl = "articleListAll"
+                            + "?page=1&perPageNum=${pageMaker.cri.perPageNum}"
+                            + "&searchType=" + searchType
+                            + "&keyword=" + encodedKeyword;
+                        self.location = redirectUrl;
+                    },
+                    error: function(xhr, status, error) {
+                        // 로깅 실패 시에도 검색 페이지로 이동
+                        var redirectUrl = "articleListAll"
+                            + "?page=1&perPageNum=${pageMaker.cri.perPageNum}"
+                            + "&searchType=" + searchType
+                            + "&keyword=" + encodedKeyword;
+                        self.location = redirectUrl;
+                    }
+                });
+            });
+            
+            // 페이지/검색 관련 함수 호출
+            setPerPageNumSelect();
+            setSearchTypeSelect();
+
+            var canPrev = '${pageMaker.prev}';
+            if (canPrev !== 'true') {
+                $('#page-prev').addClass('disabled');
             }
-            if (!keyword) {
-                alert("검색어를 입력하세요!");
-                $("#keyword").focus();
-                return;
+
+            var canNext = '${pageMaker.next}';
+            if (canNext !== 'true') {
+                $('#page-next').addClass('disabled');
             }
 
-            var encodedKeyword = encodeURIComponent(keyword);
-            var redirectUrl = "registrationlistAll?page=1"
-                + "&perPageNum=" + perPageNum
-                + "&searchType=" + searchType
-                + "&keyword=" + encodedKeyword;
+            var thisPage = '${pageMaker.cri.page}';
 
+            $('#page' + thisPage).addClass('active');
+
+	});
+
+	function setPerPageNumSelect() {
+		var perPageNum = '${pageMaker.cri.perPageNum}';
+		var $perPageSel = $('#perPageSel');
+		var thisPage = '${pageMaker.cri.page}';
+
+		$perPageSel.val(perPageNum).prop("selected", true);
+		$perPageSel.on('change', function() {
+			window.location.href = "articleListAll?page=" + thisPage
+					+ "&perPageNum=" + $perPageSel.val();
+		})
+	}
+	
+	function setSearchTypeSelect() {
+		var searchType = $('#searchType');
+		var keyword = $('#keyword');
+		var searchTypeSel = searchType.val(
+				'${pageMaker.cri.searchType}').prop("selected", true);
+		
+		
+	}
+	
+	$(function() {
+		$("#keyword").keypress(function(e){
+			//검색어 입력 후 엔터키 입력하면 조회버튼 클릭
+			if(e.keyCode && e.keyCode == 13){
+				$("#searchBtn").trigger("click");
+				return false;
+			}
+			//엔터키 막기
+			if(e.keyCode && e.keyCode == 13){
+				 e.preventDefault();	
+			}
+		});
+	});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // topKeywords에서 단어와 count 가져오기
+    const list = [
+    	<c:forEach var="RegKeywordDTO" items="${topKeywords}" varStatus="status">
+            ["${RegKeywordDTO.regkeyword}", ${RegKeywordDTO.regcount}]<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+    ];
+
+    if (list.length === 0) return;
+
+    WordCloud(document.getElementById('keywordWordCloud'), {
+        list: list,
+        gridSize: 18,
+        weightFactor: function(count) {
+            // 글자 크기 비율 설정
+            const min = 30, max = 65;
+            const counts = list.map(item => item[1]);
+            const maxCount = Math.max(...counts);
+            const minCount = Math.min(...counts);
+            return min + (count - minCount) / (maxCount - minCount) * (max - min);
+        },
+        fontFamily: 'Gowun Dodum, sans-serif',
+        color: () => {
+            const colors = ['#2563eb','#dc2626','#16a34a','#9333ea','#f59e0b','#0ea5e9','#ef4444'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        },
+        rotateRatio: 1, // 회전 없이 단어만 표시
+        backgroundColor: '#fff',
+
+        // 클릭 이벤트
+        click: function(item) {
+            const keyword = item[0]; // 클릭한 단어만 가져오기
+            const searchType = 'tc'; // 제목+내용 검색
+            const encodedKeyword = encodeURIComponent(keyword);
+
+            // 검색 로그 저장 후 검색 페이지 이동
             $.ajax({
-                url: "logRegKeyword",
+                url: "logKeyword",
                 type: "POST",
                 data: { keyword: keyword },
-                success: function() { self.location = redirectUrl; },
-                error: function() { self.location = redirectUrl; }
+                complete: function() {
+                    window.location.href = "registrationlistAll?page=1&perPageNum=10&searchType=" + searchType + "&keyword=" + encodedKeyword;
+                }
             });
-        });
-
-        // 엔터키 검색
-        $('#keyword').keypress(function(e){
-            if(e.which == 13){
-                e.preventDefault();
-                $('#searchBtn').click();
-            }
-        });
-
-        // Top7 키워드 클릭
-        $('.keyword-link').click(function(e){
-            e.preventDefault();
-            var keyword = $(this).data('keyword').trim();
-            var searchType = 'tc';
-            var perPageNum = '${pageMaker.cri.perPageNum}';
-            var encodedKeyword = encodeURIComponent(keyword);
-
-            var redirectUrl = "registrationlistAll?page=1"
-                + "&perPageNum=" + perPageNum
-                + "&searchType=" + searchType
-                + "&keyword=" + encodedKeyword;
-
-            $.ajax({
-                url: "logRegKeyword",
-                type: "POST",
-                data: { keyword: keyword },
-                success: function() { self.location = redirectUrl; },
-                error: function() { self.location = redirectUrl; }
-            });
-        });
-
+        }
     });
-</script>  
+});
+</script>
 </body>
 </html>

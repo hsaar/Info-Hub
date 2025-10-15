@@ -7,6 +7,6 @@ public interface CommentBoardService {
 	CommentBoardVO getCommentById(int commentId);
 	 void updateComment(CommentBoardVO comment);
     void addComment(CommentBoardVO comment);
-    void removeComment(int commentId);
+    boolean removeComment(int commentId, Integer loginNo);
     
 }

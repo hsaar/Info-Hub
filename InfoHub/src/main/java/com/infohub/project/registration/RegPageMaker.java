@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 public class RegPageMaker {
 
-	private int displayPageNum = 10;
+	private int displayPageNum = 5;
 	private int totalCount;
 	private int startPage;
 	private int endPage;

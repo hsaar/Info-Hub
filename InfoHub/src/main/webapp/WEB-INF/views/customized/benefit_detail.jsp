@@ -228,7 +228,7 @@
 
     </div>
   </section>
-
+ <jsp:include page="../include/footer.jsp"/>
 </main>
 
 <!-- Top 버튼 -->

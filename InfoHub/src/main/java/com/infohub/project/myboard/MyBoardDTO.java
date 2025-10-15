@@ -1,7 +1,7 @@
 package com.infohub.project.myboard;
 
 public class MyBoardDTO {
-    private int boardNo;
+    private int boardno;
     private String title;
     private String content; 
     private String regiDate; 
@@ -16,11 +16,11 @@ public class MyBoardDTO {
 
     // getter & setter
     public int getBoardNo() {
-        return boardNo;
+        return boardno;
     }
 
-    public void setBoardNo(int boardNo) {
-        this.boardNo = boardNo;
+    public void setBoardNo(int boardno) {
+        this.boardno = boardno;
     }
 
     public String getTitle() {
@@ -82,7 +82,7 @@ public class MyBoardDTO {
     @Override
     public String toString() {
         return "MyBoardDTO{" +
-                "boardNo=" + boardNo +
+                "boardNo=" + boardno +
                 ", title='" + title + '\'' +
                 ", regiDate='" + regiDate + '\'' +
                 ", readCnt=" + readCnt +

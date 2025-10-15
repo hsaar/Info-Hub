@@ -147,6 +147,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	        '<div class="comment-footer">' +
 	        '  <button class="comment-btn delete-btn" data-commentid="' + c.commentId + '">삭제</button>' +
 	        '</div>';
+	        
+	     //상세페이지 이동 기능 추가
+	        card.addEventListener('click', (e) => {
+	          // 삭제 버튼 클릭은 예외 처리
+	          if (e.target.classList.contains('delete-btn')) return;
+
+	          if (c.type === 'board' && c.boardNo) {
+	            window.location.href = '<c:url value="/detail"/>' + '?boardno=' + c.boardNo;
+	          } else if (c.type === 'article' && c.articleId) {
+	            window.location.href = "/project/articleContent?articleId=" + c.articleId;
+	          } else {
+	            alert("상세페이지로 이동할 수 없습니다");
+	            console.log(c);
+	          }
+	        });
 
 	      commentsList.appendChild(card);
 	    });
@@ -197,16 +212,22 @@ document.addEventListener('DOMContentLoaded', () => {
 	  filterSelect.addEventListener('change', async () => {
 	    currentPage = 1; // 페이지 초기화
 	    let comments = [];
+	    
 	    if (filterSelect.value === 'board') {
-	      comments = await fetchBoardComments();
+	        comments = await fetchBoardComments();
+	        comments = comments.map(c => ({ ...c, type: 'board' }));
 	    } else if (filterSelect.value === 'article') {
-	      comments = await fetchArticleComments();
+	        comments = await fetchArticleComments();
+	        comments = comments.map(c => ({ ...c, type: 'article' }));
 	    } else if (filterSelect.value === 'all') {
-	      const [boardComments, articleComments] = await Promise.all([
-	        fetchBoardComments(),
-	        fetchArticleComments()
-	      ]);
-	      comments = [...boardComments, ...articleComments];
+	        const [boardComments, articleComments] = await Promise.all([
+	            fetchBoardComments(),
+	            fetchArticleComments()
+	        ]);
+	        comments = [
+	            ...boardComments.map(c => ({ ...c, type: 'board' })),
+	            ...articleComments.map(c => ({ ...c, type: 'article' }))
+	        ];
 	    }
 
 	    currentComments = comments;

@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -56,7 +55,7 @@
       <div id="my-info-content" class="content-box" style="display: none;">
         <%@ include file="my_box.jsp"%>
       </div>
-
+      
        <!-- 내 혜택 모아보기 페이지 -->
       <div id="myBenifit-content" class="content-box" style="display: none;">
         <h2 class="content-title">내 혜택 모아보기</h2>
@@ -222,6 +221,6 @@
 	});
   
 </script>
-
+ <jsp:include page="../include/footer.jsp"/>
 </body>
 </html>

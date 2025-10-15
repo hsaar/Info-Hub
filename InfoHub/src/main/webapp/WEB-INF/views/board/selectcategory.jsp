@@ -11,9 +11,8 @@
 
 </head>
 <body>
-	<form action="/board/save" method="post">
-    <label>게시판 선택</label>
-    <select id="mainCategory" name="categoryId" required>
+    <label></label>
+   <select id="mainCategory" name="categoryId" required>
     <option value="">-- 선택 --</option>
     <c:forEach var="m" items="${mainCategories}">
         <option value="${m.categoryId}"
@@ -30,7 +29,6 @@
             <option value="${s.categoryId}">${s.name}</option>
         </c:forEach>
     </select> -->   
-</form>
 
 <script>
 const mainCategory = document.getElementById("mainCategory");
@@ -60,12 +58,12 @@ function loadSubCategories(parentId) {
         subCategory.value = '';
     }
 }
-*/
+
 // 대분류 변경 이벤트
 mainCategory.addEventListener("change", function() {
     loadSubCategories(this.value);
 });
-
+*/
 /* 페이지 로드 시 자동 선택된 값이 있으면 소분류 로드
 window.addEventListener("DOMContentLoaded", () => {
     if (mainCategory.value) {

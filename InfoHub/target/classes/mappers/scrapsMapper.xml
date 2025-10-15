@@ -27,13 +27,13 @@
 	</delete>
 	
 	<select id="myscraps" resultType="com.infohub.project.scraps.ScrapsVO">
-	SELECT r.title, r.content, r.link, r.trachea, r.call, r.type, r.startDate, r.endDate, s.createdDate, s.registrationNo, s.loginNo, s.scrapsNo FROM scraps s join registration r on r.registrationNo = s.registrationNo
+	SELECT r.title, r.content, r.link, r.trachea, r.regCall, r.regType, r.startDate, r.endDate, s.createdDate, s.registrationNo, s.loginNo, s.scrapsNo FROM scraps s join registration r on r.registrationNo = s.registrationNo
 	WHERE s.loginNo = #{loginNo}
 	ORDER BY endDate
 	</select>
 	
 	<select id="getMyScraps" parameterType="int" resultType="com.infohub.project.scraps.ScrapsVO">
-    SELECT r.title, r.content, r.link, r.trachea, r.call, r.type, r.startDate, r.endDate,
+    SELECT r.title, r.content, r.link, r.trachea, r.regCall, r.regType, r.startDate, r.endDate,
            s.createdDate, s.registrationNo, s.loginNo, s.scrapsNo
       FROM scraps s
            JOIN registration r ON r.registrationNo = s.registrationNo

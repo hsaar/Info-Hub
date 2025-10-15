@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.infohub.project.board.BoardController;
 import com.infohub.project.board.BoardService;
 import com.infohub.project.board.BoardVO;
+import com.infohub.project.login.LoginService;
 
 @Controller
 @RequestMapping("/comment")
@@ -31,36 +32,47 @@ public class CommentBoardController {
 	private CommentBoardService cService;
 	@Autowired
 	private BoardService service;
+	@Autowired
+	private LoginService lService; 
 
 	@GetMapping("/comments")
 	public String getComments(@RequestParam("boardno") int boardno, Model model, HttpSession session) {
-	    List<CommentBoardVO> comments = cService.getComments(boardno);
-	    model.addAttribute("comments", comments);
+		List<CommentBoardVO> comments = cService.getComments(boardno);
+		model.addAttribute("comments", comments);
 
-	    // ✅ 세션 로그인 번호도 전달
-	    Integer loginNo = (Integer) session.getAttribute("loginNo");
-	    model.addAttribute("loginNo", loginNo);
+		Integer loginNo = (Integer) session.getAttribute("loginNo");
+		model.addAttribute("loginNo", loginNo);
 
-	    // ✅ board도 다시 넣어줘야 JSP 내부 JSTL이 정상 동작
-	    BoardVO board = service.getDetail(boardno); // ← 게시판 서비스에서 가져오기
-	    model.addAttribute("board", board);
+		String loginUser = (String) session.getAttribute("loginUser");
+		model.addAttribute("loginUser", loginUser);
 
-	    return "board/boardreply"; // boardreply.jsp를 렌더링
+		BoardVO board = service.getDetail(boardno);
+		model.addAttribute("board", board);
+
+		return "board/boardreply";
 	}
 
 	@ResponseBody
 	@PostMapping("/add")
 	public String addComment(CommentBoardVO comment, HttpSession session,
-			@RequestParam(value = "loginNo", required = false) Integer loginNoFromRequest) {
+			@RequestParam(value = "parentId", required = false) Integer parentId) {
 		Integer loginNo = (Integer) session.getAttribute("loginNo");
-		Integer finalLoginNo = (loginNo != null) ? loginNo : loginNoFromRequest;
+		String sessionLoginUser = (String) session.getAttribute("loginUser");
+
+		
 		if (loginNo == null) {
+			System.out.println("로그인 세션 정보(loginNo 또는 loginUser)가 없습니다.");
 			return "NOT_LOGGED_IN"; // (실제 로그인 구현 시)
 		}
 
-		comment.setLoginNo(finalLoginNo);
-
+		comment.setLoginNo(loginNo);
+		comment.setLoginUser(sessionLoginUser);
+		comment.setParentCommentId(parentId);
 		cService.addComment(comment);
+		System.out.println("댓글 작성자 세션 loginNo: " + loginNo);
+		System.out.println("댓글 작성자 세션 loginUser (Name): " + sessionLoginUser);
+		System.out.println("댓글 내용: " + comment.getComment());
+		System.out.println("댓글 작성 성공: [loginNo: " + loginNo + ", loginUser(Name): " + sessionLoginUser + "]");
 		return "success";
 	}
 
@@ -83,8 +95,8 @@ public class CommentBoardController {
 		}
 // 수정 VO에 로그인 번호 설정
 		comment.setLoginNo(loginNo);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		comment.setLastModified(sdf.format(new Date()));
+		comment.setLastModified(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		cService.updateComment(comment);
 
 		cService.updateComment(comment);
 		return "SUCCESS";
@@ -92,9 +104,15 @@ public class CommentBoardController {
 
 	@ResponseBody // ajax
 	@PostMapping("/delete")
-	public void deleteComment(@RequestParam int commentId, @RequestParam int boardno) {
-		// [권장] 삭제 전 권한 체크 로직 추가 필요 (현재는 생략)
-		cService.removeComment(commentId);
+	public String deleteComment(@RequestParam int commentId, HttpSession session) {
+		Integer loginNo = (Integer) session.getAttribute("loginNo");
 
+		if (loginNo == null) {
+			return "NOT_LOGGED_IN";
+		}
+
+		boolean deleted = cService.removeComment(commentId, loginNo);
+
+		return deleted ? "success" : "fail";
 	}
 }

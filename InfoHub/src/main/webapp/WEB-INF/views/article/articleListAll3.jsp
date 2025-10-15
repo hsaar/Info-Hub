@@ -25,46 +25,79 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.js"></script>
+
 <style>
 
-.text-center {
-    text-align: left; /* 가운데 -> 왼쪽 정렬 */
-    margin-top: 0; /* 테이블과 페이지네이션 사이 간격 줄임 */
-    padding-left: 30px; /* 페이지 시작 위치 조금 띄우기 */
-    margin-left: 60px;
+#keywordWordCloud {
+  display: block;
+  width: 100%;
+  height: 230px;
+  
+}
+.pagination-nav {
+  display: flex;
+  justify-content: center; /* 전체 페이지네이션을 중앙 정렬 */
+  align-items: center;
+  gap: 8px; /* 버튼 사이 간격 */
+  margin-top: 40px;
+  padding: 20px 0;
 }
 
-.pageInfo {
-	list-style: none;
-	margin: 0;
-    padding: 0;
-    white-space: nowrap; /* 한 줄에 유지 */
-    overflow: hidden;    /* 스크롤 없이 보여주기 */
+.page-number,
+.page-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  background: #fff;
+  border: 2px solid var(--mist-200);
+  border-radius: 10px; /* 둥근 모서리 */
+  color: #6b7280;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Gowun Dodum', sans-serif;
 }
 
-.pageInfo li {
-	display: inline-block; /* 한 줄로 나열 */
-    margin: 0 5px;         /* 간격 최소화 */
-    font-size: 16px;       /* 글자 크기 줄임 */
-}
-	
-.pageInfo li a {
-    text-decoration: none;
-    color: black;
-    padding: 5px 8px;      /* 버튼/숫자 폭 최소화 */
+.page-number:hover,
+.page-arrow:hover {
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(11, 80, 208, 0.15);
 }
 
-.pageInfo li.active a {
-    color: blue;      /* 현재 페이지 번호 색 */
-    font-weight: bold; /* 강조 */
+/* 활성화된 페이지 (파란색 배경) */
+.page-number.active {
+  background: linear-gradient(135deg, var(--accent) 0%, #3b82f6 100%);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(11, 80, 208, 0.3);
 }
 
-.pageInfo li a.btn {
-    font-size: 14px;
-    padding: 4px 6px;
+.page-number.active:hover {
+  background: linear-gradient(135deg, #0a3fa0 0%, #2563eb 100%);
+  box-shadow: 0 8px 20px rgba(11, 80, 208, 0.4);
 }
+
+.page-arrow {
+  font-size: 18px;
+}
+
+.page-arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 </style>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // 시계를 갱신하는 함수
@@ -94,6 +127,14 @@ document.addEventListener('DOMContentLoaded', function() {
   <!-- 상단바 -->
 <jsp:include page="../include/header.jsp"/>
 
+<!-- 브레드크럼 -->
+	<div class="breadcrumb">
+    <div class="container">
+      <span>현재시간 ></span>
+      <span id="realTimeClock"></span>
+    </div>
+	</div>
+	
 <!-- 네비게이션 -->
   	<div class="news-header">
     <nav class="news-nav">
@@ -107,14 +148,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </nav>
 	</div>
 	
-	<!-- 브레드크럼 -->
-	<div class="breadcrumb">
-    <div class="container">
-      <span>현재시간 ></span>
-      <span id="realTimeClock"></span>
-    </div>
-	</div>
-
        <!-- 메인 컨테이너 -->
 	<div class="news-container">
     <!-- 메인 콘텐츠 -->
@@ -194,43 +227,40 @@ document.addEventListener('DOMContentLoaded', function() {
    </c:forEach>
    </table>
    
-   <!-- 페이지네이션 -->
-      <div class="text-center">
-					<ul class="search_info">
-						<form id="jobForm">
-							<input type='hidden' name="page"
-								value=${pageMaker.cri.perPageNum }></input> <input type='hidden'
-								name="perPageNum" value=${pageMaker.cri.perPageNum }></input>
-						</form>
-					</ul>
-				</div>
+    <!-- 페이지네이션 -->
+    <div class="text-center">
+		<ul class="search_info">
+			<form id="jobForm">
+				<input type='hidden' name="page"
+				value=${pageMaker.cri.perPageNum }></input> <input type='hidden'
+				name="perPageNum" value=${pageMaker.cri.perPageNum }></input>
+			</form>
+		</ul>
+	</div>
 
 
-				<div class="text-center">
-					<ul class="pageInfo">
-						<li id="page-prev"><a
-							href="articleListAll3${pageMaker.makeSearch(pageMaker.startPage-1)}">&laquo;</a></li>
+	<div class="text-center">
+    <c:if test="${pageMaker.totalCount > 0}">
+        <nav class="pagination-nav">
+        
 
-						<c:forEach begin="${pageMaker.startPage }"
-							end="${pageMaker.endPage }" var="idx">
-							<li
-								<c:out value="${pageMaker.cri.page == idx?'class =active':'' }"/>>
-								<a href="articleListAll3?page=${idx }">${idx }</a>
-							</li>
-						</c:forEach>
+         <a href="articleListAll3" class="page-number" style="min-width: 80px; font-weight: 700; background: var(--mist-100); border-color: var(--mist-300);"> 처음목록 </a>
+            
+            <c:if test="${pageMaker.prev}">
+                <a href="articleListAll3${pageMaker.makeSearch(pageMaker.startPage-1)}"  class="page-arrow" aria-label="Previous">&lt;</a>
+            </c:if>
 
-						<c:if test="${pageMaker.next && pageMaker.endPage > 0 }">
-							<li><a
-								href="articleListAll3${pageMaker.makeSearch(pageMaker.endPage +1) }">&raquo;</a></li>
-						</c:if>
+            <c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="idx">
+                <a href="articleListAll3?page=${idx }" class="page-number ${pageMaker.cri.page == idx ? 'active' : ''}">${idx }</a>
+            </c:forEach>
 
-						<!-- 처음 목록 버튼 추가 -->
-						<li id = "page-fitst">
-						<a href="articleListAll3" class="btn btn-warning">처음목록</a></li>
-					</ul>
-				</div>
-    
-    </main> 
+            <c:if test="${pageMaker.next && pageMaker.endPage > 0 }">
+                <a href="articleListAll3${pageMaker.makeSearch(pageMaker.endPage +1) }" class="page-arrow" aria-label="Next">&gt;</a>
+            </c:if>
+            </nav>
+    </c:if>
+	</div>
+    </main>
     <!-- 사이드바 -->
     <aside>
       <div class="sidebar-section">
@@ -254,18 +284,11 @@ document.addEventListener('DOMContentLoaded', function() {
        <div class="sidebar-section">
       <h2>정책 기사 키워드 Top 7</h2>
       
-      <ol class="rank-list"> <c:forEach var="keywordDTO" items="${topKeywords}" varStatus="status">
-        <li>
-        <span class="rank-number">${status.index + 1}</span>
-        <a href="#" class="keyword-link" data-keyword="${keywordDTO.skeyword}"> ${keywordDTO.skeyword}</a>
-        </li>
-      </c:forEach>
-      </ol>
-      
-    </div>
+       <!-- 워드클라우드가 표시될 영역 -->
+    <canvas id="keywordWordCloud" width="450" height="400"></canvas>
+	</div>
 
       <div class="sidebar-section">
-      
          <h2>포토·영상</h2>
 	<div class="photo-grid">
 	  <c:forEach var="article" items="${randomArticles}">
@@ -300,9 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </svg>
   </button>
    
-  <footer class="container" style="text-align: center; padding: 40px 0; color: #6b7280;">
-    © 2025 누림 — Mist Blue Theme
-  </footer>
+ <jsp:include page="../include/footer.jsp"/>
 <script>
     // Top 버튼 기능
     const topButton = document.getElementById('topButton');
@@ -462,6 +483,60 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		});
 	});
-</script> 
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // topKeywords에서 단어와 count 가져오기
+    const list = [
+        <c:forEach var="keywordDTO" items="${topKeywords}" varStatus="status">
+            ["${keywordDTO.skeyword}", ${keywordDTO.count}]<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+    ];
+
+    if (list.length === 0) return;
+
+    WordCloud(document.getElementById('keywordWordCloud'), {
+        list: list,
+        gridSize: 18,
+        // 글씨 크기 함수
+        weightFactor: function(count) {
+            const min = 30;
+            const max = 65;
+            const counts = list.map(item => item[1]);
+            const maxCount = Math.max(...counts);
+            const minCount = Math.min(...counts);
+            return min + (count - minCount) / (maxCount - minCount) * (max - min);
+        },
+        fontFamily: 'Gowun Dodum, sans-serif',
+        color: () => {
+            const colors = ['#2563eb','#dc2626','#16a34a','#9333ea','#f59e0b','#0ea5e9','#ef4444'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        },
+        rotateRatio: 1,
+        backgroundColor: '#fff',
+
+        // ⭐ 클릭 이벤트
+        click: function(item) {
+            const keyword = item[0]; // 클릭된 단어
+            const searchType = 'tc'; // 제목+내용 검색
+            const encodedKeyword = encodeURIComponent(keyword);
+
+            // 검색 로그 남기기 + 이동
+            $.ajax({
+                url: "logKeyword",
+                type: "POST",
+                data: { keyword: keyword },
+                success: function() {
+                    window.location.href = "articleListAll?page=1&perPageNum=${pageMaker.cri.perPageNum}&searchType=" + searchType + "&keyword=" + encodedKeyword;
+                },
+                error: function() {
+                    window.location.href = "articleListAll?page=1&perPageNum=${pageMaker.cri.perPageNum}&searchType=" + searchType + "&keyword=" + encodedKeyword;
+                }
+            });
+        }
+    });
+});
+</script>
 </body>
 </html>

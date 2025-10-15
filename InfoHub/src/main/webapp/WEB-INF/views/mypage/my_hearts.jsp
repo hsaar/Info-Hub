@@ -92,6 +92,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 '<div class="heart-actions">' +
                 '    <button class="delete-btn" data-heartid="' + heart.heartNo + '">삭제</button>' +
                 '</div>';
+                
+                card.style.cursor = "pointer";
+                card.addEventListener("click", function(e) {
+                    if (e.target.classList.contains("delete-btn")) return; // 삭제 클릭은 무시
+                    if (heart.articleId) {
+                        window.location.href = "/project/articleContent?articleId=" + heart.articleId;
+                    } else {
+                        alert("해당 기사 ID를 찾을 수 없습니다.");
+                    }
+                });
 
             heartList.appendChild(card);
         });

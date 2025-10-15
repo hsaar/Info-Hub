@@ -1,6 +1,8 @@
 package com.infohub.project.boardcomment;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,13 +14,11 @@ public class CommentBoardServiceImpl implements CommentBoardService {
 
 	@Override
 	public List<CommentBoardVO> getComments(int boardno) {
-		System.out.println("2");
 		List<CommentBoardVO> comments = cDAO.getCommentsByboardno(boardno);
 		// 각 댓글에 대댓글 연결
 //		for (CommentBoardVO comment : comments) {
 //			comment.setReplies(cDAO.getRepliesByCommentId(comment.getCommentId()));
 //		}
-		System.out.println("5");
 		return comments;
 
 	}
@@ -35,10 +35,16 @@ public class CommentBoardServiceImpl implements CommentBoardService {
 		cDAO.insertComment(comment);
 	}
 
+	
+
 	@Override
-	public void removeComment(int commentId) {
-		// TODO Auto-generated method stub
-		cDAO.deleteComment(commentId);
+	public boolean removeComment(int commentId, Integer loginNo) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("commentId", commentId);
+	    params.put("loginNo", loginNo);
+
+	    int result = cDAO.deleteComment(params);
+	    return result > 0; // 삭제된 행이 1개 이상이면 true
 	}
 
 	@Override
