@@ -28,6 +28,7 @@ public class CommentBoardVO {
     private String createdDate;
     private String lastModified;
     private List<CommentBoardVO> replies; // 대댓글 리스트
+    private int isDeleted;
     
     
     CommentBoardVO(){}
@@ -36,7 +37,7 @@ public class CommentBoardVO {
     
 	public CommentBoardVO(Integer commentId, Integer boardno, Integer loginNo, String loginUser,
 			Integer parentCommentId, String comment, Integer hearts, String createdDate, String lastModified,
-			List<CommentBoardVO> replies) {
+			List<CommentBoardVO> replies, int isDeleted) {
 		super();
 		this.commentId = commentId;
 		this.boardno = boardno;
@@ -48,6 +49,7 @@ public class CommentBoardVO {
 		this.createdDate = createdDate;
 		this.lastModified = lastModified;
 		this.replies = replies;
+		this.isDeleted =isDeleted;
 	}
 	
 	
@@ -57,7 +59,7 @@ public class CommentBoardVO {
 		return "CommentBoardVO [commentId=" + commentId + ", boardno=" + boardno + ", loginNo=" + loginNo
 				+ ", loginUser=" + loginUser + ", parentCommentId=" + parentCommentId + ", comment=" + comment
 				+ ", hearts=" + hearts + ", createdDate=" + createdDate + ", lastModified=" + lastModified
-				+ ", replies=" + replies + "]";
+				+ ", replies=" + replies + ", isDeleted="+ isDeleted + "]";
 	}
 
 
@@ -186,4 +188,18 @@ public class CommentBoardVO {
 	    return !createdDate.equals(lastModified);
 	}
 
+
+
+	public int getIsDeleted() {
+		return isDeleted;
+	}
+
+
+
+	public void setIsDeleted(int isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
+	
+	
 }

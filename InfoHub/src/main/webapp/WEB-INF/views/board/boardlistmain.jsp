@@ -38,21 +38,21 @@
 	<!-- 카테고리 필터 섹션 -->
 	
 <!-- 카테고리 필터 섹션 -->
-<section class="filter-section">
+<section 	class="filter-section">
   <div class="container">
     <div class="category-filter-buttons">
-      <button class="filter-btn ${empty param.categoryNo ? 'active' : ''}" 
-              onclick="filterByCategory('')">전체</button>
-      <button class="filter-btn ${param.categoryNo == '1' ? 'active' : ''}" 
-              onclick="filterByCategory('1')">창업지원</button>
-      <button class="filter-btn ${param.categoryNo == '2' ? 'active' : ''}" 
-              onclick="filterByCategory('2')">직업훈련</button>
-      <button class="filter-btn ${param.categoryNo == '3' ? 'active' : ''}" 
-              onclick="filterByCategory('3')">취업지원</button>
-      <button class="filter-btn ${param.categoryNo == '4' ? 'active' : ''}" 
-              onclick="filterByCategory('4')">청년일자리</button>
-      <button class="filter-btn ${param.categoryNo == '5' ? 'active' : ''}" 
-              onclick="filterByCategory('5')">추가지원</button>
+     <button class="filter-btn ${empty param.categoryNo ? 'active' : ''}" 
+        onclick="filterByCategory('', this)">전체</button>
+<button class="filter-btn ${param.categoryNo == '1' ? 'active' : ''}" 
+        onclick="filterByCategory('1', this)">창업지원</button>
+<button class="filter-btn ${param.categoryNo == '2' ? 'active' : ''}" 
+        onclick="filterByCategory('2', this)">직업훈련</button>
+<button class="filter-btn ${param.categoryNo == '3' ? 'active' : ''}" 
+        onclick="filterByCategory('3', this)">취업지원</button>
+<button class="filter-btn ${param.categoryNo == '4' ? 'active' : ''}" 
+        onclick="filterByCategory('4', this)">청년일자리</button>
+<button class="filter-btn ${param.categoryNo == '5' ? 'active' : ''}" 
+        onclick="filterByCategory('5', this)">추가지원</button>
      
 			</div>
 		</div>
@@ -133,7 +133,9 @@
   </svg>
 	</button>
 
-
+<footer class="footer">
+		<%@ include file="../include/footer.jsp"%>
+	</footer>
 	<script>
 
 // =================================================================
@@ -183,30 +185,6 @@ function updateUrlParams(params) {
         }
     });
     history.pushState(null, '', url.toString());
-}
-
-function shareKakao() {
-    const url = window.location.href;
-    const title = document.title;
-    if (typeof Kakao !== 'undefined') {
-        Kakao.Link.sendDefault({
-            objectType: 'feed',
-            content: {
-                title: title,
-                description: '정책 소통 플랫폼 게시판',
-                imageUrl: window.location.origin + '/resources/images/logo.png',
-                link: { mobileWebUrl: url, webUrl: url },
-            },
-        });
-    } else {
-        console.error('카카오톡 공유를 위해 카카오 SDK를 로드해주세요.');
-    }
-}
-
-function shareFacebook() {
-    const url = encodeURIComponent(window.location.href);
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-    window.open(shareUrl, '_blank', 'width=600,height=400');
 }
 
 
@@ -318,17 +296,17 @@ window.fetchBoardList = function() {
 // 4. 필터 및 정렬 함수
 // =================================================================
 // 카테고리 필터 함수
-window.filterByCategory = function(categoryId) {
-	currentPageJS = 1; 
-	currentCategoryIdJS = categoryId; 
- 
-	// 버튼 active 스타일 변경 
-	document.querySelectorAll('.category-filter-btn')
-		.forEach(btn => btn.classList.remove('active'));
-	const clickedBtn = document.querySelector(`.category-filter-btn[onclick="filterByCategory('${categoryId}')"]`);
-	if (clickedBtn) clickedBtn.classList.add('active');
- 
-	window.fetchBoardList(); 
+window.filterByCategory = function(categoryId, btn) {
+    currentPageJS = 1; 
+    currentCategoryIdJS = categoryId; 
+
+    // 버튼 active 스타일 제거
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+
+    // 클릭한 버튼에 active 추가
+    if (btn) btn.classList.add('active');
+
+    window.fetchBoardList(); 
 };
 
 

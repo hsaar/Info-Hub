@@ -30,6 +30,7 @@
 
 
 <style>
+
 #customPopup .smallText {
   font-size: 0.85em;   /* 글자 크기 조절 */
   color: #555;         /* 선택 사항: 약간 회색 */
@@ -79,6 +80,18 @@
   width: 100%;
   height: 230px;
   
+}
+
+/* 타임라인 이벤트 마우스 오버 효과 */
+.fc-event {
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.fc-event:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+  filter: brightness(1.1) !important;
+  z-index: 100 !important;
 }
 
 </style>
@@ -216,8 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </svg>
   </button>
    
-   
- <jsp:include page="../include/footer.jsp"/>
+  <jsp:include page="../include/footer.jsp"/>
 <script>
     // Top 버튼 기능
     const topButton = document.getElementById('topButton');
@@ -240,9 +252,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     var colors = [
-        '#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#FF6FF5',
-        '#FF9F1C', '#00C2FF', '#845EC2', '#FFC75F', '#FF8066'
+        '#BBDEFB',  // --mist-200 (기본 미스트블루) [cite: 4]
+        '#E3F2FD',  // --mist-100 (연한 하늘) [cite: 3]
+        '#C8E6C9',  // --mint-soft (연민트) [cite: 4]
+        '#FFF9C4',  // --yellow-soft (밝은 옐로) [cite: 4]
+        '#F8BBD0',  // --pink-soft (핑크블러쉬) [cite: 5]
+        '#FFE0B2',  // --orange-soft (크림오렌지) [cite: 5]
+        
+        // 미스트 느낌을 강조하기 위해 미스트 계열 3가지 색상을 반복 추가
+        '#E3F2FD',  // --mist-100 (연한 하늘) [cite: 3]
+        '#BBDEFB',  // --mist-200 (기본 미스트블루) [cite: 4]
+        '#CFD8DC',  // --gray-cool (쿨그레이, 미스트와 잘 어울리는 톤) [cite: 6]
+        
+        // 밝은 피치톤 추가
+        '#FFC9B3'   // 라이트 피치코랄 (기존 팔레트에서 가장 밝은 코랄 톤)
+        
+        // 이 10가지 미스트/소프트 색상들을 순환하며 캘린더 이벤트에 적용합니다.
       ];
+    // 검정색 텍스트
+    var textColor = '#000000';
     
     var events = [
         <c:forEach var="timeline" items="${timelineListAll}" varStatus="status">
@@ -257,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
             registrationNo: '${timeline.registrationNo}',
             backgroundColor: colors[${status.index} % colors.length],
             borderColor: colors[${status.index} % colors.length],
-            textColor: 'white'
+            textColor: textColor
           }<c:if test="${!status.last}">,</c:if>
         </c:forEach>
       ];
@@ -297,9 +325,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	    	var end = "종료 : " + (info.event.end ? info.event.end.toLocaleDateString() : "-");
 	    	var regCall = "Call : " + (info.event.extendedProps.regCall || "-");
 	    	var linkUrl = info.event.extendedProps.link;
-	        var link = "link : " + (linkUrl
-	        		? "<a href='" + linkUrl + "' target='_blank'>" + linkUrl + "</a>" 
-	                : "-");
+	    	var link = "link : " + (linkUrl
+	    		    ? "<a href='" + linkUrl + "' target='_blank'>링크 바로가기</a>" 
+	    		    : "-");
 	        
 	        var detailBtn = "";
 	        

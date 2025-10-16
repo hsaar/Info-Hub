@@ -12,13 +12,15 @@ public class ScrapsVO {
 	private String startDate;
 	private String endDate;
 	private String trachea;
-	private String call;
-	private String type;
+	private String regCall;
+	private String regType;
 	
 	public ScrapsVO(){}
 
+	
+
 	public ScrapsVO(int scrapsNo, String createdDate, int loginNo, int registrationNo, String title, String content,
-			String link, String startDate, String endDate, String trachea, String call, String type) {
+			String link, String startDate, String endDate, String trachea, String regCall, String regType) {
 		super();
 		this.scrapsNo = scrapsNo;
 		this.createdDate = createdDate;
@@ -30,9 +32,11 @@ public class ScrapsVO {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.trachea = trachea;
-		this.call = call;
-		this.type = type;
+		this.regCall = regCall;
+		this.regType = regType;
 	}
+
+
 
 	public ScrapsVO(int scrapsNo, String createdDate, int loginNo, int registrationNo) {
 		super();
@@ -124,29 +128,40 @@ public class ScrapsVO {
 		this.trachea = trachea;
 	}
 
-	public String getCall() {
-		return call;
+	
+
+	public String getRegCall() {
+		return regCall;
 	}
 
-	public void setCall(String call) {
-		this.call = call;
+
+
+	public void setRegCall(String regCall) {
+		this.regCall = regCall;
 	}
 
-	public String getType() {
-		return type;
+
+
+	public String getRegType() {
+		return regType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+
+
+	public void setRegType(String regType) {
+		this.regType = regType;
 	}
+
+
 
 	@Override
 	public String toString() {
 		return "ScrapsVO [scrapsNo=" + scrapsNo + ", createdDate=" + createdDate + ", loginNo=" + loginNo
 				+ ", registrationNo=" + registrationNo + ", title=" + title + ", content=" + content + ", link=" + link
-				+ ", startDate=" + startDate + ", endDate=" + endDate + ", trachea=" + trachea + ", call=" + call
-				+ ", type=" + type + "]";
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", trachea=" + trachea + ", regCall=" + regCall
+				+ ", regType=" + regType + "]";
 	}
 
 	
+
 }

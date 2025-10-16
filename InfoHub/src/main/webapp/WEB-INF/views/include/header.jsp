@@ -2,8 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-	String userId = request.getParameter("userId");
-	String name = request.getParameter("name");
+	String userId = null;
+	String name = null;
+	if(session.getAttribute("userId") != null)
+		userId = session.getAttribute("userId").toString();
+	if(session.getAttribute("name") != null)
+		name = session.getAttribute("name").toString();
 %>
 <!DOCTYPE html>
 <html>
@@ -18,7 +22,7 @@
       <img src="<c:url value='/resources/image/5.png'/>" alt="Nurim 로고">
     </a>
     <ul class="menu">
-      <li><a href="articleListAll">기사</a></li>
+      <li><a href="articleListAll">최신 기사</a></li>
       <li><a href="policy">지역별 정책 </a></li>
       <li><a href="registrationlistAll">혜택</a></li>
       <li><a href="timeline">타임라인</a></li>
@@ -26,14 +30,14 @@
     </ul>
     
     <div class="right">
-      <c:if test="${empty userId}">
+      <c:if test="${empty name}">
         <span>[비회원]</span>
         <a href="<c:url value='login'/>" title="로그인">
           <i class="fas fa-sign-in-alt"></i>
         </a>
       </c:if>
-      <c:if test="${not empty userId}">
-        <span>[${userId}]님 어서오세요</span>
+      <c:if test="${not empty name}">
+        <span>[${name}]님 어서오세요</span>
         
        
        

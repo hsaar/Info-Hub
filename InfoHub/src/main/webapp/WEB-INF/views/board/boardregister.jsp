@@ -62,12 +62,8 @@
                         </svg>
                         작성자
                     </label>
-                    <input type="text" 
-                           id="name" 
-                           name="regiId" 
-                           class="form-input" 
-                           placeholder="작성자 이름을 입력하세요"
-                           maxlength="20" />
+                    <a id="name">${board.regiId}</a>
+                      
                 </div>
                 
                 <div class="form-group half">
@@ -76,10 +72,10 @@
                             <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
                         </svg>
                         카테고리
-                    </label>
-                    <%@ include file="selectcategory.jsp"%>
+                    </label>             
+          <%@ include file="selectcategory.jsp"%> 
                 </div>
-            </div>
+      
 
             <!-- 제목 -->
             <div class="form-group">
@@ -120,7 +116,7 @@
             <div class="form-actions-write">
                 <button type="button" 
                         class="btn-cancel"
-                        onclick="location.href='${pageContext.request.contextPath}/listcategory?category=${categoryId}&sort=${sort}'">
+                        onclick="location.href='${pageContext.request.contextPath}/listmain'">
                     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                     </svg>
@@ -137,6 +133,10 @@
 
     </div>
 </div>
+
+<footer class="footer">
+		<%@ include file="../include/footer.jsp"%>
+	</footer>
 
 <script>
 // 글자 수 카운터
@@ -159,15 +159,10 @@ contentTextarea.addEventListener('input', function() {
 function validateForm() {
     console.log("validateForm 실행됨");
     
-    const name = document.getElementById('name').value.trim();
     const title = document.getElementById('title').value.trim();
     const content = document.getElementById('content').value.trim();
     const mainCategory = document.getElementById('mainCategory').value;
 
-    if (name === "") {
-        showAlert("작성자를 입력해주세요.", 'name');
-        return false;
-    }
     
     if (mainCategory === "" || mainCategory === null) {
         showAlert("카테고리를 선택해주세요.", 'mainCategory');

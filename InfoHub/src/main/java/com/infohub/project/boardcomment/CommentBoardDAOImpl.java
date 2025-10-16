@@ -1,6 +1,8 @@
 package com.infohub.project.boardcomment;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -17,7 +19,6 @@ public class CommentBoardDAOImpl implements CommentBoardDAO {
 	@Override
 	public List<CommentBoardVO> getCommentsByboardno(int boardno) {
 		// TODO Auto-generated method stub
-		System.out.println("3");
 		return sqlsession.selectList(nameSpace + ".getCommentsByboardno", boardno);
 	}
 
@@ -40,15 +41,31 @@ public class CommentBoardDAOImpl implements CommentBoardDAO {
 	}
 
 	@Override
-	public void deleteComment(int commentId) {
-		// TODO Auto-generated method stub
-		sqlsession.delete(nameSpace + ".deleteComment", commentId);
+	// 인터페이스의 시그니처를 그대로 따릅니다.
+	public int updateCommentAsDeleted(CommentBoardVO comment) {
+		return sqlsession.update(nameSpace + ".updateCommentAsDeleted", comment);
 	}
 
 	@Override
-	public int deleteAll(int boardno) {
+	public int deletePhysicalComment(CommentBoardVO comment) {
+		return sqlsession.delete(nameSpace + ".deletePhysicalComment", comment);
+	}
+
+	@Override
+	public int countReplies(CommentBoardVO comment) {
+		return sqlsession.selectOne(nameSpace + ".countReplies", comment);
+	}
+
+	@Override
+	public int deleteRepliesByBoardno(int boardno) {
 		// TODO Auto-generated method stub
-		return sqlsession.delete(nameSpace + ".deleteAll", boardno);
+		return sqlsession.delete(nameSpace + ".deleteRepliesByBoardno", boardno);
+	}
+
+	@Override
+	public int deleteRootsByBoardno(int boardno) {
+		// TODO Auto-generated method stub
+		return sqlsession.delete(nameSpace + ".deleteRootsByBoardno", boardno);
 	}
 
 	@Override

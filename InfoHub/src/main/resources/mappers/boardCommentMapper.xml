@@ -5,75 +5,158 @@
 <mapper namespace="com.infohub.project.boardCommentMapper">
 
 	<!-- 게시글 아래 댓글 전체보기 -->
-	<!-- <select id="getCommentsByboardno" resultType="CommentBoardVO"> SELECT 
-		* FROM commentboard WHERE boardno = #{boardno} ORDER BY createdDate ASC </select> -->
-
 	<select id="getCommentsByboardno" resultMap="commentResultMap">
-		SELECT c.*, l.userId
-		AS loginUser
+		SELECT
+		c.commentId,
+		c.comment,
+		c.createdDate,
+		c.lastModified,
+		c.parentCommentId,
+		c.boardno,
+		c.loginNo,
+		l.name AS loginUser,
+		c.isDeleted
 		FROM commentboard c
-		JOIN login l ON c.loginNo = l.loginNo
+		LEFT JOIN
+		login l ON c.loginNo = l.loginNo
 		WHERE c.boardno = #{boardno}
-		ORDER BY c.createdDate ASC
+		ORDER BY
+		CASE WHEN c.parentCommentId IS NULL THEN c.commentId ELSE
+		c.parentCommentId END,
+		c.commentId
 	</select>
-	<!-- 댓글달기 -->
+
+	<!-- 댓글/대댓글 작성 -->
 	<insert id="insertComment" useGeneratedKeys="true"
 		keyProperty="commentId">
 		INSERT INTO commentboard (boardno, loginNo,
-		parentCommentId, comment, createdDate
-    )
+		parentCommentId,
+		comment, createdDate)
 		VALUES (#{boardno}, #{loginNo},
-		#{parentCommentId}, #{comment},NOW())
+		#{parentCommentId},
+		#{comment}, NOW())
 	</insert>
+
 
 	<!-- 대댓글 조회 -->
 	<select id="getRepliesByCommentId" resultMap="commentResultMap">
-		SELECT c.*,
-		l.userId AS loginUser
+		SELECT
+		c.commentId,
+		c.comment,
+		c.createdDate,
+		c.lastModified,
+		c.parentCommentId,
+		c.boardno,
+		c.loginNo,
+		l.name AS loginUser,
+		c.isDeleted
 		FROM commentboard c
-		JOIN login l ON c.loginNo =
-		l.loginNo
+		LEFT JOIN
+		login l ON c.loginNo = l.loginNo
 		WHERE c.parentCommentId = #{commentId}
-		ORDER BY c.createdDate
-		ASC
+		ORDER BY c.createdDate ASC
 	</select>
-	<!-- 댓글선택 -->
+
+	<!-- 댓글 선택 -->
 	<select id="getCommentById" parameterType="int"
 		resultType="com.infohub.project.boardcomment.CommentBoardVO">
-		SELECT commentId, boardno, loginNo, loginUser,
-		parentCommentId, comment, hearts, createdDate, lastModified
+		SELECT
+		c.commentId,
+		c.boardno,
+		c.loginNo,
+		l.name AS loginUser,
+		c.parentCommentId,
+		c.comment,
+		c.hearts,
+		c.createdDate,
+		c.lastModified
 		FROM
-		commentboard
-		WHERE
-		commentId = #{commentId}
-
+		commentboard c
+		JOIN login l ON c.loginNo = l.loginNo
+		WHERE c.commentId =
+		#{commentId}
 	</select>
-	<!-- 댓글수정 -->
+
+	<!-- 댓글 수정 -->
 	<update id="updateComment"
 		parameterType="com.infohub.project.boardcomment.CommentBoardVO">
-		 UPDATE commentboard
-    SET 
-        comment = #{comment},
-        lastModified = NOW()
-    WHERE commentId = #{commentId}
+		UPDATE commentboard
+		SET comment = #{comment},
+		lastModified = NOW()
+		WHERE commentId = #{commentId} AND loginNo =
+		#{loginNo}
 	</update>
-	<!-- 댓글삭제 -->
-	<delete id="deleteComment">
-		DELETE FROM commentboard WHERE commentId =
-		#{commentId}
-	</delete>
-	<!-- 해당 게시글의 댓글 전체 삭제 -->
-	<delete id="deleteAll" parameterType="int">
+
+	<!-- 물리적 삭제 -->
+	<delete id="deletePhysicalComment"
+		parameterType="com.infohub.project.boardcomment.CommentBoardVO">
 		DELETE FROM commentboard
-		WHERE boardno = #{boardno}
+		WHERE commentId = #{commentId}
+		AND loginNo = #{loginNo}
 	</delete>
 
+	<!-- 대댓글 달린 댓글 삭제(숨김 처리) -->
+	<update id="updateCommentAsDeleted"
+		parameterType="com.infohub.project.boardcomment.CommentBoardVO">
+		UPDATE commentboard
+		SET comment = '이 댓글은 작성자에 의해
+		삭제되었습니다.',
+		isDeleted = 1,
+		lastModified = NOW()
+		WHERE commentId =
+		#{commentId}
+		AND loginNo = #{loginNo}
+	</update>
+
+	<!-- 삭제용 대댓글값 -->
+	<select id="countReplies" resultType="int"
+		parameterType="com.infohub.project.boardcomment.CommentBoardVO">
+		SELECT COUNT(*)
+		FROM commentboard
+		WHERE parentCommentId =
+		#{commentId}
+	</select>
+
+	<!-- 남은 대댓글 수 확인 -->
+	<select id="getReplies" resultMap="commentResultMap">
+		SELECT
+		c.commentId,
+		c.comment,
+		c.createdDate,
+		c.parentCommentId,
+		c.boardno,
+		c.loginNo,
+		l.name AS
+		loginUser,
+		c.lastModified,
+		c.isDeleted
+		FROM commentboard c
+		LEFT JOIN login
+		l ON c.loginNo = l.loginNo
+		WHERE parentCommentId = #{commentId}
+		ORDER BY
+		c.commentId ASC
+	</select>
+
+	<!-- 게시글 삭제용 전체삭제 -->
+	<delete id="deleteRepliesByBoardno" parameterType="int">
+		DELETE FROM
+		commentboard
+		WHERE boardno = #{boardno} AND parentCommentId IS NOT NULL
+	</delete>
+
+	<delete id="deleteRootsByBoardno" parameterType="int">
+		DELETE FROM
+		commentboard
+		WHERE boardno = #{boardno} AND parentCommentId IS NULL
+	</delete>
 	<!-- ResultMap -->
 	<resultMap id="commentResultMap"
 		type="com.infohub.project.boardcomment.CommentBoardVO">
 		<id property="commentId" column="commentId" />
 		<result property="boardno" column="boardno" />
 		<result property="loginNo" column="loginNo" />
+		<result property="loginUser" column="loginUser" />
 		<result property="parentCommentId" column="parentCommentId" />
 		<result property="comment" column="comment" />
 		<result property="hearts" column="hearts" />
@@ -82,6 +165,5 @@
 		<collection property="replies" ofType="CommentBoardVO"
 			select="getRepliesByCommentId" column="commentId" />
 	</resultMap>
-
 
 </mapper>

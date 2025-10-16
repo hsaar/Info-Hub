@@ -90,11 +90,14 @@ public class LoginController {
 						@RequestParam("keywords")String keywords) {
 		
 		int i = se.updateUser(new LoginDTO(0,userId,password,name,email,phone,null,null,1,1,0,gender,keywords));
+		LoginDTO dto = se.getUserById(userId);
 		if( i > 0 ) {
 			logger.info("변경성공");
 			request.getSession().invalidate();
-			HttpSession session = request.getSession(true);
+			HttpSession session = request.getSession(true);			
 			session.setAttribute("userId", userId);
+			session.setAttribute("loginNo", dto.getName());
+			session.setAttribute("name", dto.getName());
 		}
 		
 		return "redirect:/";
@@ -119,6 +122,7 @@ public class LoginController {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("userId", res.getUserId()); //세션이 없으면 새로운 세션에 유저id값 부여
 			session.setAttribute("loginNo", res.getLoginNo());
+			session.setAttribute("name", res.getName());
 			
 			return "redirect:/";
 		}else {

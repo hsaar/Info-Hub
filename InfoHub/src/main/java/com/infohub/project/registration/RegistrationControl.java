@@ -82,7 +82,7 @@ public class RegistrationControl {
 	   }
 	
 	 @ResponseBody
-	 @PostMapping("logRegKeyword") // 클라이언트 AJAX 요청 URL
+	 @PostMapping("logKeyword") // 클라이언트 AJAX 요청 URL
 	 public int logKeyword(@RequestParam("keyword") String regkeyword) {
 	     System.out.println("logKeyword AJAX 요청 수신 - 키워드: " + regkeyword);
 	     try {

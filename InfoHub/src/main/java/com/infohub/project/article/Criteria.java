@@ -12,7 +12,7 @@ public class Criteria {
 	
 	public Criteria() {
 		this.page = 1;
-		this.perPageNum = 10;
+		this.perPageNum = 5;
 	    this.searchType = null;
 		this.keyword = null;
 		
@@ -27,7 +27,7 @@ public class Criteria {
 
 	public void setPerPageNum(int perPageNum) {
 		if(perPageNum <= 0 || perPageNum > 100) {
-			this.perPageNum = 10;
+			this.perPageNum = 5;
 			return;
 		}
 		this.perPageNum = perPageNum;

@@ -299,11 +299,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	  function updateFilterDisplay(filter) {
 	    var filterNames = {
 	      'all': '종합',
-	      'real-estate': '부동산',
-	      'stock': '주식',
-	      'savings': '적금',
-	      'welfare': '복지',
-	      'startup': '창업'
+	      'real-estate': '일자리취업',
+	      'stock': '주거/복지',
+	      'savings': '교육',
+	      'welfare': '문화/여가',
+	      'startup': '금융/경제'
 	    };
 	    
 	    var header = document.querySelector('.result-list-header h4');
@@ -365,11 +365,11 @@ const regionIdMap = {
 //카테고리 매핑 (전역)
 const categoryMap = {
   "all": { id: null, name: "종합" },   // 종합 → categoryId X
-  "real-estate": { id: 1, name: "부동산" },
-  "stock": { id: 2, name: "주식" },
-  "savings": { id: 3, name: "적금" },
-  "welfare": { id: 4, name: "복지" },
-  "startup": { id: 5, name: "창업" }
+  "real-estate": { id: 1, name: "일자리취업" },
+  "stock": { id: 2, name: "주거/복지" },
+  "savings": { id: 3, name: "교육" },
+  "welfare": { id: 4, name: "문화/여가" },
+  "startup": { id: 5, name: "금융/경제" }
 };
 
 //전역 상태
@@ -569,11 +569,9 @@ function renderPageForCount(totalCount) {
     prevBtn.style.padding = "0";
     prevBtn.style.cursor = "pointer";
 
-    const prevImg = document.createElement("img");
-    prevImg.src = prevIcon;
-    prevImg.alt = "이전";
-    prevImg.style.width = "12px";
-    prevImg.style.height = "12px";
+    const prevImg = document.createElement("p");
+    prevImg.textContent = "<";
+    prevImg.style.fontSize = "20px";
 
     prevBtn.appendChild(prevImg);
     leftBox.appendChild(prevBtn);
@@ -593,11 +591,9 @@ function renderPageForCount(totalCount) {
     nextBtn.style.padding = "0";
     nextBtn.style.cursor = "pointer";
 
-    const nextImg = document.createElement("img");
-    nextImg.src = nextIcon;
-    nextImg.alt = "다음";
-    nextImg.style.width = "12px";
-    nextImg.style.height = "12px";
+    const nextImg = document.createElement("p");
+    nextImg.textContent = ">"
+    nextImg.style.fontSize = "20px";
 
     nextBtn.appendChild(nextImg);
     rightBox.appendChild(nextBtn);

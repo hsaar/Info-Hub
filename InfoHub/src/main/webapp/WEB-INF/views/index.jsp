@@ -53,7 +53,7 @@
 					<article class="col benefit" aria-labelledby="benefit-title">
 						<div class="inner">
 							<span class="eyebrow">Articles</span>
-							<h2 id="article" class="title">정책기사</h2>
+							<h2 id="article" class="title">최신 기사</h2>
 							<p class="desc">장학금·주거·교통·문화·건강 혜택을 프로필 기반으로 추천합니다.</p>
 							<a class="panel-link" href="articleListAll" aria-label="전체기사 페이지로 이동"
 								title="전체기사 페이지로 이동"></a>
@@ -64,7 +64,7 @@
 					<article class="col policy">
 						<div class="inner">
 							<span class="eyebrow">Benefits</span>
-							<h2 class="title">혜택</h2>
+							<h2 class="title">지역별 정책 찾기</h2>
 							<p class="desc">분야/지역/대상 필터와 마감일 알림으로, 필요한 정책만 빠르게 모아보세요.</p>
 							<a class="panel-link" href="policy" aria-label="정책 페이지로 이동"
 								title="정책 페이지로 이동"></a>
@@ -81,7 +81,15 @@
 					<div class="card-body">
 						<h3 id="login-title" class="title"
 							style="font-size: 24px; text-align: center;">
+							<c:if test="${empty name}">
 							<strong>로그인하고</strong> 여러 서비스를 <br>편리하게 이용하세요.
+							</c:if>
+							
+							<c:if test="${not empty name}">
+							<strong>${name}</strong>님 어서오세요. <br>
+							<div style="font-size: 20px;">모든 서비스를 이용할 수 있습니다.</div>
+							</c:if>
+							
 						</h3>
 						
 						<ul class="quick-links">

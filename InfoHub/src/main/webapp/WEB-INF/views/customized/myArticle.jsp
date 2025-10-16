@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -38,37 +38,24 @@ a {
     <div class="filter-section">
       <!-- 분야 필터 -->
       <div class="category-filter">
-        <c:if test="${not empty keyword0}">
-        <button class="filter-btn primary" data-category="estate">${keyword0}</button>
-        </c:if>
-        <c:if test="${not empty keyword1}">
-        <button class="filter-btn primary" data-category="estate">${keyword1}</button>
-        </c:if>
-        <c:if test="${not empty keyword2}">
-        <button class="filter-btn primary" data-category="estate">${keyword2}</button>
-        </c:if>
-        <c:if test="${not empty keyword3}">
-        <button class="filter-btn primary" data-category="estate">${keyword3}</button>
-        </c:if>
-        <c:if test="${not empty keyword4}">
-        <button class="filter-btn primary" data-category="estate">${keyword4}</button>
-        </c:if>
+      	<c:set var="userKeywords" value="${keyword0},${keyword1},${keyword2},${keyword3},${keyword4}" />
+      	<c:set var="defaultKeywords" value="취업지원,문화바우처,의료비지원,심리상담,생활안정" />
+      	<c:set var="count" value="0" />
+      	
+		<c:set var="allUserKeywords" value="${fn:split(userKeywords, ',')}" />
+		<c:forEach var="kw" items="${allUserKeywords}">
+		  <c:if test="${not empty kw and count lt 5}">
+		    <button class="filter-btn primary">${kw}</button>
+		    <c:set var="count" value="${count + 1}" />
+		  </c:if>
+		</c:forEach>
         
-        <c:if test="${empty keyword0}">
-        <button class="filter-btn" data-category="stock">취업지원</button>
-        </c:if>
-        <c:if test="${empty keyword1}">
-        <button class="filter-btn" data-category="stock">문화바우처</button>
-        </c:if>
-        <c:if test="${empty keyword2}">
-        <button class="filter-btn" data-category="stock">의료비지원</button>
-        </c:if>
-        <c:if test="${empty keyword3}">
-        <button class="filter-btn" data-category="stock">심리상담</button>
-        </c:if>
-        <c:if test="${empty keyword4}">
-        <button class="filter-btn" data-category="stock">생활안정</button>
-        </c:if>
+        <c:forEach var="base" items="${fn:split(defaultKeywords, ',')}">
+		  <c:if test="${!fn:contains(userKeywords, base) and count lt 5}">
+		    <button class="filter-btn">${base}</button>
+		    <c:set var="count" value="${count + 1}" />
+		  </c:if>
+		</c:forEach>
         
         <button class="add-filter-btn">+</button>
       </div>
@@ -76,208 +63,219 @@ a {
 
     <!-- 기사 그리드 -->
     <div class="news-grid">
-      
-      <!-- USER KEYWORD 카테고리 -->
-      <c:if test="${not empty keyword0}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword0}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list0}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
-      
-      <!-- USER KEYWORD 카테고리 -->
-      <c:if test="${not empty keyword1}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword1}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list1}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
-      
-      <!-- USER KEYWORD 카테고리 -->
-      <c:if test="${not empty keyword2}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword2}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list2}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
-      
-      <!-- USER KEYWORD 카테고리 -->
-      <c:if test="${not empty keyword3}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword3}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list3}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
-      
-      <!-- USER KEYWORD 카테고리 -->
-      <c:if test="${not empty keyword4}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword4}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list4}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
-	  
-	  <!-- 취업지원 카테고리 -->
-      <c:if test="${empty keyword0}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword5}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list5}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
-      
-      <!-- 문화바우처 카테고리 -->
-      <c:if test="${empty keyword1}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword6}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list6}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
-	  
-      <!-- 의료비지원 카테고리 -->
-      <c:if test="${empty keyword2}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword7}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list7}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
+	  <c:set var="count" value="0"/>
 
-      <!-- 심리상담 카테고리 -->
-      <c:if test="${empty keyword3}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword8}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list8}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
+		<!-- ===================== USER KEYWORD 0 ===================== -->
+		<c:if test="${not empty keyword0 and count lt 5}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">${keyword0}</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list0}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
+		
+		<!-- ===================== USER KEYWORD 1 ===================== -->
+		<c:if test="${not empty keyword1 and keyword1 ne keyword0 and count lt 5}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">${keyword1}</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list1}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
+		
+		<!-- ===================== USER KEYWORD 2 ===================== -->
+		<c:if test="${not empty keyword2 and keyword2 ne keyword0 and keyword2 ne keyword1 and count lt 5}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">${keyword2}</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list2}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
+		
+		<!-- ===================== USER KEYWORD 3 ===================== -->
+		<c:if test="${not empty keyword3 and keyword3 ne keyword0 and keyword3 ne keyword1 and keyword3 ne keyword2 and count lt 5}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">${keyword3}</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list3}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
+		
+		<!-- ===================== USER KEYWORD 4 ===================== -->
+		<c:if test="${not empty keyword4 and keyword4 ne keyword0 and keyword4 ne keyword1 and keyword4 ne keyword2 and keyword4 ne keyword3 and count lt 5}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">${keyword4}</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list4}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
+		
+		<!-- ===================== DEFAULT KEYWORD 1: 취업지원 ===================== -->
+		<c:if test="${count lt 5 and (keyword0 ne '취업지원' and keyword1 ne '취업지원' and keyword2 ne '취업지원' and keyword3 ne '취업지원' and keyword4 ne '취업지원')}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">취업지원</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list5}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
+		
+		<!-- ===================== DEFAULT KEYWORD 2: 문화바우처 ===================== -->
+		<c:if test="${count lt 5 and (keyword0 ne '문화바우처' and keyword1 ne '문화바우처' and keyword2 ne '문화바우처' and keyword3 ne '문화바우처' and keyword4 ne '문화바우처')}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">문화바우처</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list6}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
+		
+		<!-- ===================== DEFAULT KEYWORD 3: 의료비지원 ===================== -->
+		<c:if test="${count lt 5 and (keyword0 ne '의료비지원' and keyword1 ne '의료비지원' and keyword2 ne '의료비지원' and keyword3 ne '의료비지원' and keyword4 ne '의료비지원')}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">의료비지원</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list7}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
+		
+		<!-- ===================== DEFAULT KEYWORD 4: 심리상담 ===================== -->
+		<c:if test="${count lt 5 and (keyword0 ne '심리상담' and keyword1 ne '심리상담' and keyword2 ne '심리상담' and keyword3 ne '심리상담' and keyword4 ne '심리상담')}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">심리상담</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list8}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
+		
+		<!-- ===================== DEFAULT KEYWORD 5: 생활안정 ===================== -->
+		<c:if test="${count lt 5 and (keyword0 ne '생활안정' and keyword1 ne '생활안정' and keyword2 ne '생활안정' and keyword3 ne '생활안정' and keyword4 ne '생활안정')}">
+		  <div class="news-category-card">
+		    <h2 class="category-title">생활안정</h2>
+		    <div class="news-list">
+		      <c:forEach var="item" items="${list9}">
+		        <div class="news-item">
+		          <div class="news-content">
+		            <p class="news-text">${item.title}</p>
+		            <span class="news-source">${item.source}</span>
+		          </div>
+		          <div class="news-thumbnail">
+		            <img src="resources/image/${item.image}" alt="${item.image}" />
+		          </div>
+		        </div>
+		      </c:forEach>
+		    </div>
+		  </div>
+		  <c:set var="count" value="${count + 1}" />
+		</c:if>
 
-      <!-- 생활안정 카테고리 -->
-      <c:if test="${empty keyword4}">
-      <div class="news-category-card">
-        <h2 class="category-title">${keyword9}</h2>
-        <div class="news-list">
-		  <c:forEach var = "list" items = "${list9}">
-          <a href = "${list.link}"><div class="news-item">
-            <div class="news-content">
-              <p class="news-text">${list.title}</p>
-              <span class="news-source">${list.source}</span>
-            </div>
-            <div class="news-thumbnail">
-              <img src="resources/image/${list.image}" alt="${list.image}">
-            </div>
-          </div></a>
-          </c:forEach>
-        </div>
-      </div>
-      </c:if>
     </div>
-
   </div>
 </div>
 

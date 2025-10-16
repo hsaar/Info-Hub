@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.infohub.project.boardcomment.CommentBoardDAO;
+import com.infohub.project.boardcomment.CommentBoardService;
 import com.infohub.project.boardhearts.HeartsBoardDAO;
 
 @Service
@@ -19,6 +20,9 @@ public class BoardServiceImpl implements BoardService {
 
 	@Autowired
 	CommentBoardDAO cDao;
+	
+	@Autowired
+	CommentBoardService cService;
 	
 	@Autowired
 	HeartsBoardDAO hDao;
@@ -85,15 +89,19 @@ public class BoardServiceImpl implements BoardService {
 		return dao.update(boardVO);
 	}
 
-	@Override
-	public int delete(int boardno) {
-	    // 1️⃣ 댓글 먼저 삭제
-	    cDao.deleteAll(boardno);
-	    hDao.deleteAllHeartsByBoardno(boardno);
-	    // 2️⃣ 게시글 삭제
-	    return dao.delete(boardno);
-	}
-
+	 @Override
+	    @Transactional // 댓글 삭제와 게시글 삭제를 하나의 트랜잭션으로 묶습니다.
+	    public int delete(int boardno) { 
+	        
+	        // 1️⃣ 댓글 먼저 순차적으로 삭제 (Service에서 Service 호출)
+	        cService.deleteAllComments(boardno); 
+	        
+	        // 2️⃣ 좋아요/추천 기록 삭제
+	        hDao.deleteAllHeartsByBoardno(boardno);
+	        
+	        // 3️⃣ 게시글 삭제
+	        return dao.delete(boardno);
+	    }
 
 
 	@Override

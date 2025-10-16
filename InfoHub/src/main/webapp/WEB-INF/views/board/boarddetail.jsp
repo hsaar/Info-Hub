@@ -115,6 +115,10 @@
 		</div>
 	</div>
 
+<footer class="footer">
+		<%@ include file="../include/footer.jsp"%>
+	</footer>
+
 	<script>
 var boardno = ${board.boardno};
 var loginNo = '<c:out value="${loginNo}" default="null"/>';
@@ -125,6 +129,9 @@ var loginNo = '<c:out value="${loginNo}" default="null"/>';
 	console.log("==================");
 
 console.log("loginNo =", loginNo);
+
+const loginUser = "${sessionScope.loginUser}";
+
 
 // ❤️ 좋아요 토글
 function toggleHeart(boardno){
@@ -157,62 +164,102 @@ function confirmDeleteForm(boardno) {
 }
 
 $(document).ready(function(){
-    var boardno = $("#board-data").data("boardno");
+    const boardno = $("#board-data").data("boardno");
+    const loginNo = "${loginNo}" || null; // 로그인 세션
+    const loginUser = "${sessionScope.loginUser}" || null;
 
-    // 댓글 목록 불러오기
+    // 댓글 목록 불러오기 (GET)
     function loadComments() {
-        $("#commentArea").load("${pageContext.request.contextPath}/comment/comments?boardno=" + boardno + "&ajax=true");
-    }
+        $.get("${pageContext.request.contextPath}/comment/comments", { boardno: boardno, ajax: true }, function(html){
+            $("#commentArea").html(html);
+            
+            // 총 댓글 수 계산 (메인 댓글 + 대댓글)
+            let totalCount = 0;
+            $("#commentArea .comment-item").each(function(){
+                totalCount++; // 메인 댓글
+                totalCount += $(this).find(".reply-item").length; // 대댓글
+            });
 
-    // ✅ 댓글 작성
+            // 댓글 수 반영
+            $("#commentCount").text(totalCount);
+        });
+    }
+     
+
+    // 댓글 작성 (메인 댓글)
     $(document).on("submit", "#commentForm", function(e){
         e.preventDefault();
-
         if(!loginNo || loginNo === "null" || loginNo === ""){
             alert("로그인 후 작성 가능합니다.");
             location.href = "${pageContext.request.contextPath}/login";
             return;
         }
+        const form = $(this);
+        const comment = form.find("textarea[name='comment']").val();
+        
+        // JSON 형태로 서버에 전송할 데이터 객체 준비
+        const dataToSend = { 
+            boardno: boardno, 
+            comment: comment, 
+            parentCommentId: null 
+        };
+        
+        // 댓글 내용이 비어있는지 확인
+        if (!comment.trim()) {
+            console.warn("댓글 내용을 입력해주세요.");
+            return;
+        }
 
-        var comment = $(this).find("textarea[name='comment']").val();
         $.ajax({
-            url: "${pageContext.request.contextPath}/comment/add",
-            type: "POST",
-            data: { boardno: boardno, comment: comment, loginNo: loginNo },
+            url: '${pageContext.request.contextPath}/comment/add',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(dataToSend),
+            dataType: 'text', 
+            
             success: function(res){
                 if(res === "success"){
-                    loadComments();
-                    $("#commentForm")[0].reset();
+                    loadComments(); 
+                    form[0].reset(); 
                 } else if(res === "NOT_LOGGED_IN"){
-                    alert("로그인 후 작성 가능합니다.");
+                    console.warn("세션이 만료되었거나 로그인 정보가 유효하지 않습니다.");
+                    location.href = "${pageContext.request.contextPath}/login";
+                } else {
+                    console.error("댓글 작성 실패: 서버에서 예상치 못한 응답:", res);
                 }
             },
-            error: function(err){
-                console.error(err);
+            
+            error: function(xhr, status, error){
+                console.error("댓글 작성 중 오류 발생:", xhr.status, xhr.responseText);
+                console.error("댓글 작성 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
             }
         });
     });
 
-    // 댓글 수정
+ // 댓글 수정/저장
     $(document).on("click", ".btn-update", function(){
-        var commentId = $(this).data("comment-id");
+        const commentId = $(this).data("comment-id");
         $("#comment-text-" + commentId).prop("readonly", false).focus();
         $(this).removeClass("btn-update").addClass("btn-save").text("수정완료");
     });
 
     $(document).on("click", ".btn-save", function(){
-        var commentId = $(this).data("comment-id");
-        var newComment = $("#comment-text-"+commentId).val();
+        const commentId = $(this).data("comment-id");
+        const newComment = $("#comment-text-" + commentId).val();
 
-        $.post("${pageContext.request.contextPath}/comment/update",
-           { commentId: commentId, boardno: boardno, comment: newComment },
-           function(res){
-               if(res === "SUCCESS"){
-                   loadComments();
-               }
-           }).fail(function(err){
-               console.error("update ajax 오류:", err);
-           });
+        $.ajax({
+            url: "${pageContext.request.contextPath}/comment/update",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ commentId: commentId, boardno: boardno, comment: newComment }),
+            dataType: "text",
+            success: function(res){
+                if(res === "SUCCESS") loadComments();
+            },
+            error: function(xhr){
+                console.error("댓글 수정 실패:", xhr.responseText);
+            }
+        });
 
         $(this).removeClass("btn-save").addClass("btn-update").text("댓글수정");
         $("#comment-text-"+commentId).prop("readonly", true);
@@ -220,16 +267,69 @@ $(document).ready(function(){
 
     // 댓글 삭제
     $(document).on("click", ".btn-delete", function(){
-        var commentId = $(this).data("comment-id");
+        const commentId = $(this).data("comment-id");
         if(confirm("정말 삭제하시겠습니까?")){
-            $.post("${pageContext.request.contextPath}/comment/delete",
-                   {commentId:commentId, boardno:boardno},
-                   function(){ loadComments(); });
+            $.ajax({
+                url: "${pageContext.request.contextPath}/comment/delete",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ commentId: commentId, boardno: boardno }),
+                dataType: "text",
+                success: function(){ loadComments(); },
+                error: function(xhr){ console.error("댓글 삭제 실패:", xhr.responseText); }
+            });
         }
     });
 
+    // 답글 폼 토글
+    $(document).on("click", ".btn-reply", function(){
+        const commentId = $(this).data("comment-id");
+        $(".reply-form-container").hide();
+        $("#reply-form-" + commentId).show().find("textarea").focus();
+    });
+
+    $(document).on("click", ".btn-cancel", function(){
+        const replyForm = $(this).closest(".reply-form-container");
+        replyForm.hide();
+        replyForm.find("textarea").val('');
+    });
+
+    // 답글 제출
+    $(document).on("submit", ".reply-form", function(e){
+        e.preventDefault();
+        if(!loginNo || loginNo === "null" || loginNo === ""){
+            alert("로그인 후 작성 가능합니다.");
+            location.href = "${pageContext.request.contextPath}/login";
+            return;
+        }
+
+        const parentCommentId = $(this).data("parent-id") || null;
+        const reply = $(this).find("textarea").val();
+        const form = $(this);
+
+        $.ajax({
+            url: "${pageContext.request.contextPath}/comment/add",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ boardno: boardno, parentCommentId: parentCommentId, comment: reply }),
+            dataType: "text",
+            success: function(res){
+                if(res === "success"){
+                    loadComments();
+                    $("#reply-form-" + parentCommentId).hide();
+                    $("#reply-form-" + parentCommentId + " textarea").val('');
+                }
+            },
+            error: function(xhr){
+                console.error("대댓글 작성 실패:", xhr.responseText);
+            }
+        });
+    });
+
+    // 초기 댓글 로딩
     loadComments();
 });
+
 </script>
 </body>
 </html>

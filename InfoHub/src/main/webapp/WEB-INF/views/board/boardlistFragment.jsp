@@ -47,19 +47,19 @@
 			<nav class="pagination-nav">
 				<c:if test="${currentPage > 1}">
 					<a
-						href="<c:url value='/board?page=${currentPage - 1}&category=${param.category}&sort=${param.sort}' />"
+						href="<c:url value='/board?page=${currentPage - 1}&category=${param.categoryId}&sort=${param.sort}' />"
 						class="page-arrow">‹</a>
 				</c:if>
 
 				<c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
 					<a
-						href="<c:url value='/board?page=${pageNum}&category=${param.category}&sort=${param.sort}' />"
+						href="<c:url value='/board?page=${pageNum}&category=${param.categoryId}&sort=${param.sort}' />"
 						class="page-number ${currentPage == pageNum ? 'active' : ''}">${pageNum}</a>
 				</c:forEach>
 
 				<c:if test="${currentPage < totalPages}">
 					<a
-						href="<c:url value='/board?page=${currentPage + 1}&category=${param.category}&sort=${param.sort}' />"
+						href="<c:url value='/board?page=${currentPage + 1}&category=${param.categoryId}&sort=${param.sort}' />"
 						class="page-arrow">›</a>
 				</c:if>
 			</nav>

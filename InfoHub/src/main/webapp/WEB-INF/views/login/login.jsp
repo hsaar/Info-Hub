@@ -364,7 +364,7 @@
             </div>
         </div>
     </div>
-
+  <jsp:include page="../include/footer.jsp"/>
     <script>
         const signUpButton = document.getElementById('signUp');
         const signInButton = document.getElementById('signIn');

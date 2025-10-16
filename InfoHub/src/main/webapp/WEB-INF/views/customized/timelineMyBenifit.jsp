@@ -148,7 +148,7 @@
             start: '${myscrapsList.startDate}',
             end: '${myscrapsList.endDate}',
             allDay: true,
-            call: '${myscrapsList.call}',
+            call: '${myscrapsList.regCall}',
             link: '${myscrapsList.link}',
             registrationNo: '${myscrapsList.registrationNo}',
             backgroundColor: colors[${status.index} % colors.length],
