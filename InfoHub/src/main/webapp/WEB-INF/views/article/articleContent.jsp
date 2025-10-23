@@ -32,12 +32,31 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/articleContent.css' />">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
 
-	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
 	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.1.2/src/wordcloud2.js"></script>
 
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+
 <style>
+.action-btn {
+    display: inline-flex;       /* 텍스트+아이콘 가로 정렬 */
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;          /* URL 버튼과 동일하게 */
+    font-size: 0.8rem;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    background-color: #eee;     /* 테스트용, 필요시 바꾸기 */
+    transition: all 0.3s ease;
+}
+.action-btn svg {
+    vertical-align: middle;
+}
 
 .btn-common {
     display: inline-block;
@@ -382,7 +401,7 @@ document.addEventListener('DOMContentLoaded', function() {
 							htmls += '</div>';
 							htmls += '<p>' + this.comment + '</p>';
 							htmls += '<br>';
-							htmls += '<span class="comment-date">작성일: ' + this.createdDate + ' | 수정일: ' + this.lastModified + '</span>';
+							htmls += '<span class="comment-date">작성일: ' + this.createdDate + '</span>';
 							htmls += '</div>';
 	                       //htmls += '</div>';   
 	                    });  // each End
@@ -539,12 +558,80 @@ document.addEventListener('DOMContentLoaded', function() {
 	       alert("URL이 복사되었습니다.");
 	   }
 	
+	function downloadPDF() {
+		
+		  const element = document.getElementById('pdfArea');
+
+		  html2canvas(element, {
+		    scale: 2,
+		    useCORS: true,
+		    scrollY: 0,       // 스크롤 위치 무시
+		    windowWidth: document.body.scrollWidth,
+		    windowHeight: document.body.scrollHeight
+		  }).then(canvas => {
+		    const imgData = canvas.toDataURL('image/png');
+		    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+		    const pageWidth = pdf.internal.pageSize.getWidth();
+		    const pageHeight = pdf.internal.pageSize.getHeight();
+		    const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+		    let heightLeft = imgHeight;
+		    let position = 0;
+
+		    pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+		    heightLeft -= pageHeight;
+
+		    while (heightLeft > 0) {
+		      position = heightLeft - imgHeight;
+		      pdf.addPage();
+		      pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight);
+		      heightLeft -= pageHeight;
+		    }
+
+		    pdf.save('article.pdf');
+		  });
+		}
+
+	Kakao.init('50d17a154d919b83d81f7ff6cd356141');
+	console.log(Kakao.isInitialized()); // true면 정상 초기화됨
 	
+	function shareKakao() {
+		  // 현재 URL (articleContent → noArticleContent로 교체)
+		  const shareUrl = window.location.href.replace("articleContent", "noArticleContent");
+
+		  // 기사 제목, 요약 등 표시할 내용 (원하시는 대로 변경 가능)
+		  const title = document.querySelector(".article-title")?.innerText || "기사 보기";
+		  const description = "이 기사를 카카오톡에서 확인해보세요!";
+
+		  Kakao.Link.sendDefault({
+		    objectType: 'feed',
+		    content: {
+		      title: title,
+		      description: description,
+		      imageUrl: 'https://your-site.com/resources/img/logo.png', // 대표 이미지
+		      link: {
+		        mobileWebUrl: shareUrl,
+		        webUrl: shareUrl
+		      }
+		    },
+		    buttons: [
+		      {
+		        title: '기사 보러가기',
+		        link: {
+		          mobileWebUrl: shareUrl,
+		          webUrl: shareUrl
+		        }
+		      }
+		    ]
+		  });
+		}
+
 </script>  
 
 </head>
 <body>
 
+<div id="pdfArea">
   <!-- 상단바 -->
 <jsp:include page="../include/header.jsp"/>
 
@@ -628,12 +715,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <!-- 액션 버튼 -->
             <div class="article-actions">
+            	<button class="action-btn" onclick="shareKakao(); return false;" style="display: flex; align-items: center; justify-content: center; gap: 2px; flex-direction: column;">
+			    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48" fill="none" style="margin-left: 2px;">
+			        <!-- 노란색 카카오톡 말풍선 -->
+			        <circle cx="24" cy="24" r="24" fill="#FFEB00"/>
+			        <!-- 검정색 카톡 로고 느낌 -->
+			        <path d="M15 18h18v12H15z" fill="#3C1E1E"/>
+			    </svg>
+			    <span>카카오톡<br>공유</span>
+				</button>
             	<button class="action-btn" onclick="clip(); return false;">
             		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             			<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
             			<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
             		</svg>
             		URL 복사
+            	</button>
+            	<button class="action-btn" onclick="downloadPDF()">
+	            	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+				    <path fill="#007BFF" d="M12 2C11.4477 2 11 2.44772 11 3V13.5858L7.70711 10.2929C7.31658 9.90237 6.68342 9.90237 6.29289 10.2929C5.90237 10.6834 5.90237 11.3166 6.29289 11.7071L11.2929 16.7071C11.6834 17.0976 12.3166 17.0976 12.7071 16.7071L17.7071 11.7071C18.0976 11.3166 18.0976 10.6834 17.7071 10.2929C17.3166 9.90237 16.6834 9.90237 16.2929 10.2929L13 13.5858V3C13 2.44772 12.5523 2 12 2ZM5 18C4.44772 18 4 18.4477 4 19C4 19.5523 4.44772 20 5 20H19C19.5523 20 20 19.5523 20 19C20 18.4477 19.5523 18 19 18H5Z"/>
+					</svg>
+	            	 PDF 다운
             	</button>
             	<button type="button" class="action-btn action-btn-heart" id="heartBtn">
             		<i class="fa-regular fa-heart heart-icon"></i>좋아요
@@ -649,6 +751,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             
       	</article>
+
    
    <!-- 댓글 -->
 	<div class="comment-section">
@@ -667,9 +770,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 
 </c:forEach>
- 	
 </div>
 </main>
+
 <aside>
       <div class="sidebar-section">
         <h2>많이 본 기사</h2>
@@ -722,8 +825,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	</div>
     </aside>
    </div>
- 
-
 
   <!-- Top 버튼 -->
   <button class="top-button" id="topButton" aria-label="맨 위로 이동">
@@ -732,9 +833,9 @@ document.addEventListener('DOMContentLoaded', function() {
     </svg>
   </button>
    
+   <jsp:include page="../include/footer.jsp"/>
+   </div>
    
-   
-  <jsp:include page="../include/footer.jsp"/>
 <script>
     // Top 버튼 기능
     const topButton = document.getElementById('topButton');

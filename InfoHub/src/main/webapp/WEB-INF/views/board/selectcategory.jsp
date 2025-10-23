@@ -15,10 +15,16 @@
    <select id="mainCategory" name="categoryId" required>
     <option value="">-- 선택 --</option>
     <c:forEach var="m" items="${mainCategories}">
-        <option value="${m.categoryId}"
-            <c:if test="${categoryId != null && categoryId == m.categoryId}">selected</c:if>>
-            ${m.name}
-        </option>
+        <c:choose>
+            <c:when test="${m.name == '공지' && role != 2}">
+            </c:when>
+            <c:otherwise>
+                <option value="${m.categoryId}"
+                    <c:if test="${categoryId != null && categoryId == m.categoryId}">selected</c:if>>
+                    ${m.name}
+                </option>
+            </c:otherwise>
+        </c:choose>
     </c:forEach>
 </select>
 

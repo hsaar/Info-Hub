@@ -234,6 +234,14 @@
   animation: hotPulse 2s ease-in-out infinite;
 }
 
+.image-badge {
+  color: #3b82f6;
+  vertical-align: middle;
+  font-size: 18px;
+  margin-left: 4px;
+}
+
+
 @keyframes hotPulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
@@ -254,40 +262,244 @@
   font-family: 'Gowun Dodum', sans-serif;
 }
 
-.write-main-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 18px 32px;
-  background: linear-gradient(135deg, #C9E1F9 0%, #A3D1F5 50%, #7CC0F0 100%);
-  color: #1f2937;
-  border: none;
-  border-radius: 25px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(124, 192, 240, 0.3);
-  border: 1px solid rgba(201, 225, 249, 0.5);
-  font-family: 'Gowun Dodum', sans-serif;
+/* ===== 글쓰기 카드 ===== */
+.write-form-card {
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: left;
 }
 
-.write-main-button:hover {
+/* ===== 폼 그룹 ===== */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-group.half {
+  width: 48%;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 4%;
+}
+
+.form-group.half:last-child {
+  margin-right: 0;
+}
+
+
+ /* 작성자 이름이 나오는 필드의 스타일 초기화 (요청 사항 반영) */
+        .writer-display {
+            display: block;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-family: 'Gowun Dodum', sans-serif;
+            color: var(--ink); /* 변수 사용 */
+            line-height: 1.5;
+            border: none;
+            background: transparent;
+            cursor: default;
+        }
+        
+        /* 제목 input과 카테고리 select 폭 확장 */
+.form-group.half input.form-input,
+.form-group.half select {
+  width: 100%; 
+}
+
+/* 제목 영역만은 절반이 아닌 거의 전체 폭 */
+.form-group#title-group {
+  flex: 1 1 70%;
+}
+
+/* 카테고리 영역 */
+.form-group.half select {
+  min-width: 260px;
+}
+        
+       /* ===== 파일 첨부 버튼 전용 변수 ===== */
+.photo-upload-container {
+  --accent: #3b82f6;
+  --mist-200: #dbeafe;
+}
+
+/* ===== 커스텀 파일 첨부 버튼 ===== */
+.custom-photo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  background: #fff;
+  border: 2px solid var(--mist-200);
+  border-radius: 16px;
+  color: #6b7280;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Gowun Dodum', sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  user-select: none;
+  min-width: 40px;
+  text-align: center;
+}
+
+.custom-photo-btn:hover {
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(11, 80, 208, 0.15);
+}
+
+.custom-photo-btn.attached {
+  background: linear-gradient(135deg, var(--accent) 0%, #3b82f6 100%);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(11, 80, 208, 0.3);
+}
+
+.custom-photo-btn.attached:hover {
+  background: linear-gradient(135deg, #0a3fa0 0%, #2563eb 100%);
+  box-shadow: 0 8px 20px rgba(11, 80, 208, 0.4);
+}
+
+/**/
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  color: #1f2937;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.form-textarea {
+  min-height: 150px;
+}
+
+.form-input-file {
+  display: inline-block;
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #f0f9ff;
+  cursor: pointer;
+  font-size: 14px;
+  color: #1f2937;
+  transition: all 0.2s ease;
+}
+
+.form-input-file:hover {
+  background-color: #e0f2fe;
+  border-color: #7cc0f0;
+}
+
+/* 수정한곳 여기까지 */
+
+/* 글자수 표시 */
+.char-count {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #6b7280;
+  text-align: right;
+}
+
+/* ===== 버튼 영역 ===== */
+.form-actions-write {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-cancel,
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.btn-cancel:hover {
+  background-color: #e5e7eb;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #C9E1F9 0%, #A3D1F5 50%, #7CC0F0 100%);
+  color: #1f2937;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(124, 192, 240, 0.3);
+  border: 1px solid rgba(201, 225, 249, 0.5);
+  transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
   background: linear-gradient(135deg, #A3D1F5 0%, #7CC0F0 50%, #5BB5EB 100%);
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 15px 35px rgba(91, 181, 235, 0.4);
 }
 
-.write-main-button svg {
-  width: 24px;
-  height: 24px;
+.btn-submit svg {
+  width: 20px;
+  height: 20px;
   fill: currentColor;
   transition: transform 0.2s ease;
 }
 
-.write-main-button:hover svg {
+.btn-submit:hover svg {
   transform: rotate(-5deg) scale(1.1);
+}
+
+
+
+/* 반응형: 모바일에서 버튼들이 세로로 배치되도록 수정 (기존 CSS에 form-row가 이미 1fr로 설정되어 있음) */
+@media (max-width: 768px) {
+    .custom-file-upload {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+    .file-label {
+        width: 100%;
+        text-align: center;
+        padding: 10px 14px;
+        margin-bottom: 8px;
+    }
+    .file-name-display {
+        width: 100%;
+        padding: 0 4px;
+        text-align: center;
+    }
 }
 
 /* 플로팅 글쓰기 버튼 */

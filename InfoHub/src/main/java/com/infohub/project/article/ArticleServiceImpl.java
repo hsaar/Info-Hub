@@ -1,17 +1,25 @@
 package com.infohub.project.article;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.infohub.project.openapi.ElasticsearchService;
+
 @Service
 public class ArticleServiceImpl implements ArticleService{
 	
 	@Autowired
 	ArticleDAO dao;
+	
+	@Autowired
+    private ElasticsearchService esService;
+	
 
 	@Override
 	public List<ArticleVO> articlListAll(Criteria cri) throws Exception {
@@ -59,6 +67,19 @@ public class ArticleServiceImpl implements ArticleService{
 	public List<ArticleVO> articleContent(int articleId) throws Exception {
 		// TODO Auto-generated method stub
 		dao.updateViews(articleId);
+		
+		 List<ArticleVO> articles = dao.articleContent(articleId);
+		    if (articles != null && !articles.isEmpty()) {
+		        ArticleVO article = articles.get(0);
+
+		        // 3️⃣ Elasticsearch 업데이트 (커스텀 esService 사용)
+		        Map<String, Object> updateFields = new HashMap<>();
+		        updateFields.put("views", article.getViews()); // DB에서 증가된 조회수
+		        updateFields.put("hearts", article.getHearts());
+
+		        esService.updateDocument("news_index", String.valueOf(article.getArticleId()), updateFields);
+		    }
+		
 		return dao.articleContent(articleId);
 	}
 
@@ -84,6 +105,18 @@ public class ArticleServiceImpl implements ArticleService{
 	public List<ArticleVO> noArticleContent(int articleId) throws Exception {
 		// TODO Auto-generated method stub
 		dao.updateViews(articleId);
+		
+		List<ArticleVO> articles = dao.articleContent(articleId);
+	    if (articles != null && !articles.isEmpty()) {
+	        ArticleVO article = articles.get(0);
+
+	        // 3️⃣ Elasticsearch 업데이트 (커스텀 esService 사용)
+	        Map<String, Object> updateFields = new HashMap<>();
+	        updateFields.put("views", article.getViews()); // DB에서 증가된 조회수
+	        updateFields.put("hearts", article.getHearts());
+
+	        esService.updateDocument("news_index", String.valueOf(article.getArticleId()), updateFields);
+	    }
 		return dao.articleContent(articleId);
 	}
 
@@ -98,5 +131,19 @@ public class ArticleServiceImpl implements ArticleService{
 		// TODO Auto-generated method stub
 		return dao.findAllArticles();
 	}
+
+	@Override
+	public int getTotalCountByCategory(int articlecategories_categoriesNo) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.getTotalCountByCategory(articlecategories_categoriesNo);
+	}
+
+	@Override
+	public List<ArticleVO> elasticArticles() throws Exception {
+		// TODO Auto-generated method stub
+		return dao.elasticArticles();
+	}
+
+	
 
 }

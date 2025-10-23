@@ -75,7 +75,7 @@ public class BoardServiceImpl implements BoardService {
 		// TODO Auto-generated method stub
 		return dao.getDetail(boardno);
 	}
-
+	
 	@Override
 	public int register(BoardVO boardVO) throws Exception {
 		return dao.register(boardVO);

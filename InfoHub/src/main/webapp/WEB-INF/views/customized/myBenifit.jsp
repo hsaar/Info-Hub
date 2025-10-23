@@ -13,9 +13,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%
-	String userId = (String) session.getAttribute("userId");
-	int loginNo = ((Integer) session.getAttribute("loginNo")).intValue();
-
+    String userId = (String) session.getAttribute("userId");
+    int loginNo = ((Integer) session.getAttribute("loginNo")).intValue();
 %>
 
 <!DOCTYPE html>
@@ -32,197 +31,236 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-
 $(document).ready(function(){
-	
-	scrapsList();
-	
-	$(document).on("click", ".scrap-card", function(e){
-	    // 삭제 버튼 클릭 시에는 이동 막기
-	    if($(e.target).hasClass("deleteBtn")) return;
 
-	    var registrationNo = $(this).find(".deleteBtn").data("no");
-	    window.location.href = "registrationContent?registrationNo=" + registrationNo;
-	});
-	
-	$(document).on("click",".deleteBtn", function(){
-		
-		var registrationNo = $(this).data("no");
-		var loginNo = ${loginNo};
-			
-			url ="scrapsDelete";
-			var paramData ={
-	    		"registrationNo" : registrationNo,
-	    		"loginNo" : loginNo
-	    	};
-			
-			console.log(paramData);
-			
-		$.ajax({
-			url: url,
-			data: paramData,
-			type: "post",
-			dataType: "json",
-			success: function(data){
-				if(data==1){
-					scrapsList();
-				}
-			},
-			error : function(){
-	            alert("스크랩삭제 에러");
-	        }     
-		});//ajax
-	});//deletebtn
+    let currentPage = 1;
+    const itemsPerPage = 6;
+    let allScraps = [];
+    const loginNo = ${loginNo};
 
-	function scrapsList(){
-		
-		var loginNo = ${loginNo};
-		
-		url ="scraps/myscraps";
-		var paramData ={
-    		"loginNo" : loginNo
-    	};
-		
-		console.log(paramData);
-		
-	  	$.ajax({
-    	url : url,         // 주소 -> controller 매핑주소
-      	data : paramData,    // 요청데이터
-      	dataType : "json",  // 데이터타입
-      	type : "post",      // 전송방식
-        success : function(result){
-        	console.log(result.length);
-            
-            var htmls = "";
-            
-             if(result.length < 1){
-                htmls = htmls + "<h3>등록된 스크랩이 없습니다.</h3>";
-             }
-             else{
-                $(result).each(function(){
-                  // htmls = htmls + '<div id="commentList' +this.comment_id + '">';
-                                    //<div id="reno12"> <div id="reno13">
-                   htmls += '<article class="scrap-card">';
-                   htmls += '<h3 class="scrap-title">';
-                   htmls += this.title;
-                   htmls += '</a></h3>';
-                   htmls += '<p class="scrap-description">' + this.content + '</p>';
-                   htmls += '<p><span class="scrap-period">신청기간: ';
-                   htmls += this.startDate + ' - ' + this.endDate + '</span><br>';
-                   htmls += '<span class="scrap-date">스크랩: ';
-                   htmls += this.createdDate + '</span></p>';
-                   htmls += '<div class="scrap-info">자세히보기 → <a href="';
-                   htmls += this.link + '" class="scrap-link">';
-                   htmls += this.link + '</a></div>';
-                   htmls += '<button type="button" class="deleteBtn btn-common" data-no="' + this.registrationNo + '">DELETE</button>'
-                   htmls += '</article>';
-                   //htmls += '</div>';   
-                });
-             }
-             $("#scrapsList").html(htmls);
-         },
-         error : function(data){
-            alert("에러" + data);
-         }     
-  		});
-	}//scrapsList()
-	
+
+
+    // 스크랩 렌더링
+    function renderScraps(page) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const scrapsToShow = allScraps.slice(start, end);
+
+        let htmls = "";
+
+        if(scrapsToShow.length < 1){
+            htmls = "<h3>등록된 스크랩이 없습니다.</h3>";
+        } else {
+            scrapsToShow.forEach(item => {
+            	htmls += '<article class="scrap-card">';
+                htmls += '<h3 class="scrap-title">' + item.title + '</h3>';
+                htmls += '<p class="scrap-description">' + item.content + '</p>';
+                htmls += '<p><span class="scrap-period">신청기간: ' + item.startDate + ' - ' + item.endDate + '</span><br>';
+                htmls += '<span class="scrap-date">스크랩: ' + item.createdDate + '</span></p>';
+                htmls += '<div class="scrap-info">자세히보기 →&nbsp;&nbsp;<a href="' + item.link + '" class="scrap-link">' + item.trachea + '</a></div>';
+                htmls += '<button type="button" class="deleteBtn btn-common" data-no="' + item.registrationNo + '">삭제</button>';
+                htmls += '</article>';
+            });
+        }
+
+        $("#scrapsList").html(htmls);
+        renderPagination();
+    }
+
+    // 페이징 렌더링
+    function renderPagination() {
+        const totalPages = Math.ceil(allScraps.length / itemsPerPage);
+        let paginationHtml = '';
+
+        if(totalPages <= 1) {
+            $("#pagination").html('');
+            return;
+        }
+        
+        if(currentPage > 1) {
+            paginationHtml += '<button class="page-btn" data-page="' + (currentPage - 1) + '">◀</button>';
+        }
+
+        for(let i=1; i<=totalPages; i++){
+            // 올바른 JS 삼항 연산자 사용
+            paginationHtml += '<button class="page-btn ' + (i===currentPage ? 'active' : '') + '" data-page="' + i + '">' + i + '</button>';
+        }
+        
+        if(currentPage < totalPages) {
+            paginationHtml += '<button class="page-btn" data-page="' + (currentPage + 1) + '">▶</button>';
+        }
+
+        $("#pagination").html(paginationHtml);
+    }
+
+    // 스크랩 목록 불러오기
+    function loadScraps(){
+        $.ajax({
+            url: "scraps/myscraps",
+            type: "post",
+            dataType: "json",
+            data: { loginNo: loginNo },
+            success: function(result){
+                allScraps = result;
+                currentPage = 1;
+                renderScraps(currentPage);
+            },
+            error: function(err){
+                alert("스크랩 불러오기 에러");
+            }
+        });
+    }
+
+    // 삭제 버튼 클릭
+    $(document).on("click",".deleteBtn", function(){
+        const registrationNo = $(this).data("no");
+        $.ajax({
+            url: "scrapsDelete",
+            type: "post",
+            dataType: "json",
+            data: { registrationNo: registrationNo, loginNo: loginNo },
+            success: function(data){
+                if(data==1){
+                    loadScraps();
+                }
+            },
+            error: function(){ alert("삭제 에러"); }
+        });
+    });
+
+    // 카드 클릭 → 상세 페이지
+    $(document).on("click",".scrap-card", function(e){
+        if($(e.target).hasClass("deleteBtn")) return;
+        const registrationNo = $(this).find(".deleteBtn").data("no");
+        window.location.href = "registrationContent?registrationNo=" + registrationNo;
+    });
+
+    // 페이징 버튼 클릭
+    $(document).on("click", ".page-btn", function(){
+        currentPage = parseInt($(this).data("page"));
+        renderScraps(currentPage);
+        window.scrollTo(0,0);
+    });
+
+    // 초기 로드
+    loadScraps();
 });
-
 </script>
 
 <style>
-.btn-gradient {
-	background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--accent-blue) 100%);
-    border: none;
-    color: #fff !important;
-    padding: 8px 18px;
-    border-radius: 25px;
-    transition: 0.3s;
-    text-decoration: none;
-    box-shadow: #78d4ff;
-    position: relative;   /* ✅ 클릭 문제 방지 */
-    z-index: 10;          /* ✅ 위로 올리기 */
+.scrap-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.btn-gradient:hover {
-    opacity: 0.95;
-    transform: scale(1.08);
-    box-shadow: #78d4ff;
-}
-    
-.btn-common {
-    display: inline-block;
-    font-size: 0.8rem;        /* 글자 크기 통일 */
-    padding: 6px 10px;      /* 버튼 높이와 너비 통일 */
-    border-radius: 25px;    /* 둥근 모서리 */
-    border: none;
+.scrap-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
     cursor: pointer;
-    transition: all 0.3s ease;
+}
+
+.scrap-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.scrap-title {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.scrap-description {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    min-height: 60px;
+}
+
+.scrap-period, .scrap-date {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.scrap-info {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #0066cc;
+    word-break: break-all;
+}
+
+.scrap-info a {
+    color: #0077cc;
+    text-decoration: none;
+}
+
+.scrap-info a:hover {
+    text-decoration: underline;
+}
+
+.deleteBtn {
+    margin-top: 12px;
+    background-color: #ff7675;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.deleteBtn:hover {
+    background-color: #e84118;
+}
+
+/* 페이징 버튼 */
+#pagination {
     text-align: center;
-    position: relative;   /* 클릭 가능하도록 */
-    z-index: 10;          /* 다른 요소 위로 */
-    background-color: #eee; /* 테스트용 배경 */
-}
-	
-.btn-common::before {
-	pointer-events: none; /* 버튼 위 장식 요소 클릭 막지 않음 */
+    margin: 20px 0;
 }
 
+.page-btn {
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    margin: 0 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem; /* 🔹 글씨 크기도 조금 줄이면 더 슬림 */
+}
+
+.page-btn.active {
+    background-color: #87CEFA;
+    color: white;
+    border-color: #87CEFA;
+}
 </style>
-
 </head>
-
 <body>
 
-
-       <!-- 메인 컨테이너 -->
-  <div>
-    <!-- 메인 콘텐츠 -->
-   <main class="news-main">	
-<!-- 스크랩한 정책 콘텐츠 -->
-
-
-
-	<!-- 스크랩 리스트 -->
-	<div class="scrap-list" id="scrapsList">
-	</div>
+<main class="news-main">
+    <div class="scrap-list" id="scrapsList"></div>
+    <div id="pagination"></div>
 </main>
-    
-   </div>
 
-
-
-
- <!-- Top 버튼 -->
-  <button class="top-button" id="topButton" aria-label="맨 위로 이동">
+<!-- Top 버튼 -->
+<button class="top-button" id="topButton" aria-label="맨 위로 이동">
     <svg viewBox="0 0 24 24">
-      <path d="M12 4l-8 8h6v8h4v-8h6z"/>
+        <path d="M12 4l-8 8h6v8h4v-8h6z"/>
     </svg>
-  </button>
-   
-  
-<script>
-  // 정렬 버튼 처리
-//  document.addEventListener('DOMContentLoaded', function() {
-//    const sortBtns = document.querySelectorAll('.sort-btn');
-//    sortBtns.forEach(btn => {
-//      btn.addEventListener('click', function() {
-//       sortBtns.forEach(b => b.classList.remove('active'));
-//        this.classList.add('active');
-//      });
-//    });
+</button>
 
-    // 스크랩 삭제
-//    const deleteButtons = document.querySelectorAll('.scrap-delete-btn');
-//    deleteButtons.forEach(button => {
-//      button.addEventListener('click', function() {
-//        if (confirm('스크랩을 삭제하시겠습니까?')) {
-//          this.closest('.scrap-card').remove();
-//        }
-//      });
-//    });
-//  });
-</script>
 </body>
 </html>

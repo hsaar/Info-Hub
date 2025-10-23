@@ -121,4 +121,18 @@ public class ArticleDAOImpl implements ArticleDAO{
 		return session.selectList(nameSpace + ".findAllArticles");
 	}
 
+	@Override
+	public int getTotalCountByCategory(int articlecategories_categoriesNo) throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectOne(nameSpace + ".getTotalCountByCategory", articlecategories_categoriesNo);
+	}
+
+	@Override
+	public List<ArticleVO> elasticArticles() throws Exception {
+		// TODO Auto-generated method stub
+		return session.selectList(nameSpace + ".elasticArticles");
+	}
+
+	
+
 }

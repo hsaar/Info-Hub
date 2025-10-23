@@ -17,4 +17,7 @@ public interface LoginService {
 	public int updatepassword(String password, String userId);
 	public String checkPasswordById(String userId);
 	public int updateKeywords(String userId,String keywords);
+	
+	void saveIfNotExist(LoginDTO kakaoUser);
+	LoginDTO findByKakaoId(Long kakaoId);
 }

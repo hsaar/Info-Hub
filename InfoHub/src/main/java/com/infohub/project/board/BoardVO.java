@@ -15,16 +15,18 @@ public class BoardVO {
 
 	private String categoryName; // 대분류 이름
 	private String subCategoryName; // 소분류 이름
-
+	
 	private Integer heartCount; // ✅ 좋아요 수
 	private Integer commentCount;
+	private String imagePath;
 
 	BoardVO() {
 	}
 
+	
 	public BoardVO(Integer boardno, String title, String content, String regiId, String regiDate, Integer readcnt,
 			Integer loginLoginNo, Boolean isNotice, Integer categoryId, Integer subCategoryId, String categoryName,
-			String subCategoryName, Integer heartCount, Integer commentCount) {
+			String subCategoryName, Integer heartCount, Integer commentCount, String imagePath) {
 		super();
 		this.boardno = boardno;
 		this.title = title;
@@ -40,7 +42,9 @@ public class BoardVO {
 		this.subCategoryName = subCategoryName;
 		this.heartCount = heartCount;
 		this.commentCount = commentCount;
+		this.imagePath = imagePath;
 	}
+
 
 	public Integer getBoardno() {
 		return boardno;
@@ -154,13 +158,26 @@ public class BoardVO {
 		this.commentCount = commentCount;
 	}
 
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+
 	@Override
 	public String toString() {
 		return "BoardVO [boardno=" + boardno + ", title=" + title + ", content=" + content + ", regiId=" + regiId
 				+ ", regiDate=" + regiDate + ", readcnt=" + readcnt + ", loginLoginNo=" + loginLoginNo + ", isNotice="
 				+ isNotice + ", categoryId=" + categoryId + ", subCategoryId=" + subCategoryId + ", categoryName="
 				+ categoryName + ", subCategoryName=" + subCategoryName + ", heartCount=" + heartCount
-				+ ", commentCount=" + commentCount + "]";
+				+ ", commentCount=" + commentCount + ", imagePath=" + imagePath + "]";
 	}
 
+
+
+	
+	
 }

@@ -49,25 +49,41 @@
 }
 
 .fc-dayGridWeek-view .fc-event {
-    height: 70px !important;       /* 막대 높이 */
-    line-height: 70px !important;  /* 텍스트 세로 중앙 정렬 */
-    font-size: 18px !important;  /* 원하는 글씨 크기 */
-    line-height: normal !important; /* 필요하면 세로 중앙 정렬 */
+    min-height: 100px !important;      /* 이벤트 최소 높이 */
+    margin: 2px 0 !important;         /* 위아래 간격 */
+    padding: 5px 8px !important;      /* 안쪽 여백 */
+    line-height: normal !important;   /* 텍스트 세로 중앙 정렬 */
+    font-size: 16px !important;       /* 글자 크기 */
 }
 
 .fc-dayGridWeek-view {
-    height: 800px !important;
-    max-height: 800px !important;
+    height: 700px !important;
+    max-height: 700px !important;
+}
+
+/* 월간뷰 이벤트 */
+.fc-dayGridMonth-view .fc-event {
+    margin: 1px 0 !important;         
+    font-size: 16px !important;       
+}
+
+/* 월간뷰 셀 높이 자동 맞춤 */
+.fc-dayGridMonth-view .fc-daygrid-day-frame {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;  /* 이벤트 간격 */
 }
 
 .fc-listDay-view {
-    height: 800px !important;
-    max-height: 800px !important;
+    height: 700px !important;
+    max-height: 700px !important;
 }
 
 .fc-listDay-view .fc-event {
-	font-size: 18px !important;  /* 원하는 글씨 크기 */
-    line-height: normal !important; /* 필요하면 세로 중앙 정렬 */
+	margin-bottom: 8px !important;
+    padding: 5px 10px !important;
+    line-height: normal !important;
+    font-size: 16px !important;
 }
 
 /* 월간뷰는 기존 높이 유지 */
@@ -92,6 +108,66 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
   filter: brightness(1.1) !important;
   z-index: 100 !important;
+}
+
+/* 캘린더 상단 제목 (예: "2025년 10월") 스타일 */
+.fc-toolbar-title {
+  font-family: "Gowun Batang", serif;
+  margin: 0 15px !important;
+  font-size: 25px !important;
+  color: #000;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  letter-spacing: 1px;
+}
+
+/* 제목을 가운데 정렬하고 싶다면 아래도 함께 추가 */
+.fc-toolbar {
+  justify-content: center !important;
+}
+
+/* 공통 버튼 스타일 */
+.fc .fc-button {
+  background: none !important;
+  border: 1.5px solid #ccc !important;
+  border-radius: 10px !important;
+  color: #333 !important;
+  font-family: "Gowun Batang", serif !important;
+  font-size: 17px !important;
+  padding: 5px 10px !important;
+  transition: all 0.2s ease-in-out !important;
+  margin: 0 1.5px !important;
+}
+
+/* 버튼 hover 효과 */
+.fc .fc-button:hover {
+  background-color: #f3f3f3 !important;
+  border-color: #999 !important;
+  transform: translateY(-1px);
+}
+
+/* 버튼 클릭(active) 효과 */
+.fc .fc-button:active {
+  background-color: #e9e9e9 !important;
+  transform: translateY(0);
+}
+
+/* 오늘 버튼만 조금 다르게 강조 */
+.fc .fc-today-button {
+  background-color: #f9f7f4 !important;
+  border-color: #c2a574 !important;
+  color: #5a3e1b !important;
+  font-weight: 600 !important;
+}
+
+.fc .fc-today-button:hover {
+  background-color: #c2a574 !important;
+  color: #fff !important;
+}
+
+/* 양옆 버튼(이전/다음)의 아이콘 크기 살짝 조정 */
+.fc .fc-prev-button .fc-icon,
+.fc .fc-next-button .fc-icon {
+  font-size: 20px !important;
 }
 
 </style>
@@ -315,7 +391,8 @@ document.addEventListener('DOMContentLoaded', function() {
  			},
  			
  			dayHeaderFormat: { weekday: 'short', month: 'numeric', day: 'numeric' },
-	    
+ 			dayMaxEventRows: 6,      // ← 추가
+ 		    moreLinkClick: 'popover', // ← 추가
 	      eventClick: function(info) {
 	    	  document.getElementById('popupTitle').innerText = info.event.title;
 	    	  document.getElementById('popupTitle').style.fontSize = '25px';

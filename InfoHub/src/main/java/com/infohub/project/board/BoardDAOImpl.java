@@ -1,5 +1,6 @@
 package com.infohub.project.board;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,22 +23,19 @@ public class BoardDAOImpl implements BoardDAO {
 		// TODO Auto-generated method stub
 		return sqlsession.selectList(nameSpace + ".list");
 	}
-	
-	
-	 @Override
-	    public List<BoardVO> listPage(Map<String, Object> params) {
-	        return sqlsession.selectList(nameSpace + ".listPage", params);
-	    }
-
-	    @Override
-	    public int count(Map<String, Object> params) {
-	        return sqlsession.selectOne(nameSpace + ".count", params);
-	    }
-	
-
 
 	@Override
-	public List<BoardVO> getListByCategory(int categoryId)  throws Exception{
+	public List<BoardVO> listPage(Map<String, Object> params) {
+		return sqlsession.selectList(nameSpace + ".listPage", params);
+	}
+
+	@Override
+	public int count(Map<String, Object> params) {
+		return sqlsession.selectOne(nameSpace + ".count", params);
+	}
+
+	@Override
+	public List<BoardVO> getListByCategory(int categoryId) throws Exception {
 		// SQL 쿼리를 실행하고 결과를 List<BoardVO> 형태로 반환
 		return sqlsession.selectList(nameSpace + ".getListByCategory", categoryId);
 	}
@@ -53,8 +51,6 @@ public class BoardDAOImpl implements BoardDAO {
 		// TODO Auto-generated method stub
 		return sqlsession.selectOne(nameSpace + ".getDetail", boardno);
 	}
-	
-	
 
 
 	@Override
@@ -63,14 +59,11 @@ public class BoardDAOImpl implements BoardDAO {
 		return sqlsession.insert(nameSpace + ".register", boardVO);
 	}
 
-	
-
 	@Override
 	public int update(BoardVO boardVO) {
 		// TODO Auto-generated method stub
 		return sqlsession.update(nameSpace + ".update", boardVO);
 	}
-
 
 	@Override
 	public int delete(int boardno) {
@@ -80,10 +73,9 @@ public class BoardDAOImpl implements BoardDAO {
 
 	@Override
 	public List<BoardVO> selectPopularBoards() {
-	    return sqlsession.selectList(nameSpace + ".selectPopularBoards");
+		return sqlsession.selectList(nameSpace + ".selectPopularBoards");
 	}
-	
-	
+
 	@Override
 	public Map login(Map<String, Object> map) {
 		// TODO Auto-generated method stub

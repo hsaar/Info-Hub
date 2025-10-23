@@ -81,20 +81,19 @@ public class RegistrationControl {
 	      return "article/registrationlistAll";
 	   }
 	
-	 @ResponseBody
-	 @PostMapping("logKeyword") // 클라이언트 AJAX 요청 URL
-	 public int logKeyword(@RequestParam("keyword") String regkeyword) {
-	     System.out.println("logKeyword AJAX 요청 수신 - 키워드: " + regkeyword);
-	     try {
-	         // Service 메소드를 호출하여 키워드 처리 (카운트 증가 or 삽입)
-	         regKeyservice.logAndCountKeyword(regkeyword); 
-	         return 1; // 성공
-	     } catch (Exception e) {
-	         System.err.println("키워드 로깅 중 오류 발생: " + e.getMessage());
-	         e.printStackTrace(); // 디버깅을 위해 스택 트레이스를 출력
-	         return 0; // 실패
-	     }
-	 }
+	 	@ResponseBody
+	    @PostMapping("logRegKeyword")
+	    public int logRegKeyword(@RequestParam("keyword") String regkeyword) {
+	        System.out.println("logRegKeyword AJAX 요청 수신 - 키워드: " + regkeyword);
+	        try {
+	            regKeyservice.logAndCountKeyword(regkeyword); 
+	            return 1;
+	        } catch (Exception e) {
+	            System.err.println("혜택/정책 키워드 로깅 중 오류 발생: " + e.getMessage());
+	            e.printStackTrace();
+	            return 0;
+	        }
+	    }
 	
 	@Autowired
 	ArticleService as;

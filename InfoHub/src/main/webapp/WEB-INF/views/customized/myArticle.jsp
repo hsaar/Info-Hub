@@ -71,6 +71,7 @@ a {
 		    <h2 class="category-title">${keyword0}</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list0}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -80,6 +81,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>
@@ -92,6 +94,7 @@ a {
 		    <h2 class="category-title">${keyword1}</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list1}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -101,6 +104,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>
@@ -113,6 +117,7 @@ a {
 		    <h2 class="category-title">${keyword2}</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list2}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -122,6 +127,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>
@@ -134,6 +140,7 @@ a {
 		    <h2 class="category-title">${keyword3}</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list3}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -143,6 +150,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>
@@ -155,6 +163,7 @@ a {
 		    <h2 class="category-title">${keyword4}</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list4}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -164,6 +173,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>
@@ -176,6 +186,7 @@ a {
 		    <h2 class="category-title">취업지원</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list5}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -185,6 +196,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>
@@ -197,6 +209,7 @@ a {
 		    <h2 class="category-title">문화바우처</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list6}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -206,6 +219,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>
@@ -218,6 +232,7 @@ a {
 		    <h2 class="category-title">의료비지원</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list7}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -227,6 +242,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>
@@ -239,6 +255,7 @@ a {
 		    <h2 class="category-title">심리상담</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list8}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -248,6 +265,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>
@@ -260,6 +278,7 @@ a {
 		    <h2 class="category-title">생활안정</h2>
 		    <div class="news-list">
 		      <c:forEach var="item" items="${list9}">
+		      	<a href = "${item.link}" target="_blank">
 		        <div class="news-item">
 		          <div class="news-content">
 		            <p class="news-text">${item.title}</p>
@@ -269,6 +288,7 @@ a {
 		            <img src="resources/image/${item.image}" alt="${item.image}" />
 		          </div>
 		        </div>
+		        </a>
 		      </c:forEach>
 		    </div>
 		  </div>

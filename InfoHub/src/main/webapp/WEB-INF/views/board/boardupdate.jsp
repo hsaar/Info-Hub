@@ -52,7 +52,7 @@
 			<form method="post"
 				action="${pageContext.request.contextPath}/update"
 				onsubmit="return validateForm()" name="write_frm"
-				class="write-form-card">
+				enctype="multipart/form-data" class="write-form-card">
 				<input type="hidden" name="boardno" value="${board.boardno}">
 				<input type="hidden" name="loginLoginNo"
 					value="${board.loginLoginNo}">
@@ -62,110 +62,212 @@
 					<div class="form-group half">
 						<label for="name" class="form-label"> <svg
 								viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                            <path
-									d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg> 작성자
-						</label> <a id="name">${board.regiId}</a>
-
+								<path
+									d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
+							작성자
+						</label> <span id="name" class="writer-display">${board.regiId}</span>
 					</div>
 
 					<div class="form-group half">
 						<label class="form-label"> <svg viewBox="0 0 24 24"
 								width="18" height="18" fill="currentColor">
-                            <path
-									d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
-                        </svg> 카테고리
+								<path
+									d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" /></svg>
+							카테고리
 						</label>
 						<%@ include file="selectcategory.jsp"%>
 					</div>
+					<%-- 공지 여부 hidden --%>
+					<input type="hidden" id="isNotice" name="isNotice"
+						value="${board.categoryId == 37 ? '1' : '0'}">
+				</div>
 
+				<%-- 이미지 경로를 EL 변수에 저장하여 안정성 확보 --%>
+				<c:set var="imageSrc" value="${board.imagePath}" />
 
-					<!-- 제목 -->
-					<div class="form-group">
+				<div class="form-row">
+					<div class="form-group" id="title-group">
 						<label for="title" class="form-label"> <svg
-								viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                        <path
-									d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                    </svg> 제목
+								viewBox="0 0 24 24" width="25" height="18" fill="currentColor">
+								<path
+									d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg>
+							제목
 						</label> <input type="text" id="title" name="title" class="form-input"
 							placeholder="제목을 입력하세요" maxlength="80" value="${board.title}" />
 					</div>
 
-					<!-- 내용 -->
-					<div class="form-group">
-						<label for="content" class="form-label"> <svg
+					<div class="form-group half photo-upload-container">
+						<label for="uploadFile" class="form-label"> <svg
 								viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                        <path
-									d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
-                    </svg> 내용
+								<path
+									d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 14h16V6H4v12zm1-5h3l-1.5-2-1.5 2zm5 0h7l-2-3-2 3-3 2z" /></svg>
+							사진 첨부
 						</label>
-						<textarea id="content" name="content" class="form-textarea"
-							placeholder="내용을 입력하세요 (최대 3000자)" maxlength="3000" rows="15">${board.content}</textarea>
-						<div class="char-count">
-							<span id="currentLength">0</span> / 3000자
+
+						<div class="photo-upload-actions">
+							<label for="uploadFile" id="uploadButton"
+								class="custom-photo-btn"> <span id="buttonText">파일
+									선택</span>
+							</label> <input type="file" id="uploadFile" name="uploadFile"
+								accept="image/*" style="display: none;">
+
 						</div>
-					</div>
 
-					<!-- 버튼 영역 -->
-					<div class="form-actions-write">
-						<button type="button" class="btn-cancel"
-							onclick="location.href='${pageContext.request.contextPath}/listmain'">
-							<svg viewBox="0 0 24 24" width="20" height="20"
-								fill="currentColor">
-                        <path
-									d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                    </svg>
-							취소
-						</button>
-						<button type="submit" class="btn-submit">
-							<svg viewBox="0 0 24 24" width="20" height="20"
-								fill="currentColor">
-                        <path
-									d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                    </svg>
-							작성 완료
-						</button>
+						<div id="fileListContainer" class="file-list-container"></div>
 					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="content" class="form-label"> <svg
+							viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path
+								d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+        </svg> 내용
+					</label>
+					<textarea id="content" name="content" class="form-textarea"
+						placeholder="내용을 입력하세요 (최대 3000자)" maxlength="3000" rows="15">${board.content}</textarea>
+
+					<div class="char-count">
+						<span id="currentLength">0</span> / 3000자
+					</div>
+					<c:set var="containerStyle" value="display:none;" />
+					<c:set var="imgSrc" value="" />
+					<c:set var="btnStyle" value="display:none;" />
+
+					<c:if test="${not empty board.imagePath}">
+						<c:set var="containerStyle" value="display:block;" />
+						<c:set var="imgSrc"
+							value="${pageContext.request.contextPath}${board.imagePath}" />
+						<c:set var="btnStyle" value="display:inline-block;" />
+					</c:if>
+
+					<div class="image-preview" id="imagePreviewContainer"
+						style="${containerStyle}">
+						<p>현재 이미지:</p>
+						<img id="previewImg" src="${imgSrc}" width="200" alt="현재 업로드된 이미지" />
+						<button type="button" id="deleteImageBtn" class="btn-delete"
+							style="${btnStyle}">삭제</button>
+						<input type="hidden" name="deleteImage" id="deleteImageFlag"
+							value="N">
+					</div>
+				</div>
+
+				<div class="form-actions-write">
+					<button type="button" class="btn-cancel"
+						onclick="location.href='${pageContext.request.contextPath}/listmain'">
+						<svg viewBox="0 0 24 24" width="20" height="20"
+							fill="currentColor">
+							<path
+								d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" /></svg>
+						취소
+					</button>
+					<button type="submit" class="btn-submit">
+						<svg viewBox="0 0 24 24" width="20" height="20"
+							fill="currentColor">
+							<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+						작성 완료
+					</button>
+				</div>
 			</form>
-
 		</div>
 	</div>
-	
+
 	<footer class="footer">
 		<%@ include file="../include/footer.jsp"%>
 	</footer>
-	
+
 	<script>
-		//글자수
-		document
-				.addEventListener(
-						"DOMContentLoaded",
-						function() {
-							const contentTextarea = document
-									.getElementById('content');
-							const currentLength = document
-									.getElementById('currentLength');
+	document.addEventListener("DOMContentLoaded", function() {
+	    const form = document.querySelector('form.write-form-card');
+	    const categorySelect = document.querySelector('#mainCategory');
+	    const isNoticeInput = document.querySelector('#isNotice');
+	    const NOTICE_CATEGORY_ID = '37';
 
-							currentLength.textContent = contentTextarea.value.length;
-							currentLength.style.color = contentTextarea.value.length > 2700 ? '#dc2626'
-									: '#6b7280';
+	    // 이미지 관련
+	    const uploadFileInput = document.getElementById('uploadFile');
+	    const deleteImageBtn = document.getElementById('deleteImageBtn');
+	    const previewContainer = document.getElementById('imagePreviewContainer');
+	    const previewImg = document.getElementById('previewImg');
+	    const uploadButton = document.getElementById("uploadButton");
+	    const buttonText = document.getElementById("buttonText");
 
-							contentTextarea
-									.addEventListener(
-											'input',
-											function() {
-												const length = this.value.length;
-												currentLength.textContent = length;
+	    function setDeleteImageFlag(value) {
+	        let deleteInput = document.getElementById('deleteImageFlag');
+	        if (!deleteInput) {
+	            deleteInput = document.createElement('input');
+	            deleteInput.type = 'hidden';
+	            deleteInput.name = 'deleteImage';
+	            deleteInput.id = 'deleteImageFlag';
+	            form.appendChild(deleteInput);
+	        }
+	        deleteInput.value = value;
+	    }
 
-												// 글자 수가 2700자를 넘으면 경고 색상
-												if (length > 2700) {
-													currentLength.style.color = '#dc2626';
-												} else {
-													currentLength.style.color = '#6b7280';
-												}
-											});
-						});
+	    uploadFileInput.addEventListener('change', function(event) {
+	        const file = event.target.files[0];
+	        if (file) {
+	            const reader = new FileReader();
+	            reader.onload = function(e) {
+	                if (previewImg) previewImg.src = e.target.result;
+	            };
+	            reader.readAsDataURL(file);
+	            if (uploadButton) uploadButton.classList.add("attached");
+	            if (buttonText) buttonText.textContent = "첨부 완료";
+	            if (deleteImageBtn) deleteImageBtn.style.display = 'inline-block';
+	            if (previewContainer) previewContainer.style.display = 'block';
+	            setDeleteImageFlag('N'); 
+	        } else {
+	            if (uploadButton) uploadButton.classList.remove("attached");
+	            if (buttonText) buttonText.textContent = "파일 선택";
+	            if (!previewImg || !previewImg.src || (document.getElementById('deleteImageFlag')?.value === 'Y')) {
+	                if (deleteImageBtn) deleteImageBtn.style.display = 'none';
+	                if (previewContainer) previewContainer.style.display = 'none';
+	            }
+	        }
+	    });
 
+	    deleteImageBtn?.addEventListener('click', function() {
+	        if (previewImg) previewImg.src = '';
+	        if (previewContainer) previewContainer.style.display = 'none';
+	        uploadFileInput.value = '';
+	        setDeleteImageFlag('Y');
+	        if (uploadButton) uploadButton.classList.remove("attached");
+	        if (buttonText) buttonText.textContent = "파일 선택";
+	        this.style.display = 'none';
+	    });
+
+	    // 공지 디자인 적용
+	    function applyNoticeDesign() {
+	        if (categorySelect.value === NOTICE_CATEGORY_ID) {
+	            form.classList.add('notice');
+	        } else {
+	            form.classList.remove('notice');
+	        }
+	    }
+
+	    // 초기 로드 시 적용
+	    applyNoticeDesign();
+
+	    // 선택 변경 시
+	    if (categorySelect && isNoticeInput) {
+	        categorySelect.addEventListener('change', function() {
+	            isNoticeInput.value = (this.value === NOTICE_CATEGORY_ID) ? '1' : '0';
+	            applyNoticeDesign();
+	        });
+	    }
+
+	    // 글자수 실시간 반영
+	    const contentTextarea = document.getElementById('content');
+	    const currentLength = document.getElementById('currentLength');
+	    function updateCharCount() {
+	        const length = contentTextarea.value.length;
+	        currentLength.textContent = length;
+	        currentLength.style.color = length > 2700 ? '#dc2626' : '#6b7280';
+	    }
+	    updateCharCount();
+	    contentTextarea.addEventListener('input', updateCharCount);
+
+	});
 		function validateForm() {
 			/// 1. 요소 가져오기
 			const title = document.getElementById('title').value;

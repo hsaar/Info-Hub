@@ -26,6 +26,7 @@
       <li><a href="policy">지역별 정책 </a></li>
       <li><a href="registrationlistAll">혜택</a></li>
       <li><a href="timeline">타임라인</a></li>
+      <li><a href="chart">데이터 시각화</a></li>
       <li><a href="boardlistmain">게시판</a></li>
     </ul>
     

@@ -30,12 +30,6 @@
 
 <style>
 
-#keywordWordCloud {
-  display: block;
-  width: 100%;
-  height: 230px;
-  
-}
 .pagination-nav {
   display: flex;
   justify-content: center; /* 전체 페이지네이션을 중앙 정렬 */
@@ -98,7 +92,69 @@
   pointer-events: none;
 }
 
+#keywordWordCloud {
+  display: block;
+  width: 100%;
+  height: 230px;
+  
+}
+
+/* 검색 바 전체 */
+.search-bar {
+    width: 650px;            
+    align-items: center;      
+    gap: 8px;                 
+    margin-bottom: 20px;
+}
+
+/* select 스타일 */
+.search-bar select {
+    width: 150px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ffffff; /* 배경 흰색 */
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* input 스타일 */
+.search-bar input {
+    flex: 1;                 
+    padding: 10px 12px;
+    border-radius: 20px;
+    border: 1px solid #2563eb;
+    font-size: 16px;
+}
+
+/* 버튼 스타일 */
+#searchBtn {
+    width: 50px;              /* 너비 줄임 */
+    height: 45px;             
+    background-color: #2563eb; 
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;           
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+#searchBtn:hover {
+    background-color: #1e40af; 
+}
+
+/* 버튼 안 svg */
+#searchBtn svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
 </style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // 시계를 갱신하는 함수
@@ -155,9 +211,10 @@ document.addEventListener('DOMContentLoaded', function() {
   		 주거/복지 최신기사 조회
 		</h1>
 
-		<div class='search-header'>
-		<div class='search-bar'>
-					<select id="searchType" class="tab" name="searchType">
+		<section class="search-section">
+	<div class='container'>
+	<div class='search-bar'>
+					<select id="searchType" name="searchType">
 						<option value="">검색조건</option>
 
 						<option value="t"
@@ -171,14 +228,24 @@ document.addEventListener('DOMContentLoaded', function() {
 						<option value="tc"
 							<c:out value ="${cri.searchType eq 'tc'?'selected':'' }"/>>
 							Title or Content</option>
-					</select> <input class="search-input" type="text" id="keyword"
-						name="keyword" value="${pageMaker.cri.keyword}"
-						placeholder="검색어를 입력하세요" />
-					<button id="searchBtn" class="tab">Search</button>
+					</select>
+					
+					<input type="text" id="keyword" name="keyword"
+					class="search-input-large" placeholder="검색어를 입력하세요"
+					value="${pageMaker.cri.keyword}"/>
+						
+					<button id="searchBtn">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          			<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+          			</svg>
+        			</button>
 	</div>
 	</div>
+	</section>
 
 	<table class="news-item">
+	
+	총 <c:out value="${categoryTotalCount}"/>건
   
       <c:forEach var="article" items="${articleListAll2}"> <!-- JSTL의 반복문 -->
          <tr><td><br>
@@ -226,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
    </c:forEach>
    </table>
    
-    <!-- 페이지네이션 -->
+     <!-- 페이지네이션 -->
     <div class="text-center">
 		<ul class="search_info">
 			<form id="jobForm">
@@ -260,6 +327,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </c:if>
 	</div>
     </main>
+    
     <!-- 사이드바 -->
     <aside>
       <div class="sidebar-section">
@@ -323,7 +391,8 @@ document.addEventListener('DOMContentLoaded', function() {
     </svg>
   </button>
    
- <jsp:include page="../include/footer.jsp"/>
+  <jsp:include page="../include/footer.jsp"/>
+  
 <script>
     // Top 버튼 기능
     const topButton = document.getElementById('topButton');

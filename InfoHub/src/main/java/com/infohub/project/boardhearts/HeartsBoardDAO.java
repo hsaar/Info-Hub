@@ -1,5 +1,8 @@
 package com.infohub.project.boardhearts;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -28,6 +31,13 @@ public class HeartsBoardDAO {
 		int count = sqlSession.selectOne(namespace + ".checkHeart", heart);
 		return count > 0;
 	}
+	
+	 public int isLiked(int boardno, int loginNo) {
+	        Map<String, Object> param = new HashMap<>();
+	        param.put("boardno", boardno);
+	        param.put("loginNo", loginNo);
+	        return sqlSession.selectOne(namespace + ".isLiked", param);
+	    }
 	
 	public int deleteAllHeartsByBoardno(int boardNo) {	
 		return sqlSession.delete(namespace+".deleteAllHeartsByBoardno", boardNo);

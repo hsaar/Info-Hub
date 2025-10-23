@@ -27,6 +27,9 @@ public class LoginController {
 	@Autowired
 	LoginServiceImpl se;
 	
+	@Autowired
+    private KakaoService kakaoService;
+	
 	@GetMapping("login")
 	public String login(Model model) {
 		model.addAttribute("listAll", se.listAll());
@@ -103,37 +106,36 @@ public class LoginController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("passwordfind")
-	public String passwordfind(Model model) {
-		return "./login/passwordfind";
-	}
-	
 	@PostMapping("login_ok")
 	public String login_ok(Model model, LoginRequest lr, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		LoginDTO res = se.login(lr);
 		int status = 0;
 		if(res != null) {
-			status = se.getUserById(res.getUserId()).getStatus();
+			
+			LoginDTO latest = se.getUserById(res.getUserId());
+			status = latest.getStatus();
+
 		}
 		
 		if(res!=null && status != 0) {
 			request.getSession().invalidate(); //기존 세션 파기
 			
 			HttpSession session = request.getSession(true);
-			session.setAttribute("userId", res.getUserId()); //세션이 없으면 새로운 세션에 유저id값 부여
-			session.setAttribute("loginNo", res.getLoginNo());
-			session.setAttribute("name", res.getName());
+			
+			LoginDTO latest = se.getUserById(res.getUserId());
+			
+			session.setAttribute("userId", latest.getUserId());
+            session.setAttribute("loginNo", latest.getLoginNo());
+            session.setAttribute("name", latest.getName());
+            session.setAttribute("email", latest.getEmail());
+            session.setAttribute("phone", latest.getPhone());
+            session.setAttribute("keywords", latest.getKeywords());
 			
 			return "redirect:/";
 		}else {
 			redirectAttributes.addFlashAttribute("errorMsg","아이디와 비밀번호를 확인해 주세요");
 			return "redirect:/login";
 		}
-	}
-	
-	@GetMapping("/memberjoinSuccess")
-	public String memberjoinSuccess(Model model){
-		return "login/memberjoinSuccess";
 	}
 	
 	@ResponseBody
@@ -290,6 +292,11 @@ public class LoginController {
 		if(tmp>0) {
 			ok = true;
 			
+			session.setAttribute("name", name);
+	        session.setAttribute("email", email);
+	        session.setAttribute("phone", phone);
+	        session.setAttribute("keywords", keywords);
+			
 		}
 		
 		Map<String, Object> res = new HashMap<String, Object>();
@@ -317,4 +324,25 @@ public class LoginController {
 		
 		return res;
 	}
+	
+	 @GetMapping("/kakaoLogin")
+	 public String kakaoLogin(@RequestParam("code") String code, HttpSession session) {
+
+		 String accessToken = kakaoService.getAccessToken(code);
+
+	     LoginDTO dto = kakaoService.getUserInfo(accessToken);
+
+	     se.saveIfNotExist(dto);
+
+	     LoginDTO loginUser = se.findByKakaoId(dto.getKakaoId());
+	     
+	     session.setAttribute("userId", loginUser.getUserId());
+	     session.setAttribute("name", loginUser.getName());
+	     session.setAttribute("loginNo", loginUser.getLoginNo());
+	     
+	     System.out.println("세션 저장: " + session.getAttribute("userId") + ", " + session.getAttribute("name"));
+
+
+	     return "redirect:/";
+	 }
 }

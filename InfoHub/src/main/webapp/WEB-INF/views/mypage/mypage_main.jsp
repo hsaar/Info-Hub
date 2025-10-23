@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 
@@ -42,6 +43,10 @@
         <a href="#" class="menu-item" data-page="board">
           <span class="menu-text">나의 활동</span>
         </a>
+        <a href="#" class="menu-item" data-page="myBenifitPush">
+          <span class="menu-text">나의 알림</span>
+        </a>
+        
         
       </nav>
 
@@ -91,8 +96,7 @@
 
 		<div id="board-tab" style="display:none;">
   		  <%@ include file="my_board.jsp" %>
-        </div>
-
+       </div>
       </div>
 
       <!-- 좋아요 페이지 -->
@@ -101,11 +105,18 @@
       </div>
 
       <!-- 알림 관리 페이지 -->
-      <div id="alarm-content" class="content-box" style="display: none;">
-        <h2 class="content-title">알림 관리</h2>
-        <p>알림 설정한 혜택 목록이 표시됩니다.</p>
-      </div>
-    
+	  <div id="myBenifitPush-content" class="content-box" style="display: none;"> 
+        <h2 class="content-title">나의 알림</h2>
+        
+        <iframe
+		    id="alertFrame" 
+		    src= "${pageContext.request.contextPath}/myBenifitPush"
+		    width="100%" 
+		    height="600px"  <%-- 적절한 높이로 설정 --%>
+		    frameborder="0"
+		    style="border:0; display:block;">
+		</iframe>
+      </div>
    
       <!-- 기본 안내 메시지 -->
       <div id="default-content" class="content-box">
@@ -168,6 +179,9 @@
         if (pageId === 'timelineMyBenifit') {
             document.getElementById('timelineFrame').src = '${pageContext.request.contextPath}/timelineMyBenifit';
           }
+        if (pageId === 'myBenifitPush') {
+            document.getElementById('alertFrame').src = '${pageContext.request.contextPath}/myBenifitPush';
+        }
       }
     });
   });
@@ -221,6 +235,18 @@
 	});
   
 </script>
+<script>
+    menuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            // ... 생략 ...
+            if (pageId === 'myBenifitPush') {
+                 // iframe을 강제로 다시 로드합니다.
+                 document.getElementById('alertFrame').src = '${pageContext.request.contextPath}/myBenifitPush';
+            }
+        });
+    });
+</script>
+
  <jsp:include page="../include/footer.jsp"/>
 </body>
 </html>

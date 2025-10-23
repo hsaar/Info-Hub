@@ -106,4 +106,30 @@ public class LoginServiceImpl implements LoginService{
 		}
 		return phone;
 	}
+
+	@Override
+	public void saveIfNotExist(LoginDTO kakaoUser) {
+		// TODO Auto-generated method stub
+		LoginDTO dto = dao.findByKakaoId(kakaoUser.getKakaoId());
+        if (dto == null) {
+        	 dto = new LoginDTO();
+        	 dto.setUserId("kakao_" + kakaoUser.getKakaoId()); 
+             dto.setPassword("12345");
+             dto.setName("kakao_" + kakaoUser.getKakaoId()); 
+             dto.setEmail(kakaoUser.getEmail() != null ? kakaoUser.getEmail() : "");
+             dto.setKakaoId(kakaoUser.getKakaoId());
+             dto.setKakaoEmail(kakaoUser.getKakaoEmail() != null ? kakaoUser.getKakaoEmail() : "");
+             dto.setGender("N");
+             dto.setKeywords("");
+             
+            dao.insert(dto);
+        }
+    }
+
+	@Override
+	public LoginDTO findByKakaoId(Long kakaoId) {
+		// TODO Auto-generated method stub
+		return dao.findByKakaoId(kakaoId);
+	}
+	
 }

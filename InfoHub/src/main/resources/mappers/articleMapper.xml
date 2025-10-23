@@ -21,6 +21,13 @@
 	limit #{pageStart}, #{perPageNum}
 	</select>
 	
+	<select id="getTotalCountByCategory" parameterType="int" resultType="int">
+    SELECT COUNT(*) 
+    FROM article
+    WHERE articlecategories_categoriesNo = #{articlecategories_categoriesNo}
+	</select>
+
+	
 	<select id="articleListAll1" resultType = "com.infohub.project.article.ArticleVO">
 	SELECT a.*, b.name
 	FROM article a join articlecategories b on articlecategories_categoriesNo = categoriesNo
@@ -143,5 +150,9 @@
 	  limit 100
 	</select>
 	
+	<select id="elasticArticles" resultType= "com.infohub.project.article.ArticleVO">
+	  SELECT articleId,title,content,published,source,views,hearts,image,link,articlecategories_categoriesNo
+	  FROM article
+	</select>
 	
 </mapper>

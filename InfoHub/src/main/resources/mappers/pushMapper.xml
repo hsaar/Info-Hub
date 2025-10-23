@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.infohub.project.pushMapper">
+	
+<select id="selectDeadlineImminentBenefits" resultType="com.infohub.project.customizedservice.CustomizedDTO">
+    SELECT 
+        b.registrationNo as registrationNo,
+        b.title,
+        b.endDate as endDate,    b.content as content,    b.regCall as regCall,    b.startDate as startDate FROM scraps s 
+    JOIN registration b ON s.registrationNo = b.registrationNo
+    WHERE s.loginNo = #{loginNo} 
+      AND b.endDate IS NOT NULL 
+      AND b.endDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+</select>
+</mapper>

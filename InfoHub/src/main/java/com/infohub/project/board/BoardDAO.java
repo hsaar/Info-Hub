@@ -24,7 +24,8 @@ public interface BoardDAO {
 	// 조회수 1 증가(Increases the read count of a post by 1)+ 단일 게시글 조회
 	void updateReadCnt(int boardno); // 조회수 증가
 
-	public BoardVO getDetail(int boardno); // getRead(), getView()
+	public BoardVO getDetail(int boardno);
+	
 
 	// 글추가 insert
 	public int register(BoardVO boardVO);

@@ -30,13 +30,6 @@
 	<title>혜택바로가기</title>
 	
 <style>
-
-#keywordWordCloud {
-  display: block;
-  width: 100%;
-  height: 230px;
-  
-}
 .pagination-nav {
   display: flex;
   justify-content: center; /* 전체 페이지네이션을 중앙 정렬 */
@@ -99,6 +92,66 @@
   pointer-events: none;
 }
 
+#keywordWordCloud {
+  display: block;
+  width: 100%;
+  height: 230px;
+}
+
+/* 검색 바 전체 */
+.search-bar {
+    width: 650px;            
+    align-items: center;      
+    gap: 8px;                 
+    margin-bottom: 20px;
+}
+
+/* select 스타일 */
+.search-bar select {
+    width: 150px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ffffff; /* 배경 흰색 */
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* input 스타일 */
+.search-bar input {
+    flex: 1;                 
+    padding: 10px 12px;
+    border-radius: 20px;
+    border: 1px solid #2563eb;
+    font-size: 16px;
+}
+
+/* 버튼 스타일 */
+#searchBtn {
+    width: 50px;              /* 너비 줄임 */
+    height: 45px;             
+    background-color: #2563eb; 
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;           
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+#searchBtn:hover {
+    background-color: #1e40af; 
+}
+
+/* 버튼 안 svg */
+#searchBtn svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
 </style>
 
 <script>
@@ -163,21 +216,28 @@ $(document).on("click", ".policy-card", function(e){
   		 혜택 전체 목록
 		</h1>
 		
-		<div class='search-header'>
+		<section class="search-section">
+			<div class='container'>
 				<div class='search-bar'>
-					<select id="searchType" class="tab" name="searchType">
+					<select id="searchType" name="searchType">
 						<option value="">검색조건</option>
-
+	
 						<option value="t" <c:if test="${cri.searchType eq 't'}">selected</c:if>>Title</option>
-<option value="c" <c:if test="${cri.searchType eq 'c'}">selected</c:if>>Content</option>
-<option value="tc" <c:if test="${cri.searchType eq 'tc'}">selected</c:if>>Title or Content</option>
-
-					</select> <input class="search-input" type="text" id="keyword"
+						<option value="c" <c:if test="${cri.searchType eq 'c'}">selected</c:if>>Content</option>
+						<option value="tc" <c:if test="${cri.searchType eq 'tc'}">selected</c:if>>Title or Content</option>
+					</select>
+					
+					<input class="search-input-large" type="text" id="keyword"
 						name="keyword" value="${pageMaker.cri.keyword}"
 						placeholder="검색어를 입력하세요" />
-					<button id="searchBtn" class="tab">Search</button>
+						
+					<button id="searchBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          			<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+          			</svg>
+          			</button>
 				</div>
 			</div>
+		</section>
 
 	<div class="policy-list-container">
   	<div class="policy-grid">
@@ -203,7 +263,8 @@ $(document).on("click", ".policy-card", function(e){
 		</c:forEach>
 	</div>
 	</div>
-    <!-- 페이지네이션 -->
+	
+	<!-- 페이지네이션 -->
     <div class="text-center">
 		<ul class="search_info">
 			<form id="jobForm">
@@ -237,7 +298,7 @@ $(document).on("click", ".policy-card", function(e){
     </c:if>
 	</div>
     </main>
-    	
+	
 	<!-- 사이드바 -->
     <aside>
       <div class="sidebar-section">
@@ -303,7 +364,8 @@ $(document).on("click", ".policy-card", function(e){
     </svg>
   </button>
    
-<jsp:include page="../include/footer.jsp"/>
+  <jsp:include page="../include/footer.jsp"/>
+  
 <script>
     // Top 버튼 기능
     const topButton = document.getElementById('topButton');
@@ -325,7 +387,7 @@ $(document).on("click", ".policy-card", function(e){
       });
     });
     
-    // 검색 버튼 로직과 키워드 링크 로직을 분리하여 이벤트 중첩을 방지
+ // 검색 버튼 로직과 키워드 링크 로직을 분리하여 이벤트 중첩을 방지
     $(document).ready(
         function() {
             
@@ -351,14 +413,14 @@ $(document).on("click", ".policy-card", function(e){
                 }
 
                 // 최종 이동할 URL 구성
-                var redirectUrl = "articleListAll"
+                var redirectUrl = "registrationlistAll"
                     + '${pageMaker.makeQuery(1)}' // 페이지 정보 포함
                     + "&searchType=" + searchType
                     + "&keyword=" + encodedKeyword;
 
                 // 2. 키워드 로깅을 위한 AJAX 요청
                 $.ajax({
-                    url: "logKeyword", 
+                    url: "logRegKeyword", 
                     type: "POST",
                     data: { keyword: keyword },
                     success: function(response) {
@@ -371,7 +433,7 @@ $(document).on("click", ".policy-card", function(e){
             });
 
             $('#newBtn').on("click", function(evt) {
-                self.location = "articleListAll";
+                self.location = "registrationlistAll";
             });
             
             // 2. 인기 검색어 링크 클릭 이벤트
@@ -390,7 +452,7 @@ $(document).on("click", ".policy-card", function(e){
                     data: { keyword: keyword },
                     success: function(response) {
                         // 3. 로깅 성공/실패와 관계없이 검색 결과 페이지로 이동 (페이지는 1로 초기화)
-                        var redirectUrl = "articleListAll"
+                        var redirectUrl = "registrationlistAll"
                             + "?page=1&perPageNum=${pageMaker.cri.perPageNum}"
                             + "&searchType=" + searchType
                             + "&keyword=" + encodedKeyword;
@@ -398,7 +460,7 @@ $(document).on("click", ".policy-card", function(e){
                     },
                     error: function(xhr, status, error) {
                         // 로깅 실패 시에도 검색 페이지로 이동
-                        var redirectUrl = "articleListAll"
+                        var redirectUrl = "registrationlistAll"
                             + "?page=1&perPageNum=${pageMaker.cri.perPageNum}"
                             + "&searchType=" + searchType
                             + "&keyword=" + encodedKeyword;
@@ -434,7 +496,7 @@ $(document).on("click", ".policy-card", function(e){
 
 		$perPageSel.val(perPageNum).prop("selected", true);
 		$perPageSel.on('change', function() {
-			window.location.href = "articleListAll?page=" + thisPage
+			window.location.href = "registrationlistAll?page=" + thisPage
 					+ "&perPageNum=" + $perPageSel.val();
 		})
 	}
@@ -465,9 +527,8 @@ $(document).on("click", ".policy-card", function(e){
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // topKeywords에서 단어와 count 가져오기
     const list = [
-    	<c:forEach var="RegKeywordDTO" items="${topKeywords}" varStatus="status">
+       <c:forEach var="RegKeywordDTO" items="${topKeywords}" varStatus="status">
             ["${RegKeywordDTO.regkeyword}", ${RegKeywordDTO.regcount}]<c:if test="${!status.last}">,</c:if>
         </c:forEach>
     ];
@@ -478,7 +539,6 @@ document.addEventListener('DOMContentLoaded', function() {
         list: list,
         gridSize: 18,
         weightFactor: function(count) {
-            // 글자 크기 비율 설정
             const min = 30, max = 65;
             const counts = list.map(item => item[1]);
             const maxCount = Math.max(...counts);
@@ -490,18 +550,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const colors = ['#2563eb','#dc2626','#16a34a','#9333ea','#f59e0b','#0ea5e9','#ef4444'];
             return colors[Math.floor(Math.random() * colors.length)];
         },
-        rotateRatio: 1, // 회전 없이 단어만 표시
+        rotateRatio: 1, 
         backgroundColor: '#fff',
 
-        // 클릭 이벤트
         click: function(item) {
-            const keyword = item[0]; // 클릭한 단어만 가져오기
-            const searchType = 'tc'; // 제목+내용 검색
+            const keyword = item[0]; 
+            const searchType = 'tc'; 
             const encodedKeyword = encodeURIComponent(keyword);
 
-            // 검색 로그 저장 후 검색 페이지 이동
             $.ajax({
-                url: "logKeyword",
+                url: "logRegKeyword",
                 type: "POST",
                 data: { keyword: keyword },
                 complete: function() {

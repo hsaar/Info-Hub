@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.infohub.project.HomeController;
 import com.infohub.project.article.PageMaker;
+import com.infohub.project.registration.RegKeywordDTO;
+import com.infohub.project.registration.RegKeywordService;
 
 
 @Controller
@@ -34,6 +36,9 @@ public class ArticleControl {
 	@Autowired
 	KeywordService keyservice;
 	
+	@Autowired
+	RegKeywordService regKeyservice;
+	
 	
 	@RequestMapping("articleListAll")
 	public String articleListAll(Model model, Criteria cri) throws Exception{
@@ -42,10 +47,8 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll = service.articlListAll(cri);
 		model.addAttribute("articleListAll", articleListAll);
 		
-		
 		List<ArticleVO> allArticles = service.findAllArticles();
 		List<ArticleVO> randomTwo = new ArrayList<>();
-		
 
 		if (!allArticles.isEmpty()) {
 		    Collections.shuffle(allArticles);
@@ -82,10 +85,17 @@ public class ArticleControl {
 	public String articleListAll1(Model model, Criteria cri) throws Exception{
 		logger.info("articleListAll1..");
 		
+		 
 		List<ArticleVO> articleListAll1 = service.articlListAll1(cri);
 		model.addAttribute("articleListAll1", articleListAll1);
 		
+		int articlecategories_categoriesNo = 1;
 		
+		int categoryTotalCount = service.getTotalCountByCategory(articlecategories_categoriesNo);
+		logger.info("일자리취업 총 게시물 수 = " + categoryTotalCount);
+		model.addAttribute("categoryTotalCount", categoryTotalCount);
+		
+		    
 		List<ArticleVO> allArticles = service.findAllArticles();
 		List<ArticleVO> randomTwo = new ArrayList<>();
 		
@@ -127,11 +137,15 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll2 = service.articlListAll2(cri);
 		model.addAttribute("articleListAll2", articleListAll2);
 		
+		int articlecategories_categoriesNo = 2;
+		
+		int categoryTotalCount = service.getTotalCountByCategory(articlecategories_categoriesNo);
+		logger.info("주거/복지 총 게시물 수 = " + categoryTotalCount);
+		model.addAttribute("categoryTotalCount", categoryTotalCount);
 		
 		List<ArticleVO> allArticles = service.findAllArticles();
 		List<ArticleVO> randomTwo = new ArrayList<>();
 		
-
 		if (!allArticles.isEmpty()) {
 		    Collections.shuffle(allArticles);
 		    randomTwo = allArticles.size() >= 2 
@@ -168,6 +182,12 @@ public class ArticleControl {
 		
 		List<ArticleVO> articleListAll3 = service.articlListAll3(cri);
 		model.addAttribute("articleListAll3", articleListAll3);
+		
+		int articlecategories_categoriesNo = 3;
+		
+		int categoryTotalCount = service.getTotalCountByCategory(articlecategories_categoriesNo);
+		logger.info("교육 총 게시물 수 = " + categoryTotalCount);
+		model.addAttribute("categoryTotalCount", categoryTotalCount);
 		
 		
 		List<ArticleVO> allArticles = service.findAllArticles();
@@ -211,6 +231,11 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll4 = service.articlListAll4(cri);
 		model.addAttribute("articleListAll4", articleListAll4);
 		
+		int articlecategories_categoriesNo = 4;
+		
+		int categoryTotalCount = service.getTotalCountByCategory(articlecategories_categoriesNo);
+		logger.info("문화/여가 총 게시물 수 = " + categoryTotalCount);
+		model.addAttribute("categoryTotalCount", categoryTotalCount);
 		
 		List<ArticleVO> allArticles = service.findAllArticles();
 		List<ArticleVO> randomTwo = new ArrayList<>();
@@ -253,6 +278,11 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll5 = service.articlListAll5(cri);
 		model.addAttribute("articleListAll5", articleListAll5);
 		
+		int articlecategories_categoriesNo = 5;
+		
+		int categoryTotalCount = service.getTotalCountByCategory(articlecategories_categoriesNo);
+		logger.info("건강/의료 총 게시물 수 = " + categoryTotalCount);
+		model.addAttribute("categoryTotalCount", categoryTotalCount);
 		
 		List<ArticleVO> allArticles = service.findAllArticles();
 		List<ArticleVO> randomTwo = new ArrayList<>();
@@ -295,6 +325,11 @@ public class ArticleControl {
 		List<ArticleVO> articleListAll6 = service.articlListAll6(cri);
 		model.addAttribute("articleListAll6", articleListAll6);
 		
+		int articlecategories_categoriesNo = 6;
+		
+		int categoryTotalCount = service.getTotalCountByCategory(articlecategories_categoriesNo);
+		logger.info("금융/경제 총 게시물 수 = " + categoryTotalCount);
+		model.addAttribute("categoryTotalCount", categoryTotalCount);
 		
 		List<ArticleVO> allArticles = service.findAllArticles();
 		List<ArticleVO> randomTwo = new ArrayList<>();
@@ -453,5 +488,29 @@ public class ArticleControl {
 	     }
 	 }	
 	
+	@RequestMapping("chart")
+    public String chart(Model model) throws Exception {
+        // 6개 카테고리 총 게시물 수
+        int[] categoryCounts = new int[6];
+        for (int i = 0; i < 6; i++) {
+            categoryCounts[i] = service.getTotalCountByCategory(i + 1);
+        }
+        model.addAttribute("categoryCounts", categoryCounts);
+        
+        Date date = new Date();
+       SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+       
+       String formattedDate = isoFormat.format(date);
+       
+       model.addAttribute("formattedDate", formattedDate );
+
+       List<KeywordDTO> articleTopKeywords = keyservice.findTop7(); 
+       model.addAttribute("articleTopKeywords", articleTopKeywords); 
+
+       List<RegKeywordDTO> registrationTopKeywords = regKeyservice.findTop7();
+       model.addAttribute("registrationTopKeywords", registrationTopKeywords);
+       
+        return "article/chart";
+    }
 	
 }

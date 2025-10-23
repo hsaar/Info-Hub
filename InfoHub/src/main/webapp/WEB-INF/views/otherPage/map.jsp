@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+		String userId = (String) session.getAttribute("userId");
 
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -19,7 +22,7 @@
 <body>
 
 <!-- 여기에 상단바 include -->
-<%@ include file="../include/header.jsp" %> 
+<jsp:include page="../include/header.jsp"/>
 
 <!-- 메인 컨테이너 -->
 <div class="map-main-container">
@@ -523,10 +526,18 @@ function renderPageForCount(totalCount) {
     li.appendChild(span);
     
     //상세페이지 이동
+    
+    
     li.style.cursor = "pointer";
     li.addEventListener("click", function() {
-      if (p.registrationNo) {
+    	
+    const userId = '<%= userId %>';
+    const isLoggedIn = userId && userId.trim() !== "" && userId.trim() !== "null" && userId.trim() !== "undefined";
+      
+    if (isLoggedIn && p.registrationNo) {
         window.location.href = "/project/registrationContent?registrationNo=" + p.registrationNo;
+      } else if(!isLoggedIn && p.registrationNo){
+    	  window.location.href = "/project/noRegistrationContent?registrationNo=" + p.registrationNo;
       } else {
         alert("정책 ID가 없습니다.");
       }

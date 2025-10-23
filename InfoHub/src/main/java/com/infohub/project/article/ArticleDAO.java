@@ -32,5 +32,7 @@ public interface ArticleDAO {
 	
 	List<ArticleVO> findAllArticles() throws Exception;
 	
-	
+	int getTotalCountByCategory(int articlecategories_categoriesNo) throws Exception;
+
+	List<ArticleVO> elasticArticles() throws Exception;
 }

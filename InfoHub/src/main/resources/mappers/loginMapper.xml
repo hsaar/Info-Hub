@@ -71,4 +71,20 @@
 		where userId = #{userId}
 	</update>
 	
+	
+	<select id="findByKakaoId" parameterType="long" resultType="com.infohub.project.login.LoginDTO">
+        SELECT *
+        FROM infohub.login 
+        WHERE kakaoId = #{kakaoId}
+    </select>
+
+    <!-- 신규 사용자 추가 -->
+    <insert id="insert" parameterType="com.infohub.project.login.LoginDTO">
+    INSERT INTO infohub.login 
+    (userId, password, name, email, phone, createdDate, status, role, age, gender, keywords, kakaoId, kakaoEmail)
+    VALUES 
+    (#{userId}, #{password}, #{name}, #{email}, #{phone}, now(), 1, 1, #{age}, #{gender}, #{keywords}, #{kakaoId}, #{kakaoEmail})
+	</insert>
+	
+	
 </mapper>

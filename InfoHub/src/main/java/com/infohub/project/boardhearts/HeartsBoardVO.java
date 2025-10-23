@@ -6,21 +6,27 @@ public class HeartsBoardVO {
 	private int boardno;
 	private int commentId;
 	private String regiDate;
+	private boolean liked; //게시글 좋아요 여부 확인
 	
 	
 	
-	HeartsBoardVO(){}
+	public HeartsBoardVO(){}
 
 
 
-	public HeartsBoardVO(int heartId, int loginNo, int boardno, int commentId, String regiDate) {
+	public HeartsBoardVO(int heartId, int loginNo, int boardno, int commentId, String regiDate, boolean liked) {
 		super();
 		this.heartId = heartId;
 		this.loginNo = loginNo;
 		this.boardno = boardno;
 		this.commentId = commentId;
 		this.regiDate = regiDate;
+		this.liked = liked;
 	}
+
+
+
+
 
 
 
@@ -84,11 +90,27 @@ public class HeartsBoardVO {
 
 
 
+	public boolean isLiked() {
+		return liked;
+	}
+
+
+
+	public void setLiked(boolean liked) {
+		this.liked = liked;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "HeartsBoardVO [heartId=" + heartId + ", loginNo=" + loginNo + ", boardno=" + boardno + ", commentId="
-				+ commentId + ", regiDate=" + regiDate + "]";
+				+ commentId + ", regiDate=" + regiDate + ", liked=" + liked + "]";
 	}
+
+
+
+	
 	
 	
 }

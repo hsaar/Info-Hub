@@ -31,15 +31,21 @@
 		b.categoryboard_categoryId AS categoryId,
 		b.subCategoryId,
 		cb.name AS categoryName,
-		COALESCE(COUNT(DISTINCT c.commentId), 0) AS commentCount,
-		COALESCE(COUNT(DISTINCT hb.heartId), 0) AS heartCount
+		b.imagePath,
+		COALESCE(COUNT(DISTINCT
+		c.commentId), 0) AS commentCount,
+		COALESCE(COUNT(DISTINCT hb.heartId),
+		0) AS heartCount
 		FROM
 		board b
-		LEFT JOIN commentboard c ON
-		b.boardno = c.boardno
+		LEFT
+		JOIN commentboard c ON
+		b.boardno =
+		c.boardno
 		LEFT JOIN
 		categoryboard cb ON
-		b.categoryboard_categoryId = cb.categoryId
+		b.categoryboard_categoryId =
+		cb.categoryId
 		LEFT
 		JOIN heartsboard hb ON
 		b.boardno = hb.boardno
@@ -119,26 +125,23 @@
 		b.loginLoginNo AS loginLoginNo,
 		b.categoryboard_categoryId AS categoryId,
 		b.subCategoryId,
-		p.name AS
-		categoryName,
+		p.name AS categoryName,
 		c.name AS subCategoryName,
-		COALESCE(hc.heartCount, 0) AS
-		heartCount,
-		l.loginNo AS loginNo -- 🔹 추가
+		COALESCE(hc.heartCount, 0) AS heartCount,
+		CASE WHEN hb.loginNo IS NOT NULL THEN 1 ELSE 0 END AS liked, <!-- 추가 -->
+		l.loginNo AS loginNo,
+		b.imagePath
 		FROM board b
 		LEFT JOIN (
-		SELECT
-		boardno, COUNT(*) AS heartCount
+		SELECT boardno, COUNT(*) AS heartCount
 		FROM heartsboard
 		GROUP BY boardno
-		) hc ON
-		b.boardno = hc.boardno
-		LEFT JOIN categoryboard p ON
-		b.categoryboard_categoryId = p.categoryId
-		LEFT JOIN categoryboard c ON
-		b.subCategoryId = c.categoryId
-		LEFT JOIN login l ON b.loginLoginNo =
-		l.loginNo -- 🔹 추가
+		) hc ON b.boardno = hc.boardno
+		LEFT JOIN categoryboard p ON b.categoryboard_categoryId = p.categoryId
+		LEFT JOIN categoryboard c ON b.subCategoryId = c.categoryId
+		LEFT JOIN login l ON b.loginLoginNo = l.loginNo
+		LEFT JOIN heartsboard hb
+		ON hb.boardno = b.boardno AND hb.loginNo = #{loginNo} <!-- 로그인한 유저 좋아요 체크 -->
 		WHERE b.boardno = #{boardno}
 		LIMIT 1
 	</select>
@@ -150,13 +153,13 @@
 		= readcnt + 1
 		WHERE boardno = #{boardno}
 	</update>
-
-
+	
 
 	<!-- 글쓰기 -->
 	<insert id="register"
 		parameterType="com.infohub.project.board.BoardVO"
 		useGeneratedKeys="true" keyProperty="boardno">
+
 		INSERT INTO board (
 		title,
 		content,
@@ -164,7 +167,9 @@
 		regiDate,
 		loginLoginNo,
 		categoryboard_categoryId,
-		subCategoryId
+		subCategoryId,
+		imagePath,
+		isNotice
 		)
 		SELECT
 		#{title},
@@ -173,24 +178,30 @@
 		NOW(),
 		l.loginNo,
 		#{categoryId},
-		#{subCategoryId}
+		#{subCategoryId},
+		#{imagePath},
+		CASE WHEN l.role
+		= 2 THEN #{isNotice} ELSE 0 END
 		FROM login l
 		WHERE l.loginNo =
 		#{loginLoginNo};
+
 	</insert>
 
 
 	<!-- 수정하기 -->
 	<update id="update"
 		parameterType="com.infohub.project.board.BoardVO">
-		UPDATE board
-		SET title = #{title},
-		content = #{content},
-		categoryboard_categoryId = #{categoryId}
-		WHERE boardno = #{boardno}
-		AND
-		loginLoginNo =
-		#{loginLoginNo} <!-- 본인 글만 수정 가능 -->
+		UPDATE board b
+		JOIN login l ON b.loginLoginNo = l.loginNo
+		SET
+		b.title = #{title},
+		b.content = #{content},
+		b.categoryboard_categoryId = #{categoryId},
+		b.isNotice = CASE WHEN l.role = 2 THEN #{isNotice} ELSE b.isNotice END,
+		b.imagePath = #{imagePath}  <!-- null이어도 반영 -->
+		WHERE b.boardno = #{boardno}
+		AND b.loginLoginNo = #{loginLoginNo};
 	</update>
 
 

@@ -116,4 +116,16 @@ public class LoginDAOImpl implements LoginDAO{
 		return total;
 	}
 
+	@Override
+	public LoginDTO findByKakaoId(Long kakaoId) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne(namespace + ".findByKakaoId", kakaoId);
+	}
+
+	@Override
+	public void insert(LoginDTO dto) {
+		// TODO Auto-generated method stub
+		sqlsession.insert(namespace + ".insert", dto);
+	}
+
 }

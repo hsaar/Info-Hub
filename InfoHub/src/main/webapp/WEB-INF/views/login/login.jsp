@@ -24,6 +24,21 @@
     <!-- plugin -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
+<script>
+  // 카카오 초기화
+  Kakao.init("50d17a154d919b83d81f7ff6cd356141");
+  console.log(Kakao.isInitialized()); // true 나오면 정상
+
+  function kakaoLogin() {
+    Kakao.Auth.authorize({
+      redirectUri: 'http://localhost:8080/project/kakaoLogin'
+    });
+  }
+</script>
+
 </head>
 <body>
     
@@ -149,15 +164,11 @@
                     
                     <!-- 소셜 로그인 버튼들 -->
                     <div class="social-login">
-                        <button class="social-btn facebook" onclick="socialLogin('facebook')">
-                            <i class="fab fa-facebook-f"></i>
+                        
+                        <button class="social-btn linkedin" onclick="kakaoLogin()">
+                             <img src="https://developers.kakao.com/tool/resource/static/img/button/login/full/ko/kakao_login_medium_narrow.png" alt="카카오 로그인" />
                         </button>
-                        <button class="social-btn google" onclick="socialLogin('google')">
-                            <i class="fab fa-google"></i>
-                        </button>
-                        <button class="social-btn linkedin" onclick="socialLogin('linkedin')">
-                            <i class="fab fa-linkedin-in"></i>
-                        </button>
+                        
                     </div>
                     
                     <!-- 구분선 -->

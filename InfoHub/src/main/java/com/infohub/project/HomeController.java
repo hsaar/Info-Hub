@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttribute;
+
+import com.infohub.project.login.LoginDTO;
 
 /**
  * Handles requests for the application home page.
@@ -27,7 +31,7 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping("/")
-	public String home(Locale locale, Model model, @SessionAttribute(name = "userId", required = false)String userId) {
+	public String home(HttpSession session, Locale locale, Model model, @SessionAttribute(name = "userId", required = false)String userId) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		Date date = new Date();
@@ -37,8 +41,9 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-	    if(userId != null) { 
-	        model.addAttribute("userId",userId);
+		LoginDTO loginUser = (LoginDTO) session.getAttribute("loginUser");
+	    if (loginUser != null) {
+	        model.addAttribute("loginUser", loginUser);
 	    }
 		
 		return "index";

@@ -16,7 +16,8 @@
 		parameterType="com.infohub.project.boardhearts.HeartsBoardVO">
 		DELETE FROM heartsboard
 		WHERE loginNo = #{loginNo}
-		AND boardno = #{boardno}
+		AND boardno =
+		#{boardno}
 		<if test="commentId != 0">
 			AND commentId = #{commentId}
 		</if>
@@ -28,21 +29,32 @@
 		SELECT COUNT(*) FROM heartsboard WHERE boardno = #{boardno}
 	</select>
 
+	<!-- 로그인한 유저 기준 좋아요 여부 -->
+	<select id="isLiked" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM heartsboard
+		WHERE boardno = #{boardno}
+		AND loginNo = #{loginNo}
+	</select>
+
+
 	<!-- 특정 유저가 이미 좋아요 눌렀는지 확인 -->
 	<select id="checkHeart"
 		parameterType="com.infohub.project.boardhearts.HeartsBoardVO"
 		resultType="int">
 		SELECT COUNT(*) FROM heartsboard
 		WHERE loginNo = #{loginNo}
-		AND boardno = #{boardno}
+		AND boardno
+		= #{boardno}
 		<if test="commentId != 0">
 			AND commentId = #{commentId}
 		</if>
 	</select>
 
 	<!-- 특정 게시글의 모든 좋아요 삭제 -->
-	<delete id="deleteAllHeartsByBoardno" parameterType ="int">
-		DELETE FROM heartsboard
+	<delete id="deleteAllHeartsByBoardno" parameterType="int">
+		DELETE FROM
+		heartsboard
 		WHERE boardno = #{boardno}
 	</delete>
 

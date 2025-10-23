@@ -12,6 +12,29 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+<style type="text/css">
+.comment-type-label {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.comment-type-label.article {
+  background-color: #1976d2; /* 파랑 */
+}
+
+.comment-type-label.board {
+  background-color: #2e7d32; /* 초록 */
+}
+
+.comment-item-header {
+  margin-bottom: 5px;
+}
+</style>
 </head>
 <body>
 
@@ -132,21 +155,29 @@ document.addEventListener('DOMContentLoaded', () => {
 	    const startIdx = (currentPage - 1) * pageSize;
 	    const endIdx = currentPage * pageSize;
 	    const pageComments = comments.slice(startIdx, endIdx);
-
+	    
 	    pageComments.forEach(c => {
 	      const contentText = (c.content || "(내용 없음)").toString();
-
+	      const isArticle = c.type === 'article';
+	      const commentTypeLabel =
+	        '<span class="comment-type-label ' + (isArticle ? 'article' : 'board') + '">' +
+	        (isArticle ? '기사' : '게시판') +
+	        '</span>';
+	      
 	      const card = document.createElement('div');
 	      card.classList.add('comment-item');
 
 	      card.innerHTML =
-	        '<div class="comment-content">' +
-	        '  <p>' + contentText + '</p>' +
-	        '</div>' +
-	        '<div class="comment-date">' + c.createdAt + '</div>' +
-	        '<div class="comment-footer">' +
-	        '  <button class="comment-btn delete-btn" data-commentid="' + c.commentId + '">삭제</button>' +
-	        '</div>';
+	    	  '<div class="comment-item-header">' +
+	    	  commentTypeLabel +
+	    	  '</div>' +
+	    	  '<div class="comment-content">' +
+	    	  '  <p>' + contentText + '</p>' +
+	    	  '</div>' +
+	    	  '<div class="comment-date">' + c.createdAt + '</div>' +
+	    	  '<div class="comment-footer">' +
+	    	  '  <button class="comment-btn delete-btn" data-commentid="' + c.commentId + '">삭제</button>' +
+	    	  '</div>';
 	        
 	     //상세페이지 이동 기능 추가
 	        card.addEventListener('click', (e) => {

@@ -17,4 +17,10 @@ public interface LoginDAO {
 	public int updatepassword(String password, String userId);
 	public String checkPasswordById(String userId);
 	public int updateKeywords(String userId,String keywords);
+
+	// 카카오 ID로 유저 조회
+	LoginDTO findByKakaoId(Long kakaoId);
+
+    // 신규 유저 저장
+    void insert(LoginDTO dto);
 }

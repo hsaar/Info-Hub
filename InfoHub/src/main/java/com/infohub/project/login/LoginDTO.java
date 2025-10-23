@@ -15,7 +15,13 @@ public class LoginDTO {
 	private String gender;
 	private String keywords;
 	
+	 // 🔹 카카오 로그인 필드 추가
+    private Long kakaoId;  // 카카오 고유 ID
+    private String kakaoEmail; // 카카오 이메일 (필요시)
+	
 	public LoginDTO() {}
+	
+	
 	
 	public LoginDTO(int loginNo, String userId, String password, String name, String email, String phone,
 			String createdDate, String lastLogin, int status, int role, int age, String gender, String keywords) {
@@ -33,6 +39,26 @@ public class LoginDTO {
 		this.age = age;
 		this.gender = gender;
 		this.keywords = keywords;
+	}
+
+	public LoginDTO(int loginNo, String userId, String password, String name, String email, String phone,
+			String createdDate, String lastLogin, int status, int role, int age, String gender, String keywords, Long kakaoId, String kakaoEmail) {
+		super();
+		this.loginNo = loginNo;
+		this.userId = userId;
+		this.password = password;
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.createdDate = createdDate;
+		this.lastLogin = lastLogin;
+		this.status = status;
+		this.role = role;
+		this.age = age;
+		this.gender = gender;
+		this.keywords = keywords;
+		this.kakaoId = kakaoId;
+        this.kakaoEmail = kakaoEmail;
 	}
 
 	public int getLoginNo() {
@@ -139,12 +165,17 @@ public class LoginDTO {
 		this.keywords = keywords;
 	}
 
-	@Override
-	public String toString() {
-		return "LoginDTO [loginNo=" + loginNo + ", userId=" + userId + ", password=" + password + ", name=" + name
-				+ ", email=" + email + ", phone=" + phone + ", createdDate=" + createdDate + ", lastLogin=" + lastLogin
-				+ ", status=" + status + ", role=" + role + ", age=" + age + ", gender=" + gender + ", keywords="
-				+ keywords + "]";
-	}
-	
+	public Long getKakaoId() { return kakaoId; }
+    public void setKakaoId(Long kakaoId) { this.kakaoId = kakaoId; }
+    public String getKakaoEmail() { return kakaoEmail; }
+    public void setKakaoEmail(String kakaoEmail) { this.kakaoEmail = kakaoEmail; }
+
+    @Override
+    public String toString() {
+        return "LoginDTO [loginNo=" + loginNo + ", userId=" + userId + ", password=" + password + ", name=" + name
+                + ", email=" + email + ", phone=" + phone + ", createdDate=" + createdDate + ", lastLogin=" + lastLogin
+                + ", status=" + status + ", role=" + role + ", age=" + age + ", gender=" + gender + ", keywords="
+                + keywords + ", kakaoId=" + kakaoId + ", kakaoEmail=" + kakaoEmail + "]";
+    }
+    
 }

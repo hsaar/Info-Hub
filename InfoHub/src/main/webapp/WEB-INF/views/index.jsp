@@ -16,13 +16,91 @@
 <%@ include file="include/plugin.jsp"%>
 
 <!-- 타이틀용 세리프 + 본문 산세리프 -->
-<link href="/resources/css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link
 	href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Gowun+Dodum&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+    const contextPath = "${pageContext.request.contextPath}";
+
+    // 버튼 클릭과 엔터(폼 제출) 모두 처리
+    $("#siteIndexForm").on("submit", function(e) {
+        e.preventDefault(); // 페이지 리로드 방지
+        const keyword = $("#homeSearchKeyword").val().trim();
+        if (!keyword) {
+            alert("검색어를 입력해주세요.");
+            return;
+        }
+        // siteIndex.jsp로 이동
+        window.location.href = contextPath + "/siteIndex?keyword=" + encodeURIComponent(keyword);
+    });
+
+    // 기존 버튼 클릭 이벤트는 필요 없음, submit 이벤트 하나로 통합 가능
+});
+</script>
+
+<style>
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px; /* 아이템 간 간격 */
+    margin-top: 50px;
+    margin-bottom: -50px;
+}
+
+.search-bar input {
+    width: 650px;
+    height: 60px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    outline: none;
+}
+
+.search-bar input:focus {
+    background-color: #ffffff;
+    box-shadow: 0 0 6px rgba(135, 206, 250, 0.7);
+}
+
+.search-bar button {
+    padding: 8px 16px;
+    border: 1px solid #87CEFA;
+    background-color: #87CEFA;
+    height: 60px;
+    width: 80px;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.search-bar button:hover { background-color: #2563eb; }
+
+.reset-btn {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+    font-weight: bold;
+    border-radius: 20px;
+    margin-left: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.reset-btn:hover { background-color: #f0f0f0; }
+
+</style>
+
 
 </head>
 
@@ -33,6 +111,12 @@
 	</header>
 
 	<!-- 메인 히어로(양분) -->
+				<div class="search-bar">
+			    <form id="siteIndexForm">
+			    <input type="text" id="homeSearchKeyword" placeholder="검색어를 입력하세요">
+			    <button type="submit" id="siteIndexBtn">검색</button>
+				</form>
+				</div>
 	<main class="hero">
 		<div class="container layout">
 			<!-- ⬇⬇ 왼쪽 컬럼 래퍼 추가 -->
@@ -47,6 +131,7 @@
 						</p>
 					</div>
 				</article>
+				
 
 				<section class="split">
 					<!-- 좌: 정책 -->
@@ -109,9 +194,9 @@
 								<span class="icon" style="mask: url('resources/image/mypage.svg')"></span>
 								<span>마이페이지</span>
 							</a></li>
-							<li><a href="timeline" class="dot-link"> 
+							<li><a href="newsSearch" class="dot-link"> 
 								<span class="icon" style="mask: url('resources/image/alarm.svg')"></span>
-								<span>타임라인</span>
+								<span>실시간 관심 뉴스 피드</span>
 							</a></li>
 							</c:if>
 							
@@ -130,9 +215,9 @@
 								<span class="icon" style="mask: url('resources/image/mypage.svg')"></span>
 								<span>마이페이지</span>
 							</a></li>
-							<li><a href="timeline" class="dot-link"> 
+							<li><a href="newsSearch" class="dot-link"> 
 								<span class="icon" style="mask: url('resources/image/alarm.svg')"></span>
-								<span>타임라인</span>
+								<span>실시간 관심 뉴스 피드</span>
 							</a></li>
 							</c:if>
 							
@@ -158,54 +243,24 @@
 	
 	<!-- Code injected by live-server -->
 	<script>
-		// <![CDATA[  <-- For SVG support
-		if ('WebSocket' in window) {
-			(function() {
-				function refreshCSS() {
-					var sheets = [].slice.call(document
-							.getElementsByTagName("link"));
-					var head = document.getElementsByTagName("head")[0];
-					for (var i = 0; i < sheets.length; ++i) {
-						var elem = sheets[i];
-						var parent = elem.parentElement || head;
-						parent.removeChild(elem);
-						var rel = elem.rel;
-						if (elem.href && typeof rel != "string"
-								|| rel.length == 0
-								|| rel.toLowerCase() == "stylesheet") {
-							var url = elem.href.replace(
-									/(&|\?)_cacheOverride=\d+/, '');
-							elem.href = url
-									+ (url.indexOf('?') >= 0 ? '&' : '?')
-									+ '_cacheOverride='
-									+ (new Date().valueOf());
-						}
-						parent.appendChild(elem);
-					}
-				}
-				var protocol = window.location.protocol === 'http:' ? 'ws://'
-						: 'wss://';
-				var address = var address = window.location.origin + '/ws';
-				var socket = new WebSocket(address);
-				socket.onmessage = function(msg) {
-					if (msg.data == 'reload')
-						window.location.reload();
-					else if (msg.data == 'refreshcss')
-						refreshCSS();
-				};
-				if (sessionStorage
-						&& !sessionStorage
-								.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-					console.log('Live reload enabled.');
-					sessionStorage.setItem(
-							'IsThisFirstTime_Log_From_LiveServer', true);
-				}
-			})();
-		} else {
-			console
-					.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-		}
-		// ]]>
+	(function() {
+        function refreshCSS() {
+            var sheets = [].slice.call(document.getElementsByTagName("link"));
+            var head = document.getElementsByTagName("head")[0];
+            for (var i = 0; i < sheets.length; ++i) {
+                var elem = sheets[i];
+                var parent = elem.parentElement || head;
+                parent.removeChild(elem);
+                var rel = elem.rel;
+                if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+                    var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                    elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+                }
+                parent.appendChild(elem);
+            }
+        }
+
+    })();
 	</script>
 
 </body>

@@ -20,7 +20,6 @@
 				class="board-item ${board.isNotice ? 'notice-item' : ''} clickable"
 				data-boardno="${board.boardno}">
 				<div class="board-number">${board.isNotice ? '공지' : board.boardno}</div>
-
 				<div class="board-title">
 					<c:if test="${board.isNotice}">
 						<span class="notice-badge">공지</span>
@@ -29,6 +28,9 @@
 						<span class="category-badge">${board.categoryName}</span>
 					</c:if>
 					<span class="board-title-text">${board.title}</span>
+						<c:if test="${board.imagePath != null && board.imagePath ne ''}">
+						<span class="image-badge"><i class="fa-solid fa-image"></i></span>
+					</c:if>
 					<c:if test="${board.commentCount > 0}">
 						<span class="comment-count">[${board.commentCount}]</span>
 					</c:if>
@@ -47,13 +49,13 @@
 			<nav class="pagination-nav">
 				<c:if test="${currentPage > 1}">
 					<a
-						href="<c:url value='/board?page=${currentPage - 1}&category=${param.categoryId}&sort=${param.sort}' />"
+						href="<c:url value='/listmain?page=${currentPage - 1}&category=${param.categoryId}&sort=${param.sort}' />"
 						class="page-arrow">‹</a>
 				</c:if>
 
 				<c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
 					<a
-						href="<c:url value='/board?page=${pageNum}&category=${param.categoryId}&sort=${param.sort}' />"
+						href="<c:url value='/listmain?page=${pageNum}&category=${param.categoryId}&sort=${param.sort}' />"
 						class="page-number ${currentPage == pageNum ? 'active' : ''}">${pageNum}</a>
 				</c:forEach>
 
@@ -64,6 +66,5 @@
 				</c:if>
 			</nav>
 		</c:if>
-
 	</div>
 </div>

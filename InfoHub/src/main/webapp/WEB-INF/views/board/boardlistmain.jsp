@@ -14,6 +14,7 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Gowun+Dodum&display=swap"
 	rel="stylesheet">
+
 <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 <link rel="stylesheet" href="<c:url value='/resources/css/board.css' />">
 <link rel="stylesheet" href="<c:url value='/resources/css/error.css' />">
@@ -31,29 +32,33 @@
 	<div class="page-header">
 		<div class="container">
 			<h1 class="page-main-title">게시판</h1>
-			
 		</div>
 	</div>
 
 	<!-- 카테고리 필터 섹션 -->
-	
-<!-- 카테고리 필터 섹션 -->
-<section 	class="filter-section">
-  <div class="container">
-    <div class="category-filter-buttons">
-     <button class="filter-btn ${empty param.categoryNo ? 'active' : ''}" 
-        onclick="filterByCategory('', this)">전체</button>
-<button class="filter-btn ${param.categoryNo == '1' ? 'active' : ''}" 
-        onclick="filterByCategory('1', this)">창업지원</button>
-<button class="filter-btn ${param.categoryNo == '2' ? 'active' : ''}" 
-        onclick="filterByCategory('2', this)">직업훈련</button>
-<button class="filter-btn ${param.categoryNo == '3' ? 'active' : ''}" 
-        onclick="filterByCategory('3', this)">취업지원</button>
-<button class="filter-btn ${param.categoryNo == '4' ? 'active' : ''}" 
-        onclick="filterByCategory('4', this)">청년일자리</button>
-<button class="filter-btn ${param.categoryNo == '5' ? 'active' : ''}" 
-        onclick="filterByCategory('5', this)">추가지원</button>
-     
+
+	<!-- 카테고리 필터 섹션 -->
+	<section class="filter-section">
+		<div class="container">
+			<div class="category-filter-buttons">
+				<button class="filter-btn ${empty param.categoryNo ? 'active' : ''}"
+					onclick="filterByCategory('', this)">전체</button>
+				<button
+					class="filter-btn ${param.categoryNo == '1' ? 'active' : ''}"
+					onclick="filterByCategory('1', this)">창업지원</button>
+				<button
+					class="filter-btn ${param.categoryNo == '2' ? 'active' : ''}"
+					onclick="filterByCategory('2', this)">직업훈련</button>
+				<button
+					class="filter-btn ${param.categoryNo == '3' ? 'active' : ''}"
+					onclick="filterByCategory('3', this)">취업지원</button>
+				<button
+					class="filter-btn ${param.categoryNo == '4' ? 'active' : ''}"
+					onclick="filterByCategory('4', this)">청년일자리</button>
+				<button
+					class="filter-btn ${param.categoryNo == '5' ? 'active' : ''}"
+					onclick="filterByCategory('5', this)">추가지원</button>
+
 			</div>
 		</div>
 	</section>
@@ -133,7 +138,7 @@
   </svg>
 	</button>
 
-<footer class="footer">
+	<footer class="footer">
 		<%@ include file="../include/footer.jsp"%>
 	</footer>
 	<script>
